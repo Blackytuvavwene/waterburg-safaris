@@ -1,4 +1,5 @@
 <script lang="ts">
+import Footer from "./footer/footer.svelte";
 import NavBar from "./navbar/navbar.svelte";
 </script>
 
@@ -6,3 +7,4 @@ import NavBar from "./navbar/navbar.svelte";
 
 <NavBar/>
 <slot></slot>
+<Footer/>

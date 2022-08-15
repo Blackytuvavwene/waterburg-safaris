@@ -7,7 +7,7 @@
 
 
 <div class="about-us-container">
-    <TopicTextSection topicText="About us"/>
+    <TopicTextSection topicText="About us" flexDirection="row"/>
     <AboutUsSummary />
     <AboutUsImageView/>
 </div>

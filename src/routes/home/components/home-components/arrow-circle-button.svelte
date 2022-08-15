@@ -6,7 +6,7 @@
         
 </button>
 
-<style>
+<style lang="scss">
     button{
         border: none;
         background: none;

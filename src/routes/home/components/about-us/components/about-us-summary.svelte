@@ -28,37 +28,43 @@ import ArrowCircleButton from "../../home-components/arrow-circle-button.svelte"
         margin-top:5%;
         padding-left: 26px;
         padding-right: 26px;
-    }
 
-    .summary-text-container{
-        width: 80%;
-        display: inline;
-        text-align: start;
-        color: rgb(0, 0, 136);
-        border-radius: 10px;
-    }
-
-    p{
-        font-size: 2rem;
-        font-weight: bold;
-        text-align: start;
-        margin:0 auto;
-    }
-
-    @media screen and (max-width: 600px){
         .summary-text-container{
-            width: 70%;
+            width: 80%;
             display: inline;
             text-align: start;
             color: rgb(0, 0, 136);
             border-radius: 10px;
+
+            p{
+                font-size: 2rem;
+                font-weight: bold;
+                text-align: start;
+                margin:0 auto;
+            }
         }
 
-        p{
-            font-size: 1.6rem;
-            font-weight: bold;
-            text-align: start;
-            margin:0 auto;
+        @media screen and (max-width: 600px){
+            .summary-text-container{
+                width: 70%;
+                display: inline;
+                text-align: start;
+                color: rgb(0, 0, 136);
+                border-radius: 10px;
+
+                p{
+                    font-size: 1.6rem;
+                    font-weight: bold;
+                    text-align: start;
+                    margin:0 auto;
+                }
+            }
         }
+
     }
+
+    
+    
+
+    
 </style>

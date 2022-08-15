@@ -1,9 +1,11 @@
 <script lang="ts">
-    export const lionImage='$lib/lion.JPG';
+    export let lionImage='/images/lion.JPG';
+    export let waterBerg='/images/waterberg.JPG';
 </script>
 
 <div class="image-container">
-    <img src="$lib/lion.JPG" alt="lion" sizes=""/>
+    <img src={lionImage} alt="lion" class="image1"/>
+    <img src={waterBerg} alt="" class="image2">
 </div>
 
 <style lang="scss">
@@ -16,13 +18,28 @@
         justify-content: center;
         align-items: center;
         margin: 20px;
+        position: relative;
 
         img{
-            height: 100%;
-            width: 100%;
+            height: 70%;
+            width: 70%;
             object-fit: cover;
             border: 1px solid black;
         }
+
+        .image1{
+            position: absolute;
+            top: 40%;
+            left: 0;
+        }
+
+        .image2{
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+
     }
 
 
