@@ -1,10 +1,15 @@
 <script lang="ts">
-import Footer from "./footer/footer.svelte";
-import NavBar from "./navbar/navbar.svelte";
+import Footer from '$lib/components/footer/footer.svelte';
+
+import Navbar from '$lib/components/navbar/navbar.svelte';
+
+
+import '../app.css';
+
 </script>
 
 
 
-<NavBar/>
+<Navbar/>
 <slot></slot>
 <Footer/>

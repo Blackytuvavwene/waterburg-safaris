@@ -1,8 +1,10 @@
 
 <script lang="ts">
-    import TopicTextSection from './../home-components/topic-text-section.svelte';
-    import AboutUsImageView from './components/about-us-image-view.svelte';
-    import AboutUsSummary from './components/about-us-summary.svelte';
+import TopicTextSection from "../home-components/topic-text-section.svelte";
+import AboutUsImageView from "./components/about-us-image-view.svelte";
+import AboutUsSummary from "./components/about-us-summary.svelte";
+
+
 </script>
 
 

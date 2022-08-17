@@ -1,0 +1,39 @@
+:root{
+    --primary:#006497;
+    --on-primary:#ffffff;
+    --primary-container:#cce5ff;
+    --on-primary-container:#001d31;
+    --secondary:#006c47;
+    --on-secondary:#ffffff;
+    --secondary-container:#8df7c1;
+    --on-secondary-container:#002113;
+    --tertiary:#00677d;
+    --on-tertiary:#ffffff;
+    --tertiary-container:#b3ebff;
+    --on-tertiary-container:#001f27;
+    --error:#ba1a1a;
+    --on-error:#ffffff;
+    --error-container:#ffdad6;
+    --on-error-container:#410002;
+    --background:#fcfcff;
+    --on-background:#1a1c1e;
+    --surface-variant:#dee3eb;
+    --on-surface-variant:#42474e;
+    --outline:#72787e;
+    --success:#006e1b;
+    --on-success:#ffffff;
+    --success-container:#95f991;
+    --on-success-container:#002204;
+}
+
+@font-face {
+    font-family: 'Dosis';
+    src: url('/Dosis-VariableFont_wght.ttf') format('truetype');
+}
+
+body{
+    font-family: 'Dosis', sans-serif;
+    font-size: 16px;
+    color: var(--on-background);
+    background-color: var(--background); 
+}

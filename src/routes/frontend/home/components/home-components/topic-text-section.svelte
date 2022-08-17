@@ -26,13 +26,15 @@
             padding-left: 2rem;
             display: inline;
             text-align: start;
-            background-color: lightskyblue;
-            color: rgb(0, 0, 136);
+            background-color: var(--on-primary-container);
+            color: var(--primary-container);
             border-radius: 10px;
             padding: 6px;
+            border: none;
 
             .topic{
                 font-size: 2rem;
+                font-variation-settings: 'wght' 700;
                 font-weight: bold;
                 text-align: center;
                 margin:0 auto;
@@ -46,7 +48,7 @@
         .line{
             width: 100%;
             height: 2px;
-            background-color: black;
+            background-color: var(--primary);
             display: flex;
             flex-direction: row;
             justify-content: center;
@@ -56,19 +58,10 @@
         @media screen and (max-width: 600px){
             .text-container{
                 width: 80%;
-                padding-left: 2rem;
-                display: inline;
-                text-align: start;
-                background-color: lightskyblue;
-                color: rgb(0, 0, 136);
-                border-radius: 10px;
-                padding: 6px;
 
                 .topic{
                     font-size: 1.4rem;
-                    font-weight: bold;
-                    text-align: center;
-                    margin:0 auto;
+                    font-variation-settings: 'wght' 500;
                 }
             }
         }

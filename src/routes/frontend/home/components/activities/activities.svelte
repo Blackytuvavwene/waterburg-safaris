@@ -1,6 +1,8 @@
-<script>
-import TopicTextSection from "../home-components/topic-text-section.svelte";
+<script lang="ts">
 
+
+
+import TopicTextSection from "../home-components/topic-text-section.svelte";
 import ActivityCard from "./components/activity-card.svelte";
 
 </script>
