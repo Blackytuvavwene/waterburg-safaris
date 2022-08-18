@@ -11,5 +11,8 @@ import '../app.css';
 
 
 <Navbar/>
-<slot></slot>
+<main>
+    <slot/>
+</main>
+
 <Footer/>

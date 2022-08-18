@@ -7,7 +7,7 @@
     export let padding:string;
     export let margin:string;
     export let borderRadius:string;
-
+    import '../../../app.css';
 </script>
 
 <button style="color:{fontColor}; background-color:{backGroundColor}; font-size:{fontSize};
@@ -23,5 +23,17 @@ font-variation-settings: 'wght',{fontWeight}; padding:{padding}; margin:{margin}
         padding: 16px;
         margin-top: 16px;
         font-variation-settings: 'wght', 800;
+    }
+
+    @media (min-width: 768px) {
+        button {
+            font-size: 1.4rem;
+        }
+    }
+
+    button:hover{
+        background-color:var(--on-primary-container);
+        color: var(--primary-container);
+        cursor: pointer;
     }
 </style>

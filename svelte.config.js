@@ -9,6 +9,9 @@ const config = {
 
 	kit: {
 		adapter: adapter()
+	},
+	files:{
+		routes:'src/routes/frontend'
 	}
 };
 
