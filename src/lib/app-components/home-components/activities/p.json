@@ -1,0 +1,61 @@
+{
+    "id": "$database.mongodbObjectId",
+    "companyName": "$company.name",
+    "registrationNumber": "$database.mongodbObjectId",
+    "seoDescription": "$lorem.paragraph",
+    "overview": "$lorem.paragraphs",
+    "slogan": "$lorem.sentence",
+    "contact": {
+      "phone": "$phone.number",
+      "email": "$internet.email",
+      "address": {
+        "countryCode": "$address.countryCode",
+        "country": "$address.country",
+        "formattedAddress": "$address.streetAddress",
+        "geoPoints": {
+             "lat": "$address.latitude",
+             "lng": "$address.longitude"
+           },
+        "socialLinks":[
+                {
+                  "name": "$random.word",
+                  "url": "$internet.url"
+                },
+                {
+                  "name": "$random.word",
+                  "url": "$internet.url"
+                },
+                {
+                  "name": "$random.word",
+                  "url": "$internet.url"
+                },
+                {
+                  "name": "$random.word",
+                  "url": "$internet.url"
+                }
+              ]
+            }
+     },
+     "companyStaff": [
+        {
+          "fullName": "$name.fullName",
+          "title": "$name.jobTitle"
+        },
+        {
+          "fullName": "$name.fullName",
+          "title": "$name.jobTitle"
+        },
+        {
+          "fullName": "$name.fullName",
+          "title": "$name.jobTitle"
+        }
+     ],
+     "gallery": [
+          "$image.nature",
+          "$image.nature",
+          "$image.nature",
+          "$image.nature"
+     ],
+     "createdAt": "$date.past",
+     "updatedAt": "$date.recent"
+  }

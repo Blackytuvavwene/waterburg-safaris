@@ -1,18 +1,36 @@
 <script lang="ts">
-import Footer from '$lib/components/footer/footer.svelte';
-
-import Navbar from '$lib/components/navbar/navbar.svelte';
+import type { Address, AboutResponse } from '$lib/app-components/about-components/about.types';
 
 
+import Footer from '$lib/app-components/footer/footer.svelte';
+import Header from '$lib/app-components/header/Header.svelte';
 import '../app.css';
 
+import type { LayoutServerData } from './$types';
+
+export let data: LayoutServerData;
+data.about as AboutResponse;
+
+$: ({ contact } = data.about);
+
+
+type FooterContactProps={
+    address?:Address,
+    email?:string,
+    phone?:string
+}
+
+let footerContactProp:FooterContactProps=data.about.contact as FooterContactProps;
 </script>
 
 
 
-<Navbar/>
+<Header/>
 <main>
     <slot/>
 </main>
+<Footer footerContactProps={footerContactProp}/>
 
-<Footer/>
+
+
+
