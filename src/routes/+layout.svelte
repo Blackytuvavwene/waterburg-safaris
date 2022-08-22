@@ -20,7 +20,7 @@ type FooterContactProps={
     phone?:string
 }
 
-let footerContactProp:FooterContactProps=data.about.contact as FooterContactProps;
+let footerContactProps:FooterContactProps=data.about.contact as FooterContactProps;
 </script>
 
 
@@ -29,7 +29,7 @@ let footerContactProp:FooterContactProps=data.about.contact as FooterContactProp
 <main>
     <slot/>
 </main>
-<Footer footerContactProps={footerContactProp}/>
+<Footer {footerContactProps}/>
 
 
 

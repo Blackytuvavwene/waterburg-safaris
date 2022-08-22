@@ -30,5 +30,5 @@ import type { ButtonProps } from '../button/button.props.types';
             {/if}
         </div>
     </div>
-    <FlatButton buttonPropData={buttonData} />
+    <a href="/book-online/{packageData.id}"><button>Book online</button></a>
 </div>

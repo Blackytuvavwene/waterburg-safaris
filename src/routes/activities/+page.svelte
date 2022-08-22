@@ -2,15 +2,15 @@
 import type { ActivitiesList, ActivitiesResponse } from '$lib/app-components/activities-components/activities.types';
 import ActivityContainer from '$lib/app-components/activities-components/ActivityContainer.svelte';
 
-    import type {PageServerData} from './$types';
+import type {PageServerData} from './$types';
 
-    export let data: PageServerData;
+export let data: PageServerData;
 
-   let activities= data.activities as ActivitiesResponse[];
+let activities= data.activities as ActivitiesResponse[];
 
     
 
-    console.log(activities);
+console.log(activities);
 </script>
 
 <svelte:head>
@@ -24,7 +24,8 @@ import ActivityContainer from '$lib/app-components/activities-components/Activit
     <div class="flex flex-wrap justify-center">
         {#each activities as activity}
         <ActivityContainer activity={activity}/>
-        <button>Learn more</button>
+        <a href="activities/{activity.id}"><button class="float-right bg-secondaryContainer p-2 rounded-lg hover:bg-secondary
+             hover:text-onSecondary">Learn more</button></a>
         {/each}
     </div>
 </div>
