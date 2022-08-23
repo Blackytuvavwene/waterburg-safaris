@@ -1,5 +1,6 @@
 <script lang="ts">
 import type { Address, AboutResponse } from '$lib/app-components/about-components/about.types';
+import ContactForm from '$lib/app-components/contact-form/ContactForm.svelte';
 
 
 import Footer from '$lib/app-components/footer/footer.svelte';
@@ -28,7 +29,9 @@ let footerContactProps:FooterContactProps=data.about.contact as FooterContactPro
 <Header/>
 <main>
     <slot/>
+    <ContactForm/>
 </main>
+
 <Footer {footerContactProps}/>
 
 

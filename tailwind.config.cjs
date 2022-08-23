@@ -34,6 +34,22 @@ module.exports = {
         "onSuccessContainer":"var(--on-success-container)",
         "onErrorContainer":"var(--on-error-container)",
         "outline":"var(--outline)",
+      },
+      screens:{
+        "xxs":{"max":"320px",},
+        "xs":{"max":"360px",},
+      },
+      animation:{
+          "slideFromLeft": "slideFromLeft 1.5s ease-in-out",
+      },
+      keyframes:{
+        "slideFromLeft":{
+          "0%":{
+            translate:'translateX(-20vw)',
+          },
+          "100%":"translateX(0)"
+        }
+          
       }
     },
   },

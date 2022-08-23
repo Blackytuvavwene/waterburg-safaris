@@ -1,7 +1,8 @@
 <script lang="ts">
 import { onMount } from "svelte";
 import { page } from "$app/stores";
-import { fade } from "svelte/transition";
+import { fade, slide } from "svelte/transition";
+import { quadInOut } from "svelte/easing";
 
 
     let mobileNavBarShow = false;
@@ -64,7 +65,7 @@ import { fade } from "svelte/transition";
         </ul>
 
         <div class="sm:hidden flex flex-col w-full justify-end items-end">
-            <div class="{mobileNavBarShow ? "w-full bg-black h-full flex flex-row justify-between items-center" : ""}">
+            <div class="{mobileNavBarShow ? "w-full bg-transparent h-full flex flex-row justify-between items-center" : ""}">
                 <div class="{mobileNavBarShow ? "items-start ml-6" : "hidden"}">
                     <a href="/">Logo</a>
                 </div>
@@ -78,12 +79,12 @@ import { fade } from "svelte/transition";
 
 
             {#if mobileNavBarShow}
-            <div class="p-6 bg-black {mobileNavBarShow === true ? "block" : "hidden"}
-              w-full sidebar transition-all" transition:fade>
-                <ul class="list-none flex flex-col justify-between items-center">
+            <div class="p-6 bg-gradient-to-b from-primary to-black {mobileNavBarShow === true ? "block" : "hidden"}
+              w-full sidebar ease-in-out duration-500 transition" transition:slide="{{duration:500,easing:quadInOut}}">
+                <ul class="list-none flex flex-col  items-center">
                     {#each  navLinks as link}
-                        <li class="cursor-pointer ">
-                            <a href={link.path} class="text-white 
+                        <li class="cursor-pointer hover:bg-primaryContainer hover:text-onPrimaryContainer border-b-2 p-4 border-surfaceVariant w-full">
+                            <a href={link.path} class="text-onPrimary text-center hover:text-onPrimaryContainer
                             {link === navLinks[navLinks.length - 1] ? "mr-0" : "mb-4"}" on:click={toggleNavBar}>
                                 {link.name}
                             </a>

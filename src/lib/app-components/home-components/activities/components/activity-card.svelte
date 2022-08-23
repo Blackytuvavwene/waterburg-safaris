@@ -5,7 +5,6 @@ import FlatButton from "$lib/app-components/button/flat-button.svelte";
 
 
 import blob from "$lib/background-blob.svg";
-import blobImage from "$lib/image-blob.svg";
 import ImageBlob from "./image-blob.svelte";
 
 
@@ -18,20 +17,18 @@ const buttonData:ButtonProps={
 
     
 
-<div class=" max-h-full my-6">
-    <div class="activity-description-container">
-        <h1>Boat cruise</h1>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.</p>
-        <FlatButton buttonPropData={buttonData}/>
-    </div>
-    <span></span>
-    <div class="activity-image-container">
-        <div class="background-blob">
-            <img src={blob} alt="">
-        </div>
-        <div class="image-blob">
-            <ImageBlob/>
-        </div>
+<div class=" h-full w-fit rounded-2xl mx-6 lg:mx-28 my-6 flex flex-col-reverse lg:flex-row justify-center items-center
+border-primary border-2">
+    <section class="my-2 lg:ml-10 flex flex-col justify-start items-start p-4">
+        <h1 class=" text-2xl font-extrabold text-onPrimaryContainer lg:text-4xl">Boat cruise</h1>
+        <p class=" text-onPrimaryContainer lg:text-2xl">Lorem ipsum dolor sit amet consectetur adipisicing elit.
+             Quisquam, quidem.</p>
+        <a class="w-full" href="/activities"><button class="rounded-lg bg-primaryContainer 
+            text-onPrimaryContainer p-3 font-bold my-4 w-full lg:w-full ">Learn more</button></a>
+    </section>
+    <span class="m-2"></span>
+    <div class="w-full h-full justify-center  lg:justify-end flex ">
+        <img class=" rounded-t-2xl lg:rounded-r-2xl lg:rounded-l-none" src="/images/boatCruise1.webp" alt="" srcset="">
     </div>
 </div>
 

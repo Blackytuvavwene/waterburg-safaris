@@ -9,7 +9,12 @@
     let waterBerg='/images/waterberg.webp';
 </script>
 
-<div class="image-container">
-    <img src={lionImage} alt="lion" class="image1"/>
-    <img src={waterBerg} alt="" class="image2">
+<div class="w-full h-full items-center justify-center">
+    <div class=" m-10 lg:m-28 lg:flex lg:flex-row">
+        <img src={lionImage} alt="lion" class="w-full h-full lg:w-[50%] border-secondaryContainer border-8"/>
+        <span class="m-4"></span>
+        <img src={waterBerg} alt="lion2" class=" w-full h-full lg:w-[50%] border-tertiaryContainer border-8">
+    </div>
 </div>
+
+
