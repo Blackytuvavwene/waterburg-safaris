@@ -17,6 +17,7 @@ import Intro from "$lib/app-components/home-components/intro/intro.svelte";
       tours to all the game reserves and national parks of Botswana, Chobe National Park, Savute, Okavango Delta
        moremi Khwai and xakanaxa), nxai pan, Kgalagadi, mabuasehube game reserve), day trips into chobe national
         park, Mighty Victoria Falls Daytrips in Zimbabwe, Boat cruise in chobe river and transfers to various places.">
+        <!-- <script src="https://kit.fontawesome.com/d20804bf75.js" crossorigin="anonymous"></script> -->
 </svelte:head>
 
 
