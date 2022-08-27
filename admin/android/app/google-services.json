@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "872126391062",
+    "project_id": "waterburg-safaris",
+    "storage_bucket": "waterburg-safaris.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:872126391062:android:07faaf0fb5a40ca997e637",
+        "android_client_info": {
+          "package_name": "com.example.admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "872126391062-uplitrg0mtg5ir155gb6tmb7du29227v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALG8rLM0r7RewmmISgQ9dy51b7e35Ap9Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "872126391062-uplitrg0mtg5ir155gb6tmb7du29227v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

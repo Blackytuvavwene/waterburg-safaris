@@ -1,18 +1,20 @@
-<script lang="ts"></script>
+<script lang="ts">
+import ContactIconContainer from "./ContactIconContainer.svelte";
+
+</script>
 
 <section class="flex flex-col bg-primary w-[100%] h-full px-4 py-6 justify-center items-center">
-    <h1>Contact us</h1>
-    <div class="w-[100%] mx-20 sm:flex-row flex flex-col justify-between items-center">
-        <div>
-            <h2>Want to know more</h2>
-            <div >
-                <span class="fill-red-500">
-                    <i class="fa-solid fa-location-dot"></i>
-                </span>
-                
+    <h1 class="text-3xl font-extrabold text-onPrimary m-6">Contact us</h1>
+    <div class="w-[100%] sm:pl-10 sm:flex-row flex flex-col justify-between items-center">
+        <div class="w-[100%] md:w-[30%] lg:w-[45%] p-4 flex flex-col items-center justify-center">
+            <h2 class="text-2xl w-[100%] text-center font-bold text-onPrimary md:text-start">Contact information</h2>
+            <div class="flex flex-col w-[100%] items-center justify-center">
+                <ContactIconContainer iconData="fa-solid fa-phone" contactData="+267 71 234 567"/>
+                <ContactIconContainer iconData="fa-solid fa-envelope-open" contactData="waterburgsafaris@gmail.com"/>
+                <ContactIconContainer iconData="fa-solid fa-map-location-dot" contactData="Plot 1111, Kazungula Botswana"/>
             </div>
         </div>
-        <form class="w-[100%] sm:w-96 flex flex-col items-center bg-onPrimary p-6 rounded
+        <form class="w-[100%] sm:w-[60%] flex flex-col items-center bg-onPrimary p-6 rounded
          justify-center" action="" method="post">
             <fieldset class=" flex w-full flex-col justify-center mb-8">
                 <div>

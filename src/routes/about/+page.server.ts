@@ -1,9 +1,9 @@
 import { getAbout } from "$lib/app-components/about-components/about.api";
 import { error } from "@sveltejs/kit";
-import type { AboutResponse } from "$lib/app-components/about-components/about.types";
+import type { AboutCompanyResponse } from "$lib/app-components/about-components/about.types";
 import type { PageServerLoad, Action } from './$types';
 
-const endpoint='https://6300056a9350a1e548e9706d.mockapi.io/about';
+const endpoint='http://localhost:3000/api/about-company';
 
 // /** @type {import('./$types').PageServerLoad} */
 
@@ -12,8 +12,11 @@ export const load:PageServerLoad= async () => {
 
     if(response.status === 200) {
         const data = await response.json();
+        const aboutCompanyInfo=data['docs'][0] as AboutCompanyResponse;
+
+      
         return {
-            about: data[0] as AboutResponse,
+            about: aboutCompanyInfo,
         } 
     }
 

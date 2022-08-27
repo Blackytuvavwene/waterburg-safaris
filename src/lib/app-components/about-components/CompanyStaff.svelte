@@ -14,8 +14,8 @@ import type { CompanyStaff } from "./about.types";
     <div class="flex flex-col sm:flex-wrap sm:flex-row justify-evenly items-center">
         {#each companyStaffData as staff}
         <div class="flex flex-col items-center justify-center w-[100%] sm:w-80 mb-4 bg-tertiaryContainer p-4">
-            <h1 class="text-2xl font-bold text-onTertiaryContainer">{staff.fullName}</h1>
-            <p class="text-s">{staff.title}</p>
+            <h1 class="text-2xl font-bold text-onTertiaryContainer">{staff.companyStaffDetails?.companyStaffName}</h1>
+            <p class="text-s">{staff.companyStaffDetails?.jobTitle}</p>
         </div>
     {/each}
     </div>

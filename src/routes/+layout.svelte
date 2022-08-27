@@ -1,5 +1,5 @@
 <script lang="ts">
-import type { Address, AboutResponse } from '$lib/app-components/about-components/about.types';
+import type { Address, AboutCompanyResponse } from '$lib/app-components/about-components/about.types';
 import ContactForm from '$lib/app-components/contact-form/ContactForm.svelte';
 
 
@@ -10,18 +10,12 @@ import '../app.css';
 import type { LayoutServerData } from './$types';
 
 export let data: LayoutServerData;
-data.about as AboutResponse;
+data.about as AboutCompanyResponse;
 
-$: ({ contact } = data.about);
+$: ({ companyDetails } = data.about);
 
 
-type FooterContactProps={
-    address?:Address,
-    email?:string,
-    phone?:string
-}
 
-let footerContactProps:FooterContactProps=data.about.contact as FooterContactProps;
 </script>
 
 
@@ -32,7 +26,7 @@ let footerContactProps:FooterContactProps=data.about.contact as FooterContactPro
     <ContactForm/>
 </main>
 
-<Footer {footerContactProps}/>
+<Footer />
 
 
 
