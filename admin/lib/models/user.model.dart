@@ -7,6 +7,7 @@ part 'user.model.g.dart';
   explicitToJson: true,
 )
 class UserModel {
+  final String? uid;
   final String? username;
   final String? password;
   final String? email;
@@ -14,13 +15,15 @@ class UserModel {
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
-  UserModel(
-      {this.username,
-      this.password,
-      this.email,
-      this.phoneNumber,
-      this.createdAt,
-      this.updatedAt});
+  UserModel({
+    this.uid,
+    this.username,
+    this.password,
+    this.email,
+    this.phoneNumber,
+    this.createdAt,
+    this.updatedAt,
+  });
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
