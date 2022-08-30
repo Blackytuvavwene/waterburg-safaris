@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 abstract class AuthAbstract {
   // login method
-  Future<void> login({
+  Future<User> login({
     String? email,
     String? password,
   });
@@ -9,8 +11,11 @@ abstract class AuthAbstract {
   Future<void> logout();
 
   // signup method
-  Future<void> signup({
+  Future<UserCredential> signup({
     String email,
     String password,
   });
+
+  // stream user changes
+  Stream<User?> isSignedIn();
 }

@@ -1,6 +1,7 @@
-import 'package:admin/global/global.dart';
+import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sizer/sizer.dart';
 
@@ -34,28 +35,36 @@ class _MobileWelcomeScreen extends HookConsumerWidget {
               SizedBox(
                 height: 6.h,
               ),
-              Center(
-                child: Text(
-                  'Waterburg Safaris Admin',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
+              const Center(
+                child: DText(
+                  text: 'Waterburg Safaris Admin',
                 ),
               ),
-              SvgPicture.asset('assets/images/welcome.svg'),
+              SvgPicture.asset(
+                'assets/images/welcome.svg',
+                height: 54.h,
+              ),
+              SizedBox(
+                height: 6.h,
+              ),
+              CustomElevatedButton(
+                onPressed: () {
+                  ref.read(appStatusProvider.notifier).toggleFirstOpen();
+                  context.pushNamed('signup');
+                },
+                text: 'Create account',
+                height: 6.h,
+              ),
               SizedBox(
                 height: 4.h,
               ),
-              ElevatedButton(
-                onPressed: () {},
-                child: const Text('Create account'),
-              ),
-              SizedBox(
-                height: 4.h,
-              ),
-              ElevatedButton(
-                onPressed: () {},
-                child: const Text('Login'),
+              CustomElevatedButton(
+                onPressed: () {
+                  ref.read(appStatusProvider.notifier).toggleFirstOpen();
+                  context.pushNamed('login');
+                },
+                text: 'Login',
+                height: 6.h,
               ),
             ],
           ),
@@ -85,26 +94,29 @@ class _TabletWelcomeScreen extends HookConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    'Waterburg Safaris Admin',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onBackground,
-                    ),
+                  const DText(
+                    text: 'Waterburg Safaris Admin',
                   ),
                   SvgPicture.asset('assets/images/welcome.svg'),
                   SizedBox(
                     height: 2.h,
                   ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('Create account'),
+                  CustomElevatedButton(
+                    onPressed: () {
+                      ref.read(appStatusProvider.notifier).toggleFirstOpen();
+                      context.pushNamed('signup');
+                    },
+                    text: 'Create account',
                   ),
                   SizedBox(
                     height: 4.h,
                   ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('Login'),
+                  CustomElevatedButton(
+                    onPressed: () {
+                      ref.read(appStatusProvider.notifier).toggleFirstOpen();
+                      context.pushNamed('login');
+                    },
+                    text: 'Login',
                   ),
                 ],
               ),
@@ -151,27 +163,32 @@ class _DesktopWelcomeScreen extends HookConsumerWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text(
-                                  'Waterburg Safaris Admin',
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onBackground,
-                                  ),
+                                const DText(
+                                  text: 'Waterburg Safaris Admin',
                                 ),
                                 SizedBox(
                                   height: 6.h,
                                 ),
-                                ElevatedButton(
-                                  onPressed: () {},
-                                  child: const Text('Create account'),
+                                CustomElevatedButton(
+                                  onPressed: () {
+                                    ref
+                                        .read(appStatusProvider.notifier)
+                                        .toggleFirstOpen();
+                                    context.pushNamed('signup');
+                                  },
+                                  text: 'Create account',
                                 ),
                                 SizedBox(
                                   height: 4.h,
                                 ),
-                                ElevatedButton(
-                                  onPressed: () {},
-                                  child: const Text('Login'),
+                                CustomElevatedButton(
+                                  onPressed: () {
+                                    ref
+                                        .read(appStatusProvider.notifier)
+                                        .toggleFirstOpen();
+                                    context.pushNamed('login');
+                                  },
+                                  text: 'Login',
                                 ),
                               ],
                             ),

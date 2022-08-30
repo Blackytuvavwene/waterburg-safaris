@@ -1,32 +1,30 @@
 import { getAbout } from "$lib/app-components/about-components/about.api";
 import { error } from "@sveltejs/kit";
 import type { AboutCompanyResponse } from "$lib/app-components/about-components/about.types";
-import type { LayoutServerLoad } from './$types';
-import {footerPropStore, type FooterContactProps} from '$lib/app-components/footer/footerprops.types';
+import type { LayoutServerLoad } from './$types'; 
+import { companyData } from "$lib/firebase";
+import { setFooterProps, type FooterContactProps } from "$lib/app-components/footer/footerprops.types";
 
-const endpoint='http://localhost:3000/api/about-company';
+// const endpoint='http://localhost:3000/api/about-company';
 
 // /** @type {import('./$types').PageServerLoad} */
 
 export const load:LayoutServerLoad= async () => {
-    const response = await getAbout('GET', endpoint);
+    const responseData = await companyData();
 
-    if(response.status === 200) {
-        const data = await response.json();
-        const aboutCompanyInfo=data['docs'][0] as AboutCompanyResponse;
+    if(responseData ) {
+        const data = responseData;
+        const aboutCompanyInfo=data as AboutCompanyResponse;
 
-      const newFootProps:FooterContactProps={
-            address:aboutCompanyInfo.address,
-            contacts: aboutCompanyInfo.companyDetails?.contacts,
-       };
+     setFooterProps(aboutCompanyInfo?.companyDetails );
 
 
-        footerPropStore.set(newFootProps);
+       
         return {
-            about: data['docs'][0] as AboutCompanyResponse,
+            about: aboutCompanyInfo,
         } 
     }
 
-    throw error(response.status);
+    throw error(403,'failed to get data');
     
 };

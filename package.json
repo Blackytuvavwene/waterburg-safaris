@@ -41,6 +41,18 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@ngneat/effects": "^1.1.1",
+		"@ngneat/effects-hooks": "^1.1.0",
+		"@ngneat/effects-ng": "^2.0.0",
+		"@ngneat/elf": "^2.1.0",
+		"@ngneat/elf-cli-ng": "^1.0.0",
+		"@ngneat/elf-devtools": "^1.2.1",
+		"@ngneat/elf-entities": "^4.4.2",
+		"@ngneat/elf-pagination": "^1.0.1",
+		"@ngneat/elf-persist-state": "^1.1.5",
+		"@ngneat/elf-requests": "^1.1.4",
+		"@ngneat/elf-state-history": "^1.2.1",
+		"firebase": "^9.9.3",
 		"swiper": "^8.3.2"
 	}
 }

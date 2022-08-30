@@ -25,12 +25,13 @@ class UserDatabaseRepository implements UserDatabaseAbstract {
 
   // get user from firestore
   @override
-  Future<UserModel> getUserFromFirestore({String? uid}) async {
+  Stream<UserModel> getUserFromFirestore({String? uid}) {
     try {
-      var user = await _firestore.collection('users').doc(uid).get();
-      return UserModel.fromJson(user.data is Map<String, dynamic>
-          ? user.data
-          : json.decode(user.data.toString()));
+      var user = _firestore.collection('users').doc(uid).snapshots().map(
+          (event) => UserModel.fromJson(event.data is Map<String, dynamic>
+              ? event.data
+              : json.decode(event.data.toString())));
+      return user;
     } on FirebaseException catch (e) {
       throw e.toString();
     }

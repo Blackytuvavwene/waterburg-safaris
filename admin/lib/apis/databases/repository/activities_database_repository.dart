@@ -41,7 +41,7 @@ class ActivitiesDatabaseRepository implements ActivitiesDatabaseAbstract {
   // get a list of activities from firestore
   @override
   Stream<List<Activity>> getActivitiesFromFirestore() {
-    return _firestore.collection('activities').snapshots().map(
+    var data = _firestore.collection('activities').snapshots().map(
           (activityData) => activityData.docs
               .map(
                 (e) => Activity.fromJson(
@@ -50,6 +50,7 @@ class ActivitiesDatabaseRepository implements ActivitiesDatabaseAbstract {
               )
               .toList(),
         );
+    return data;
   }
 
   // update activity on firestore

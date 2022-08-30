@@ -11,28 +11,28 @@ export let data: PageServerData;
 
 
 
-$: ({companyStaff, seo,companyOverview, address, companyGallery,companyDetails}=data.about)
+$: ({companyStaff,  companyGallery,companyDetails}=data.about)
 
 
 
 </script>
 
 <svelte:head>
-    <title>{seo?.seoTitle}</title>
-    <meta name="description" content={seo?.seoDescription}>
+    <title>{companyDetails?.companyName}</title>
+    <meta name="description" content={companyDetails?.seoDescription}>
 </svelte:head>
 
 
 <div class=" flex-1 flex-col justify-center items-center py-6 mx-6 h-full w-auto">
     <h1 class=" text-primary text-3xl font-bold my-2">{companyDetails?.companyName}</h1>
-    {#if companyOverview}
-    <Overview overviewData={companyOverview}/>
+    {#if companyDetails?.overview}
+    <Overview overviewData={companyDetails?.overview}/>
     {/if}
     {#if companyStaff}
     <CompanyStaff companyStaffData={companyStaff}/>
     {/if}
-    {#if address}
-    <Address addressData={address}/>
+    {#if companyDetails}
+    <Address addressData={companyDetails}/>
     {/if}
     <!-- {#if gallery}
     <AboutGallery galleryData={gallery}/>

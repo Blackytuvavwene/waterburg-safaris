@@ -1,12 +1,40 @@
-import { writable } from "svelte/store";
-import type { Address, Contacts } from "../about-components/about.types"
+import { createStore, select, withProps } from '@ngneat/elf';
+import type { CompanyDetails } from "../about-components/about.types";
+import { localStorageStrategy, persistState } from '@ngneat/elf-persist-state';
+import { writable } from 'svelte/store';
+import { browser } from '$app/env';
 
-export type FooterContactProps={
-    address?:Address,
-    contacts?:Contacts;
+export interface FooterContactProps{
+   companyDetails?:CompanyDetails;
 };
 
+// const footData =browser && localStorage.getItem('footData');
 
-const footerProps:FooterContactProps={};
+// export const footerPropStore= writable(footData ? JSON.parse(footData):'');
 
-export const footerPropStore= writable(footerProps);
+// if(browser){
+//     footerPropStore.subscribe(data=>localStorage.footData=data);
+// }
+
+// export const setFooterProps=(footerData:FooterContactProps['companyDetails'])=>{
+//     footerPropStore.update((data)=>data=JSON.stringify(footerData));
+// }
+
+
+
+const footData:CompanyDetails={};
+
+export const footerPropStore= writable(footData);
+
+export const setFooterProps=(footerData?:CompanyDetails)=>{
+  
+    if(footerData){
+        footerPropStore.set(footerData);
+    }
+    
+}
+
+
+
+
+

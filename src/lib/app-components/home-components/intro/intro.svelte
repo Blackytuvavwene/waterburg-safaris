@@ -10,9 +10,9 @@ import IntroImageSlider from "./components/IntroImageSlider.svelte";
 <div class="h-full flex w-full flex-col ">
     <div class=" bg-primary flex flex-col justify-center items-center h-full  
     lg:flex-row sm:justify-evenly py-8 lg:py-10 lg:px-6">
-        <div class=" mx-6 my-8">
+        <div class=" mx-[5%] my-8 lg:w-[50%]">
             <section class="my-6">
-                <h1 class=" font-[800] text-tertiaryContainer font-sans text-center text-4xl lg:text-start">
+                <h1 class="mb-6 font-extrabold text-tertiaryContainer font-sans text-center text-5xl sm:text-6xl lg:text-start">
                     Welcome to Waterburg Safaris
                 </h1>
                 <p class="text-center lg:text-start text-primaryContainer 
@@ -27,12 +27,15 @@ import IntroImageSlider from "./components/IntroImageSlider.svelte";
                  md:w-[50%] text-onPrimary">Book online</button>
             </div>
         </div>
-        <FadeTransition>
-            <div class="flex border-secondaryContainer border-2 w-[90%] h-full sm:h-96 sm:w-10/12
-            lg:w-10/12 lg:h-96 lg:flex justify-center items-center ">
-               <IntroImageSlider/>
-           </div>
-        </FadeTransition>
+        <div class="lg:w-[50%] w-full">
+            <FadeTransition>
+                <div class="flex border-secondaryContainer border-2 w-[90%] h-full sm:h-10/12 md:w-[90%]
+                lg:w-fit lg:h-96 lg:flex justify-center items-center ">
+                   <IntroImageSlider/>
+               </div>
+            </FadeTransition>
+        </div>
+        
         
     </div>
 </div>

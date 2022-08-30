@@ -1,6 +1,5 @@
 <script lang="ts">
 import ContactFooter from "./components/ContactFooter.svelte";
-import type { Address } from "$lib/app-components/about-components/about.types";
 
 
 </script>

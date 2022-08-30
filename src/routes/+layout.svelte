@@ -1,5 +1,5 @@
 <script lang="ts">
-import type { Address, AboutCompanyResponse } from '$lib/app-components/about-components/about.types';
+import type {  AboutCompanyResponse } from '$lib/app-components/about-components/about.types';
 import ContactForm from '$lib/app-components/contact-form/ContactForm.svelte';
 
 
@@ -10,7 +10,7 @@ import '../app.css';
 import type { LayoutServerData } from './$types';
 
 export let data: LayoutServerData;
-data.about as AboutCompanyResponse;
+// console.log(data.about);
 
 $: ({ companyDetails } = data.about);
 

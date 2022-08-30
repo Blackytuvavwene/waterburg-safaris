@@ -8,10 +8,12 @@ class AuthRepository extends AuthAbstract {
 
   // login in method override
   @override
-  Future<void> login({String? email, String? password}) async {
+  Future<User> login({String? email, String? password}) async {
     try {
-      await _auth.signInWithEmailAndPassword(
+      final data = await _auth.signInWithEmailAndPassword(
           email: email!, password: password!);
+      final user = data.user;
+      return user!;
     } on FirebaseAuthException catch (e) {
       throw e.toString();
     }
@@ -25,12 +27,17 @@ class AuthRepository extends AuthAbstract {
 
   // signup in method override
   @override
-  Future<void> signup({String? email, String? password}) async {
+  Future<UserCredential> signup({String? email, String? password}) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
+      final user = await _auth.createUserWithEmailAndPassword(
           email: email!, password: password!);
+      return user;
     } on FirebaseAuthException catch (e) {
       throw e.toString();
     }
   }
+
+  // is signed in method
+  @override
+  Stream<User?> isSignedIn() => _auth.userChanges();
 }

@@ -2,7 +2,7 @@
     export let overviewData:string;
 
     // split the overview text into an array of paragraphs
-    let paragraphs=overviewData.split('\n');
+    let paragraphs=overviewData.split('  ');
 </script>
 
 

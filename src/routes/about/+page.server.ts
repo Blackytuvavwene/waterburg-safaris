@@ -1,18 +1,18 @@
-import { getAbout } from "$lib/app-components/about-components/about.api";
+
 import { error } from "@sveltejs/kit";
 import type { AboutCompanyResponse } from "$lib/app-components/about-components/about.types";
 import type { PageServerLoad, Action } from './$types';
+import { companyData } from "$lib/firebase";
 
-const endpoint='http://localhost:3000/api/about-company';
 
 // /** @type {import('./$types').PageServerLoad} */
 
 export const load:PageServerLoad= async () => {
-    const response = await getAbout('GET', endpoint);
+    const responseData = await companyData();
 
-    if(response.status === 200) {
-        const data = await response.json();
-        const aboutCompanyInfo=data['docs'][0] as AboutCompanyResponse;
+    if(responseData ) {
+        const data = responseData;
+        const aboutCompanyInfo=data as AboutCompanyResponse;
 
       
         return {
@@ -20,7 +20,7 @@ export const load:PageServerLoad= async () => {
         } 
     }
 
-    throw error(response.status);
+    throw error(403,'failed to get data');
     
 };
 
