@@ -25,6 +25,8 @@ const db =getFirestore(app);
 const getAboutCompany=await getDoc(doc(db,'aboutCompany','ymV8H6FBRjfMBFhAh8o2'));
     
 const getActivities=await getDocs(collection(db,'activities'));
+
+const getActivity=async (activityID:string)=>await getDoc(doc(db,'activities',activityID));
   
 export const companyData=()=>{
 if (getAboutCompany.exists()) {
@@ -39,9 +41,20 @@ if (getAboutCompany.exists()) {
 export const activitiesData=()=>{
     if (getAboutCompany.exists()) {
         console.log(getActivities.docs.values());
-        return getActivities.docs.push();
+        return getActivities.docs.map(doc => doc.data());
     } else {
         console.log("No company data found");
     }
+}
+
+
+// get activity data from firestore
+export const activityData=async(docId:string)=>{
+    const data= await getActivity(docId);
+    if(data.exists()){
+        return data.data();
+    } else {
+        throw "Failed to get activity data";
     }
+}
 

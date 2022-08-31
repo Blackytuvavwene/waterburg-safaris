@@ -24,7 +24,7 @@ export interface FooterContactProps{
 
 const footData:CompanyDetails={};
 
-export const footerPropStore= writable(footData);
+export const footerPropStore= writable({});
 
 export const setFooterProps=(footerData?:CompanyDetails)=>{
   

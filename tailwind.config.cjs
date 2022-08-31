@@ -40,6 +40,7 @@ module.exports = {
       screens:{
         "xxs":{"max":"320px",},
         "xs":{"max":"360px",},
+        "s":{"max":"390px",},
       },
       animation:{
           "slideFromLeft": "slideFromLeft 1.5s ease-in-out",

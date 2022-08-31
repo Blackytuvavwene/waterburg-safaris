@@ -5,30 +5,24 @@ import type { ButtonProps } from '../button/button.props.types';
     import type { Package } from './activities.types';
     export let packageData:Package;
 
-    const buttonData:ButtonProps={
-        title:"Book Now",
-        backGroundColor:'bg-secondary',
-        fontColor:"text-onSecondary",
-        bgHoverColor:"hover:bg-onSecondary",
-        fontHoverColor:"hover:text-secondary",
-        borderRadius:"rounded-lg",
-    }
+   
 </script>
 
-<div class=" bg-secondaryContainer flex flex-col justify-center items-center py-4 rounded-xl">
-    <h1>{packageData.name}</h1>
-    <p class=" font-extrabold">${packageData.price}</p>
-    <div class=" flex flex-col justify-center items-center">
-        <p class=" text-lg font-bold">Package offers:</p>
-        <div class="bg-onSecondaryContainer m-2 px-4 rounded-lg">
-            {#if packageData.includes}
-                {#each packageData.includes as offer}
-                <p class=" text-secondaryContainer border-secondary my-2
-                 {offer ===packageData.includes[packageData.includes.length -1] ? ""
-                  : "border-b-[1px]"}">{offer}</p>
+<div class="w-full bg-secondaryContainer flex flex-col justify-center items-center  py-4 rounded-xl">
+    <h1><strong class="text-lg font-bold text-onSecondaryContainer">{packageData.packageName}</strong></h1>
+    <p class=" font-bold">${packageData.price}</p>
+    <div class=" flex w-full h-fit flex-col justify-center mb-4 items-center">
+        <p class=" text-lg font-bold mb-2">Package offers:</p>
+        <div class="bg-tertiaryContainer w-full h-fit object-contain p-6 ">
+            {#if packageData.packageOffers}
+                {#each packageData.packageOffers as offer}
+                <p class=" text-onTertiaryContainer border-secondary my-2
+                 {offer ===packageData.packageOffers[packageData.packageOffers.length -1] ? ""
+                  : "border-b-[1px] py-4"}">{offer}</p>
                 {/each}
             {/if}
         </div>
     </div>
-    <a href="/book-online/{packageData.id}"><button>Book online</button></a>
+    <a class="w-full" href="/book-online/{packageData.packageId}">
+        <button class="text-onPrimary p-4 w-full bg-secondary">Book online</button></a>
 </div>
