@@ -50,17 +50,18 @@ import { quadInOut } from "svelte/easing";
 
 
 <header class="w-full flex items-center bg-primary">
-    <nav class="w-full flex {mobileNavBarShow ? "flex-col justify-start" : "py-4"} justify-between items-center ">
-        <div class= "flex flex-col items-start justify-start  ml-4">
+    <nav class="w-full flex {mobileNavBarShow ? "flex-col" : "py-4"} justify-between items-center ">
+        <div class= "flex flex-row items-center w-full justify-between ml-4">
             <a href="/">Logo</a>
-        </div>
-        <div class="sm:hidden transition delay-1000 flex flex-col w-full justify-end items-end">
-                <div class="w-8 h-full mr-4 {mobileNavBarShow ? "translate-y-6" : ""}" on:click={toggleNavBar}>
+            <div class="sm:hidden transition delay-1000 flex flex-col w-full justify-end items-end">
+                <div class="w-8 h-full mr-4 {mobileNavBarShow ? "translate-y-4" : ""}" on:click={toggleNavBar}>
                     <div class="bg-white w-full h-1 {mobileNavBarShow ? "rotate-45 translate-y-1" : ""}"></div>
                     <div class="bg-none w-full h-2 {mobileNavBarShow ? "hidden" : ""}"></div>
                     <div class="bg-white w-full h-1 {mobileNavBarShow ? "-rotate-45" : ""}"></div>
                 </div>
         </div>
+        </div>
+        
         <ul class="list-none hidden sm:flex flex-row mr-4 justify-between items-center">
             {#each  navLinks as link}
                 <li class="cursor-pointer ">
@@ -77,7 +78,7 @@ import { quadInOut } from "svelte/easing";
                     {#each  navLinks as link}
                         <li class="cursor-pointer hover:bg-primaryContainer hover:text-onPrimaryContainer
                          border-b-2 p-4 border-surfaceVariant w-full">
-                            <a href={link.path} class="text-onPrimary text-center hover:text-onPrimaryContainer
+                            <a href={link.path} class="text-onPrimary w-[100%] text-center hover:text-onPrimaryContainer
                             {link === navLinks[navLinks.length - 1] ? "mr-0" : "mb-4"}" on:click={toggleNavBar}>
                                 {link.name}
                             </a>
@@ -85,9 +86,7 @@ import { quadInOut } from "svelte/easing";
                     {/each}
                 </ul>
             </div>
-            {/if}
-
-        
+        {/if}
     </nav>
 </header>
 
