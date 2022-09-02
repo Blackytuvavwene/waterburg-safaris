@@ -1,31 +1,20 @@
-import { getAbout } from "$lib/app-components/about-components/about.api";
+import type { ActivitiesResponse } from "$lib/app-components/activities-components/activities.types";
+import { activitiesData } from "$lib/firebase";
 import { error } from "@sveltejs/kit";
-import type { PageServerLoad} from './$types';
-import type {  Package } from "$lib/app-components/activities-components/activities.types";
-import { currentActivity } from "$lib/app-components/activities-components/activity.stores";
+import type { PageServerLoad } from "./$types";
 
+export const load:PageServerLoad= async () => {
+    const responseData = await activitiesData();
 
-let activity:string;
-
-
-currentActivity.subscribe(id=>activity=id);
-
-const endpoint=`https://6300056a9350a1e548e9706d.mockapi.io/activities/1/packages`;
-
-// /** @type {import('./$types').PageServerLoad} */
-
-export const load:PageServerLoad= async ({params}) => {
-    const response = await getAbout('GET', `${endpoint}/${params.slug}`);
-
-    if(response.status === 200) {
-        const data = await response.json();
-        const activity= data as Package;
+    if(responseData ) {
+        const data = responseData;
+        const activities=data as ActivitiesResponse[];
+       
         return {
-            activity: activity,
+            activities: activities,
         } 
-        
     }
 
-    throw error(response.status,response.json.toString());
+    throw error(403,'failed to get data');
     
 };

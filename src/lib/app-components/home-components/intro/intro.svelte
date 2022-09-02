@@ -1,4 +1,6 @@
 <script>
+import { resetCurrentSelectedPersist } from '$lib/app-components/activities-components/activity.stores';
+
 	import FadeTransition from './../../animations/FadeTransition.svelte';
 import IntroImageSlider from "./components/IntroImageSlider.svelte";
 
@@ -19,12 +21,16 @@ import IntroImageSlider from "./components/IntroImageSlider.svelte";
                 text-base font-bold">Explore marvels of creation with us!</p>
             </section>
             <div class="flex flex-col md:flex-row h-full w-[100%]">
-                <button class="font-bold bg-onPrimary text-primary shadow-md sm:text-xl sm:p-4
-                shadow-onPrimaryContainer hover:-translate-y-1 rounded-lg p-2 md:w-[50%] ">View our activities</button>
+                <a href="/activities" class="w-full h-full md:w-[50%]">
+                    <button class="font-bold w-full bg-onPrimary text-primary shadow-md sm:text-xl sm:p-4
+                    shadow-onPrimaryContainer hover:-translate-y-1 rounded-lg p-2  ">View our activities</button>
+                </a>
                 <span class="m-4 "></span>
-                <button class="font-bold transition ease-in-out duration-500 hover:-translate-y-1 rounded-lg
-                 border-onPrimary border-[1px] sm:p-4 p-[7px]
-                 md:w-[50%] text-onPrimary">Book online</button>
+                <a href="/book-online" class="w-full  md:w-[50%]">
+                    <button class="font-bold w-full transition ease-in-out duration-500 hover:-translate-y-1 rounded-lg
+                    border-onPrimary border-[1px] sm:p-4 p-[7px]
+                    text-onPrimary" on:click={resetCurrentSelectedPersist}>Book online</button>
+                </a>
             </div>
         </div>
         <div class="lg:w-[50%] w-full">

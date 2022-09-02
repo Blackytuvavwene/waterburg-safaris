@@ -1,11 +1,35 @@
 <script lang="ts">
-import type { Package } from '$lib/app-components/activities-components/activities.types';
+import type { ActivitiesResponse, Package } from '$lib/app-components/activities-components/activities.types';
+import {  persistCurrentSelectedStore, type currentA } from '$lib/app-components/activities-components/activity.stores';
+import ActivitiesBooking from '$lib/app-components/booking-components/ActivitiesBooking..svelte';
+import CurrentActivityBooking from '$lib/app-components/booking-components/CurrentActivityBooking.svelte';
+import { activitiesData, activityData } from '$lib/firebase';
+import type { PageServerData } from './$types';
+import { onMount } from 'svelte';
+export let data:PageServerData;
 
-    import type { PageServerData } from './$types';
+let cselected:currentA;
 
-    export let data: PageServerData;
+persistCurrentSelectedStore.subscribe(data =>{
+        cselected = data;
+        console.log(data);
+    });
 
-    $: ({ id,discount,includes,price,lastPrice, } = data.activity as Package);
+
+
+let activitiesDataList=data.activities;
+
+    $: ({ pID ,activity} = cselected);
 </script>
 
-<h1>Book online</h1>
+<svelte:head>
+    <title>Book {activity!= null? activity.activityName :"activities"} online</title>
+</svelte:head>
+
+{#if activity}
+<div class="w-full">
+    <CurrentActivityBooking currentActivity={cselected}/>
+</div>  
+{:else}
+<ActivitiesBooking {activitiesDataList}/>
+{/if}

@@ -49,8 +49,8 @@ export const activitiesData=()=>{
 
 
 // get activity data from firestore
-export const activityData=async(docId:string)=>{
-    const data= await getActivity(docId);
+export const activityData=async(docId?:string)=>{
+    const data= await getActivity(docId!);
     if(data.exists()){
         return data.data();
     } else {

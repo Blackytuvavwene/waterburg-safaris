@@ -2,8 +2,17 @@
 import type { ButtonProps } from '../button/button.props.types';
 
 	import FlatButton from '../button/flat-button.svelte';
-    import type { Package } from './activities.types';
+    import type { ActivitiesResponse, Package } from './activities.types';
+import { setCurrentSelectedPersist } from './activity.stores';
     export let packageData:Package;
+    export let activity:ActivitiesResponse;
+
+    const setBookActivity=()=>{
+        if(activity.activityId && packageData.packageId){
+            console.log(activity,'set');
+            return setCurrentSelectedPersist(activity,packageData.packageId);
+        }
+    }
 
    
 </script>
@@ -23,6 +32,6 @@ import type { ButtonProps } from '../button/button.props.types';
             {/if}
         </div>
     </div>
-    <a class="w-full" href="/book-online/{packageData.packageId}">
-        <button class="text-onPrimary p-4 w-full bg-secondary">Book online</button></a>
+    <a class="w-full" href="/book-online">
+        <button class="text-onPrimary p-4 w-full bg-secondary" on:click={setBookActivity}>Book online</button></a>
 </div>

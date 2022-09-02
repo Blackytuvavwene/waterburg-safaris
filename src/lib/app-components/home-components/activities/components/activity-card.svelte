@@ -17,7 +17,7 @@ const buttonData:ButtonProps={
 
     
 
-<div class=" h-full w-fit rounded-2xl mx-6 lg:mx-28 my-6 flex flex-col-reverse lg:flex-row justify-center items-center
+<div class=" h-full w-fit sm:w-80 lg:w-10/12 rounded-2xl mx-6 lg:mx-2  my-6 flex flex-col-reverse lg:flex-row justify-center items-center
 border-primary border-2">
     <section class="my-2 lg:ml-10 flex flex-col justify-start items-start p-4">
         <h1 class=" text-2xl font-extrabold text-onPrimaryContainer lg:text-4xl">Boat cruise</h1>
@@ -27,8 +27,8 @@ border-primary border-2">
             text-onPrimaryContainer p-3 font-bold my-4 w-full lg:w-full ">Learn more</button></a>
     </section>
     <span class="m-2"></span>
-    <div class="w-full h-full justify-center  lg:justify-end flex ">
-        <img class=" rounded-t-2xl lg:rounded-r-2xl lg:rounded-l-none" src="/images/boatCruise1.webp" alt="" srcset="">
-    </div>
+    <figure class="w-full h-full justify-center  lg:justify-end flex  ">
+        <img class=" rounded-t-2xl lg:rounded-r-2xl lg:rounded-l-none object-contain w-full h-full" src="/images/boatCruise1.webp" alt="" srcset="">
+    </figure>
 </div>
 

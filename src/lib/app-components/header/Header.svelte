@@ -63,8 +63,8 @@ import { quadInOut } from "svelte/easing";
         </div>
         <ul class="list-none hidden sm:flex flex-row mr-4 justify-between items-center">
             {#each  navLinks as link}
-                <li class="cursor-pointer ">
-                    <a href={link.path} class="text-white {link === navLinks[navLinks.length - 1] ? "mr-0" : "mr-10"}">
+                <li class="cursor-pointer w-full ">
+                    <a href={link.path} class="text-white w-full  bg-red-500 p-4 {link === navLinks[navLinks.length - 1] ? "mr-0" : "mr-10"}">
                         {link.name}
                     </a>
                 </li>
@@ -73,12 +73,12 @@ import { quadInOut } from "svelte/easing";
         {#if mobileNavBarShow}
             <div class="p-6 bg-gradient-to-b from-primary to-black {mobileNavBarShow === true ? "block" : "hidden"}
               w-full sidebar ease-in-out duration-500 transition" transition:slide="{{duration:500,easing:quadInOut}}">
-                <ul class="list-none flex flex-col  items-center">
+                <ul class="list-none flex flex-col  items-center w-full">
                     {#each  navLinks as link}
                         <li class="cursor-pointer hover:bg-primaryContainer hover:text-onPrimaryContainer
                          border-b-2 p-4 border-surfaceVariant w-full">
                             <a href={link.path} class="text-onPrimary text-center hover:text-onPrimaryContainer
-                            {link === navLinks[navLinks.length - 1] ? "mr-0" : "mb-4"}" on:click={toggleNavBar}>
+                            {link === navLinks[navLinks.length - 1] ? "mr-0" : "mb-4"} w-full" on:click={toggleNavBar}>
                                 {link.name}
                             </a>
                         </li>

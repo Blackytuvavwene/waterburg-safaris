@@ -32,7 +32,7 @@ import PackageCard from '$lib/app-components/activities-components/PackageCard.s
             {#if packages}
             {#each packages as packageData}
                 <div class=" m-4 w-full h-full sm:w-80">
-                    <PackageCard {packageData}/>
+                    <PackageCard activity={data.activity} {packageData}/>
                 </div>
             {/each}
         {/if}
