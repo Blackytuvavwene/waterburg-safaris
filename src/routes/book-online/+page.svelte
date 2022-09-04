@@ -19,7 +19,7 @@ persistCurrentSelectedStore.subscribe(data =>{
 
 let activitiesDataList=data.activities;
 
-    $: ({ pID ,activity} = cselected);
+    $: ({ packageD ,activity} = cselected);
 </script>
 
 <svelte:head>

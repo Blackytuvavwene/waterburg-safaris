@@ -8,9 +8,9 @@ import { setCurrentSelectedPersist } from './activity.stores';
     export let activity:ActivitiesResponse;
 
     const setBookActivity=()=>{
-        if(activity.activityId && packageData.packageId){
+        if(activity.activityId && packageData){
             console.log(activity,'set');
-            return setCurrentSelectedPersist(activity,packageData.packageId);
+            return setCurrentSelectedPersist(activity,packageData);
         }
     }
 

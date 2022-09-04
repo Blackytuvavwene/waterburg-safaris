@@ -14,14 +14,15 @@ export const load:LayoutServerLoad= async () => {
 
     if(responseData ) {
         const data = responseData;
-        const aboutCompanyInfo=data as AboutCompanyResponse;
+        // console.log(data);
+        const aboutCompanyInfo=data;
 
      setFooterProps(aboutCompanyInfo?.companyDetails );
 
 
        
         return {
-            about: aboutCompanyInfo,
+            about: aboutCompanyInfo as AboutCompanyResponse,
         } 
     }
 

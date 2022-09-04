@@ -1,11 +1,11 @@
 import { createStore, withProps } from '@ngneat/elf';
 import { writable } from 'svelte/store';
 import { localStorageStrategy, persistState } from '@ngneat/elf-persist-state';
-import type { ActivitiesResponse } from './activities.types';
+import type { ActivitiesResponse, Package } from './activities.types';
 
 export type currentA={
     activity?:ActivitiesResponse|null;
-    pID?:string|null;
+    packageD?:Package|null;
 }
 
 // export const currentSelected = writable<currentA>();
@@ -21,7 +21,7 @@ export type currentA={
 
 export const persistCurrentSelectedStore = createStore(
     {name: 'currentSelected'},
-    withProps<currentA>({activity:null,pID:null})
+    withProps<currentA>({activity:null,packageD:null})
 );
 
 export const currentPersist=persistState(persistCurrentSelectedStore,{
@@ -29,11 +29,11 @@ export const currentPersist=persistState(persistCurrentSelectedStore,{
     storage: localStorageStrategy,
 });
 
-export const setCurrentSelectedPersist=(activityNew:ActivitiesResponse,packageID:string) => {
+export const setCurrentSelectedPersist=(activityNew:ActivitiesResponse,packageID:Package) => {
    
     const newC:currentA={
        activity:activityNew,
-        pID:packageID
+        packageD:packageID
     }
     return persistCurrentSelectedStore.update((state)=>(state=newC));
 };
@@ -41,5 +41,7 @@ export const setCurrentSelectedPersist=(activityNew:ActivitiesResponse,packageID
 export const resetCurrentSelectedPersist=()=>{
     persistCurrentSelectedStore.reset();
 }
+
+
 
 

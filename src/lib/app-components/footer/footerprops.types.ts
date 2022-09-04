@@ -2,7 +2,7 @@ import { createStore, select, withProps } from '@ngneat/elf';
 import type { CompanyDetails } from "../about-components/about.types";
 import { localStorageStrategy, persistState } from '@ngneat/elf-persist-state';
 import { writable } from 'svelte/store';
-import { browser } from '$app/env';
+import { browser } from '$app/environment';
 
 export interface FooterContactProps{
    companyDetails?:CompanyDetails;

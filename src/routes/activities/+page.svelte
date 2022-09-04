@@ -3,6 +3,7 @@ import type { ActivitiesList, ActivitiesResponse } from '$lib/app-components/act
 import ActivityContainer from '$lib/app-components/activities-components/ActivityContainer.svelte';
 
 import type {PageServerData} from './$types';
+import {navigating}from '$app/stores';
 
 export let data: PageServerData;
 
@@ -18,6 +19,9 @@ let activities= data.activities ;
     <meta name="description" content='Waterburg Safaris offers a variety of safari activities taking you on an adventure that leaves wanting more'>
 </svelte:head>
 
+{#if $navigating}
+    <p>Loading........</p>
+{/if}
 
 <section class="h-full">
     <h1 class="px-6 pt-6 text-2xl font-bold lg:px-10">Waterburg Safaris Activities</h1>

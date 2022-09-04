@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { collection, doc, getDoc, getDocs, getFirestore} from "firebase/firestore";
+import { aboutCompanyConverter } from "./app-components/about-components/about.types";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -22,7 +23,7 @@ const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 const db =getFirestore(app);
 
-const getAboutCompany=await getDoc(doc(db,'aboutCompany','ymV8H6FBRjfMBFhAh8o2'));
+const getAboutCompany=await getDoc(doc(db,'aboutCompany','ymV8H6FBRjfMBFhAh8o2').withConverter(aboutCompanyConverter));
     
 const getActivities=await getDocs(collection(db,'activities'));
 
@@ -31,7 +32,11 @@ const getActivity=async (activityID:string)=>await getDoc(doc(db,'activities',ac
 export const companyData=()=>{
 if (getAboutCompany.exists()) {
     // console.log(getAboutCompany.data());
-    return getAboutCompany.data();
+    const company=getAboutCompany.data();
+   if (company != undefined){
+    const companyData=company.toAboutResponse(company);
+    return companyData;
+   }
 } else {
     console.log("No company data found");
 }
@@ -40,7 +45,7 @@ if (getAboutCompany.exists()) {
 // get all activities from firestore
 export const activitiesData=()=>{
     if (getAboutCompany.exists()) {
-        console.log(getActivities.docs.values());
+        // console.log(getActivities.docs.values());
         return getActivities.docs.map(doc => doc.data());
     } else {
         console.log("No company data found");

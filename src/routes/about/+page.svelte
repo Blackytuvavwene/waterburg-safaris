@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { AboutCompanyResponse } from '$lib/app-components/about-components/about.types';
 import AboutGallery from "$lib/app-components/about-components/AboutGallery.svelte";
 import Address from "$lib/app-components/about-components/Address.svelte";
 
@@ -11,7 +12,7 @@ export let data: PageServerData;
 
 
 
-$: ({companyStaff,  companyGallery,companyDetails}=data.about)
+$: ({companyStaff,  companyGallery,companyDetails}=data.about as AboutCompanyResponse)
 
 
 

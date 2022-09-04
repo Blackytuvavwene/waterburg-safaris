@@ -1,15 +1,34 @@
 <script lang="ts">
 import type { ActivitiesResponse, Package } from "$lib/app-components/activities-components/activities.types";
+import {updateActivity, bookingStore,updatePackage, type BookingStore } from "./booking.stores";
 
 
     export let activitiesDataList:ActivitiesResponse[];
     let selected:ActivitiesResponse;
     let selectedPackage:Package;
     
+    let bookingState:BookingStore;
 
-    
+    bookingStore.subscribe(activ=>{
+        bookingState= activ ;
+        console.log(bookingState);
+    });
 
-    $:console.log(activitiesDataList);
+    function setPackage(){
+        if(selectedPackage){
+            return updatePackage(selectedPackage);
+        }
+    }
+
+    function setActivity(){
+        console.log('set',selected);
+        if(selected){
+            console.log('set',selected);
+            return updateActivity(selected);
+        }
+    }
+
+    $:({activity,packageD}=bookingState);
 </script>
 
 <section class="m-8 lg:m-28">
@@ -18,36 +37,43 @@ import type { ActivitiesResponse, Package } from "$lib/app-components/activities
         <div class="bg-primaryContainer p-6">
             <h2 class="text-base font-semibold lg:font-bold">Activity & Package selection</h2>
             <p>Choose activity and package that suits you</p>
+            {#if selected !=undefined}
+            <p>{selected.activityName}</p>
+            {/if}
+            
             <fieldset class="flex flex-col ">
                 <div class="flex flex-col gap-1">
                     <label for="activity">Activity</label>
                     <select name="activity" id="" bind:value={selected}>
                         {#each activitiesDataList as activity}
-                            <option value={activity} on:click="{()=>selected=activity}">
+                            <option value={activity} on:click={setActivity} on:click="{()=>selected=activity}">
                              {activity?.activityName}
                             </option>
                         {/each}
                     </select> 
                 </div>
-                {#if selected != undefined }
+                {#if activity != undefined }
+                <p>hejjjjjj</p>
                 <div>
                     <p>hello</p>
-                    {#if selected.packages}
+                    {#if activity.packages}
                     <label for="package">Choose package</label>
                     <select name="package" id="" bind:value={selectedPackage}>
-                        {#each selected.packages as packagedata}
+                        {#each activity.packages as packagedata}
                         <option value={packagedata}>{packagedata.packageName}</option>
                         {/each}
                     </select>
                     {/if}
                 </div>
                 <div>
-                    <p>{selectedPackage.description}</p>
+                    <p>{packageD?.description}</p>
                 </div>
                 {:else}
                 <p>Select activity first</p>
                 {/if}
+                
             </fieldset>
+            
         </div>
         <div>
             <div class="flex flex-col bg-tertiaryContainer p-8">
@@ -89,6 +115,5 @@ import type { ActivitiesResponse, Package } from "$lib/app-components/activities
             </div>
             <input type="submit" value="Proceed to checkout" class="my-2 p-4 bg-successContainer text-onSuccessContainer font-bold">
         </div>
-        
     </form>
 </section>
