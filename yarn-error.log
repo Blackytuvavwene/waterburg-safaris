@@ -1,0 +1,83 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\Boitumelo\.node\corepack\yarn\1.22.19\bin\yarn.js add vite@^3.1.0-beta.1 -D
+
+PATH: 
+  C:\Program Files (x86)\PowerShell\7;C:\Program Files\ImageMagick-7.1.0-Q16-HDRI;C:\Program Files\Microsoft\jdk-11.0.12.7-hotspot\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files\dotnet\;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;C:\Users\Boitumelo\AppData\Local\Android\Sdk\platform-tools;C:\Python310;C:\php8;C:\flutter\bin;C:\Users\Boitumelo\AppData\Local\Pub\Cache\bin;C:\Program Files\GitHub CLI\;C:\Program Files (x86)\PowerShell\7\;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\composer;C:\Program Files\Neovim\/bin;C:\Users\Boitumelo\AppData\Local\Programs\Python\Python310\Scripts\;C:\Users\Boitumelo\AppData\Local\Programs\Python\Python310\;C:\Users\Boitumelo\AppData\Local\Microsoft\WindowsApps;C:\Users\Boitumelo\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Boitumelo\.dotnet\tools;C:\Users\Boitumelo\AppData\Roaming\npm;C:\Users\Boitumelo\.dotnet\tools;C:\tools\neovim\nvim-win64\bin;C:\Users\Boitumelo\AppData\Roaming\Composer\vendor\bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  16.14.2
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: EPERM: operation not permitted, unlink 'C:\Users\Boitumelo\Documents\Business Projects\waterburg-safaris\site\node_modules\esbuild-windows-64\esbuild.exe'
+
+npm manifest: 
+  {
+  	"name": "site",
+  	"version": "0.0.1",
+  	"scripts": {
+  		"dev": "vite dev",
+  		"build": "vite build",
+  		"package": "svelte-kit package",
+  		"preview": "vite preview",
+  		"test": "playwright test",
+  		"check": "svelte-check --tsconfig ./tsconfig.json",
+  		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
+  		"lint": "prettier --check --plugin-search-dir=. . && eslint .",
+  		"format": "prettier --write --plugin-search-dir=. ."
+  	},
+  	"devDependencies": {
+  		"@floating-ui/dom": "^1.0.1",
+  		"@playwright/test": "^1.22.2",
+  		"@popperjs/core": "^2.11.6",
+  		"@sveltejs/adapter-auto": "next",
+  		"@sveltejs/kit": "next",
+  		"@typescript-eslint/eslint-plugin": "^5.27.0",
+  		"@typescript-eslint/parser": "^5.27.0",
+  		"autoprefixer": "^10.4.8",
+  		"classnames": "^2.3.1",
+  		"eslint": "^8.16.0",
+  		"eslint-config-prettier": "^8.3.0",
+  		"eslint-plugin-svelte3": "^4.0.0",
+  		"flowbite-svelte": "^0.25.16",
+  		"postcss": "^8.4.16",
+  		"prettier": "^2.6.2",
+  		"prettier-plugin-svelte": "^2.7.0",
+  		"sass": "^1.54.4",
+  		"svelte": "^3.44.0",
+  		"svelte-check": "^2.7.1",
+  		"svelte-heros": "^2.3.5",
+  		"svelte-preprocess": "^4.10.7",
+  		"tailwindcss": "^3.1.8",
+  		"tslib": "^2.3.1",
+  		"typescript": "^4.7.4",
+  		"vite": "^3.0.0"
+  	},
+  	"type": "module",
+  	"dependencies": {
+  		"@ngneat/effects": "^1.1.1",
+  		"@ngneat/effects-hooks": "^1.1.0",
+  		"@ngneat/effects-ng": "^2.0.0",
+  		"@ngneat/elf": "^2.1.0",
+  		"@ngneat/elf-cli-ng": "^1.0.0",
+  		"@ngneat/elf-devtools": "^1.2.1",
+  		"@ngneat/elf-entities": "^4.4.2",
+  		"@ngneat/elf-pagination": "^1.0.1",
+  		"@ngneat/elf-persist-state": "^1.1.5",
+  		"@ngneat/elf-requests": "^1.1.4",
+  		"@ngneat/elf-state-history": "^1.2.1",
+  		"firebase": "^9.9.3",
+  		"swiper": "^8.3.2"
+  	}
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
