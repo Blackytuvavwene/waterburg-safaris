@@ -1,10 +1,10 @@
 <script lang="ts">
 	import type {ActivitiesResponse, Package } from '$lib/app-components/activities-components/activities.types';
 	import type {currentA}  from '$lib/app-components/activities-components/activity.stores';
-import { onMount } from 'svelte';
-import { dataset_dev } from 'svelte/internal';
+    import { onMount } from 'svelte';
+    import { dataset_dev } from 'svelte/internal';
     export let currentActivity:currentA;
-    let packageData:Package;
+
 
     $:({activityName, seoDescription,overview,packages,tags}=currentActivity.activity as ActivitiesResponse);
 
@@ -21,7 +21,7 @@ import { dataset_dev } from 'svelte/internal';
     //     packageData=pD as Package;
     // });
 
-
+$:({packageD}=currentActivity);
 
     
 </script>
@@ -34,20 +34,14 @@ import { dataset_dev } from 'svelte/internal';
             <p class="text-sm">This is the package you selected for activity category 
                 <em class="font-semibold"> {activityName}</em>
             </p>
-            <fieldset class="bg-primaryContainer p-6">
-                {#await packageData}
-                   <p>Loading</p> 
-                {:then data} 
-                <p>{data?.packageName}</p>
-                {#if data?.packageOffers}
-                <p class="text-onPrimaryContainer font-medium ">The package includes</p>
-                {#each data?.packageOffers as offer}
+            <fieldset class="bg-primaryContainer p-6 my-2"> 
+                {#if packageD  && packageD.packageOffers}
+                <p>{packageD.packageName}</p>
+                <p class="text-onPrimaryContainer font-medium text-s ">The package includes</p>
+                {#each packageD.packageOffers as offer}
                     <p class="text-xs">{offer}</p>
                 {/each}
                 {/if}
-                
-                {/await}
-                
             </fieldset>
         </div>
         <div>

@@ -5,7 +5,7 @@ import {updateActivity, bookingStore,updatePackage, type BookingStore } from "./
 
     export let activitiesDataList:ActivitiesResponse[];
     let selected:ActivitiesResponse;
-    let selectedPackage:Package;
+    let selectedPackage:Package|null;
     
     let bookingState:BookingStore;
 
@@ -37,43 +37,37 @@ import {updateActivity, bookingStore,updatePackage, type BookingStore } from "./
         <div class="bg-primaryContainer p-6">
             <h2 class="text-base font-semibold lg:font-bold">Activity & Package selection</h2>
             <p>Choose activity and package that suits you</p>
-            {#if selected !=undefined}
-            <p>{selected.activityName}</p>
-            {/if}
-            
             <fieldset class="flex flex-col ">
                 <div class="flex flex-col gap-1">
                     <label for="activity">Activity</label>
                     <select name="activity" id="" bind:value={selected}>
                         {#each activitiesDataList as activity}
-                            <option value={activity} on:click={setActivity} on:click="{()=>selected=activity}">
+                            <option value={activity} on:click={setActivity} on:click="{()=>{selected=activity,selectedPackage=null}}">
                              {activity?.activityName}
                             </option>
                         {/each}
                     </select> 
                 </div>
-                {#if activity != undefined }
-                <p>hejjjjjj</p>
+                {#if selected != undefined }
                 <div>
-                    <p>hello</p>
-                    {#if activity.packages}
+                    {#if selected.packages}
                     <label for="package">Choose package</label>
                     <select name="package" id="" bind:value={selectedPackage}>
-                        {#each activity.packages as packagedata}
+                        {#each selected.packages as packagedata}
                         <option value={packagedata}>{packagedata.packageName}</option>
                         {/each}
                     </select>
                     {/if}
                 </div>
-                <div>
-                    <p>{packageD?.description}</p>
+                <div class="py-4">
+                    {#if selectedPackage}
+                    <p>{selectedPackage.description}</p> 
+                    {/if}
                 </div>
                 {:else}
                 <p>Select activity first</p>
                 {/if}
-                
             </fieldset>
-            
         </div>
         <div>
             <div class="flex flex-col bg-tertiaryContainer p-8">
@@ -114,6 +108,10 @@ import {updateActivity, bookingStore,updatePackage, type BookingStore } from "./
                 </fieldset>
             </div>
             <input type="submit" value="Proceed to checkout" class="my-2 p-4 bg-successContainer text-onSuccessContainer font-bold">
+        </div>
+        <div class="sticky top-10">
+            <p>Total price</p>
+            <p>{selectedPackage?.price}</p>
         </div>
     </form>
 </section>

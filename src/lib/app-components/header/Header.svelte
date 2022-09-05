@@ -57,16 +57,19 @@ import logo from "$lib/wablogo.png";
     <nav class="w-full h-full flex flex-row  justify-between items-center ">
         <div class= "flex flex-col items-start justify-start h-full w-full">
             <div class="w-full h-full flex flex-row justify-between items-center ">
-                <a href="/" class="float-left h-full p-2 flex justify-center items-center">
-                    <img src={svglogo}  alt="Waterburg Safaris logo" width="40" height="30" />
-                </a>
+                <div class="flex flex-row items-center justify-center w-full">
+                    <a href="/" class="float-left h-full p-2 flex justify-center items-center">
+                        <img src={svglogo}  alt="Waterburg Safaris logo" width="40" height="30" />
+                    </a>
+                    <span class="float-left s:text-base text-xl w-full font-bold mx-2 text-onPrimary">Waterburg Safaris</span>
+                </div>
                 <div class="sm:hidden h-full transition delay-1000 flex flex-col w-full justify-end items-end">
                     <div class="w-8 h-full mr-4 " on:click={toggleNavBar}>
                         <div class="bg-white w-full h-1 {mobileNavBarShow ? "rotate-45 translate-y-1" : ""}"></div>
                         <div class="bg-none w-full h-2 {mobileNavBarShow ? "hidden" : ""}"></div>
                         <div class="bg-white w-full h-1 {mobileNavBarShow ? "-rotate-45" : ""}"></div>
                     </div>
-            </div>
+                </div>
             </div>
             {#if mobileNavBarShow}
             <div class="pb-6 bg-gradient-to-b from-primary to-black {mobileNavBarShow === true ? "block" : "hidden"}
