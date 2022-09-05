@@ -17,8 +17,7 @@ export interface CustomerDetails{
 
 export interface CreditCardModel{
     cardNumber?:string;
-    expirationDate?:string;
-    expirationMonth?:string;
-    expirationYear?:string;
+    cardHolderNames?:string;
+    expiryDate?:string;
     cvv?:string;
 }

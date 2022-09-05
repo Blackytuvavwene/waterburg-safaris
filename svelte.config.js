@@ -12,7 +12,8 @@ const config = {
 	] ,
 
 	kit: {
-		adapter: adapter()
+		adapter: adapter(),
+		
 	},
 	files:{
 		routes:'src/routes/frontend'

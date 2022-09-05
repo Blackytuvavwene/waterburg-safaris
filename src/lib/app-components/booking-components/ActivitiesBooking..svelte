@@ -107,11 +107,10 @@ import {updateActivity, bookingStore,updatePackage, type BookingStore } from "./
                     </div>
                 </fieldset>
             </div>
-            <input type="submit" value="Proceed to checkout" class="my-2 p-4 bg-successContainer text-onSuccessContainer font-bold">
         </div>
-        <div class="sticky top-10">
-            <p>Total price</p>
-            <p>{selectedPackage?.price}</p>
+        <div class="sticky bottom-0 p-2 flex flex-row items-center justify-between bg-primary">
+            <p class=" text-base font-semibold text-onPrimary">$ {selectedPackage?.price}</p>
+            <input type="submit" value="Proceed to checkout" class=" p-2  bg-successContainer text-onSuccessContainer font-bold">
         </div>
     </form>
 </section>

@@ -1,9 +1,17 @@
 <script lang="ts">
+	import type { BookingFormModel } from '$lib/app-components/booking-components/booking.types';
 	import type {ActivitiesResponse, Package } from '$lib/app-components/activities-components/activities.types';
 	import type {currentA}  from '$lib/app-components/activities-components/activity.stores';
     import { onMount } from 'svelte';
-    import { dataset_dev } from 'svelte/internal';
+    import { createEventDispatcher, dataset_dev } from 'svelte/internal';
     export let currentActivity:currentA;
+
+    let bookingModel:BookingFormModel;
+    let dispatch = createEventDispatcher();
+
+
+    // values to bind to our form to book the event
+    let fullName:string,email:string,ccNumber:string,ccHolderName:string,ccExpiry:string,cvv:string,amtPaid:number;
 
 
     $:({activityName, seoDescription,overview,packages,tags}=currentActivity.activity as ActivitiesResponse);
@@ -21,6 +29,31 @@
     //     packageData=pD as Package;
     // });
 
+
+    bookingModel={
+        bookingCode:crypto.randomUUID(),
+        packageData:currentActivity.packageD!,
+        activityDetails:currentActivity.activity!,
+        paid:true,
+        amountPaid:amtPaid!,
+       customerDetails:{
+        fullNames:fullName!,
+        email:email!,
+        creditCardDetails:{
+            cardNumber:ccNumber!,
+            cvv:cvv!,
+            cardHolderNames:ccHolderName!,
+            expiryDate:ccExpiry!,
+        }
+       } 
+    }
+
+    function bookActivity(){
+        dispatch("bookActivity",{
+            bookingModel
+        });
+    }
+
 $:({packageD}=currentActivity);
 
     
@@ -28,7 +61,7 @@ $:({packageD}=currentActivity);
 
 <section class="w-[100%] p-8 lg:p-28 ">
     <h1 class="text-xl font-semibold text-primary">Book for {activityName}</h1>
-    <form action="" method="post">
+    <form action="" method="post" class="">
         <div class="bg-secondaryContainer p-6">
             <h2 class="text-base font-semibold">Selected Package</h2>
             <p class="text-sm">This is the package you selected for activity category 
@@ -51,19 +84,19 @@ $:({packageD}=currentActivity);
                     <fieldset class="flex flex-col gap-2">
                         <div class="flex flex-col gap-1">
                             <label for="names">Name on card</label>
-                            <input type="text" id="names" name="names" >
+                            <input type="text" id="names" name="names" bind:value={ccHolderName}>
                         </div>
                         <div class="flex flex-col gap-1">
                             <label for="names">Credit card number</label>
-                            <input type="text" id="names" name="names" >
+                            <input type="text" id="names" name="names" bind:value={ccNumber}>
                         </div>
                         <div class="flex flex-col gap-1">
                             <label for="names">Expiry</label>
-                            <input type="text" id="names" name="names" >
+                            <input type="text" id="names" name="names" bind:value={ccExpiry}>
                         </div>
                         <div class="flex flex-col gap-1">
                             <label for="names">CVV</label>
-                            <input type="text" id="names" name="names" >
+                            <input type="text" id="names" name="names" bind:value={cvv}>
                         </div>
                     </fieldset>
                 </div>
@@ -74,15 +107,19 @@ $:({packageD}=currentActivity);
                 <fieldset class="flex flex-col gap-2">
                     <div class="flex flex-col gap-1">
                         <label for="names">Full names</label>
-                        <input type="text" id="names" name="names" >
+                        <input type="text" id="names" name="names" bind:value={fullName}>
                     </div>
                     <div class="flex flex-col gap-1">
                         <label for="email">Email</label>
-                        <input type="email" name="email" id="">
+                        <input type="email" name="email" id="" bind:value={email}>
                     </div>
                 </fieldset>
             </div>
-            <input type="submit" value="Proceed to checkout" class="my-2 p-4 bg-successContainer text-onSuccessContainer font-bold">
+            <div class="sticky bottom-0 p-2 flex flex-row items-center justify-between bg-primary">
+                <p class=" text-base font-semibold text-onPrimary">$ {currentActivity?.packageD?.price}</p>
+                <input type="submit" value="Proceed to checkout" class=" p-2  bg-successContainer text-onSuccessContainer font-bold">
+            </div>
+            
         </div>
     </form>
 </section>
