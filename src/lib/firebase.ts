@@ -3,14 +3,14 @@ import { getApps, initializeApp, type FirebaseApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { collection, doc, getDoc, getDocs, getFirestore} from "firebase/firestore";
 import { aboutCompanyConverter } from "./app-components/about-components/about.types";
-import { 
-    VITE_FIREBASE_API_KEY, 
-    VITE_FIREBASE_APP_ID, 
-    VITE_FIREBASE_AUTH_DOMAIN, 
-    VITE_FIREBASE_MEASURING_ID, 
-    VITE_FIREBASE_MESSENGER_ID, 
-    VITE_FIREBASE_PROJECT_ID, 
-    VITE_FIREBASE_STORAGE_BUCKET } from "$env/static/private";
+// import { 
+//     VITE_FIREBASE_API_KEY, 
+//     VITE_FIREBASE_APP_ID, 
+//     VITE_FIREBASE_AUTH_DOMAIN, 
+//     VITE_FIREBASE_MEASURING_ID, 
+//     VITE_FIREBASE_MESSENGER_ID, 
+//     VITE_FIREBASE_PROJECT_ID, 
+//     VITE_FIREBASE_STORAGE_BUCKET } from "$env/static/private";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -49,7 +49,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const appInit =()=>{
-    console.log('Initializing Firebase',VITE_FIREBASE_PROJECT_ID);
     if(!getApps().length) return initializeApp(firebaseConfig);
 }
 // const analytics = getAnalytics(app);
