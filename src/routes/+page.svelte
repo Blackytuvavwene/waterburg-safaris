@@ -1,12 +1,22 @@
-<script>
+<script lang="ts">
 import AboutUs from "$lib/app-components/home-components/about-us/about-us.svelte";
 import Activities from "$lib/app-components/home-components/activities/activities.svelte";
-
+import type { PageServerData } from './$types';
 import Intro from "$lib/app-components/home-components/intro/intro.svelte";
+import { persistHomeDataStore } from "$lib/app-components/home-components/helpers/home.stores";
+import type { HomeModel } from "$lib/app-components/home-components/helpers/home.firestore.helpers";
+
+let homeModel:HomeModel;
+
+persistHomeDataStore.subscribe(homeData=>{
+    homeModel=homeData ;
+    console.log('homas',homeModel);
+});
+
+$:({homeActivities ,aboutCompany}=homeModel);
 
 
-
-
+// $:console.log('sets',homeActivities![0].activityDetails);
 </script>
 
 
@@ -24,7 +34,10 @@ import Intro from "$lib/app-components/home-components/intro/intro.svelte";
 
 <Intro/>
 <AboutUs/>
-<Activities/>
+{#if homeActivities !== null && homeActivities !== undefined}
+<Activities {homeActivities} />
+{/if}
+
 
 
 

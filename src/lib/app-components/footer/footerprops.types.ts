@@ -24,11 +24,12 @@ export interface FooterContactProps{
 
 const footData:CompanyDetails={};
 
-export const footerPropStore= writable({});
+export const footerPropStore= writable<CompanyDetails>({});
 
 export const setFooterProps=(footerData?:CompanyDetails)=>{
   
     if(footerData){
+        console.log('set footer properties',footerData);
         footerPropStore.set(footerData);
     }
     

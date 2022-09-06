@@ -1,8 +1,11 @@
-<script>
+<script lang="ts">
 import { resetCurrentSelectedPersist } from '$lib/app-components/activities-components/activity.stores';
 
-	import FadeTransition from './../../animations/FadeTransition.svelte';
+	import FadeTransition from '$lib/animations/FadeTransition.svelte';
 import IntroImageSlider from "./components/IntroImageSlider.svelte";
+import SlideText from '$lib/animations/SlideText.svelte';
+import { quintOut } from 'svelte/easing';
+
 
 
 
@@ -14,9 +17,15 @@ import IntroImageSlider from "./components/IntroImageSlider.svelte";
     lg:flex-row sm:justify-evenly py-8 lg:py-10 lg:px-6">
         <div class=" mx-[5%] my-8 lg:w-[50%]">
             <section class="my-6">
-                <h1 class="mb-6 font-extrabold text-tertiaryContainer font-sans text-center text-5xl sm:text-6xl lg:text-start">
-                    Welcome to Waterburg Safaris
-                </h1>
+                <div  class="w-full h-full">
+                    <SlideText >
+                        <h1 class="mb-6 font-extrabold text-tertiaryContainer font-sans text-center text-5xl sm:text-6xl lg:text-start">
+                            Welcome to Waterburg Safaris
+                        </h1>
+                    </SlideText>
+                </div>
+                
+                
                 <p class="text-center lg:text-start text-primaryContainer 
                 text-base font-bold">Explore marvels of creation with us!</p>
             </section>

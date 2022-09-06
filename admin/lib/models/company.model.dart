@@ -87,7 +87,10 @@ class CompanyDetails {
   final String? vatNo;
   final String? companyLogoUrl;
   final String? seoDescription;
-  final String? overView;
+  final String? overview;
+  final List<String>? cellPhoneNos;
+  final String? email;
+  final String? telNo;
   CompanyDetails({
     this.companyName,
     this.companyAddress,
@@ -95,7 +98,10 @@ class CompanyDetails {
     this.vatNo,
     this.companyLogoUrl,
     this.seoDescription,
-    this.overView,
+    this.overview,
+    this.cellPhoneNos,
+    this.email,
+    this.telNo,
   });
 
   factory CompanyDetails.fromJson(Map<String, dynamic> json) =>

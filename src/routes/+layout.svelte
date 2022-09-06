@@ -10,10 +10,10 @@ import '../app.css';
 
 import type { LayoutServerData } from './$types';
 
-export let data: LayoutServerData;
-// console.log(data.about);
+// export let data: LayoutServerData;
+// // console.log(data.about);
 
-$: ({ companyDetails } = data.about as AboutCompanyResponse);
+// $: ({ companyDetails } = data.about as AboutCompanyResponse);
 
 
 

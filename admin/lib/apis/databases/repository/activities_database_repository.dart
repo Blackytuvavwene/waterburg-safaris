@@ -42,14 +42,14 @@ class ActivitiesDatabaseRepository implements ActivitiesDatabaseAbstract {
   @override
   Stream<List<Activity>> getActivitiesFromFirestore() {
     var data = _firestore.collection('activities').snapshots().map(
-          (activityData) => activityData.docs
-              .map(
-                (e) => Activity.fromJson(
-                  e.data(),
-                ),
-              )
-              .toList(),
+          (activityData) => activityData.docs.map((e) {
+            print(e.data());
+            return Activity.fromJson(
+              e.data(),
+            );
+          }).toList(),
         );
+
     return data;
   }
 

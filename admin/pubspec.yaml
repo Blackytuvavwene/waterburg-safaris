@@ -50,6 +50,7 @@ dependencies:
   isar_flutter_libs: 2.5.0
   get_it: ^7.2.0
   shared_preferences: ^2.0.15
+  uuid: ^3.0.6
 
 dev_dependencies:
   # The "flutter_lints" package below contains a set of recommended lints to

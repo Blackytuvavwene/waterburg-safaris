@@ -17,6 +17,7 @@ class Activity {
   final List<Gallery>? activityGallery;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final String? overview;
   Activity({
     this.activityId,
     this.activityName,
@@ -26,6 +27,7 @@ class Activity {
     this.activityGallery,
     this.createdAt,
     this.updatedAt,
+    this.overview,
   });
 
   factory Activity.fromJson(Map<String, dynamic> json) =>
@@ -43,10 +45,10 @@ class Package {
   final String? packageName;
   final List<String>? keywords;
   final String? description;
-  final double? price;
-  final double? lastPrice;
-  final double? rating;
-  final double? discountPercentage;
+  final String? price;
+  final String? lastPrice;
+  final String? rating;
+  final String? discountPercentage;
   final String? coupon;
   final List<String>? packageOffers;
   final DateTime? createdAt;

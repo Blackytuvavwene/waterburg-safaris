@@ -4,25 +4,26 @@ import type { AboutCompanyResponse } from "$lib/app-components/about-components/
 import type { LayoutServerLoad } from './$types'; 
 import { companyData } from "$lib/firebase";
 import { setFooterProps, type FooterContactProps } from "$lib/app-components/footer/footerprops.types";
+import { getHomeActivities, type HomeActivities, type HomeModel } from "$lib/app-components/home-components/helpers/home.firestore.helpers";
+import { setHomeDataPersist } from "$lib/app-components/home-components/helpers/home.stores";
 
 // const endpoint='http://localhost:3000/api/about-company';
 
 // /** @type {import('./$types').PageServerLoad} */
 
 export const load:LayoutServerLoad= async () => {
-    const responseData = await companyData();
+   
+    const Hdata=await getHomeActivities();
 
-    if(responseData ) {
-        const data = responseData;
-        // console.log(data);
-        const aboutCompanyInfo=data;
+    if(Hdata) {
+        const data = Hdata;
 
-     setFooterProps(aboutCompanyInfo?.companyDetails );
+     setHomeDataPersist(Hdata);
 
 
        
         return {
-            about: aboutCompanyInfo as AboutCompanyResponse,
+            homeData: Hdata as HomeModel,
         } 
     }
 

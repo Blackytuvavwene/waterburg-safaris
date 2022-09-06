@@ -53,8 +53,8 @@ const appInit =()=>{
 }
 // const analytics = getAnalytics(app);
 
-const app:FirebaseApp=appInit() as FirebaseApp;
- const db =getFirestore(app);
+export const app:FirebaseApp=appInit() as FirebaseApp;
+export const db =getFirestore(app);
 
 const getAboutCompany=await getDoc(doc(db,'aboutCompany','ymV8H6FBRjfMBFhAh8o2').withConverter(aboutCompanyConverter));
     
@@ -76,13 +76,11 @@ if (getAboutCompany.exists()) {
 }
 
 // get all activities from firestore
-export const activitiesData=()=>{
-    if (getAboutCompany.exists()) {
-        // console.log(getActivities.docs.values());
+export const activitiesData=async()=>{
+
+        console.log('hello world',getActivities.docs.values());
         return getActivities.docs.map(doc => doc.data());
-    } else {
-        console.log("No company data found");
-    }
+    
 }
 
 

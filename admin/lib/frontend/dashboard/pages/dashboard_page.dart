@@ -1,6 +1,7 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sizer/sizer.dart';
 
 class DashboardPage extends HookConsumerWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -10,19 +11,10 @@ class DashboardPage extends HookConsumerWidget {
     final activitiesList = ref.watch(activitiesStreamProvider);
     final userDataStream = ref.watch(userDataStreamProvider);
 
-    return AppLayout(
-      mobile: _MobileDashboardPage(
-        activitiesList: activitiesList,
-        userDataStream: userDataStream,
-      ),
-      tablet: _TabletDashboardPage(
-        activitiesList: activitiesList,
-        userDataStream: userDataStream,
-      ),
-      desktop: _DesktopDashboardPage(
-        activitiesList: activitiesList,
-        userDataStream: userDataStream,
-      ),
+    return const AppLayout(
+      mobile: _MobileDashboardPage(),
+      tablet: _TabletDashboardPage(),
+      desktop: _DesktopDashboardPage(),
     );
   }
 }
@@ -31,13 +23,12 @@ class DashboardPage extends HookConsumerWidget {
 class _MobileDashboardPage extends HookConsumerWidget {
   const _MobileDashboardPage({
     Key? key,
-    required this.activitiesList,
-    required this.userDataStream,
   }) : super(key: key);
-  final AsyncValue<List<Activity>>? activitiesList;
-  final AsyncValue<UserModel>? userDataStream;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    //access providers for the dashboard
+    final activitiesList = ref.watch(activitiesStreamProvider);
+    final userDataStream = ref.watch(userDataStreamProvider);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
@@ -48,9 +39,41 @@ class _MobileDashboardPage extends HookConsumerWidget {
       body: SafeArea(
           child: SingleChildScrollView(
         child: Column(
-          children: const [
-            DText(
+          children: [
+            const DText(
               text: 'Hello',
+            ),
+            SizedBox(
+              height: 30.h,
+              child: activitiesList.when(
+                data: (data) {
+                  return ListView(
+                    children: data
+                        .map(
+                          (e) => ListTile(
+                            title: DText(
+                              text: e.activityName,
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  );
+                },
+                error: (error, stackTrace) {
+                  return Container(
+                    color: Theme.of(context).colorScheme.errorContainer,
+                    child: DText(
+                      text: error.toString(),
+                      textColor: Theme.of(context).colorScheme.onErrorContainer,
+                    ),
+                  );
+                },
+                loading: () {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              ),
             )
           ],
         ),
@@ -63,13 +86,12 @@ class _MobileDashboardPage extends HookConsumerWidget {
 class _TabletDashboardPage extends HookConsumerWidget {
   const _TabletDashboardPage({
     Key? key,
-    required this.activitiesList,
-    required this.userDataStream,
   }) : super(key: key);
-  final AsyncValue<List<Activity>>? activitiesList;
-  final AsyncValue<UserModel>? userDataStream;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    //access providers for the dashboard
+    final activitiesList = ref.watch(activitiesStreamProvider);
+    final userDataStream = ref.watch(userDataStreamProvider);
     return Container(
       color: Colors.amberAccent,
       child: const Center(
@@ -85,13 +107,12 @@ class _TabletDashboardPage extends HookConsumerWidget {
 class _DesktopDashboardPage extends HookConsumerWidget {
   const _DesktopDashboardPage({
     Key? key,
-    required this.activitiesList,
-    required this.userDataStream,
   }) : super(key: key);
-  final AsyncValue<List<Activity>>? activitiesList;
-  final AsyncValue<UserModel>? userDataStream;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    //access providers for the dashboard
+    final activitiesList = ref.watch(activitiesStreamProvider);
+    final userDataStream = ref.watch(userDataStreamProvider);
     return Container(
       color: Colors.amberAccent,
       child: const Center(

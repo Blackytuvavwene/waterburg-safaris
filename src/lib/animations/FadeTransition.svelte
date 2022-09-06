@@ -38,7 +38,7 @@
 <div bind:this={currentView} class=" w-full flex flex-col justify-center items-center h-full">
     {#if visible}
     <div id="current" class="flex flex-col justify-center items-center w-full h-full"
-     transition:fly="{{ duration: 3000,delay:1000, x: 0, y: 500, opacity: 0, easing: quintOut}}" >
+     transition:fly="{{ duration: 3000,delay:0, x: 100, y: 0, opacity: 0, easing: quintOut}}" >
         <slot ></slot>
     </div>
     {/if}

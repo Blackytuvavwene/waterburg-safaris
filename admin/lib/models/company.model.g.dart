@@ -79,7 +79,12 @@ CompanyDetails _$CompanyDetailsFromJson(Map json) => CompanyDetails(
       vatNo: json['vatNo'] as String?,
       companyLogoUrl: json['companyLogoUrl'] as String?,
       seoDescription: json['seoDescription'] as String?,
-      overView: json['overView'] as String?,
+      overview: json['overview'] as String?,
+      cellPhoneNos: (json['cellPhoneNos'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      email: json['email'] as String?,
+      telNo: json['telNo'] as String?,
     );
 
 Map<String, dynamic> _$CompanyDetailsToJson(CompanyDetails instance) =>
@@ -90,5 +95,8 @@ Map<String, dynamic> _$CompanyDetailsToJson(CompanyDetails instance) =>
       'vatNo': instance.vatNo,
       'companyLogoUrl': instance.companyLogoUrl,
       'seoDescription': instance.seoDescription,
-      'overView': instance.overView,
+      'overview': instance.overview,
+      'cellPhoneNos': instance.cellPhoneNos,
+      'email': instance.email,
+      'telNo': instance.telNo,
     };

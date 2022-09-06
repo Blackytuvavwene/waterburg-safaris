@@ -23,6 +23,7 @@ Activity _$ActivityFromJson(Map json) => Activity(
       updatedAt: json['updatedAt'] == null
           ? null
           : DateTime.parse(json['updatedAt'] as String),
+      overview: json['overview'] as String?,
     );
 
 Map<String, dynamic> _$ActivityToJson(Activity instance) => <String, dynamic>{
@@ -35,6 +36,7 @@ Map<String, dynamic> _$ActivityToJson(Activity instance) => <String, dynamic>{
           instance.activityGallery?.map((e) => e.toJson()).toList(),
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
+      'overview': instance.overview,
     };
 
 Package _$PackageFromJson(Map json) => Package(
@@ -44,10 +46,10 @@ Package _$PackageFromJson(Map json) => Package(
           ?.map((e) => e as String)
           .toList(),
       description: json['description'] as String?,
-      price: (json['price'] as num?)?.toDouble(),
-      lastPrice: (json['lastPrice'] as num?)?.toDouble(),
-      rating: (json['rating'] as num?)?.toDouble(),
-      discountPercentage: (json['discountPercentage'] as num?)?.toDouble(),
+      price: json['price'] as String?,
+      lastPrice: json['lastPrice'] as String?,
+      rating: json['rating'] as String?,
+      discountPercentage: json['discountPercentage'] as String?,
       coupon: json['coupon'] as String?,
       packageOffers: (json['packageOffers'] as List<dynamic>?)
           ?.map((e) => e as String)

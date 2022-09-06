@@ -1,6 +1,7 @@
 
 <script lang="ts">
-import FadeTransition from "$lib/app-components/animations/FadeTransition.svelte";
+import FadeTransition from "$lib/animations/FadeTransition.svelte";
+import SlideText from "$lib/animations/SlideText.svelte";
 
 import TopicTextSection from "../topic-text-section/topic-text-section.svelte";
 
@@ -20,7 +21,7 @@ let ttt={
 <div class=" z-auto h-full my-20 flex flex-col">
     <TopicTextSection topicText="About us" flexDirection="row"/>
 
-    <AboutUsSummary />
+    <SlideText><AboutUsSummary /></SlideText>
     <FadeTransition><AboutUsImageView/></FadeTransition>
     
 </div>
