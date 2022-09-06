@@ -22,6 +22,7 @@ class AppNotifier extends StateNotifier<AppAuthStatus> {
   toggleFirstOpen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('loaded', true);
+    print('sett');
     state = AppAuthStatus.loaded;
   }
 

@@ -1,16 +1,16 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
+import { getApps, initializeApp, type FirebaseApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { collection, doc, getDoc, getDocs, getFirestore} from "firebase/firestore";
 import { aboutCompanyConverter } from "./app-components/about-components/about.types";
-// import { 
-//     FIREBASE_API_KEY, 
-//     FIREBASE_APP_ID, 
-//     FIREBASE_AUTH_DOMAIN, 
-//     FIREBASE_MEASURING_ID, 
-//     FIREBASE_MESSENGER_ID, 
-//     FIREBASE_PROJECT_ID, 
-//     FIREBASE_STORAGE_BUCKET } from "$env/static/private";
+import { 
+    VITE_FIREBASE_API_KEY, 
+    VITE_FIREBASE_APP_ID, 
+    VITE_FIREBASE_AUTH_DOMAIN, 
+    VITE_FIREBASE_MEASURING_ID, 
+    VITE_FIREBASE_MESSENGER_ID, 
+    VITE_FIREBASE_PROJECT_ID, 
+    VITE_FIREBASE_STORAGE_BUCKET } from "$env/static/private";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -26,19 +26,36 @@ import { aboutCompanyConverter } from "./app-components/about-components/about.t
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: import.meta.env.FIREBASE_API_KEY,
-  authDomain: import.meta.env.FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.FIREBASE_MESSENGER_ID,
-  appId: import.meta.env.FIREBASE_APP_ID,
-  measurementId: import.meta.env.FIREBASE_MEASURING_ID
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSENGER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASURING_ID
 };
 
+
+
+// const firebaseConfig = {
+//     apiKey: "AIzaSyA5oKqp0yK3oljBdyVFk7EPL5E4vto3Ycw",
+//     authDomain: "waterburg-safaris.firebaseapp.com",
+//     projectId: "waterburg-safaris",
+//     storageBucket: "waterburg-safaris.appspot.com",
+//     messagingSenderId: "872126391062",
+//     appId: "1:872126391062:web:03c551323fb6409897e637",
+//     measurementId: "G-7YVD66BC10"
+//   };
+
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const appInit =()=>{
+    console.log('Initializing Firebase',VITE_FIREBASE_PROJECT_ID);
+    if(!getApps().length) return initializeApp(firebaseConfig);
+}
 // const analytics = getAnalytics(app);
-export const db =getFirestore(app);
+
+const app:FirebaseApp=appInit() as FirebaseApp;
+ const db =getFirestore(app);
 
 const getAboutCompany=await getDoc(doc(db,'aboutCompany','ymV8H6FBRjfMBFhAh8o2').withConverter(aboutCompanyConverter));
     

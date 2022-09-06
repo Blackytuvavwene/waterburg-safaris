@@ -40,26 +40,28 @@ final appRouterProvider = Provider.autoDispose(
       ],
       redirect: (state) {
         // if first open app navigate to welcome screen
-        final isFirstOpen = firstOpen;
+        final isFirstOpen = firstOpen.value;
 
         final loggingIn = state.subloc == '/login';
 
-        String redirectPath() {
-          if (isFirstOpen == AppAuthStatus.firstLoad && user.value == null) {
-            print('hello');
-            return '/home';
-          } else if (isFirstOpen == AppAuthStatus.loaded &&
-              user.value == null) {
-            return '/login';
-          }
-
-          if (isFirstOpen == AppAuthStatus.loaded && user.value != null) {
-            return '/home';
-          }
+        if (isFirstOpen == AppAuthStatus.firstLoad && user.value == null) {
+          print('hello');
           return '/';
         }
 
-        return redirectPath();
+        if (isFirstOpen == AppAuthStatus.loaded && user.value == null) {
+          print('login');
+          return '/login';
+        }
+
+        if (isFirstOpen == AppAuthStatus.loaded &&
+            user.value != null &&
+            loggingIn) {
+          print('home');
+          return '/home';
+        }
+
+        return null;
       },
     );
   },
