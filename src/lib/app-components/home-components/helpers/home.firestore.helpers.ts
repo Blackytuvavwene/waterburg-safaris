@@ -3,18 +3,18 @@ import { activitiesData, companyData, db } from "$lib/firebase";
 import { collection, FirestoreError, getDocs } from "firebase/firestore";
 
 export interface HomeActivities{
-    activityId?: string|null;
-    activityName?: string|null;
-    tags?: string[]|null;
-    activityDetails?: string|null;
-    image?:CompanyGallery|null;
+    activityId?: string;
+    activityName?: string;
+    tags?: string[];
+    activityDetails?: string;
+    image?:CompanyGallery;
    
 
 }
 
 export interface HomeModel{
-    aboutCompany?:AboutCompanyResponse|null;
-    homeActivities?:HomeActivities[]|null;
+    aboutCompany?:AboutCompanyResponse;
+    homeActivities?:HomeActivities[];
 }
 
 export const getHomeActivities=async()=>{

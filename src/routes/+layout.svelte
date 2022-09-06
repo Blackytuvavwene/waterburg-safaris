@@ -10,7 +10,7 @@ import '../app.css';
 
 import type { LayoutServerData } from './$types';
 
-// export let data: LayoutServerData;
+export let data: LayoutServerData;
 // // console.log(data.about);
 
 // $: ({ companyDetails } = data.about as AboutCompanyResponse);
@@ -25,9 +25,9 @@ import type { LayoutServerData } from './$types';
 
 <Header/>
 <main>
-    <slot/>
-    {#if $page.url.pathname==="/contact"}
-    {:else}
+    <slot />
+    {#if $page.url.pathname!=="/contact"}
+   
     <ContactFormFooter/>
     {/if}
     

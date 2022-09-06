@@ -6,10 +6,7 @@ import type { HomeActivities, HomeModel } from "./home.firestore.helpers";
 
 export const persistHomeDataStore = createStore(
     {name: 'homeData'},
-    withProps<HomeModel>({
-        aboutCompany:null,
-        homeActivities:null,
-    })
+    withProps<HomeModel>({})
 );
 
 export const homeDataPersist=persistState(persistHomeDataStore,{
@@ -18,9 +15,13 @@ export const homeDataPersist=persistState(persistHomeDataStore,{
 });
 
 export const setHomeDataPersist=(homeData:HomeModel) => {
-   
-    // console.log("setHomeDataPersist",homeData);
-    return persistHomeDataStore.update((state)=>(state=homeData));
+   const newD=homeData;
+    
+    if (newD) {
+        console.log("setHomeDataPersist not null",newD);
+        return persistHomeDataStore.update((state)=>(state=newD)); 
+    }
+    
 };
 
 export const resetCurrentSelectedPersist=()=>{

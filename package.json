@@ -52,7 +52,6 @@
 		"@ngneat/elf-persist-state": "^1.1.5",
 		"@ngneat/elf-requests": "^1.1.4",
 		"@ngneat/elf-state-history": "^1.2.1",
-		"env-cmd": "^10.1.0",
 		"firebase": "^9.9.3",
 		"swiper": "^8.3.2"
 	}

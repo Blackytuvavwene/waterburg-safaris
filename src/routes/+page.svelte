@@ -1,22 +1,29 @@
 <script lang="ts">
+	import type{ PageServerData } from './$types';
 import AboutUs from "$lib/app-components/home-components/about-us/about-us.svelte";
 import Activities from "$lib/app-components/home-components/activities/activities.svelte";
-import type { PageServerData } from './$types';
 import Intro from "$lib/app-components/home-components/intro/intro.svelte";
 import { persistHomeDataStore } from "$lib/app-components/home-components/helpers/home.stores";
 import type { HomeModel } from "$lib/app-components/home-components/helpers/home.firestore.helpers";
 
 let homeModel:HomeModel;
 
-persistHomeDataStore.subscribe(homeData=>{
-    homeModel=homeData ;
-    console.log('homas',homeModel);
-});
-
-$:({homeActivities ,aboutCompany}=homeModel);
 
 
-// $:console.log('sets',homeActivities![0].activityDetails);
+export let data:PageServerData;
+
+$:({homeActivities ,aboutCompany}=data.homeData );
+
+$:console.log(aboutCompany!);
+
+
+
+
+persistHomeDataStore.subscribe((homeData=>{
+   return homeModel=homeData ;
+    
+}));
+// $:console.log('sets',homeActivities![0].activityDetails != null ? homeActivities![0].activityDetails :'shhs');
 </script>
 
 
@@ -34,9 +41,15 @@ $:({homeActivities ,aboutCompany}=homeModel);
 
 <Intro/>
 <AboutUs/>
-{#if homeActivities !== null && homeActivities !== undefined}
+{#if homeActivities}
 <Activities {homeActivities} />
+{:else}
+<p>No data {aboutCompany?.companyId}</p>
 {/if}
+
+
+
+
 
 
 
