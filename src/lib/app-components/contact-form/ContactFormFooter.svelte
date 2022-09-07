@@ -3,7 +3,7 @@ import ContactIconContainer from "./ContactIconContainer.svelte";
 
 </script>
 
-<section class="flex flex-col bg-primary w-[100%] h-full px-4 py-6 justify-center items-center">
+<section class="flex flex-col bg-primary-200 w-[100%] h-full px-4 py-6 justify-center items-center">
     <h1 class="text-3xl font-extrabold text-onPrimary m-6">Contact us</h1>
     <div class="w-[100%] sm:pl-10 sm:flex-row flex flex-col justify-between items-center">
         <div class="w-[100%] md:w-[30%] lg:w-[45%] p-4 flex flex-col items-center justify-center">

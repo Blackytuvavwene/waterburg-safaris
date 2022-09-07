@@ -9,7 +9,7 @@
 <div class=" h-full w-[100%]">
     <h1 class=" font-bold text-2xl my-2 lg:mx-32 lg:my-14">Company overview</h1>
     {#each paragraphs as line}
-        <p class=" font-semibold text-base my-6  lg:mx-32">{line}</p>
+        <p class=" font-bold lg:font-medium text-base lg:text-lg my-6  lg:mx-32">{line}</p>
     {/each}
 
 </div>

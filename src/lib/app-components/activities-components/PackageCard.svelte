@@ -1,7 +1,7 @@
 <script lang="ts">
-import type { ButtonProps } from '../button/button.props.types';
 
-	import FlatButton from '../button/flat-button.svelte';
+
+	
     import type { ActivitiesResponse, Package } from './activities.types';
 import { setCurrentSelectedPersist } from './activity.stores';
     export let packageData:Package;

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { isLoading } from '$lib/helpers/global.stores';
 	import { page,navigating } from '$app/stores';
 import type {  AboutCompanyResponse } from '$lib/app-components/about-components/about.types';
 import ContactFormFooter from '$lib/app-components/contact-form/ContactFormFooter.svelte';
@@ -7,8 +8,15 @@ import ContactFormFooter from '$lib/app-components/contact-form/ContactFormFoote
 import Footer from '$lib/app-components/footer/footer.svelte';
 import Header from '$lib/app-components/header/Header.svelte';
 import '../app.css';
+import logo from "$lib/wblogolg.svg";
 
 import type { LayoutServerData } from './$types';
+import { onMount } from 'svelte';
+import PageLoader from '$lib/animations/PageLoader.svelte';
+
+let isPageLoaded = false;
+
+
 
 export let data: LayoutServerData;
 // // console.log(data.about);
@@ -16,15 +24,21 @@ export let data: LayoutServerData;
 // $: ({ companyDetails } = data.about as AboutCompanyResponse);
 
 
-
+onMount(()=>{
+    setTimeout(()=>{
+isPageLoaded = true;
+},800);
+});
 </script>
 
-<!-- {#if $navigating}
-   <img class="w-[100vw] h-[100vh] absolute z-10 bg-red-500" src="$lib/wblogo.svg" alt="Loading Waterburg Safaris logo">
+
+<!-- {#if !isPageLoaded}
+<PageLoader/>
 {/if} -->
 
+
 <Header/>
-<main>
+<main >
     <slot />
     {#if $page.url.pathname!=="/contact"}
    
@@ -33,7 +47,7 @@ export let data: LayoutServerData;
     
 </main>
 
-<Footer />
+<Footer footerData={data.homeData} />
 
 
 

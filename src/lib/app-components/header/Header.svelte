@@ -3,8 +3,7 @@ import { onMount } from "svelte";
 import { page } from "$app/stores";
 import { fade, slide } from "svelte/transition";
 import { quadInOut } from "svelte/easing";
-import svglogo from "$lib/wblogo.svg";
-import logo from "$lib/wablogo.png";
+import logo from "$lib/wblogos.svg";
 
 
     let mobileNavBarShow = false;
@@ -53,13 +52,13 @@ import logo from "$lib/wablogo.png";
 
 
 
-<header class="w-full h-full flex items-center sticky top-0  bg-primary ">
+<header class="w-full h-full flex items-center sticky top-0 z-10 bg-primary ">
     <nav class="w-full h-full flex flex-row  justify-between items-center ">
         <div class= "flex flex-col items-start justify-start h-full w-full">
             <div class="w-full h-full flex flex-row justify-between items-center ">
                 <div class="flex flex-row items-center justify-center w-full">
-                    <a href="/" class="float-left h-full p-2 flex justify-center items-center">
-                        <img src={svglogo}  alt="Waterburg Safaris logo" width="40" height="30" />
+                    <a href="/" class="float-left h-full p-3 flex justify-center items-center">
+                        <img src={logo}  alt="Waterburg Safaris logo" width="50" height="50" />
                     </a>
                     <span class="float-left s:text-base text-xl w-full font-bold mx-2 text-onPrimary">Waterburg Safaris</span>
                 </div>

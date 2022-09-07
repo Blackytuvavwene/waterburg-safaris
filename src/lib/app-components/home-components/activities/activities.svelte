@@ -15,14 +15,10 @@ export let homeActivities:HomeActivities[] ;
     <TopicTextSection topicText="Activities" flexDirection="row-reverse" />
     <div class="my-10 flex flex-col items-center justify-center sm:flex-row flex-wrap ">
         {#if homeActivities}
-        {#each homeActivities as activity}
-        <ActivityCard {activity} /> 
-        {/each}
+            {#each homeActivities as activity}
+            <ActivityCard {activity} /> 
+            {/each}
         {/if}
-            
-      
-        
-        
     </div>
     
 </div>
