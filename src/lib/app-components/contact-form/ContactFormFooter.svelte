@@ -3,18 +3,11 @@ import ContactIconContainer from "./ContactIconContainer.svelte";
 
 </script>
 
-<section class="flex flex-col bg-primary-200 w-[100%] h-full px-4 py-6 justify-center items-center">
+<section class="flex flex-col bg-primary-900 w-[100%] h-full px-4 py-6 justify-center items-center">
     <h1 class="text-3xl font-extrabold text-onPrimary m-6">Contact us</h1>
-    <div class="w-[100%] sm:pl-10 sm:flex-row flex flex-col justify-between items-center">
-        <div class="w-[100%] md:w-[30%] lg:w-[45%] p-4 flex flex-col items-center justify-center">
-            <h2 class="text-2xl w-[100%] text-center font-bold text-onPrimary md:text-start">Contact information</h2>
-            <div class="flex flex-col w-[100%] items-center justify-center">
-                <ContactIconContainer iconData="fa-solid fa-phone" contactData="+267 71 234 567"/>
-                <ContactIconContainer iconData="fa-solid fa-envelope-open" contactData="waterburgsafaris@gmail.com"/>
-                <ContactIconContainer iconData="fa-solid fa-map-location-dot" contactData="Plot 1111, Kazungula Botswana"/>
-            </div>
-        </div>
-        <form class="w-[100%] sm:w-[60%] flex flex-col items-center bg-onPrimary p-6 rounded
+    <div class="w-[100%] sm:pl-10 mb-6 flex flex-col justify-between items-center">
+        
+        <form class="w-[100%] sm:w-[60%] lg:w-[30%] flex flex-col items-center bg-onPrimary p-6 rounded
          justify-center" action="" method="post">
             <fieldset class=" flex w-full flex-col justify-center mb-8">
                 <div>
@@ -36,6 +29,5 @@ import ContactIconContainer from "./ContactIconContainer.svelte";
            <input class="w-full bg-onPrimaryContainer text-primaryContainer my-6 p-2
             rounded-md" type="submit" value="Submit">
         </form>
-        
     </div>
 </section>

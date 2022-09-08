@@ -18,8 +18,8 @@ export let footerData:HomeModel;
 
 <footer class=" w-full pt-6 flex flex-col justify-between items-center h-full bg-primary-100">
     <div class="flex flex-col md:flex-row justify-between w-full">
-        <figure class="ml-6 mb-4 w-full ">
-            <img class="w-fit xl:w-80 h-fit object-fill" src={wblogoLg} alt="Waterburg Safaris brand logo" height="200" width="200">
+        <figure class="md:ml-6 p-6 mb-4 w-full ">
+            <img class=" w-4/5 xl:w-80 h-fit object-fill" src={wblogoLg} alt="Waterburg Safaris brand logo" height="200" width="200">
         </figure>
         
         <div class=" justify-end items-end w-full">
