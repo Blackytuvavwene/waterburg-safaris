@@ -29,7 +29,7 @@ export const footerPropStore= writable<CompanyDetails>({});
 export const setFooterProps=(footerData?:CompanyDetails)=>{
   
     if(footerData){
-        console.log('set footer properties',footerData);
+        // console.log('set footer properties',footerData);
         footerPropStore.set(footerData);
     }
     

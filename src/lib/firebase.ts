@@ -71,14 +71,14 @@ if (getAboutCompany.exists()) {
     return companyData;
    }
 } else {
-    console.log("No company data found");
+    console.error("No company data found");
 }
 }
 
 // get all activities from firestore
 export const activitiesData=async()=>{
 
-        console.log('hello world',getActivities.docs.values());
+        // console.log('hello world',getActivities.docs.values());
         return getActivities.docs.map(doc => doc.data());
     
 }
@@ -93,4 +93,8 @@ export const activityData=async(docId?:string)=>{
         throw "Failed to get activity data";
     }
 }
+
+
+
+
 

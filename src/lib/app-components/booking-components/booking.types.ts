@@ -2,9 +2,10 @@ import type { ActivitiesResponse, Package } from "../activities-components/activ
 
 export interface BookingFormModel{
     bookingCode?: string;
-    packageData?:Package;
     customerDetails?:CustomerDetails;
-    activityDetails?:ActivitiesResponse;
+    activityDetails?:ActivityDetails;
+    departureDate?:Date;
+    arrivalDate?:Date;
     paid?:boolean;
     amountPaid?:number;
 }
@@ -18,6 +19,17 @@ export interface CustomerDetails{
 export interface CreditCardModel{
     cardNumber?:string;
     cardHolderNames?:string;
-    expiryDate?:string;
+    expiryDate?:Date;
     cvv?:string;
+}
+
+export interface BookedPackage{
+packageId?:string;
+packageName?:string;
+}
+
+export interface ActivityDetails{
+    activityName?:string;
+    activityId?:string;
+    bookedPackage?:BookedPackage;
 }

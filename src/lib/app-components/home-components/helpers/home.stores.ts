@@ -18,7 +18,7 @@ export const setHomeDataPersist=(homeData:HomeModel) => {
    const newD=homeData;
     
     if (newD) {
-        console.log("setHomeDataPersist not null",newD);
+        // console.log("setHomeDataPersist not null",newD);
         return persistHomeDataStore.update((state)=>(state=newD)); 
     }
     

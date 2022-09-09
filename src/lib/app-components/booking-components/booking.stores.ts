@@ -32,3 +32,76 @@ export const   updateActivity = (newAc?:ActivitiesResponse) => {
 export const   updatePackage=(newPa?:Package) =>{
         bookingStore.update(setProps({packageD:newPa}));
     };
+
+
+// handle booking state changes
+function bookingStateChange  () {
+
+
+    const {subscribe , update, set} =writable({
+        status:'Idle',
+        data: {},
+        submitted: false,
+        failure:'',
+        message:''
+    });
+
+    function setLoading(state:boolean){
+        update(()=>{
+            return {
+                status: state ? 'Booking' : '',
+                data:{},
+                submitted: false,
+                failure:'',
+                message: 'Your booking is being processed'
+            };
+        });
+    };
+
+    function setSubmitted<T>(state:boolean,dataSubmitted:Partial<T>,code?:string){
+        update(()=>{
+            return {
+                status: state ? 'Success' : '',
+                data:dataSubmitted,
+                submitted: state ? true : false,
+                failure:'',
+                message: `Your booking is successful! save this booking code ${code}`
+            };
+        });
+    };
+
+    function setError(state:boolean,dataError:Partial<string>){
+        update(()=>{
+            return {
+                status: state ? 'Error' : '',
+                data:{},
+                submitted: state ? true : false,
+                failure:dataError,
+                message: 'Your booking is unsuccessful try again later'
+            };
+        });
+    };
+
+    function resetAll(){
+        set({
+            status:'Idle',
+            data: {},
+            submitted: false,
+            failure:'',
+            message:''
+        })
+    };
+
+    return { 
+        subscribe,
+        update,
+        set, 
+        setLoading, 
+        setSubmitted, 
+        setError, 
+        resetAll
+    }
+}
+
+
+export const bookingState= bookingStateChange();

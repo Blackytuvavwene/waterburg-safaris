@@ -14,7 +14,7 @@ export let data:PageServerData;
 
 $:({homeActivities ,aboutCompany}=data.homeData );
 
-$:console.log(aboutCompany!);
+// $:console.log(aboutCompany!);
 
 
 

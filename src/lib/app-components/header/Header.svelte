@@ -52,7 +52,7 @@ import logo from "$lib/wblogos.svg";
 
 
 
-<header class="w-full h-full flex items-center sticky top-0 z-10 bg-primary ">
+<header class="w-full h-full flex items-center sticky top-0 z-10 bg-primary-900 ">
     <nav class="w-full h-full flex flex-row  justify-between items-center ">
         <div class= "flex flex-col items-start justify-start h-full w-full">
             <div class="w-full h-full flex flex-row justify-between items-center ">

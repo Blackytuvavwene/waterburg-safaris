@@ -8,7 +8,7 @@ export const load:PageServerLoad= async ({parent}) => {
     if(responseData ) {
         const data = responseData.homeData;
         const homeData=data as HomeModel;
-        console.debug(homeData);
+        // console.debug(homeData);
        
         return {
             homeData: homeData,

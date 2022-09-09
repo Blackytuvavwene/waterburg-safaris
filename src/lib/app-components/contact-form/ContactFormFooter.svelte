@@ -3,9 +3,9 @@ import ContactIconContainer from "./ContactIconContainer.svelte";
 
 </script>
 
-<section class="flex flex-col bg-primary-900 w-[100%] h-full px-4 py-6 justify-center items-center">
+<section class="flex flex-col bg-primary-900 w-full h-full px-4 py-6 justify-center items-center">
     <h1 class="text-3xl font-extrabold text-onPrimary m-6">Contact us</h1>
-    <div class="w-[100%] sm:pl-10 mb-6 flex flex-col justify-between items-center">
+    <div class="w-full mb-6 flex flex-col justify-between items-center">
         
         <form class="w-[100%] sm:w-[60%] lg:w-[30%] flex flex-col items-center bg-onPrimary p-6 rounded
          justify-center" action="" method="post">

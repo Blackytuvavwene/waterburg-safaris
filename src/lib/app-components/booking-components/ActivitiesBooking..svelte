@@ -11,7 +11,7 @@ import {updateActivity, bookingStore,updatePackage, type BookingStore } from "./
 
     bookingStore.subscribe(activ=>{
         bookingState= activ ;
-        console.log(bookingState);
+        // console.log(bookingState);
     });
 
     function setPackage(){
@@ -21,9 +21,9 @@ import {updateActivity, bookingStore,updatePackage, type BookingStore } from "./
     }
 
     function setActivity(){
-        console.log('set',selected);
+        // console.log('set',selected);
         if(selected){
-            console.log('set',selected);
+            // console.log('set',selected);
             return updateActivity(selected);
         }
     }
