@@ -2,6 +2,7 @@ import { createStore, setProps, withProps } from '@ngneat/elf';
 import { writable } from 'svelte/store';
 import { localStorageStrategy, persistState } from '@ngneat/elf-persist-state';
 import type { ActivitiesResponse, Package } from '$lib/app-components/activities-components/activities.types';
+import type { BookingFormModel } from './booking.types';
 
 
 
@@ -40,7 +41,7 @@ function bookingStateChange  () {
 
     const {subscribe , update, set} =writable({
         status:'Idle',
-        data: {},
+        data: <BookingFormModel>{},
         submitted: false,
         failure:'',
         message:''

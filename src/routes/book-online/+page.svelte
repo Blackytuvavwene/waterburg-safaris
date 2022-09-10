@@ -11,6 +11,8 @@ import { DatabaseHandler } from '$lib/helpers/firestore.converters';
 import type { BookingFormModel } from '$lib/app-components/booking-components/booking.types';
 import { bookingState } from '$lib/app-components/booking-components/booking.stores';
 export let data:PageServerData;
+import successSvg from "$lib/success.svg";
+import { Spinner } from 'flowbite-svelte';
 
 let cselected:currentA;
 let bookingError:any;
@@ -52,33 +54,56 @@ let activitiesDataList=data.activities;
     <title>Book {activity!= null? activity.activityName :"activities"} online</title>
 </svelte:head>
 
-<main class="relative w-full">
+
+
+<div class="relative w-full">
   
 
-{#if $bookingState.status === 'Booking'}
-    <div class="w-full flex flex-col justify-center items-center bg-black h-[100vh] absolute top-0 opacity-50 bottom-0">
-        <div class="w-fit bg-primary-200 h-fit p-6 animate-pulse">
-          <h6>{$bookingState.status}</h6>
-          <p>{$bookingState.message}</p>  
+{#if $bookingState.status === 'Booking' || $bookingState.status === 'Idle'}
+    {#if $bookingState.status === 'Booking'}
+    <div class="w-full flex flex-col justify-center z-20 items-center h-[100vh] backdrop-invert backdrop-opacity-30 absolute top-0   bottom-0">
+        <div class="w-fit bg-onPrimary rounded-xl h-fit opacity-100 p-6 backdrop-opacity-30 flex flex-col items-center justify-center">
+          <h6 class="mb-6 text-xl font-bold border-b-2 border-primary w-full text-center pb-2">{$bookingState.status}</h6>
+          <p>{$bookingState.message}</p>
+          <div class="w-full flex flex-col justify-center items-center my-10">
+            <Spinner size="20"/>
+          </div>
+            
         </div>
     </div>
+    {/if}
+    {#if activity}
+        <div class="w-full">
+            <CurrentActivityBooking currentActivity={cselected} on:bookSafariActivity={bookActivity}/>
+        </div>  
+        {:else}
+        <ActivitiesBooking {activitiesDataList}/>
+    {/if}
     {:else if $bookingState.status === 'Success'}
-    <section class="w-full h-full">
-<h1>{$bookingState.status}</h1>
-<p>{$bookingState.message}</p>
+    <section class="w-full h-full flex flex-col items-center">
+        <div class="text-center bg-success-100 p-4 border-2 border-success-200 rounded-xl w-fit my-6">
+            <i class="fa-solid fa-circle-check text-xl mr-4 text-success-200"></i>
+            Booking {$bookingState.status}
+        </div>
+        <div class="flex flex-col sm:px-10 lg:px-28 xl:px-96 sm:flex-row items-center justify-center lg:my-20 xl:my-52 my-10 w-full">
+            <img class="w-52 mb-10 sm:w-56 sm:h-56 h-52 object-cover items-center -translate-x-4 sm:translate-x-0 sm:mr-10" src={successSvg} alt="Successfully booked an activity with Waterburg Safaris">
+            <div class="w-full h-full">
+                <h1 class="text-success-900 text-lg font-bold px-6">Your booking was successful!</h1>
+                <p class="text-md pb-6 pt-2 px-6">You have successfully booked a {$bookingState.data?.activityDetails?.activityName}
+                activity with <em class="font-bold">Waterburg Safaris</em>. <span>Please check your email for further details</span></p>
+                <p class="ml-6 mb-10">Here is your unique booking code <span class="bg-success-50 p-2 text-lg rounded-xl shadow-lg">{$bookingState.data?.bookingCode}</span></p>
+                <div class="w-full flex px-6 gap-6">
+                    <button class="p-3 w-full bg-success text-onSuccess rounded-xl ">Make a new booking</button>
+                    <button class="p-3 text-success border-success border-2 w-full rounded-xl ">Go home</button>
+                </div>
+                
+            </div>
+        </div>
     </section>
-   
     {:else if $bookingState.status === 'Error'}
     <p>{$bookingState.message}</p>
-    {:else}
-    {#if activity}
-    <div class="w-full">
-        <CurrentActivityBooking currentActivity={cselected} on:bookSafariActivity={bookActivity}/>
-    </div>  
-    {:else}
-    <ActivitiesBooking {activitiesDataList}/>
-    {/if}
+    
+    
 {/if}
-
-</main>
+</div>
 

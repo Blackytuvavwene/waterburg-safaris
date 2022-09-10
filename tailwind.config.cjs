@@ -48,7 +48,20 @@ module.exports = {
          800: '#003642',
          900: '#001f27',
         },
-        "success":"var(--success)",
+        "success": {
+          DEFAULT:"var(--success)",
+          50: '#f5fff5',
+          100: '#c0ffd6',
+          150: '#6bfdb2',
+          200: '#4adf98',
+          300: '#1dc37e',
+          400: '#00a669',
+          500: '#008956',
+          600: '#006d43',
+          700: '#005231',
+          800: '#003921',
+          900: '#002111'
+        },
         "error":"var(--error)",
         "background":"var(--background)",
         "surface":{
