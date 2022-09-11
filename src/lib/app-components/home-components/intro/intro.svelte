@@ -24,7 +24,7 @@ $:({homeActivities, aboutCompany}= homeModel)
                 <div  class="w-full h-full">
                     <SlideText >
                         <h1 class="mb-6 font-extrabold text-tertiaryContainer font-sans text-start sm:text-center text-5xl sm:text-6xl lg:text-start">
-                            Welcome to Waterburg Safaris {$persistHomeDataStore.aboutCompany?.companyDetails?.companyName}
+                            Welcome to Waterburg Safaris 
                         </h1>
                     </SlideText>
                 </div>

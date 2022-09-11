@@ -47,7 +47,7 @@ import logo from "$lib/wblogos.svg";
         {
             name: "Book online",
             id: 'book-onine',
-            path: '/book-onine'
+            path: '/book-online'
         }
     ];
 
