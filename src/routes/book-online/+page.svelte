@@ -77,7 +77,7 @@ let activitiesDataList=data.activities;
             <CurrentActivityBooking currentActivity={cselected} on:bookSafariActivity={bookActivity}/>
         </div>  
         {:else}
-        <ActivitiesBooking {activitiesDataList}/>
+        <ActivitiesBooking {activitiesDataList} on:bookSafariActivity={bookActivity}/>
     {/if}
     {:else if $bookingState.status === 'Success'}
     <section class="w-full h-full flex flex-col items-center">
