@@ -14,7 +14,7 @@ $: ({aboutCompany,homeActivities}=footerData);
 // console.log('hello',$footerPropStore);
 </script>
 
-<div class="h-full p-6 flex justify-between  flex-wrap gap-10">
+<div class="h-full p-6 flex justify-between items-center flex-wrap gap-4">
     <div class="flex flex-col mr-10">
         <h1 class="text-2xl font-bold mb-4">Contact</h1>
         <div class="flex items-center">

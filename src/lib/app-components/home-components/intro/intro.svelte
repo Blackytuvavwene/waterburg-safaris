@@ -1,32 +1,36 @@
 <script lang="ts">
+	import { persistHomeDataStore } from '$lib/app-components/home-components/helpers/home.stores';
 import { resetCurrentSelectedPersist } from '$lib/app-components/activities-components/activity.stores';
 
-	import FadeTransition from '$lib/animations/FadeTransition.svelte';
+import FadeTransition from '$lib/animations/FadeTransition.svelte';
 import IntroImageSlider from "./components/IntroImageSlider.svelte";
 import SlideText from '$lib/animations/SlideText.svelte';
 import { quintOut } from 'svelte/easing';
+import type { HomeModel } from '$lib/app-components/home-components/helpers/home.firestore.helpers';
+
+export let homeModel: HomeModel;
 
 
 
-
+$:({homeActivities, aboutCompany}= homeModel)
 </script>
 
 
 <div class="h-full flex w-full flex-col ">
-    <div class=" bg-primary flex flex-col justify-center items-center h-full  
-    lg:flex-row sm:justify-evenly py-8 lg:py-10 lg:px-6">
-        <div class=" mx-[5%] my-8 lg:w-[50%]">
+    <div class=" bg-gradient-to-b lg:bg-gradient-to-br from-primary to-black flex flex-col justify-center items-center h-full  
+    lg:flex-row sm:justify-evenly py-8 lg:py-10 lg:px-6 ">
+        <div class=" mx-[5%] xl:ml-72 my-8 lg:w-[50%]">
             <section class="my-6">
                 <div  class="w-full h-full">
                     <SlideText >
-                        <h1 class="mb-6 font-extrabold text-tertiaryContainer font-sans text-center text-5xl sm:text-6xl lg:text-start">
-                            Welcome to Waterburg Safaris
+                        <h1 class="mb-6 font-extrabold text-tertiaryContainer font-sans text-start sm:text-center text-5xl sm:text-6xl lg:text-start">
+                            Welcome to Waterburg Safaris {$persistHomeDataStore.aboutCompany?.companyDetails?.companyName}
                         </h1>
                     </SlideText>
                 </div>
                 
                 
-                <p class="text-center lg:text-start text-primaryContainer 
+                <p class="text-start sm:text-center lg:text-start text-primaryContainer 
                 text-base font-bold">Explore marvels of creation with us!</p>
             </section>
             <div class="flex flex-col md:flex-row h-full w-[100%]">
@@ -42,16 +46,14 @@ import { quintOut } from 'svelte/easing';
                 </a>
             </div>
         </div>
-        <div class="lg:w-[50%] w-full">
             <FadeTransition>
-                <div class="flex border-secondaryContainer border-2 w-[90%] h-full sm:h-10/12 md:w-[90%]
-                lg:w-fit lg:h-96 lg:flex justify-center items-center ">
-                   <IntroImageSlider/>
+                <div class=" border-2 h-fit xl:h-full
+                w-[90%] xl:w-[90%] lg:flex justify-center items-center ">
+                {#if aboutCompany?.companyGallery}
+                    <IntroImageSlider imageData={aboutCompany.companyGallery[0]}/>
+                {/if}
                </div>
             </FadeTransition>
-        </div>
-        
-        
     </div>
 </div>
 

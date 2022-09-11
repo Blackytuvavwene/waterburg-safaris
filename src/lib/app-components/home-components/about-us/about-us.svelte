@@ -18,11 +18,12 @@ let ttt={
 </script>
 
 
-<div class=" z-auto h-full my-20 flex flex-col">
-    <TopicTextSection topicText="About us" flexDirection="row"/>
-
-    <SlideText><AboutUsSummary /></SlideText>
-    <FadeTransition><AboutUsImageView/></FadeTransition>
+<div class=" z-auto h-full my-20 w-full flex flex-col">
     
+        <TopicTextSection topicText="About us" flexDirection="row"/>
+
+        <SlideText><AboutUsSummary /></SlideText>
+        <FadeTransition><AboutUsImageView/></FadeTransition>
+   
 </div>
 

@@ -39,7 +39,7 @@ persistHomeDataStore.subscribe((homeData=>{
 </svelte:head>
 
 
-<Intro/>
+<Intro homeModel={data.homeData}/>
 <AboutUs/>
 {#if homeActivities}
 <Activities {homeActivities} />

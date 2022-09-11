@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Booking Successful</title>
+
+        <style lang="css">
+            :root{
+                --primary:#006497;
+                --on-primary:#ffffff;
+                --primary-container:#cce5ff;
+                --on-primary-container:#001d31;
+                --secondary:#006c47;
+                --on-secondary:#ffffff;
+                --secondary-container:#8df7c1;
+                --on-secondary-container:#002113;
+                --tertiary:#00677d;
+                --on-tertiary:#ffffff;
+                --tertiary-container:#b3ebff;
+                --on-tertiary-container:#001f27;
+                --error:#ba1a1a;
+                --on-error:#ffffff;
+                --error-container:#ffdad6;
+                --on-error-container:#410002;
+                --background:#fcfcff;
+                --on-background:#1a1c1e;
+                --surface-variant:#dee3eb;
+                --on-surface-variant:#42474e;
+                --outline:#72787e;
+                --success:#006e1b;
+                --on-success:#ffffff;
+                --success-container:#95f991;
+                --on-success-container:#002204;
+            }
+
+
+            body{
+                padding: 0;
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                width: 100vw;
+            }
+
+            .mail-body{
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                padding: 30px;
+            }
+
+            #greeting-message{
+                font-size: 40px;
+            }
+            
+            .message-text{
+                font-size: 26px;
+            }
+
+            #booking-code{
+                font-size: 34px;
+                background-color: var(--tertiary-container);
+                width: fit-content;
+                padding: 10px;
+                box-shadow: inset 0px 0px 4px 1px var(--primary);
+                border-radius: 10px;
+                font-weight: bold;
+            }
+
+            @media screen and (min-width: 768px) {
+                .mail-body{
+                    padding-left: 20%;
+                    padding-right: 20%;
+                    align-items: center;
+                    justify-items: center;
+                    justify-content: center;
+                }
+            }
+
+        </style>
+    </head>
+    
+    <body>
+        <div class="mail-body">
+            <h2 id="greeting-message">
+                Hello 
+                <strong>
+                    {{ customerName }}
+                </strong>
+            </h2>
+            <div class="message-body">
+                <p class="message-text">
+                    You have successfully purchased a {{ activityName }} with 
+                    <strong>Waterburg Safaris</strong> to enjoy a {{ packageName}} adventure.
+                </p>
+                <p class="message-text">
+                    Below is your unique code, copy and save it as its important for identification in case of enquiries
+                </p>
+                <p id="booking-code">
+                    {{ bookingCode }}
+                </p>
+                <p class="message-text">
+                    Thank you for booking with us.
+                </p>
+            </div>
+        </div>
+    </body>
+</html>
