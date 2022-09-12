@@ -62,7 +62,7 @@ final firstLoadProvider = FutureProvider<AppAuthStatus>((ref) async {
 });
 
 final loggedIn = FutureProvider.autoDispose<AppAuthStatus>(
-  ((ref) => ref.read(appStatusProvider.notifier).getLoggedIn()),
+  ((ref) => ref.watch(appStatusProvider.notifier).getLoggedIn()),
 );
 
 final currentUserProvider = StreamProvider.autoDispose<User?>((ref) {

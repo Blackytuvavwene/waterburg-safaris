@@ -21,7 +21,8 @@ class LoginPage extends HookConsumerWidget {
         EasyLoading.showError(state.error.toString());
       } else if (state is AsyncData) {
         EasyLoading.showSuccess('Successfully logged in!');
-        context.pushNamed('home');
+        context.pushNamed('home',
+            params: {'id': ref.read(nestedRoutesProvider)[0].path!});
       }
     });
 

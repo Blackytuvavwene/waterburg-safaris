@@ -46,20 +46,14 @@ Package _$PackageFromJson(Map json) => Package(
           ?.map((e) => e as String)
           .toList(),
       description: json['description'] as String?,
-      price: json['price'] as String?,
-      lastPrice: json['lastPrice'] as String?,
-      rating: json['rating'] as String?,
-      discountPercentage: json['discountPercentage'] as String?,
+      price: (json['price'] as num?)?.toDouble(),
+      lastPrice: (json['lastPrice'] as num?)?.toDouble(),
+      rating: (json['rating'] as num?)?.toDouble(),
+      discountPercentage: (json['discountPercentage'] as num?)?.toDouble(),
       coupon: json['coupon'] as String?,
       packageOffers: (json['packageOffers'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
-      createdAt: json['createdAt'] == null
-          ? null
-          : DateTime.parse(json['createdAt'] as String),
-      updatedAt: json['updatedAt'] == null
-          ? null
-          : DateTime.parse(json['updatedAt'] as String),
     );
 
 Map<String, dynamic> _$PackageToJson(Package instance) => <String, dynamic>{
@@ -73,6 +67,4 @@ Map<String, dynamic> _$PackageToJson(Package instance) => <String, dynamic>{
       'discountPercentage': instance.discountPercentage,
       'coupon': instance.coupon,
       'packageOffers': instance.packageOffers,
-      'createdAt': instance.createdAt?.toIso8601String(),
-      'updatedAt': instance.updatedAt?.toIso8601String(),
     };

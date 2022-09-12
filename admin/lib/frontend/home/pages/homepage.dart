@@ -1,29 +1,47 @@
 import 'package:admin/lib.dart';
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:line_icons/line_icon.dart';
 
 class HomePage extends HookConsumerWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({
+    Key? key,
+    required this.index,
+    required this.child,
+  }) : super(key: key);
+  final int index;
+  final Widget child;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageIndex = useState(0);
-    var pageController = usePageController(
-      initialPage: pageIndex.value,
-    );
+    final pageIndex = useState(index);
+
+    // set current index
+    useEffect(() {
+      pageIndex.value = index;
+      return null;
+    }, [index]);
 
     // function to animate the page controller to the next page
     void _onItemTapped(int index) {
       pageIndex.value = index;
-      pageController.animateToPage(
-        index,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.ease,
-      );
-      pageController.jumpToPage(index);
+      final route = ref.read(nestedRoutesProvider)[index];
+      context.go(route.path.toString());
     }
+
+    // animate page change
+    Widget child = AnimatedSwitcher(
+      duration: const Duration(milliseconds: 300),
+      transitionBuilder: (child, animation) => FadeThroughTransition(
+        animation: animation,
+        secondaryAnimation: ReverseAnimation(animation),
+        fillColor: Colors.transparent,
+        child: child,
+      ),
+      child: this.child,
+    );
 
     //list of pages
     final pages = [
@@ -37,20 +55,17 @@ class HomePage extends HookConsumerWidget {
       mobile: _MobileHomePage(
         onNavItemPressed: _onItemTapped,
         pageIndex: pageIndex.value,
-        pages: pages,
-        pageController: pageController,
+        page: child,
       ),
       tablet: _TabletHomePage(
         onNavItemPressed: _onItemTapped,
         pageIndex: pageIndex.value,
-        pages: pages,
-        pageController: pageController,
+        page: child,
       ),
       desktop: _DesktopHomePage(
         onNavItemPressed: _onItemTapped,
         pageIndex: pageIndex.value,
-        pages: pages,
-        pageController: pageController,
+        page: child,
       ),
     );
   }
@@ -62,25 +77,21 @@ class _MobileHomePage extends HookConsumerWidget {
     Key? key,
     required this.onNavItemPressed,
     required this.pageIndex,
-    required this.pages,
-    this.pageController,
+    required this.page,
   }) : super(key: key);
   final Function? onNavItemPressed;
   final int? pageIndex;
-  final List<HookConsumerWidget>? pages;
-  final PageController? pageController;
+  final Widget? page;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final newRouteMap = RouteMap(
+      index: pageIndex!,
+      context: context,
+    );
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
-        child: PageView(
-          controller: pageController,
-          children: pages!,
-          onPageChanged: (value) {
-            onNavItemPressed!(value);
-          },
-        ),
+        child: page!,
       ),
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
@@ -101,40 +112,15 @@ class _MobileHomePage extends HookConsumerWidget {
         child: NavigationBar(
           backgroundColor: Theme.of(context).colorScheme.background,
           selectedIndex: pageIndex!,
-          destinations: [
-            NavigationDestination(
-              icon: LineIcon.alternateTachometer(
-                color: pageIndex == 0
-                    ? Theme.of(context).colorScheme.onPrimary
-                    : Theme.of(context).colorScheme.onPrimaryContainer,
-              ),
-              label: 'Dashboard',
-            ),
-            NavigationDestination(
-              icon: LineIcon.archive(
-                color: pageIndex == 1
-                    ? Theme.of(context).colorScheme.onPrimary
-                    : Theme.of(context).colorScheme.onPrimaryContainer,
-              ),
-              label: 'Activities',
-            ),
-            NavigationDestination(
-              icon: LineIcon.comments(
-                color: pageIndex == 2
-                    ? Theme.of(context).colorScheme.onPrimary
-                    : Theme.of(context).colorScheme.onPrimaryContainer,
-              ),
-              label: 'Bookings',
-            ),
-            NavigationDestination(
-              icon: LineIcon.user(
-                color: pageIndex == 3
-                    ? Theme.of(context).colorScheme.onPrimary
-                    : Theme.of(context).colorScheme.onPrimaryContainer,
-              ),
-              label: 'Profile',
-            ),
-          ],
+          destinations: ref
+              .read(nestedRoutesNavProvider(pageIndex!))
+              .map(
+                (e) => NavigationDestination(
+                  icon: e.icon!,
+                  label: e.label.toString(),
+                ),
+              )
+              .toList(),
           onDestinationSelected: (index) {
             onNavItemPressed!(index);
           },
@@ -150,15 +136,17 @@ class _TabletHomePage extends HookConsumerWidget {
     Key? key,
     required this.onNavItemPressed,
     required this.pageIndex,
-    required this.pages,
-    this.pageController,
+    required this.page,
   }) : super(key: key);
   final Function? onNavItemPressed;
   final int? pageIndex;
-  final List<HookConsumerWidget>? pages;
-  final PageController? pageController;
+  final Widget? page;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final newRouteMap = RouteMap(
+      index: pageIndex!,
+      context: context,
+    );
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
@@ -166,40 +154,17 @@ class _TabletHomePage extends HookConsumerWidget {
           children: [
             NavigationRail(
               extended: false,
-              destinations: [
-                NavigationRailDestination(
-                  icon: LineIcon.alternateTachometer(
-                    color: pageIndex == 0
-                        ? Theme.of(context).colorScheme.onPrimary
-                        : Theme.of(context).colorScheme.onPrimaryContainer,
-                  ),
-                  label: const DText(text: 'Dashboard'),
-                ),
-                NavigationRailDestination(
-                  icon: LineIcon.archive(
-                    color: pageIndex == 1
-                        ? Theme.of(context).colorScheme.onPrimary
-                        : Theme.of(context).colorScheme.onPrimaryContainer,
-                  ),
-                  label: const DText(text: 'Activities'),
-                ),
-                NavigationRailDestination(
-                  icon: LineIcon.comments(
-                    color: pageIndex == 2
-                        ? Theme.of(context).colorScheme.onPrimary
-                        : Theme.of(context).colorScheme.onPrimaryContainer,
-                  ),
-                  label: const DText(text: 'Bookings'),
-                ),
-                NavigationRailDestination(
-                  icon: LineIcon.user(
-                    color: pageIndex == 3
-                        ? Theme.of(context).colorScheme.onPrimary
-                        : Theme.of(context).colorScheme.onPrimaryContainer,
-                  ),
-                  label: const DText(text: 'Profile'),
-                ),
-              ],
+              destinations: ref
+                  .read(nestedRoutesNavProvider(pageIndex!))
+                  .map(
+                    (e) => NavigationRailDestination(
+                      icon: e.icon!,
+                      label: DText(
+                        text: e.label,
+                      ),
+                    ),
+                  )
+                  .toList(),
               onDestinationSelected: (index) {
                 onNavItemPressed!(index);
               },
@@ -209,13 +174,7 @@ class _TabletHomePage extends HookConsumerWidget {
               width: 0,
             ),
             Expanded(
-              child: PageView(
-                controller: pageController,
-                children: pages!,
-                onPageChanged: (value) {
-                  onNavItemPressed!(value);
-                },
-              ),
+              child: page!,
             ),
           ],
         ),
@@ -230,15 +189,21 @@ class _DesktopHomePage extends HookConsumerWidget {
     Key? key,
     required this.onNavItemPressed,
     required this.pageIndex,
-    required this.pages,
-    this.pageController,
+    required this.page,
   }) : super(key: key);
   final Function? onNavItemPressed;
   final int? pageIndex;
-  final List<HookConsumerWidget>? pages;
-  final PageController? pageController;
+  final Widget? page;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    //  color: pageIndex == 0
+    //                   ? Theme.of(context).colorScheme.onPrimary
+    //                   : Theme.of(context).colorScheme.onPrimaryContainer,
+
+    final newRouteMap = RouteMap(
+      index: pageIndex!,
+      context: context,
+    );
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
@@ -246,40 +211,17 @@ class _DesktopHomePage extends HookConsumerWidget {
         children: [
           NavigationRail(
             extended: true,
-            destinations: [
-              NavigationRailDestination(
-                icon: LineIcon.alternateTachometer(
-                  color: pageIndex == 0
-                      ? Theme.of(context).colorScheme.onPrimary
-                      : Theme.of(context).colorScheme.onPrimaryContainer,
-                ),
-                label: const DText(text: 'Dashboard'),
-              ),
-              NavigationRailDestination(
-                icon: LineIcon.archive(
-                  color: pageIndex == 1
-                      ? Theme.of(context).colorScheme.onPrimary
-                      : Theme.of(context).colorScheme.onPrimaryContainer,
-                ),
-                label: const DText(text: 'Activities'),
-              ),
-              NavigationRailDestination(
-                icon: LineIcon.comments(
-                  color: pageIndex == 2
-                      ? Theme.of(context).colorScheme.onPrimary
-                      : Theme.of(context).colorScheme.onPrimaryContainer,
-                ),
-                label: const DText(text: 'Bookings'),
-              ),
-              NavigationRailDestination(
-                icon: LineIcon.user(
-                  color: pageIndex == 3
-                      ? Theme.of(context).colorScheme.onPrimary
-                      : Theme.of(context).colorScheme.onPrimaryContainer,
-                ),
-                label: const DText(text: 'Profile'),
-              ),
-            ],
+            destinations: ref
+                .read(nestedRoutesNavProvider(pageIndex!))
+                .map(
+                  (e) => NavigationRailDestination(
+                    icon: e.icon!,
+                    label: DText(
+                      text: e.label,
+                    ),
+                  ),
+                )
+                .toList(),
             onDestinationSelected: (index) {
               onNavItemPressed!(index);
             },
@@ -289,13 +231,7 @@ class _DesktopHomePage extends HookConsumerWidget {
             width: 0,
           ),
           Expanded(
-            child: PageView(
-              controller: pageController,
-              children: pages!,
-              onPageChanged: (value) {
-                onNavItemPressed!(value);
-              },
-            ),
+            child: page!,
           ),
         ],
       )),

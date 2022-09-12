@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:admin/lib.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -41,16 +43,20 @@ class ActivitiesDatabaseRepository implements ActivitiesDatabaseAbstract {
   // get a list of activities from firestore
   @override
   Stream<List<Activity>> getActivitiesFromFirestore() {
-    var data = _firestore.collection('activities').snapshots().map(
-          (activityData) => activityData.docs.map((e) {
-            print(e.data());
-            return Activity.fromJson(
-              e.data(),
-            );
-          }).toList(),
-        );
+    try {
+      var data = _firestore.collection('activities').snapshots().map(
+            (activityData) => activityData.docs.map((e) {
+              print(jsonEncode(e.data()));
+              return Activity.fromJson(
+                e.data(),
+              );
+            }).toList(),
+          );
 
-    return data;
+      return data;
+    } on FirebaseException catch (e) {
+      throw e.message.toString();
+    }
   }
 
   // update activity on firestore

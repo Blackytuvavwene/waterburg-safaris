@@ -45,14 +45,12 @@ class Package {
   final String? packageName;
   final List<String>? keywords;
   final String? description;
-  final String? price;
-  final String? lastPrice;
-  final String? rating;
-  final String? discountPercentage;
+  final double? price;
+  final double? lastPrice;
+  final double? rating;
+  final double? discountPercentage;
   final String? coupon;
   final List<String>? packageOffers;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
   Package({
     this.packageId,
     this.packageName,
@@ -64,8 +62,6 @@ class Package {
     this.discountPercentage,
     this.coupon,
     this.packageOffers,
-    this.createdAt,
-    this.updatedAt,
   });
 
   factory Package.fromJson(Map<String, dynamic> json) =>

@@ -60,6 +60,7 @@ class _MobileDashboardPage extends HookConsumerWidget {
                   );
                 },
                 error: (error, stackTrace) {
+                  print(stackTrace);
                   return Container(
                     color: Theme.of(context).colorScheme.errorContainer,
                     child: DText(

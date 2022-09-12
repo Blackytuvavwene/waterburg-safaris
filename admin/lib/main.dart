@@ -28,7 +28,7 @@ class MyApp extends HookConsumerWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final router = ref.watch(appRouterProvider);
+    final router = ref.read(appRouterProvider);
     return Sizer(
       builder: (context, orientation, deviceType) {
         return MaterialApp.router(
