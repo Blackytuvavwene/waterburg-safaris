@@ -1,7 +1,7 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sizer/sizer.dart';
 
@@ -50,7 +50,11 @@ class _MobileWelcomeScreen extends HookConsumerWidget {
               CustomElevatedButton(
                 onPressed: () {
                   ref.read(appStatusProvider.notifier).toggleFirstOpen();
-                  context.pushNamed('signup');
+                  Modular.to.push(
+                    MaterialPageRoute(
+                      builder: (context) => const SignUpPage(),
+                    ),
+                  );
                 },
                 text: 'Create account',
                 height: 6.h,
@@ -61,7 +65,11 @@ class _MobileWelcomeScreen extends HookConsumerWidget {
               CustomElevatedButton(
                 onPressed: () {
                   ref.read(appStatusProvider.notifier).toggleFirstOpen();
-                  context.pushNamed('login');
+                  Modular.to.push(
+                    MaterialPageRoute(
+                      builder: (context) => const LoginPage(),
+                    ),
+                  );
                 },
                 text: 'Login',
                 height: 6.h,
@@ -83,7 +91,9 @@ class _TabletWelcomeScreen extends HookConsumerWidget {
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(20.w),
+          padding: EdgeInsets.symmetric(
+            horizontal: 20.w,
+          ),
           child: Center(
             child: ConstrainedBox(
               constraints: BoxConstraints(
@@ -97,14 +107,24 @@ class _TabletWelcomeScreen extends HookConsumerWidget {
                   const DText(
                     text: 'Waterburg Safaris Admin',
                   ),
-                  SvgPicture.asset('assets/images/welcome.svg'),
                   SizedBox(
-                    height: 2.h,
+                    height: 12.h,
+                  ),
+                  SvgPicture.asset(
+                    'assets/images/welcome.svg',
+                    height: 22.h,
+                  ),
+                  SizedBox(
+                    height: 12.h,
                   ),
                   CustomElevatedButton(
                     onPressed: () {
                       ref.read(appStatusProvider.notifier).toggleFirstOpen();
-                      context.pushNamed('signup');
+                      Modular.to.push(
+                        MaterialPageRoute(
+                          builder: (context) => const SignUpPage(),
+                        ),
+                      );
                     },
                     text: 'Create account',
                   ),
@@ -114,7 +134,11 @@ class _TabletWelcomeScreen extends HookConsumerWidget {
                   CustomElevatedButton(
                     onPressed: () {
                       ref.read(appStatusProvider.notifier).toggleFirstOpen();
-                      context.pushNamed('login');
+                      Modular.to.push(
+                        MaterialPageRoute(
+                          builder: (context) => const LoginPage(),
+                        ),
+                      );
                     },
                     text: 'Login',
                   ),
@@ -156,6 +180,9 @@ class _DesktopWelcomeScreen extends HookConsumerWidget {
                           child: SvgPicture.asset('assets/images/welcome.svg'),
                         ),
                       ),
+                      SizedBox(
+                        width: 10.w,
+                      ),
                       Expanded(
                         child: Center(
                           child: Container(
@@ -174,7 +201,11 @@ class _DesktopWelcomeScreen extends HookConsumerWidget {
                                     ref
                                         .read(appStatusProvider.notifier)
                                         .toggleFirstOpen();
-                                    context.pushNamed('signup');
+                                    Modular.to.push(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const SignUpPage()),
+                                    );
                                   },
                                   text: 'Create account',
                                 ),
@@ -186,7 +217,11 @@ class _DesktopWelcomeScreen extends HookConsumerWidget {
                                     ref
                                         .read(appStatusProvider.notifier)
                                         .toggleFirstOpen();
-                                    context.pushNamed('login');
+                                    Modular.to.push(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const LoginPage()),
+                                    );
                                   },
                                   text: 'Login',
                                 ),

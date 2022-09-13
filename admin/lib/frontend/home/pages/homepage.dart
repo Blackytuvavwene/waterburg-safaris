@@ -1,47 +1,25 @@
 import 'package:admin/lib.dart';
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class HomePage extends HookConsumerWidget {
   const HomePage({
     Key? key,
-    required this.index,
-    required this.child,
   }) : super(key: key);
-  final int index;
-  final Widget child;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageIndex = useState(index);
-
-    // set current index
-    useEffect(() {
-      pageIndex.value = index;
-      return null;
-    }, [index]);
+    final pageIndex = useState(0);
 
     // function to animate the page controller to the next page
     void _onItemTapped(int index) {
       pageIndex.value = index;
       final route = ref.read(nestedRoutesProvider)[index];
-      context.go(route.path.toString());
+      Modular.to.navigate(route.path.toString());
     }
-
-    // animate page change
-    Widget child = AnimatedSwitcher(
-      duration: const Duration(milliseconds: 300),
-      transitionBuilder: (child, animation) => FadeThroughTransition(
-        animation: animation,
-        secondaryAnimation: ReverseAnimation(animation),
-        fillColor: Colors.transparent,
-        child: child,
-      ),
-      child: this.child,
-    );
 
     //list of pages
     final pages = [
@@ -55,17 +33,14 @@ class HomePage extends HookConsumerWidget {
       mobile: _MobileHomePage(
         onNavItemPressed: _onItemTapped,
         pageIndex: pageIndex.value,
-        page: child,
       ),
       tablet: _TabletHomePage(
         onNavItemPressed: _onItemTapped,
         pageIndex: pageIndex.value,
-        page: child,
       ),
       desktop: _DesktopHomePage(
         onNavItemPressed: _onItemTapped,
         pageIndex: pageIndex.value,
-        page: child,
       ),
     );
   }
@@ -77,11 +52,9 @@ class _MobileHomePage extends HookConsumerWidget {
     Key? key,
     required this.onNavItemPressed,
     required this.pageIndex,
-    required this.page,
   }) : super(key: key);
   final Function? onNavItemPressed;
   final int? pageIndex;
-  final Widget? page;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final newRouteMap = RouteMap(
@@ -90,8 +63,8 @@ class _MobileHomePage extends HookConsumerWidget {
     );
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: SafeArea(
-        child: page!,
+      body: const SafeArea(
+        child: RouterOutlet(),
       ),
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
@@ -136,11 +109,9 @@ class _TabletHomePage extends HookConsumerWidget {
     Key? key,
     required this.onNavItemPressed,
     required this.pageIndex,
-    required this.page,
   }) : super(key: key);
   final Function? onNavItemPressed;
   final int? pageIndex;
-  final Widget? page;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final newRouteMap = RouteMap(
@@ -173,8 +144,8 @@ class _TabletHomePage extends HookConsumerWidget {
             const VerticalDivider(
               width: 0,
             ),
-            Expanded(
-              child: page!,
+            const Expanded(
+              child: RouterOutlet(),
             ),
           ],
         ),
@@ -189,11 +160,9 @@ class _DesktopHomePage extends HookConsumerWidget {
     Key? key,
     required this.onNavItemPressed,
     required this.pageIndex,
-    required this.page,
   }) : super(key: key);
   final Function? onNavItemPressed;
   final int? pageIndex;
-  final Widget? page;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //  color: pageIndex == 0
@@ -230,8 +199,8 @@ class _DesktopHomePage extends HookConsumerWidget {
           const VerticalDivider(
             width: 0,
           ),
-          Expanded(
-            child: page!,
+          const Expanded(
+            child: RouterOutlet(),
           ),
         ],
       )),

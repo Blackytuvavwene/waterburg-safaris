@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:layout/layout.dart';
 import 'package:sizer/sizer.dart';
@@ -14,9 +15,12 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
-    const ProviderScope(
+    ProviderScope(
       child: Layout(
-        child: MyApp(),
+        child: ModularApp(
+          module: AppRoutingModule(),
+          child: const MyApp(),
+        ),
       ),
     ),
   );
@@ -57,9 +61,8 @@ class MyApp extends HookConsumerWidget {
                 onSurfaceVariant: Color(0xFFc2c7ce),
                 outline: Color(0xFF8c9198)),
           ),
-          routeInformationParser: router.routeInformationParser,
-          routerDelegate: router.routerDelegate,
-          routeInformationProvider: router.routeInformationProvider,
+          routeInformationParser: Modular.routeInformationParser,
+          routerDelegate: Modular.routerDelegate,
           builder: EasyLoading.init(),
         );
       },
