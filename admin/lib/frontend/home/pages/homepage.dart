@@ -1,24 +1,23 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:vrouter/vrouter.dart';
 
 class HomePage extends HookConsumerWidget {
-  const HomePage({
-    Key? key,
-  }) : super(key: key);
+  const HomePage({Key? key, this.child}) : super(key: key);
+  final Widget? child;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageIndex = useState(0);
+    // final pageIndex = useState(ref.read(routeIndexProvider.notifier).state);
 
     // function to animate the page controller to the next page
     void _onItemTapped(int index) {
-      pageIndex.value = index;
+      ref.read(routeIndexProvider.notifier).setIndex(index);
+
       final route = ref.read(nestedRoutesProvider)[index];
-      Modular.to.navigate(route.path.toString());
+      context.vRouter.toNamed(route.name.toString());
     }
 
     //list of pages
@@ -32,15 +31,18 @@ class HomePage extends HookConsumerWidget {
     return AppLayout(
       mobile: _MobileHomePage(
         onNavItemPressed: _onItemTapped,
-        pageIndex: pageIndex.value,
+        pageIndex: ref.read(routeIndexProvider.notifier).state,
+        child: child,
       ),
       tablet: _TabletHomePage(
         onNavItemPressed: _onItemTapped,
-        pageIndex: pageIndex.value,
+        pageIndex: ref.read(routeIndexProvider.notifier).state,
+        child: child,
       ),
       desktop: _DesktopHomePage(
         onNavItemPressed: _onItemTapped,
-        pageIndex: pageIndex.value,
+        pageIndex: ref.read(routeIndexProvider.notifier).state,
+        child: child,
       ),
     );
   }
@@ -52,9 +54,11 @@ class _MobileHomePage extends HookConsumerWidget {
     Key? key,
     required this.onNavItemPressed,
     required this.pageIndex,
+    this.child,
   }) : super(key: key);
   final Function? onNavItemPressed;
   final int? pageIndex;
+  final Widget? child;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final newRouteMap = RouteMap(
@@ -63,8 +67,8 @@ class _MobileHomePage extends HookConsumerWidget {
     );
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: const SafeArea(
-        child: RouterOutlet(),
+      body: SafeArea(
+        child: child!,
       ),
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
@@ -109,9 +113,11 @@ class _TabletHomePage extends HookConsumerWidget {
     Key? key,
     required this.onNavItemPressed,
     required this.pageIndex,
+    this.child,
   }) : super(key: key);
   final Function? onNavItemPressed;
   final int? pageIndex;
+  final Widget? child;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final newRouteMap = RouteMap(
@@ -144,8 +150,8 @@ class _TabletHomePage extends HookConsumerWidget {
             const VerticalDivider(
               width: 0,
             ),
-            const Expanded(
-              child: RouterOutlet(),
+            Expanded(
+              child: child!,
             ),
           ],
         ),
@@ -160,9 +166,11 @@ class _DesktopHomePage extends HookConsumerWidget {
     Key? key,
     required this.onNavItemPressed,
     required this.pageIndex,
+    this.child,
   }) : super(key: key);
   final Function? onNavItemPressed;
   final int? pageIndex;
+  final Widget? child;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //  color: pageIndex == 0
@@ -199,8 +207,8 @@ class _DesktopHomePage extends HookConsumerWidget {
           const VerticalDivider(
             width: 0,
           ),
-          const Expanded(
-            child: RouterOutlet(),
+          Expanded(
+            child: child!,
           ),
         ],
       )),

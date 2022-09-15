@@ -1,98 +1,115 @@
 import 'package:admin/lib.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+import 'package:vrouter/vrouter.dart';
 
-final appRouterProvider = Provider.autoDispose(
+final appRouterProvider = Provider.autoDispose<List<VRouteElement>>(
   (ref) {
     final user = ref.watch(currentUserProvider);
     final firstOpen = ref.read(firstLoadProvider);
-    return GoRouter(
-      routes: [
-        GoRoute(
-          path: '/',
-          builder: (context, state) {
-            return const WelcomePage();
-          },
-          redirect: (state) {
-            // if first open app navigate to welcome screen
-            final isFirstOpen = firstOpen.value;
+    return [
+      VWidget(
+        path: '/',
+        name: 'welcome',
+        widget: const WelcomePage(),
+        // redirect: (state) {
+        //   // if first open app navigate to welcome screen
+        //   final isFirstOpen = firstOpen.value;
 
-            final loggingIn = state.subloc == '/login';
+        //   final loggingIn = state.subloc == '/login';
 
-            if (isFirstOpen == AppAuthStatus.firstLoad &&
-                user.value?.uid == null) {
-              print('hello');
-              return '/';
-            }
+        //   if (isFirstOpen == AppAuthStatus.firstLoad &&
+        //       user.value?.uid == null) {
+        //     print('hello');
+        //     return '/';
+        //   }
 
-            if (isFirstOpen == AppAuthStatus.loaded &&
-                user.value?.uid == null) {
-              print('login');
-              return '/login';
-            }
+        //   if (isFirstOpen == AppAuthStatus.loaded &&
+        //       user.value?.uid == null) {
+        //     print('login');
+        //     return '/login';
+        //   }
 
-            if (isFirstOpen == AppAuthStatus.loaded &&
-                user.value?.uid != null &&
-                loggingIn) {
-              print('home');
-              return '/home';
-            }
+        //   if (isFirstOpen == AppAuthStatus.loaded &&
+        //       user.value?.uid != null &&
+        //       loggingIn) {
+        //     print('home');
+        //     return '/home';
+        //   }
 
-            return null;
-          },
-          routes: [
-            GoRoute(
-              path: 'login',
-              name: 'login',
-              builder: (context, state) {
-                return const LoginPage();
-              },
+        //   return null;
+        // },
+        stackedRoutes: [
+          VWidget(
+            path: 'login',
+            name: 'login',
+            widget: const LoginPage(),
+          ),
+          VWidget(
+            path: 'signup',
+            name: 'signup',
+            widget: const SignUpPage(),
+          ),
+          VNester(
+            path: '/home',
+            name: 'home',
+            widgetBuilder: (child) => HomePage(
+              child: child,
             ),
-            GoRoute(
-              path: 'signup',
-              name: 'signup',
-              builder: (context, state) {
-                return const SignUpPage();
-              },
-            ),
-            GoRoute(
-              path: 'home/:id',
-              name: 'home',
-              redirect: (_) => 'home',
-              builder: (context, state) {
-                // get params path
-                String? path = state.params['id'];
-                //set initial index
-                int pageIndex = 0;
-                // set initial page
-                Widget initialPage =
-                    ref.read(nestedRoutesProvider).first.widget!;
-
-                if (path != null) {
-                  // set initial index
-                  pageIndex = ref
-                      .read(nestedRoutesProvider)
-                      .indexWhere((element) => element.path == path);
-
-                  // set initial page
-                  initialPage = ref
-                      .read(nestedRoutesProvider)
-                      .firstWhere((element) => element.path == path)
-                      .widget!;
-                }
-
-                return const HomePage();
-              },
-            ),
-          ],
-        ),
-      ],
-      redirectLimit: 15,
-    );
+            nestedRoutes: [
+              VWidget(
+                path: null,
+                name: 'dashboard',
+                widget: const DashboardPage(),
+              ),
+              VWidget(
+                path: '/activities',
+                name: 'activities',
+                widget: const ActivitiesPage(),
+              ),
+              VWidget(
+                path: '/bookings',
+                name: 'bookings',
+                widget: const BookingsPage(),
+              ),
+              VWidget(
+                path: '/profile',
+                name: 'profile',
+                widget: const ProfilePage(),
+              ),
+            ],
+          ),
+        ],
+      ),
+      VWidget(path: '/404', widget: const NotFoundPage()),
+      VRouteRedirector(
+        path: r':_(.+)',
+        redirectTo: '/404',
+      ),
+    ];
   },
 );
+
+// get params path
+// String? path = state.params['id'];
+// //set initial index
+// int pageIndex = 0;
+// // set initial page
+// Widget initialPage =
+//     ref.read(nestedRoutesProvider).first.widget!;
+
+// if (path != null) {
+//   // set initial index
+//   pageIndex = ref
+//       .read(nestedRoutesProvider)
+//       .indexWhere((element) => element.path == path);
+
+//   // set initial page
+//   initialPage = ref
+//       .read(nestedRoutesProvider)
+//       .firstWhere((element) => element.path == path)
+//       .widget!;
+// }
 
 // routing with flutter modular
 class AppRoutingModule extends Module {

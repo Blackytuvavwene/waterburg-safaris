@@ -1,9 +1,9 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sizer/sizer.dart';
+import 'package:vrouter/vrouter.dart';
 
 class WelcomePage extends HookConsumerWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -50,11 +50,7 @@ class _MobileWelcomeScreen extends HookConsumerWidget {
               CustomElevatedButton(
                 onPressed: () {
                   ref.read(appStatusProvider.notifier).toggleFirstOpen();
-                  Modular.to.push(
-                    MaterialPageRoute(
-                      builder: (context) => const SignUpPage(),
-                    ),
-                  );
+                  context.vRouter.toNamed('signup');
                 },
                 text: 'Create account',
                 height: 6.h,
@@ -65,11 +61,7 @@ class _MobileWelcomeScreen extends HookConsumerWidget {
               CustomElevatedButton(
                 onPressed: () {
                   ref.read(appStatusProvider.notifier).toggleFirstOpen();
-                  Modular.to.push(
-                    MaterialPageRoute(
-                      builder: (context) => const LoginPage(),
-                    ),
-                  );
+                  context.vRouter.toNamed('login');
                 },
                 text: 'Login',
                 height: 6.h,
@@ -120,11 +112,7 @@ class _TabletWelcomeScreen extends HookConsumerWidget {
                   CustomElevatedButton(
                     onPressed: () {
                       ref.read(appStatusProvider.notifier).toggleFirstOpen();
-                      Modular.to.push(
-                        MaterialPageRoute(
-                          builder: (context) => const SignUpPage(),
-                        ),
-                      );
+                      context.vRouter.toNamed('signup');
                     },
                     text: 'Create account',
                   ),
@@ -134,11 +122,7 @@ class _TabletWelcomeScreen extends HookConsumerWidget {
                   CustomElevatedButton(
                     onPressed: () {
                       ref.read(appStatusProvider.notifier).toggleFirstOpen();
-                      Modular.to.push(
-                        MaterialPageRoute(
-                          builder: (context) => const LoginPage(),
-                        ),
-                      );
+                      context.vRouter.toNamed('login');
                     },
                     text: 'Login',
                   ),
@@ -201,11 +185,7 @@ class _DesktopWelcomeScreen extends HookConsumerWidget {
                                     ref
                                         .read(appStatusProvider.notifier)
                                         .toggleFirstOpen();
-                                    Modular.to.push(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const SignUpPage()),
-                                    );
+                                    context.vRouter.toNamed('signup');
                                   },
                                   text: 'Create account',
                                 ),
@@ -217,11 +197,7 @@ class _DesktopWelcomeScreen extends HookConsumerWidget {
                                     ref
                                         .read(appStatusProvider.notifier)
                                         .toggleFirstOpen();
-                                    Modular.to.push(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const LoginPage()),
-                                    );
+                                    context.vRouter.toNamed('login');
                                   },
                                   text: 'Login',
                                 ),

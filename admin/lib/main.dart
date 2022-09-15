@@ -1,10 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:layout/layout.dart';
 import 'package:sizer/sizer.dart';
+import 'package:vrouter/vrouter.dart';
 
 import 'lib.dart';
 
@@ -15,12 +15,9 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
-    ProviderScope(
+    const ProviderScope(
       child: Layout(
-        child: ModularApp(
-          module: AppRoutingModule(),
-          child: const MyApp(),
-        ),
+        child: MyApp(),
       ),
     ),
   );
@@ -33,10 +30,45 @@ class MyApp extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.read(appRouterProvider);
+    final firstOpen = ref.read(firstLoadProvider);
+    // ref.listen(currentUserProvider, (first) {
+    //   if (firstOpen) {
+    //     ref.read(firstLoadProvider.notifier).setFirstLoad();
+    //   }
+    // });
     return Sizer(
       builder: (context, orientation, deviceType) {
-        return MaterialApp.router(
-          title: 'Flutter Demo',
+        return VRouter(
+          beforeEnter: (vRedirector) async {
+            final isFirstOpen = firstOpen.value;
+
+            final isUserConnected = ref.watch(currentUserProvider).value;
+
+            if (isFirstOpen == AppAuthStatus.firstLoad &&
+                isUserConnected?.uid == null) {
+              print('hello');
+              return vRedirector.toNamed('welcome');
+            }
+
+            if (isFirstOpen == AppAuthStatus.loaded &&
+                isUserConnected?.uid != null) {
+              print('home');
+              return vRedirector.toNamed('home');
+            }
+            if (isUserConnected?.uid == null &&
+                isFirstOpen == AppAuthStatus.loaded &&
+                vRedirector.toNamed != 'login') {
+              return vRedirector
+                  .toNamed('login'); // Use VRedirector to redirect
+            }
+          },
+          title: 'Waterburg Safaris Admin',
+          // This transition will be applied to every route
+          buildTransition: (animation1, _, child) {
+            return FadeTransition(opacity: animation1, child: child);
+          },
+          // You can specify a transition duration (default 300)
+          transitionDuration: const Duration(milliseconds: 500),
           debugShowCheckedModeBanner: false,
           theme: ThemeData.from(
             colorScheme: const ColorScheme(
@@ -61,8 +93,7 @@ class MyApp extends HookConsumerWidget {
                 onSurfaceVariant: Color(0xFFc2c7ce),
                 outline: Color(0xFF8c9198)),
           ),
-          routeInformationParser: Modular.routeInformationParser,
-          routerDelegate: Modular.routerDelegate,
+          routes: router,
           builder: EasyLoading.init(),
         );
       },

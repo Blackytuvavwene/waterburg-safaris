@@ -5,11 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icon.dart';
 
 class RouteModel {
-  final Widget? widget;
-  final String? path;
-  final String? name;
-  final Icon? icon;
-  final String? label;
+  Widget? widget;
+  String? path;
+  String? name;
+  Icon? icon;
+  String? label;
   RouteModel({
     this.widget,
     this.path,
@@ -17,13 +17,30 @@ class RouteModel {
     this.icon,
     this.label,
   });
+
+  RouteModel copyWith({
+    Widget? widget,
+    String? path,
+    String? name,
+    Icon? icon,
+    String? label,
+  }) {
+    return RouteModel(
+      widget: widget ?? this.widget,
+      path: path ?? this.path,
+      name: name ?? this.name,
+      icon: icon ?? this.icon,
+      label: label ?? this.label,
+    );
+  }
 }
 
 List<RouteModel> nestedMainAppRoutes({int? iconColor}) => [
       RouteModel(
         widget: const DashboardPage(),
-        path: '/dashboard',
+        path: null,
         name: 'dashboard',
+        label: 'Dashboard',
         icon: LineIcon.alternateTachometer(
           color: iconColor == 0
               ? const Color(0xFF003351)
@@ -34,6 +51,7 @@ List<RouteModel> nestedMainAppRoutes({int? iconColor}) => [
         widget: const ActivitiesPage(),
         path: '/activities',
         name: 'activities',
+        label: 'Activities',
         icon: LineIcon.archive(
           color: iconColor == 1
               ? const Color(0xFF003351)
@@ -44,6 +62,7 @@ List<RouteModel> nestedMainAppRoutes({int? iconColor}) => [
         widget: const BookingsPage(),
         path: '/bookings',
         name: 'bookings',
+        label: 'Bookings',
         icon: LineIcon.comments(
           color: iconColor == 2
               ? const Color(0xFF003351)
@@ -54,6 +73,7 @@ List<RouteModel> nestedMainAppRoutes({int? iconColor}) => [
         widget: const ProfilePage(),
         path: '/profile',
         name: 'profile',
+        label: 'Profile',
         icon: LineIcon.user(
           color: iconColor == 3
               ? const Color(0xFF003351)
@@ -80,4 +100,22 @@ final nestedRoutesNavProvider =
   return nestedMainAppRoutes(
     iconColor: index,
   );
+});
+
+class HomePageRouterNotifier extends StateNotifier<int> {
+  HomePageRouterNotifier() : super(0);
+
+  void setIndex(int index) {
+    state = index;
+  }
+
+  void setIndexFromPath(String pathName) {
+    state =
+        nestedMainAppRoutes().indexWhere((element) => element.name == pathName);
+  }
+}
+
+final routeIndexProvider =
+    StateNotifierProvider<HomePageRouterNotifier, int>((ref) {
+  return HomePageRouterNotifier();
 });

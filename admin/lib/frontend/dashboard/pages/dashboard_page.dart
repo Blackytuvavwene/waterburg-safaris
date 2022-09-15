@@ -11,10 +11,73 @@ class DashboardPage extends HookConsumerWidget {
     final activitiesList = ref.watch(activitiesStreamProvider);
     final userDataStream = ref.watch(userDataStreamProvider);
 
-    return const AppLayout(
-      mobile: _MobileDashboardPage(),
-      tablet: _TabletDashboardPage(),
-      desktop: _DesktopDashboardPage(),
+    return userDataStream.when(
+      data: (data) {
+        return AppLayout(
+          mobile: _MobileDashboardPage(
+            userData: data,
+            activitiesWidget: activitiesList.when(
+              data: (activities) {
+                return DashBoardActivitiesData(
+                  activitiesData: activities,
+                );
+              },
+              error: (error, stackTrace) {
+                return DashBoardActivitiesError(
+                  error: error.toString(),
+                );
+              },
+              loading: () {
+                return const DashBoardActivitiesLoading();
+              },
+            ),
+          ),
+          tablet: _TabletDashboardPage(
+            userData: data,
+            activitiesWidget: activitiesList.when(
+              data: (activities) {
+                return DashBoardActivitiesData(
+                  activitiesData: activities,
+                );
+              },
+              error: (error, stackTrace) {
+                return DashBoardActivitiesError(
+                  error: error.toString(),
+                );
+              },
+              loading: () {
+                return const DashBoardActivitiesLoading();
+              },
+            ),
+          ),
+          desktop: _DesktopDashboardPage(
+            userData: data,
+            activitiesWidget: activitiesList.when(
+              data: (activities) {
+                return DashBoardActivitiesData(
+                  activitiesData: activities,
+                );
+              },
+              error: (error, stackTrace) {
+                return DashBoardActivitiesError(
+                  error: error.toString(),
+                );
+              },
+              loading: () {
+                return const DashBoardActivitiesLoading();
+              },
+            ),
+          ),
+        );
+      },
+      loading: () {
+        return const DashBoardLoadingPage();
+      },
+      error: (error, stack) {
+        return DashBoardErrorPage(
+          errorText: error.toString(),
+        );
+      },
     );
   }
 }
@@ -23,12 +86,14 @@ class DashboardPage extends HookConsumerWidget {
 class _MobileDashboardPage extends HookConsumerWidget {
   const _MobileDashboardPage({
     Key? key,
+    this.userData,
+    this.activitiesWidget,
   }) : super(key: key);
+  final UserModel? userData;
+  final Widget? activitiesWidget;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //access providers for the dashboard
-    final activitiesList = ref.watch(activitiesStreamProvider);
-    final userDataStream = ref.watch(userDataStreamProvider);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
@@ -39,43 +104,13 @@ class _MobileDashboardPage extends HookConsumerWidget {
       body: SafeArea(
           child: SingleChildScrollView(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            const DText(
-              text: 'Hello',
-            ),
             SizedBox(
-              height: 30.h,
-              child: activitiesList.when(
-                data: (data) {
-                  return ListView(
-                    children: data
-                        .map(
-                          (e) => ListTile(
-                            title: DText(
-                              text: e.activityName,
-                            ),
-                          ),
-                        )
-                        .toList(),
-                  );
-                },
-                error: (error, stackTrace) {
-                  print(stackTrace);
-                  return Container(
-                    color: Theme.of(context).colorScheme.errorContainer,
-                    child: DText(
-                      text: error.toString(),
-                      textColor: Theme.of(context).colorScheme.onErrorContainer,
-                    ),
-                  );
-                },
-                loading: () {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-              ),
-            )
+              height: 45.h,
+              width: 100.w,
+              child: activitiesWidget!,
+            ),
           ],
         ),
       )),
@@ -87,17 +122,22 @@ class _MobileDashboardPage extends HookConsumerWidget {
 class _TabletDashboardPage extends HookConsumerWidget {
   const _TabletDashboardPage({
     Key? key,
+    this.userData,
+    this.activitiesWidget,
   }) : super(key: key);
+  final UserModel? userData;
+  final Widget? activitiesWidget;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //access providers for the dashboard
-    final activitiesList = ref.watch(activitiesStreamProvider);
-    final userDataStream = ref.watch(userDataStreamProvider);
-    return Container(
-      color: Colors.amberAccent,
-      child: const Center(
-        child: Text(
-          'Tablet Dashboard',
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
+      body: SafeArea(
+        child: ListView(
+          children: [
+            Expanded(
+              child: activitiesWidget!,
+            ),
+          ],
         ),
       ),
     );
@@ -108,17 +148,22 @@ class _TabletDashboardPage extends HookConsumerWidget {
 class _DesktopDashboardPage extends HookConsumerWidget {
   const _DesktopDashboardPage({
     Key? key,
+    this.userData,
+    this.activitiesWidget,
   }) : super(key: key);
+  final UserModel? userData;
+  final Widget? activitiesWidget;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //access providers for the dashboard
-    final activitiesList = ref.watch(activitiesStreamProvider);
-    final userDataStream = ref.watch(userDataStreamProvider);
-    return Container(
-      color: Colors.amberAccent,
-      child: const Center(
-        child: Text(
-          'Desktop Dashboard',
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
+      body: SafeArea(
+        child: ListView(
+          children: [
+            Expanded(
+              child: activitiesWidget!,
+            ),
+          ],
         ),
       ),
     );

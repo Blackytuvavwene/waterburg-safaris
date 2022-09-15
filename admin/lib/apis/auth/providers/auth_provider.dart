@@ -65,6 +65,6 @@ final loggedIn = FutureProvider.autoDispose<AppAuthStatus>(
   ((ref) => ref.watch(appStatusProvider.notifier).getLoggedIn()),
 );
 
-final currentUserProvider = StreamProvider.autoDispose<User?>((ref) {
+final currentUserProvider = StreamProvider<User?>((ref) {
   return ref.watch(authProvider).isSignedIn();
 });

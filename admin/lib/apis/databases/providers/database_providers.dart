@@ -12,5 +12,7 @@ final activityDbRepositoryProvider = Provider<ActivitiesDatabaseRepository>(
 
 // stream user data from firestore
 final userDataStreamProvider = StreamProvider.autoDispose<UserModel>((ref) {
-  return ref.watch(userDbRepositoryProvider).getUserFromFirestore();
+  return ref
+      .watch(userDbRepositoryProvider)
+      .getUserFromFirestore(uid: ref.read(currentUserProvider).value?.uid);
 });

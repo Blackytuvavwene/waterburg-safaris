@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:admin/lib.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -46,7 +44,6 @@ class ActivitiesDatabaseRepository implements ActivitiesDatabaseAbstract {
     try {
       var data = _firestore.collection('activities').snapshots().map(
             (activityData) => activityData.docs.map((e) {
-              print(jsonEncode(e.data()));
               return Activity.fromJson(
                 e.data(),
               );

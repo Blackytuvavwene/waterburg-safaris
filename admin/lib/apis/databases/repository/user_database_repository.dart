@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:admin/lib.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -28,9 +26,9 @@ class UserDatabaseRepository implements UserDatabaseAbstract {
   Stream<UserModel> getUserFromFirestore({String? uid}) {
     try {
       var user = _firestore.collection('users').doc(uid).snapshots().map(
-          (event) => UserModel.fromJson(event.data is Map<String, dynamic>
-              ? event.data
-              : json.decode(event.data.toString())));
+            (event) => UserModel.fromJson(event.data()!),
+          );
+
       return user;
     } on FirebaseException catch (e) {
       throw e.toString();
