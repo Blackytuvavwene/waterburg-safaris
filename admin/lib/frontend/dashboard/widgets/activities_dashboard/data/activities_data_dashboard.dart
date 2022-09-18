@@ -38,64 +38,65 @@ class _MobileDashBoardActivitiesData extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
-        height: 45.h,
-        width: 100.w,
-        child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: 8.w,
-            vertical: 4.h,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: 100.w,
-                child: Row(
-                  children: [
-                    DText(
-                      text: 'Activities',
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    const Spacer(),
-                    TextButton.icon(
-                      onPressed: () {
-                        ref
-                            .read(routeIndexProvider.notifier)
-                            .setIndexFromPath('activities');
+      height: 45.h,
+      width: 100.w,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: 8.w,
+          vertical: 4.h,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 100.w,
+              child: Row(
+                children: [
+                  DText(
+                    text: 'Activities',
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  const Spacer(),
+                  TextButton.icon(
+                    onPressed: () {
+                      ref
+                          .read(routeIndexProvider.notifier)
+                          .setIndexFromPath('activities');
 
-                        context.vRouter.toNamed('activities');
-                      },
-                      // style: TextButton.styleFrom(),
-                      icon: LineIcon.chevronCircleRight(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      label: DText(
-                        text: 'View all',
-                        textColor: Theme.of(context).colorScheme.primary,
-                      ),
+                      context.vRouter.toNamed('activities');
+                    },
+                    // style: TextButton.styleFrom(),
+                    icon: LineIcon.chevronCircleRight(
+                      color: Theme.of(context).colorScheme.primary,
                     ),
-                  ],
-                ),
+                    label: DText(
+                      text: 'View all',
+                      textColor: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 10),
-              Expanded(
-                child: ListView.separated(
-                  itemCount: activitiesData!.length,
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(height: 10);
-                  },
-                  itemBuilder: (context, index) {
-                    return ActivityCard(
-                      activity: activitiesData?[index],
-                    );
-                  },
-                ),
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: ListView.separated(
+                itemCount: activitiesData!.length,
+                separatorBuilder: (context, index) {
+                  return const SizedBox(height: 10);
+                },
+                itemBuilder: (context, index) {
+                  return ActivityCard(
+                    activity: activitiesData?[index],
+                  );
+                },
               ),
-            ],
-          ),
-        ));
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -124,7 +125,7 @@ class _TabletDashBoardActivitiesData extends HookConsumerWidget {
               children: [
                 DText(
                   text: 'Activities',
-                  fontSize: 14.sp,
+                  fontSize: 10.sp,
                   fontWeight: FontWeight.w600,
                 ),
                 const Spacer(),
@@ -184,63 +185,76 @@ class _DesktopDashBoardActivitiesData extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
-      height: 56.h,
+      height: 70.h,
       width: 100.w,
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: 8.w,
-          vertical: 10.h,
+      child: Card(
+        margin: EdgeInsets.all(
+          2.w,
         ),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                DText(
-                  text: 'Activities',
-                  fontSize: 10.sp,
-                  fontWeight: FontWeight.w600,
-                ),
-                const Spacer(),
-                TextButton.icon(
-                  onPressed: () {
-                    ref
-                        .read(routeIndexProvider.notifier)
-                        .setIndexFromPath('activities');
+        elevation: 10,
+        shadowColor: Theme.of(context).colorScheme.primary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            2.w,
+          ),
+        ),
+        color: Theme.of(context).colorScheme.secondary,
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: 4.w,
+            vertical: 10.h,
+          ),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  DText(
+                    text: 'Activities',
+                    fontSize: 8.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  const Spacer(),
+                  TextButton.icon(
+                    onPressed: () {
+                      ref
+                          .read(routeIndexProvider.notifier)
+                          .setIndexFromPath('activities');
 
-                    context.vRouter.toNamed('activities');
-                  },
-                  // style: TextButton.styleFrom(),
-                  icon: LineIcon.chevronCircleRight(
-                    color: Theme.of(context).colorScheme.primary,
+                      context.vRouter.toNamed('activities');
+                    },
+                    // style: TextButton.styleFrom(),
+                    icon: LineIcon.chevronCircleRight(
+                      color: Theme.of(context).colorScheme.onSecondary,
+                    ),
+                    label: DText(
+                      text: 'View all',
+                      textColor: Theme.of(context).colorScheme.onSecondary,
+                    ),
                   ),
-                  label: DText(
-                    text: 'View all',
-                    textColor: Theme.of(context).colorScheme.primary,
+                ],
+              ),
+              const SizedBox(height: 10),
+              Expanded(
+                child: GridView.custom(
+                  shrinkWrap: true,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: GridView.custom(
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                ),
-                childrenDelegate: SliverChildListDelegate(
-                  activitiesData!
-                      .map(
-                        (e) => ActivityCard(
-                          activity: e,
-                        ),
-                      )
-                      .toList(),
+                  childrenDelegate: SliverChildListDelegate(
+                    activitiesData!
+                        .map(
+                          (e) => ActivityCard(
+                            activity: e,
+                          ),
+                        )
+                        .toList(),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -361,7 +375,7 @@ class _ActivityCardTablet extends HookConsumerWidget {
           // const SizedBox(height: 10),
           DText(
             text: activity!.activityName!,
-            fontSize: 12.sp,
+            fontSize: 10.sp,
             fontWeight: FontWeight.w600,
             textColor: Theme.of(context).colorScheme.onSecondaryContainer,
           ),
@@ -413,19 +427,17 @@ class _ActivityCardDesktop extends HookConsumerWidget {
           // const SizedBox(height: 10),
           DText(
             text: activity!.activityName!,
-            fontSize: 8.sp,
+            fontSize: 6.sp,
             fontWeight: FontWeight.w600,
             textColor: Theme.of(context).colorScheme.onSecondaryContainer,
           ),
           const SizedBox(height: 5),
-          Expanded(
-            child: DText(
-              text: activity!.seoDescription!,
-              fontSize: 6.sp,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              textColor: Theme.of(context).colorScheme.onSecondaryContainer,
-            ),
+          DText(
+            text: activity!.seoDescription!,
+            fontSize: 4.sp,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            textColor: Theme.of(context).colorScheme.onSecondaryContainer,
           ),
         ],
       ),

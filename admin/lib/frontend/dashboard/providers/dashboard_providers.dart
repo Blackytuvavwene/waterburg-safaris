@@ -1,9 +1,15 @@
 import 'package:admin/lib.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final activitiesStreamProvider =
-    StreamProvider.autoDispose<List<Activity>>((ref) {
-  final db = ref.watch(activityDbRepositoryProvider);
-  final Stream<List<Activity>> list = db.getActivitiesFromFirestore();
-  return list;
+// stream booking data from firestore
+final bookingDataStreamProvider =
+    StreamProvider.autoDispose<List<BookingModel>>((ref) {
+  return ref.watch(bookingDbRepositoryProvider).getBookingsFromFirestore();
+});
+
+// stream company data from firestore
+final companyDataStreamProvider = StreamProvider.autoDispose<Company>((ref) {
+  return ref
+      .watch(companyDbRepositoryProvider)
+      .streamCompanyFromFirestore(companyId: 'ymV8H6FBRjfMBFhAh8o2');
 });

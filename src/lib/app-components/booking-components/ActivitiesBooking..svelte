@@ -67,10 +67,10 @@ import type { BookingFormModel } from "./booking.types";
     $:({activity,packageD}=bookingState);
 </script>
 
-<section class="m-8 lg:my-28  xl:px-72">
-    <h1 class="xl:mx-72">Book your safari adventure activity now</h1>
+<section class="m-8 lg:my-28  xl:px-72 w-full flex flex-col">
+    <h1 class=" text-start pb-10">Book your safari adventure activity now</h1>
     <form action="" method="post" class="flex flex-col w-full rounded-xl drop-shadow-xl bg-primary-50">
-        <div class=" rounded-t-xl inset-10 p-6">
+        <div class=" rounded-t-xl p-6 w-full">
             <h2 class="text-base font-semibold lg:font-bold">Activity & Package selection</h2>
             <p>Choose activity and package that suits you</p>
             <fieldset class="flex flex-col ">
@@ -119,7 +119,7 @@ import type { BookingFormModel } from "./booking.types";
         <div class="flex flex-col md:flex-row w-full ">
             <div class="flex flex-col  p-8 w-full">
                 <h3 class="text-base font-semibold lg:font-bold">Card details</h3>
-                <div class="flex flex-col gap-10">
+                <div class="flex flex-col gap-10 w-full">
                     <fieldset class="flex flex-col gap-6">
                         <div class="flex flex-col gap-1">
                             <label for="ccHolderName">Name on card</label>
@@ -157,19 +157,19 @@ import type { BookingFormModel } from "./booking.types";
             <div class="flex flex-col bg-primary-100 p-8 w-full">
                 <h4 class="text-base font-semibold">Bookings dates</h4>
                 <p>Enter your depature and arrival dates</p>
-                <fieldset class="flex flex-col gap-2">
-                    <div class="flex flex-col gap-1">
+                <fieldset class="flex flex-col gap-2 w-full">
+                    <div class="flex flex-col gap-1 w-full">
                         <label for="departureDate">Departure date</label>
                         <input type="datetime-local" min={Date.now()} id="departureDate" name="departureDate" 
                         on:click={()=>selectedDepartureDate=true} bind:value={departureDate}>
                     </div>
-                    <div class="flex flex-col gap-1">
+                    <div class="flex flex-col gap-1 w-full">
                         <label for="arrivalDate">Arrival date</label>
                         <input type="datetime-local" min={Date.now()} name="arrivalDate" id="arrivalDate" bind:value={arrivalDate}
                         on:click={()=>selectedArrivalDate=true}>
                     </div>
                 </fieldset>
-                <div class="w-full flex flex-col py-6">
+                <div class="w-full flex flex-col py-6 ">
                     <h5 class="font-bold sm:font-semibold py-2">Selected dates</h5>
                     <p class="font-semibold">Departure date :
                         <span class="font-normal">

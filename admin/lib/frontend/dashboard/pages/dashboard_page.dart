@@ -31,6 +31,7 @@ class DashboardPage extends HookConsumerWidget {
                 return const DashBoardActivitiesLoading();
               },
             ),
+            bookingsWidget: const BookingDashboard(),
           ),
           tablet: _TabletDashboardPage(
             userData: data,
@@ -49,6 +50,7 @@ class DashboardPage extends HookConsumerWidget {
                 return const DashBoardActivitiesLoading();
               },
             ),
+            bookingsWidget: const BookingDashboard(),
           ),
           desktop: _DesktopDashboardPage(
             userData: data,
@@ -67,6 +69,7 @@ class DashboardPage extends HookConsumerWidget {
                 return const DashBoardActivitiesLoading();
               },
             ),
+            bookingsWidget: const BookingDashboard(),
           ),
         );
       },
@@ -88,9 +91,11 @@ class _MobileDashboardPage extends HookConsumerWidget {
     Key? key,
     this.userData,
     this.activitiesWidget,
+    this.bookingsWidget,
   }) : super(key: key);
   final UserModel? userData;
   final Widget? activitiesWidget;
+  final Widget? bookingsWidget;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //access providers for the dashboard
@@ -111,6 +116,11 @@ class _MobileDashboardPage extends HookConsumerWidget {
               width: 100.w,
               child: activitiesWidget!,
             ),
+            SizedBox(
+              height: 45.h,
+              width: 100.w,
+              child: bookingsWidget!,
+            ),
           ],
         ),
       )),
@@ -124,9 +134,11 @@ class _TabletDashboardPage extends HookConsumerWidget {
     Key? key,
     this.userData,
     this.activitiesWidget,
+    this.bookingsWidget,
   }) : super(key: key);
   final UserModel? userData;
   final Widget? activitiesWidget;
+  final Widget? bookingsWidget;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -134,9 +146,8 @@ class _TabletDashboardPage extends HookConsumerWidget {
       body: SafeArea(
         child: ListView(
           children: [
-            Expanded(
-              child: activitiesWidget!,
-            ),
+            activitiesWidget!,
+            bookingsWidget!,
           ],
         ),
       ),
@@ -150,9 +161,11 @@ class _DesktopDashboardPage extends HookConsumerWidget {
     Key? key,
     this.userData,
     this.activitiesWidget,
+    this.bookingsWidget,
   }) : super(key: key);
   final UserModel? userData;
   final Widget? activitiesWidget;
+  final Widget? bookingsWidget;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -160,9 +173,8 @@ class _DesktopDashboardPage extends HookConsumerWidget {
       body: SafeArea(
         child: ListView(
           children: [
-            Expanded(
-              child: activitiesWidget!,
-            ),
+            activitiesWidget!,
+            bookingsWidget!,
           ],
         ),
       ),

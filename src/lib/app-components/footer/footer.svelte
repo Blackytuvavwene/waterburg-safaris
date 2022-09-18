@@ -17,12 +17,12 @@ export let footerData:HomeModel;
 
 
 <footer class=" w-full pt-6 flex flex-col justify-between items-center h-full bg-primary-100">
-    <div class="flex flex-col  md:flex-row justify-between w-full xl:px-72">
-        <figure class="md:ml-6 p-6 mb-4 w-full ">
-            <img class=" w-[50%] md:w-4/6 xl:w-56 h-fit object-contain" src={wblogoLg} alt="Waterburg Safaris brand logo" height="200" width="200">
+    <div class="flex flex-col h-full  md:flex-row justify-between w-full xl:px-44">
+        <figure class="md:ml-6 xl:ml-0 p-6 mb-4 w-fit xl:mr-12 ">
+            <img class=" w-[50%] md:w-4/6 xl:w-56  h-fit object-contain" src={wblogoLg} alt="Waterburg Safaris brand logo" height="200" width="200">
         </figure>
         
-        <div class="  justify-end items-center w-full">
+        <div class="  justify-end items-center w-fit xl:w-full h-full">
   
             <ContactFooter {footerData}/>
         </div>

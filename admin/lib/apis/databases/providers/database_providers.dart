@@ -16,3 +16,11 @@ final userDataStreamProvider = StreamProvider.autoDispose<UserModel>((ref) {
       .watch(userDbRepositoryProvider)
       .getUserFromFirestore(uid: ref.read(currentUserProvider).value?.uid);
 });
+
+// company database repository provider
+final companyDbRepositoryProvider =
+    Provider<CompanyDatabaseRepository>((ref) => CompanyDatabaseRepository());
+
+// booking database repository provider
+final bookingDbRepositoryProvider =
+    Provider<BookingDatabaseRepository>((ref) => BookingDatabaseRepository());

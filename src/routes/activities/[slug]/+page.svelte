@@ -18,17 +18,17 @@ import PackageCard from '$lib/app-components/activities-components/PackageCard.s
 <div class="w-full h-full flex flex-col pt-6">
     <section class="p-6 lg:px-36">
         <h1><strong class="text-3xl lg:text-4xl lg:font-bold text-primary">{activityName}</strong></h1>
-        <p class="my-6 font-semibold lg:text-lg">{overview}</p>
-        <p class="my-6 font-semibold lg:text-lg">{seoDescription}</p>
+        <p class="my-6 font-semibold lg:font-medium lg:text-lg">{overview}</p>
+        <p class="my-6 font-semibold lg:font-medium lg:text-lg">{seoDescription}</p>
     </section>
     <div class="flex flex-row flex-wrap justify-center
     items-center p-4 w-full h-full">
         <div class="py-6 flex flex-col items-center justify-center">
             <h2 class="font-bold text-center pb-6 text-xl sm:text-2xl md:text-3xl">Choose a package that suits</h2>
-            <p class="text-center text-lg lg:text-2xl lg:font-semibold">Below are the packages that we currently offer under 
+            <p class="text-center text-lg lg:text-2xl">Below are the packages that we currently offer under 
                 <strong class="text-2xl font-bold">{activityName}</strong> to our clients</p>
         </div>
-        <div class="flex items-center justify-center md:flex-row flex-wrap ">
+        <div class="flex items-center my-12 justify-center md:flex-row flex-wrap ">
             {#if packages}
             {#each packages as packageData}
                 <div class=" m-4 w-full h-full sm:w-80">

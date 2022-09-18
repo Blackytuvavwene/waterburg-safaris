@@ -63,10 +63,16 @@ final appRouterProvider = Provider.autoDispose<List<VRouteElement>>(
                 widget: const DashboardPage(),
               ),
               VWidget(
-                path: '/activities',
-                name: 'activities',
-                widget: const ActivitiesPage(),
-              ),
+                  path: '/activities',
+                  name: 'activities',
+                  widget: const ActivitiesPage(),
+                  stackedRoutes: [
+                    VWidget(
+                      path: ':activityId',
+                      name: 'activityDetails',
+                      widget: const ActivityPage(),
+                    ),
+                  ]),
               VWidget(
                 path: '/bookings',
                 name: 'bookings',
@@ -81,7 +87,10 @@ final appRouterProvider = Provider.autoDispose<List<VRouteElement>>(
           ),
         ],
       ),
-      VWidget(path: '/404', widget: const NotFoundPage()),
+      VWidget(
+        path: '/404',
+        widget: const NotFoundPage(),
+      ),
       VRouteRedirector(
         path: r':_(.+)',
         redirectTo: '/404',
