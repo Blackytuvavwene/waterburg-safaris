@@ -60,7 +60,7 @@ import { resetCurrentSelectedPersist } from '$lib/app-components/activities-comp
 
 <header class="w-full h-full flex items-center sticky top-0 z-10 bg-primary-900 ">
     <nav class="w-full h-fit sm:px-10 xl:px-44 flex flex-row  justify-between items-center ">
-        <div class= "flex flex-col items-start justify-start h-full w-full sm:w-fit">
+        <div class= "flex flex-col items-start justify-start h-full w-full lg:w-fit">
             <div class="w-full h-full flex flex-row justify-between items-center ">
                 <div class="flex flex-row items-center justify-center w-full">
                     <a href="/" class="float-left h-full p-3 flex justify-center items-center">
