@@ -13,6 +13,7 @@ import { bookingState } from '$lib/app-components/booking-components/booking.sto
 export let data:PageServerData;
 import successSvg from "$lib/success.svg";
 import { Spinner } from 'flowbite-svelte';
+	import { goto } from '$app/navigation';
 
 let cselected:currentA;
 let bookingError:any;
@@ -93,8 +94,8 @@ let activitiesDataList=data.activities;
                 activity with <em class="font-bold">Waterburg Safaris</em>. <span>Please check your email for further details</span></p>
                 <p class="ml-6 mb-10">Here is your unique booking code <span class="bg-success-50 p-2 text-lg rounded-xl shadow-lg">{$bookingState.data?.bookingCode}</span></p>
                 <div class="w-full flex px-6 gap-6">
-                    <button class="p-3 w-full bg-success text-onSuccess rounded-xl ">Make a new booking</button>
-                    <button class="p-3 text-success border-success border-2 w-full rounded-xl ">Go home</button>
+                    <button class="p-3 w-full bg-success text-onSuccess rounded-xl " on:click={bookingState.resetAll}>Make a new booking</button>
+                    <button class="p-3 text-success border-success border-2 w-full rounded-xl " on:click={()=> goto('/')}>Go home</button>
                 </div>
                 
             </div>

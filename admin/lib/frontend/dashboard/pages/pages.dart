@@ -1,3 +1,4 @@
 export 'dashboard_page.dart';
-export 'error/dashboard_error.dart';
-export 'loading/dashboard_loading.dart';
+export 'data/data.dart';
+export 'error/error.dart';
+export 'loading/loading.dart';
