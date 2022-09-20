@@ -1,9 +1,19 @@
+import 'dart:io';
+
 import 'package:admin/lib.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ActivitiesDatabaseRepository implements ActivitiesDatabaseAbstract {
   // cloud firestore instance
   final _firestore = FirebaseFirestore.instance;
+  // firebase storage instance
+  final _firebaseStorage = FirebaseStorage.instance;
+
+  // activities storage reference
+  _activitiesStorageReference({String? activityId}) {
+    return _firebaseStorage.ref().child('activities/$activityId');
+  }
 
   // add a new activity to firestore
   @override
@@ -79,5 +89,27 @@ class ActivitiesDatabaseRepository implements ActivitiesDatabaseAbstract {
     } on FirebaseException catch (e) {
       throw e.toString();
     }
+  }
+
+  // add list of images to firebase storage
+  @override
+  Future<List<String>> addImagesToFirebaseStorage({
+    required List<File> images,
+    required String activityId,
+  }) async {
+    // upload images to firebase storage
+    var uploadImages = images.map(
+      (image) async {
+        final uploadTask = _firebaseStorage
+            .ref()
+            .child('activities/$activityId')
+            .putFile(image);
+
+        final imageUrl = await (await uploadTask).ref.getDownloadURL();
+        return imageUrl;
+      },
+    ).toList();
+
+    return Future.wait(uploadImages);
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:admin/lib.dart';
 
 abstract class ActivitiesDatabaseAbstract {
@@ -18,4 +20,10 @@ abstract class ActivitiesDatabaseAbstract {
 
   // delete activity on firestore
   Future<void> deleteActivityFromFirestore({String activityId});
+
+  // add list of images to firebase storage
+  Future<List<String>> addImagesToFirebaseStorage({
+    required List<File> images,
+    required String activityId,
+  });
 }

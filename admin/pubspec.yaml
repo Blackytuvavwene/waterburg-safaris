@@ -54,6 +54,7 @@ dependencies:
   animations: ^2.0.4
   flutter_animate: ^1.0.0
   vrouter: ^1.2.0
+  firebase_storage: ^10.3.8
 
 dev_dependencies:
   # The "flutter_lints" package below contains a set of recommended lints to

@@ -1,12 +1,6 @@
 import 'package:admin/lib.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// stream booking data from firestore
-final bookingDataStreamProvider =
-    StreamProvider.autoDispose<List<BookingModel>>((ref) {
-  return ref.watch(bookingDbRepositoryProvider).getBookingsFromFirestore();
-});
-
 // stream company data from firestore
 final companyDataStreamProvider = StreamProvider.autoDispose<Company>((ref) {
   return ref

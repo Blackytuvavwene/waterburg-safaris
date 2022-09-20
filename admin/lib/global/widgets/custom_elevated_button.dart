@@ -13,7 +13,9 @@ class CustomElevatedButton extends StatelessWidget {
     this.onPrimary,
     this.onSurface,
     this.width,
+    this.fontWeight,
     this.height,
+    this.borderRadius,
   }) : super(key: key);
   final String? text;
   final VoidCallback? onPressed;
@@ -24,19 +26,22 @@ class CustomElevatedButton extends StatelessWidget {
   final Color? onSurface;
   final double? width;
   final double? height;
+  final FontWeight? fontWeight;
+  final BorderRadius? borderRadius;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: borderRadius ?? BorderRadius.zero,
         ),
-        primary: primary ?? Theme.of(context).colorScheme.primaryContainer,
-        onPrimary:
+        backgroundColor:
+            primary ?? Theme.of(context).colorScheme.primaryContainer,
+        foregroundColor:
             onPrimary ?? Theme.of(context).colorScheme.onPrimaryContainer,
-        onSurface: onSurface,
+        disabledForegroundColor: onSurface,
         minimumSize: Size(
           width ?? 100.w,
           height ?? 8.h,
@@ -45,6 +50,7 @@ class CustomElevatedButton extends StatelessWidget {
       child: DText(
         text: text,
         fontSize: fontSize,
+        fontWeight: fontWeight ?? FontWeight.bold,
         textColor:
             textColor ?? Theme.of(context).colorScheme.onPrimaryContainer,
       ),

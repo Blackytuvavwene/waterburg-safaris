@@ -294,7 +294,7 @@ class _ActivityCardMobile extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       width: 100.w,
-      height: 10.h,
+      height: 16.h,
       padding: EdgeInsets.symmetric(
         horizontal: 4.w,
         vertical: 2.h,
@@ -318,19 +318,23 @@ class _ActivityCardMobile extends HookConsumerWidget {
           //   ),
           // ),
           // const SizedBox(height: 10),
-          DText(
-            text: activity!.activityName!,
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w600,
-            textColor: Theme.of(context).colorScheme.onSecondaryContainer,
+          Expanded(
+            child: DText(
+              text: activity!.activityName!,
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w600,
+              textColor: Theme.of(context).colorScheme.onSecondaryContainer,
+            ),
           ),
           const SizedBox(height: 5),
-          DText(
-            text: activity!.seoDescription!,
-            fontSize: 10.sp,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-            textColor: Theme.of(context).colorScheme.onSecondaryContainer,
+          Expanded(
+            child: DText(
+              text: activity!.seoDescription!,
+              fontSize: 10.sp,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              textColor: Theme.of(context).colorScheme.onSecondaryContainer,
+            ),
           ),
         ],
       ),

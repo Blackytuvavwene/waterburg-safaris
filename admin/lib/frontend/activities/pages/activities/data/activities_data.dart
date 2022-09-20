@@ -1,7 +1,7 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:vrouter/vrouter.dart';
+import 'package:sizer/sizer.dart';
 
 class ActivitiesData extends HookConsumerWidget {
   const ActivitiesData({
@@ -35,24 +35,23 @@ class _ActivitiesDataMobile extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      appBar: AppBar(
+        title: DText(
+          text: 'Activities',
+          fontSize: 19.sp,
+        ),
+        leading: null,
+        automaticallyImplyLeading: false,
+        elevation: 0,
+      ),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: activitiesData!
                 .map(
-                  (e) => ListTile(
-                    onTap: () {
-                      context.vRouter.toNamed(
-                        'activityDetails',
-                        pathParameters: {
-                          'activityId': e.activityId.toString(),
-                        },
-                      );
-                    },
-                    title: DText(
-                      text: e.activityName.toString(),
-                    ),
+                  (e) => ActivityPreviewContainer(
+                    activity: e,
                   ),
                 )
                 .toList(),
@@ -73,27 +72,39 @@ class _ActivitiesDataTablet extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      appBar: AppBar(
+        title: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: 8.w,
+          ),
+          child: DText(
+            text: 'Activities',
+            fontSize: 12.sp,
+          ),
+        ),
+        toolbarHeight: 8.h,
+        leading: null,
+        automaticallyImplyLeading: false,
+        elevation: 0,
+      ),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            children: activitiesData!
-                .map(
-                  (e) => ListTile(
-                    onTap: () {
-                      context.vRouter.toNamed(
-                        'activityDetails',
-                        pathParameters: {
-                          'activityId': e.activityId.toString(),
-                        },
-                      );
-                    },
-                    title: DText(
-                      text: e.activityName.toString(),
-                    ),
-                  ),
-                )
-                .toList(),
+          child: SizedBox(
+            width: 100.w,
+            height: 100.h,
+            child: ListView.custom(
+              shrinkWrap: true,
+              childrenDelegate: SliverChildListDelegate(
+                activitiesData!
+                    .map(
+                      (e) => ActivityPreviewContainer(
+                        activity: e,
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
           ),
         ),
       ),
@@ -111,27 +122,45 @@ class _ActivitiesDataDesktop extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      appBar: AppBar(
+        title: Padding(
+          padding: EdgeInsets.only(
+            left: 8.w,
+          ),
+          child: DText(
+            text: 'Activities',
+            fontSize: 12.sp,
+          ),
+        ),
+        leading: null,
+        toolbarHeight: 16.h,
+        automaticallyImplyLeading: false,
+        elevation: 0,
+      ),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            children: activitiesData!
-                .map(
-                  (e) => ListTile(
-                    onTap: () {
-                      context.vRouter.toNamed(
-                        'activityDetails',
-                        pathParameters: {
-                          'activityId': e.activityId.toString(),
-                        },
-                      );
-                    },
-                    title: DText(
-                      text: e.activityName.toString(),
-                    ),
-                  ),
-                )
-                .toList(),
+          child: SizedBox(
+            width: 100.w,
+            height: 100.h,
+            child: GridView.custom(
+              shrinkWrap: true,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 1.5.w,
+                mainAxisSpacing: 2.w,
+                childAspectRatio: 1.5,
+              ),
+              childrenDelegate: SliverChildListDelegate(
+                activitiesData!
+                    .map(
+                      (e) => ActivityPreviewContainer(
+                        activity: e,
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
           ),
         ),
       ),
