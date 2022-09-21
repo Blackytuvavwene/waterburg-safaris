@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:sizer/sizer.dart';
+import 'package:vrouter/vrouter.dart';
 
 // activity view page with app layout
 class ActivityDetailsPage extends HookConsumerWidget {
@@ -110,9 +111,22 @@ class _ActivityDetailsPageDesktop extends HookConsumerWidget {
             padding: EdgeInsets.only(
               right: 4.w,
             ),
-            child: LineIcon.editAlt(
-              size: 10.sp,
-              color: Theme.of(context).colorScheme.onBackground,
+            child: IconButton(
+              icon: LineIcon.editAlt(
+                size: 10.sp,
+                color: Theme.of(context).colorScheme.onBackground,
+              ),
+              onPressed: () {
+                // set activity to edit
+                final dataActivity = ref
+                    .read(activityToEditActivityPageProvider.notifier)
+                    .state = activity;
+                // route to edit activity page
+                if (dataActivity != null) {
+                  debugPrint('activity to edit: ${dataActivity.toJson()}');
+                  VRouter.of(context).toNamed('editActivity');
+                }
+              },
             ),
           ),
         ],

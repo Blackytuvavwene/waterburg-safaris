@@ -34,6 +34,30 @@ class Activity {
       _$ActivityFromJson(json);
 
   Map<String, dynamic> toJson() => _$ActivityToJson(this);
+
+  Activity copyWith({
+    String? activityId,
+    String? activityName,
+    String? seoDescription,
+    List<String>? tags,
+    List<Package>? packages,
+    List<Gallery>? activityGallery,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? overview,
+  }) {
+    return Activity(
+      activityId: activityId ?? this.activityId,
+      activityName: activityName ?? this.activityName,
+      seoDescription: seoDescription ?? this.seoDescription,
+      tags: tags ?? this.tags,
+      packages: packages ?? this.packages,
+      activityGallery: activityGallery ?? this.activityGallery,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      overview: overview ?? this.overview,
+    );
+  }
 }
 
 @JsonSerializable(

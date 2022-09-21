@@ -31,13 +31,13 @@ class PackageCard extends HookConsumerWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(
-                    width: 20.w,
-                    height: 4.h,
+                  Expanded(
+                    flex: 1,
                     child: DText(
                       text: package!.packageName,
                       textColor: Theme.of(context).colorScheme.onPrimary,
                       fontSize: 16.sp,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   SizedBox(
@@ -71,8 +71,7 @@ class PackageCard extends HookConsumerWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SizedBox(
-                      height: 5.h,
+                    Expanded(
                       child: DText(
                         text: 'Package offers:',
                         textColor: Theme.of(context).colorScheme.onPrimary,
@@ -85,6 +84,7 @@ class PackageCard extends HookConsumerWidget {
                     ),
                     package!.packageOffers!.isNotEmpty
                         ? Expanded(
+                            flex: 3,
                             child: ListView.separated(
                               itemCount: package!.packageOffers!.length,
                               separatorBuilder: (context, index) {

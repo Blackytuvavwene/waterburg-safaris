@@ -17,3 +17,13 @@ final activityDataStreamProvider =
       db.streamActivityFromFirestore(activityId: activityId);
   return activity;
 });
+
+// activity pass to edit activity page provider
+final activityToEditActivityPageProvider =
+    StateProvider<Activity?>((ref) => null);
+
+// final activity controller notifier provider
+final activityControlNotifierProvider =
+    StateNotifierProvider<ActivityControlNotifier, Activity?>((ref) {
+  return ActivityControlNotifier();
+});
