@@ -68,7 +68,7 @@ final appRouterProvider = Provider.autoDispose<List<VRouteElement>>(
                 widget: const ActivitiesPage(),
                 stackedRoutes: [
                   VWidget(
-                    path: ':activityId/',
+                    path: ':activityId',
                     name: 'activityDetails',
                     widget: const ActivityPage(),
                     stackedRoutes: [
