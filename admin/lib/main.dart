@@ -30,7 +30,7 @@ class MyApp extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.read(appRouterProvider);
-    final firstOpen = ref.read(firstLoadProvider);
+    final firstOpen = ref.watch(firstLoadProvider);
     // ref.listen(currentUserProvider, (first) {
     //   if (firstOpen) {
     //     ref.read(firstLoadProvider.notifier).setFirstLoad();
@@ -40,9 +40,9 @@ class MyApp extends HookConsumerWidget {
       builder: (context, orientation, deviceType) {
         return VRouter(
           beforeEnter: (vRedirector) async {
-            final isFirstOpen = firstOpen.value;
+            final isFirstOpen = ref.read(firstLoadProvider.future);
 
-            final isUserConnected = ref.watch(currentUserProvider).value;
+            final isUserConnected = ref.read(currentUserProvider).value;
 
             if (isFirstOpen == AppAuthStatus.firstLoad &&
                 isUserConnected?.uid == null) {

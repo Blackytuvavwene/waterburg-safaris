@@ -1,6 +1,7 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:layout/layout.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:sizer/sizer.dart';
 
@@ -13,14 +14,14 @@ class PackageCard extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
-      width: 20.w,
+      width: context.breakpoint > LayoutBreakpoint.sm ? 20.w : 80.w,
       height: 70.h,
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 20.w,
+              width: 100.w,
               color: Theme.of(context).colorScheme.secondary.withOpacity(
                     0.5,
                   ),
@@ -36,7 +37,9 @@ class PackageCard extends HookConsumerWidget {
                     child: DText(
                       text: package!.packageName,
                       textColor: Theme.of(context).colorScheme.onPrimary,
-                      fontSize: 6.sp,
+                      fontSize: context.breakpoint > LayoutBreakpoint.sm
+                          ? 6.sp
+                          : 16.sp,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -48,7 +51,9 @@ class PackageCard extends HookConsumerWidget {
                     child: DText(
                       text: package!.description,
                       textColor: Theme.of(context).colorScheme.onPrimary,
-                      fontSize: 4.sp,
+                      fontSize: context.breakpoint > LayoutBreakpoint.sm
+                          ? 4.sp
+                          : 12.sp,
                     ),
                   ),
                   SizedBox(
@@ -56,7 +61,9 @@ class PackageCard extends HookConsumerWidget {
                     child: DText(
                       text: '\$ ${package!.price.toString()}',
                       textColor: Theme.of(context).colorScheme.onPrimary,
-                      fontSize: 4.sp,
+                      fontSize: context.breakpoint > LayoutBreakpoint.sm
+                          ? 4.sp
+                          : 12.sp,
                     ),
                   ),
                 ],
@@ -76,7 +83,9 @@ class PackageCard extends HookConsumerWidget {
                     DText(
                       text: 'Package offers:',
                       textColor: Theme.of(context).colorScheme.onPrimary,
-                      fontSize: 4.sp,
+                      fontSize: context.breakpoint > LayoutBreakpoint.sm
+                          ? 4.sp
+                          : 14.sp,
                       fontWeight: FontWeight.w800,
                     ),
                     SizedBox(
@@ -113,7 +122,10 @@ class PackageCard extends HookConsumerWidget {
                                           textColor: Theme.of(context)
                                               .colorScheme
                                               .onPrimary,
-                                          fontSize: 6.sp,
+                                          fontSize: context.breakpoint >
+                                                  LayoutBreakpoint.sm
+                                              ? 6.sp
+                                              : 12.sp,
                                         ),
                                       ),
                                     ],

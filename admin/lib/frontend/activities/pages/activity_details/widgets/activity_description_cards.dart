@@ -207,7 +207,7 @@ class ActivityDescriptionViewCard extends HookConsumerWidget {
     final teCtrl = useTextEditingController();
     return Container(
       padding: EdgeInsets.all(
-        1.5.w,
+        context.breakpoint > LayoutBreakpoint.sm ? 1.5.w : 8.w,
       ),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primary,

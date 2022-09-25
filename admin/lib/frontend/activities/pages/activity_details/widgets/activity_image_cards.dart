@@ -1,13 +1,15 @@
 import 'package:admin/lib.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:extended_image/extended_image.dart';
+import 'package:extended_image/extended_image.dart' as ei;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:image_compression_flutter/image_compression_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:layout/layout.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:sizer/sizer.dart';
+import 'package:universal_io/io.dart' as uio;
 
 // final imaFileProvider = Provider((ref)=>(XFile im) {
 //  ImageFile file;
@@ -27,7 +29,7 @@ class ActivityImageCard extends HookConsumerWidget {
   final Gallery? image;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ExtendedImage.network(
+    return ei.ExtendedImage.network(
       image!.imageUrl!,
       fit: BoxFit.cover,
       width: 40.w,
@@ -35,20 +37,20 @@ class ActivityImageCard extends HookConsumerWidget {
       cache: true,
       shape: BoxShape.rectangle,
       borderRadius: BorderRadius.circular(10),
-      loadStateChanged: (ExtendedImageState state) {
+      loadStateChanged: (ei.ExtendedImageState state) {
         switch (state.extendedImageLoadState) {
-          case LoadState.loading:
+          case ei.LoadState.loading:
             return const Center(
               child: CircularProgressIndicator(),
             );
-          case LoadState.completed:
-            return ExtendedRawImage(
+          case ei.LoadState.completed:
+            return ei.ExtendedRawImage(
               image: state.extendedImageInfo?.image,
               fit: BoxFit.cover,
               width: 40.w,
               height: 20.h,
             );
-          case LoadState.failed:
+          case ei.LoadState.failed:
             return const Center(
               child: Icon(Icons.error),
             );
@@ -138,8 +140,11 @@ class ImagePickerWidget extends HookConsumerWidget {
               ElevatedButton(
                 onPressed: () async {
                   // await ImageHelpers.webPickImage();
-                  await multiImagepicker.pickMultipleImages();
-
+                  if (multiHelper.asData?.value != null) {
+                    await multiImagepicker.pickAndAddMultipleImagesToList();
+                  } else {
+                    await multiImagepicker.pickMultipleImages();
+                  }
                   // convert xfile to imagefile
                 },
                 child: const Text('Pick Image'),
@@ -249,12 +254,34 @@ class ImagePickerWidget extends HookConsumerWidget {
                           child: Center(
                             child: Wrap(
                               spacing: 2.w,
-                              children: image.map((e) {
-                                return ImageCard(
-                                  image: e.xFile,
-                                  imageFile: e.imageFile,
-                                );
-                              }).toList(),
+                              children: [
+                                ...image.map((e) {
+                                  return Center(
+                                    child: ImageCard(
+                                      image: e,
+                                    ).animate().slide(
+                                          begin: const Offset(10, 0),
+                                          end: Offset.zero,
+                                          duration: const Duration(
+                                            milliseconds: 500,
+                                          ),
+                                          curve: Curves.easeInOut,
+                                        ),
+                                  );
+                                }),
+                                Center(
+                                  child: TextButton(
+                                      onPressed: () {},
+                                      child: DText(
+                                        text: 'Add Image',
+                                        textColor: Theme.of(context)
+                                            .colorScheme
+                                            .background,
+                                        fontSize: 16.sp,
+                                        textAlign: TextAlign.center,
+                                      )),
+                                ),
+                              ],
                             ),
                           ),
                         )
@@ -262,11 +289,14 @@ class ImagePickerWidget extends HookConsumerWidget {
                           width: 100.w,
                           child: Center(
                             child: SizedBox(
-                              width: 60.w,
+                              width: context.breakpoint > LayoutBreakpoint.sm
+                                  ? 60.w
+                                  : 90.w,
                               child: DottedBorder(
                                 padding: EdgeInsets.all(
                                   10.w,
                                 ),
+                                strokeWidth: 4.sp,
                                 borderType: BorderType.RRect,
                                 dashPattern: const [6, 10, 4],
                                 radius: const Radius.circular(10),
@@ -276,7 +306,7 @@ class ImagePickerWidget extends HookConsumerWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisSize: MainAxisSize.max,
                                     children: [
                                       IconButton(
                                         onPressed: () {},
@@ -284,16 +314,22 @@ class ImagePickerWidget extends HookConsumerWidget {
                                           color: Theme.of(context)
                                               .colorScheme
                                               .background,
-                                          size: 10.sp,
+                                          size: context.breakpoint >
+                                                  LayoutBreakpoint.sm
+                                              ? 10.sp
+                                              : 34.sp,
                                         ),
                                       ),
                                       Center(
                                         child: DText(
-                                          text: 'Add Image',
+                                          text: 'Add Images',
                                           textColor: Theme.of(context)
                                               .colorScheme
                                               .background,
-                                          fontSize: 3.sp,
+                                          fontSize: context.breakpoint >
+                                                  LayoutBreakpoint.sm
+                                              ? 3.sp
+                                              : 16.sp,
                                           textAlign: TextAlign.center,
                                         ),
                                       )
@@ -349,12 +385,11 @@ class ImageCard extends HookConsumerWidget {
   const ImageCard({
     Key? key,
     this.image,
-    this.imageFile,
   }) : super(key: key);
-  final XFile? image;
-  final ImageFile? imageFile;
+  final ImageHelperModel? image;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final fileI = uio.File(image!.path!);
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
@@ -362,39 +397,68 @@ class ImageCard extends HookConsumerWidget {
       ),
       color: Theme.of(context).colorScheme.tertiaryContainer,
       child: SizedBox(
-        width: 20.w,
-        height: 60.h,
+        width: context.breakpoint > LayoutBreakpoint.sm ? 20.w : 90.w,
+        height: context.breakpoint > LayoutBreakpoint.sm ? 60.h : 30.h,
         child: Stack(
           children: [
             // image
-            ExtendedImage.network(
-              image!.path.toString(),
-              fit: BoxFit.cover,
-              width: 100.w,
-              height: 100.h,
-              cache: true,
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.circular(10),
-              loadStateChanged: (ExtendedImageState state) {
-                switch (state.extendedImageLoadState) {
-                  case LoadState.loading:
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  case LoadState.completed:
-                    return ExtendedRawImage(
-                      image: state.extendedImageInfo?.image,
-                      fit: BoxFit.cover,
-                      width: 100.w,
-                      height: 100.h,
-                    );
-                  case LoadState.failed:
-                    return const Center(
-                      child: Icon(Icons.error),
-                    );
-                }
-              },
-            ),
+
+            kIsWeb
+                ? ei.ExtendedImage.network(
+                    image!.path!,
+                    fit: BoxFit.cover,
+                    width: 100.w,
+                    height: 100.h,
+                    cache: true,
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(10),
+                    loadStateChanged: (ei.ExtendedImageState state) {
+                      switch (state.extendedImageLoadState) {
+                        case ei.LoadState.loading:
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        case ei.LoadState.completed:
+                          return ei.ExtendedRawImage(
+                            image: state.extendedImageInfo?.image,
+                            fit: BoxFit.cover,
+                            width: 100.w,
+                            height: 100.h,
+                          );
+                        case ei.LoadState.failed:
+                          return const Center(
+                            child: Icon(Icons.error),
+                          );
+                      }
+                    },
+                  )
+                : ei.ExtendedImage.memory(
+                    image!.bytes!,
+                    fit: BoxFit.cover,
+                    width: 100.w,
+                    height: 100.h,
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(10),
+                    loadStateChanged: (ei.ExtendedImageState state) {
+                      switch (state.extendedImageLoadState) {
+                        case ei.LoadState.loading:
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        case ei.LoadState.completed:
+                          return ei.ExtendedRawImage(
+                            image: state.extendedImageInfo?.image,
+                            fit: BoxFit.cover,
+                            width: 100.w,
+                            height: 100.h,
+                          );
+                        case ei.LoadState.failed:
+                          return const Center(
+                            child: Icon(Icons.error),
+                          );
+                      }
+                    },
+                  ),
             // edit button
             Positioned(
               top: 0,
@@ -409,7 +473,12 @@ class ImageCard extends HookConsumerWidget {
               top: 0,
               left: 0,
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  ref
+                      .read(multipleImageHelperControllerNotifierProvider
+                          .notifier)
+                      .deleteImageFromList(image: image!);
+                },
                 icon: const Icon(Icons.delete),
               ),
             ),
@@ -420,8 +489,8 @@ class ImageCard extends HookConsumerWidget {
               right: 0,
               child: Container(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 5,
-                  vertical: 5,
+                  horizontal: 10,
+                  vertical: 10,
                 ),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.background.withOpacity(
@@ -432,31 +501,44 @@ class ImageCard extends HookConsumerWidget {
                     bottomRight: Radius.circular(10),
                   ),
                 ),
-                child: Column(
-                  children: [
-                    DText(
-                      text: 'Image Details',
-                      textColor: Theme.of(context).colorScheme.onBackground,
-                      fontSize: context.breakpoint > LayoutBreakpoint.sm
-                          ? 6.sp
-                          : 10.sp,
-                    ),
-                    DText(
-                      text: 'Image Name : ${image!.name}',
-                      textColor: Theme.of(context).colorScheme.onBackground,
-                      fontSize: context.breakpoint > LayoutBreakpoint.sm
-                          ? 4.sp
-                          : 8.sp,
-                    ),
-                    DText(
-                      text:
-                          'Image Size : ${(imageFile!.sizeInBytes / 1024 / 1024).toStringAsFixed(2)} MB - (${imageFile!.width} x ${imageFile!.height})',
-                      textColor: Theme.of(context).colorScheme.onBackground,
-                      fontSize: context.breakpoint > LayoutBreakpoint.sm
-                          ? 4.sp
-                          : 8.sp,
-                    ),
-                  ],
+                child: SizedBox(
+                  height: 8.h,
+                  width: 100.w,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: DText(
+                          text: 'Image Details',
+                          textColor: Theme.of(context).colorScheme.onBackground,
+                          fontSize: context.breakpoint > LayoutBreakpoint.sm
+                              ? 6.sp
+                              : 16.sp,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: DText(
+                          text: 'Image Name : ${image?.name}',
+                          textColor: Theme.of(context).colorScheme.onBackground,
+                          fontSize: context.breakpoint > LayoutBreakpoint.sm
+                              ? 4.sp
+                              : 14.sp,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 4,
+                        child: DText(
+                          text:
+                              'Image Size : ${(image!.imageFile!.sizeInBytes / 1024 / 1024).toStringAsFixed(2)} MB / (${image!.imageFile!.width} x ${image!.imageFile!.height})',
+                          textColor: Theme.of(context).colorScheme.onBackground,
+                          fontSize: context.breakpoint > LayoutBreakpoint.sm
+                              ? 4.sp
+                              : 14.sp,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

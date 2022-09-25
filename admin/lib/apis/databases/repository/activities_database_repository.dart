@@ -1,8 +1,10 @@
+import 'dart:io';
+
 import 'package:admin/lib.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:universal_io/io.dart';
 
 class ActivitiesDatabaseRepository implements ActivitiesDatabaseAbstract {
   // cloud firestore instance
@@ -100,10 +102,15 @@ class ActivitiesDatabaseRepository implements ActivitiesDatabaseAbstract {
     // upload images to firebase storage
     var uploadImages = images.map(
       (image) async {
-        final uploadTask = _firebaseStorage
-            .ref()
-            .child('activities/$activityId')
-            .putFile(File(image.path));
+        final uploadTask = kIsWeb
+            ? _firebaseStorage
+                .ref()
+                .child('activities/$activityId')
+                .putData(await image.readAsBytes())
+            : _firebaseStorage
+                .ref()
+                .child('activities/$activityId')
+                .putFile(File(image.path));
 
         final imageUrl = await (await uploadTask).ref.getDownloadURL();
         return imageUrl;

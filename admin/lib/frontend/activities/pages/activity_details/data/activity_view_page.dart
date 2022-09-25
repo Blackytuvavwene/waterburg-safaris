@@ -128,7 +128,7 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: 2.w,
+                    horizontal: 4.w,
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -161,17 +161,20 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
                       ),
                       DText(
                         text: 'Activity Overview',
-                        fontSize: 6.sp,
+                        fontSize: 16.sp,
                       ),
                       SizedBox(
                         height: 1.h,
                       ),
                       DText(
                         text: activity?.overview.toString(),
-                        fontSize: 4.sp,
+                        fontSize: 14.sp,
                       ),
                     ],
                   ),
+                ),
+                SizedBox(
+                  height: 2.h,
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
@@ -182,33 +185,38 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
                     children: [
                       DText(
                         text: 'Activity Images',
-                        fontSize: 6.sp,
+                        fontSize: 16.sp,
                       ),
                       SizedBox(
                         height: 1.h,
                       ),
                       SizedBox(
-                        height: 100.h,
                         width: 100.w,
-                        child: ListView.separated(
-                          scrollDirection: Axis.vertical,
-                          itemCount: activity!.activityGallery!.length.toInt(),
-                          separatorBuilder: (context, index) {
-                            return SizedBox(
-                              height: 4.h,
-                            );
-                          },
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                left: 2.w,
-                                right: 2.w,
-                              ),
-                              child: ActivityImageCard(
-                                image: activity!.activityGallery![index],
-                              ),
-                            );
-                          },
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxHeight: 80.h,
+                          ),
+                          child: ListView.separated(
+                            scrollDirection: Axis.vertical,
+                            itemCount:
+                                activity!.activityGallery!.length.toInt(),
+                            separatorBuilder: (context, index) {
+                              return SizedBox(
+                                height: 4.h,
+                              );
+                            },
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  left: 2.w,
+                                  right: 2.w,
+                                ),
+                                child: ActivityImageCard(
+                                  image: activity!.activityGallery![index],
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ],
@@ -217,24 +225,56 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
                 Container(
                   height: 60.h,
                   width: 100.w,
-                  color: Theme.of(context).colorScheme.onBackground,
-                  child: Column(
-                    children: [
-                      DText(
-                        text: 'Packages available',
-                        fontSize: 6.sp,
-                      ),
-                      Wrap(
-                        spacing: 2.w,
-                        children: activity!.packages!
-                            .map(
-                              (package) => PackageCard(
-                                package: package,
+                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 2.w,
+                    vertical: 2.h,
+                  ),
+                  child: SizedBox(
+                    width: 100.w,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        DText(
+                          text: 'Packages available',
+                          fontSize: 16.sp,
+                          textAlign: TextAlign.center,
+                          textColor: Theme.of(context).colorScheme.background,
+                        ),
+                        const Spacer(),
+                        SizedBox(
+                          width: 100.w,
+                          height: 50.h,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                              SizedBox(
+                                width: 2.w,
                               ),
-                            )
-                            .toList(),
-                      ),
-                    ],
+                              ...activity!.packages!.map(
+                                (e) {
+                                  return Padding(
+                                    padding: EdgeInsets.only(
+                                      right: 2.w,
+                                    ),
+                                    child: PackageCard(
+                                      package: e,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                            // children: activity!.packages!
+                            //     .map(
+                            //       (package) => PackageCard(
+                            //         package: package,
+                            //       ),
+                            //     )
+                            //     .toList(),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const Center(

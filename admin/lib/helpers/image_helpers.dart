@@ -11,33 +11,32 @@ import 'package:image_picker/image_picker.dart';
 class ImageHelperModel {
   ImageHelperModel({
     required this.xFile,
+    required this.path,
+    required this.name,
+    required this.bytes,
     required this.imageFile,
   });
   final XFile? xFile;
+  final String? name;
+  final String? path;
+  final Uint8List? bytes;
   final ImageFile? imageFile;
 
   ImageHelperModel copyWith({
     XFile? xFile,
+    String? name,
+    String? path,
+    Uint8List? bytes,
     ImageFile? imageFile,
   }) {
     return ImageHelperModel(
       xFile: xFile ?? this.xFile,
+      name: name ?? this.name,
+      path: path ?? this.path,
+      bytes: bytes ?? this.bytes,
       imageFile: imageFile ?? this.imageFile,
     );
   }
-
-  @override
-  String toString() => 'ImageHelperModel(xFile: $xFile, imageFile: $imageFile)';
-
-  @override
-  bool operator ==(covariant ImageHelperModel other) {
-    if (identical(this, other)) return true;
-
-    return other.xFile == xFile && other.imageFile == imageFile;
-  }
-
-  @override
-  int get hashCode => xFile.hashCode ^ imageFile.hashCode;
 }
 
 class ImageHelpers {
@@ -103,7 +102,7 @@ class ImageHelpers {
   // file to imagefile
   static Future<ImageFile?> fileToImageFile(XFile file) async {
     try {
-      final imageFile = file.asImageFile;
+      final imageFile = await file.asImageFile;
       return imageFile;
     } catch (e) {
       throw e.toString();
@@ -124,11 +123,14 @@ class ImageHelpers {
         return null;
       }
 
-      final imageFile = await fileToImageFile(image);
+      // final imageFile = await fileToImageFile(image);
 
       final newImage = ImageHelperModel(
         xFile: image,
-        imageFile: imageFile,
+        name: image.name,
+        path: image.path,
+        imageFile: await image.asImageFile,
+        bytes: await image.readAsBytes(),
       );
 
       return newImage;
@@ -219,11 +221,16 @@ class ImageHelpers {
       }
       final files = <ImageHelperModel>[];
       for (final image in images) {
-        final file = await fileToImageFile(image);
-        files.add(ImageHelperModel(
+        // image.readAsBytes();
+        // final file = await fileToImageFile(image);
+        final newImage = ImageHelperModel(
           xFile: image,
-          imageFile: file,
-        ));
+          name: image.name,
+          path: image.path,
+          imageFile: await image.asImageFile,
+          bytes: await image.readAsBytes(),
+        );
+        files.add(newImage);
       }
       return files;
     } catch (e) {
@@ -339,7 +346,23 @@ class MultipleImageHelperControllerNotifier
     });
   }
 
-  // p
+  // pick and add multiple images to list
+  Future<void> pickAndAddMultipleImagesToList() async {
+    // state = const AsyncValue.loading();
+
+    // use pickMultipleImages method from image helper
+    final images = await ImageHelpers.pickMultipleImages();
+
+    // add images to list
+    state = AsyncValue.data([...state.asData!.value!, ...images!]);
+  }
+
+  // delete image from list
+  Future<void> deleteImageFromList({required ImageHelperModel image}) async {
+    state = AsyncValue.data(state.asData!.value!
+        .where((element) => element.path != image.path)
+        .toList());
+  }
 
   // compress multiple images
   // Future<void> compressMultipleImages({required List<XFile> files}) async {
