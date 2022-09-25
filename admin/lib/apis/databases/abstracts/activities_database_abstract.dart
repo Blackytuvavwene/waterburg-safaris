@@ -1,6 +1,5 @@
-import 'dart:io';
-
 import 'package:admin/lib.dart';
+import 'package:image_picker/image_picker.dart';
 
 abstract class ActivitiesDatabaseAbstract {
   // add a new activity to firestore
@@ -23,7 +22,7 @@ abstract class ActivitiesDatabaseAbstract {
 
   // add list of images to firebase storage
   Future<List<String>> addImagesToFirebaseStorage({
-    required List<File> images,
+    required List<XFile> images,
     required String activityId,
   });
 }

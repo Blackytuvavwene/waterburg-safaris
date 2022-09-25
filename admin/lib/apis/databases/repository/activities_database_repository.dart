@@ -1,8 +1,8 @@
-import 'dart:io';
-
 import 'package:admin/lib.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:universal_io/io.dart';
 
 class ActivitiesDatabaseRepository implements ActivitiesDatabaseAbstract {
   // cloud firestore instance
@@ -94,7 +94,7 @@ class ActivitiesDatabaseRepository implements ActivitiesDatabaseAbstract {
   // add list of images to firebase storage
   @override
   Future<List<String>> addImagesToFirebaseStorage({
-    required List<File> images,
+    required List<XFile> images,
     required String activityId,
   }) async {
     // upload images to firebase storage
@@ -103,7 +103,7 @@ class ActivitiesDatabaseRepository implements ActivitiesDatabaseAbstract {
         final uploadTask = _firebaseStorage
             .ref()
             .child('activities/$activityId')
-            .putFile(image);
+            .putFile(File(image.path));
 
         final imageUrl = await (await uploadTask).ref.getDownloadURL();
         return imageUrl;

@@ -37,17 +37,17 @@ isPageLoaded = true;
 {/if} -->
 
 
-<Header/>
+<!-- <Header/> -->
 <main >
     <slot />
-    {#if $page.url.pathname!=="/contact"}
+    <!-- {#if $page.url.pathname!=="/contact"}
    
     <ContactFormFooter/>
-    {/if}
+    {/if} -->
     
 </main>
 
-<Footer footerData={data.homeData} />
+<!-- <Footer footerData={data.homeData} /> -->
 
 
 
