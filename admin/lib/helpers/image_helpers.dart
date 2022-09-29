@@ -354,7 +354,9 @@ class MultipleImageHelperControllerNotifier
     final images = await ImageHelpers.pickMultipleImages();
 
     // add images to list
-    state = AsyncValue.data([...state.asData!.value!, ...images!]);
+    state = images != null
+        ? AsyncValue.data([...state.asData!.value!, ...images])
+        : state;
   }
 
   // delete image from list

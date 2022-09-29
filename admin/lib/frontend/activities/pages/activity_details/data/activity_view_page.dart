@@ -94,7 +94,7 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
           ),
           child: DText(
             text: activity?.activityName.toString(),
-            fontSize: 10.sp,
+            fontSize: 16.sp,
           ),
         ),
         elevation: 0,
@@ -105,7 +105,7 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
             ),
             child: IconButton(
               icon: LineIcon.editAlt(
-                size: 10.sp,
+                size: 16.sp,
                 color: Theme.of(context).colorScheme.onBackground,
               ),
               onPressed: () {
@@ -277,9 +277,17 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
                     ),
                   ),
                 ),
-                const Center(
-                  child: ImagePickerWidget(),
-                )
+                Center(
+                  child: ImagePickerWidget(
+                    activityId: activity!.activityId,
+                  ),
+                ),
+                Center(
+                  child: ActivityTags(
+                    tags: activity?.tags,
+                    activityId: activity!.activityId,
+                  ),
+                ),
               ],
             ),
           ),
@@ -462,7 +470,16 @@ class _ActivityDetailsPageTablet extends HookConsumerWidget {
                   ],
                 ),
               ),
-              const ImagePickerWidget()
+              Center(
+                child: ImagePickerWidget(
+                  activityId: activity!.activityId,
+                ),
+              ),
+              Center(
+                child: ActivityTags(
+                  tags: activity?.tags,
+                ),
+              )
             ],
           ),
         ),
@@ -685,7 +702,17 @@ class _ActivityDetailsPageDesktop extends HookConsumerWidget {
                   ),
                 ),
               ),
-              const ImagePickerWidget()
+              Center(
+                child: ImagePickerWidget(
+                  activityId: activity!.activityId,
+                ),
+              ),
+              Center(
+                child: ActivityTags(
+                  tags: activity?.tags,
+                  activityId: activity!.activityId,
+                ),
+              )
             ],
           ),
         ),

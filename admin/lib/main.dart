@@ -39,29 +39,6 @@ class MyApp extends HookConsumerWidget {
     return Sizer(
       builder: (context, orientation, deviceType) {
         return VRouter(
-          beforeEnter: (vRedirector) async {
-            final isFirstOpen = ref.read(firstLoadProvider.future);
-
-            final isUserConnected = ref.read(currentUserProvider).value;
-
-            if (isFirstOpen == AppAuthStatus.firstLoad &&
-                isUserConnected?.uid == null) {
-              print('hello');
-              return vRedirector.toNamed('welcome');
-            }
-
-            if (isFirstOpen == AppAuthStatus.loaded &&
-                isUserConnected?.uid != null) {
-              print('home');
-              return vRedirector.toNamed('home');
-            }
-            if (isUserConnected?.uid == null &&
-                isFirstOpen == AppAuthStatus.loaded &&
-                vRedirector.toNamed != 'login') {
-              return vRedirector
-                  .toNamed('login'); // Use VRedirector to redirect
-            }
-          },
           title: 'Waterburg Safaris Admin',
           // This transition will be applied to every route
           buildTransition: (animation1, _, child) {
@@ -93,7 +70,105 @@ class MyApp extends HookConsumerWidget {
                 onSurfaceVariant: Color(0xFFc2c7ce),
                 outline: Color(0xFF8c9198)),
           ),
-          routes: router,
+          routes: [
+            VGuard(
+                beforeEnter: (vRedirector) async {
+                  final isFirstOpen = ref.watch(firstLoadProvider.future);
+
+                  final isUserConnected = ref.watch(currentUserProvider).value;
+
+                  if (isFirstOpen == AppAuthStatus.firstLoad &&
+                      isUserConnected?.uid == null) {
+                    print('hello');
+                    return vRedirector.toNamed('welcome');
+                  }
+
+                  if (isFirstOpen == AppAuthStatus.loaded &&
+                      isUserConnected?.uid != null) {
+                    print('home');
+                    return vRedirector.toNamed('home');
+                  }
+                  if (isUserConnected?.uid == null &&
+                      isFirstOpen == AppAuthStatus.loaded &&
+                      vRedirector.toNamed != 'login') {
+                    return vRedirector
+                        .toNamed('login'); // Use VRedirector to redirect
+                  }
+                },
+                stackedRoutes: [
+                  VWidget(
+                    path: '/',
+                    name: 'welcome',
+                    widget: const WelcomePage(),
+                    stackedRoutes: [
+                      VWidget(
+                        path: 'login',
+                        name: 'login',
+                        widget: const LoginPage(),
+                      ),
+                      VWidget(
+                        path: 'signup',
+                        name: 'signup',
+                        widget: const SignUpPage(),
+                      ),
+                      VNester(
+                        path: '/home',
+                        name: 'home',
+                        widgetBuilder: (child) => HomePage(
+                          child: child,
+                        ),
+                        nestedRoutes: [
+                          VWidget(
+                            path: null,
+                            name: 'dashboard',
+                            widget: const DashboardPage(),
+                          ),
+                          VWidget(
+                            path: '/activities',
+                            name: 'activities',
+                            widget: const ActivitiesPage(),
+                            stackedRoutes: [
+                              VWidget(
+                                path: ':activityId',
+                                name: 'activityDetails',
+                                widget: const ActivityPage(),
+                                stackedRoutes: [
+                                  VWidget(
+                                    path: '/edit',
+                                    name: 'editActivity',
+                                    widget: EditActivityPage(
+                                      activity: ref.watch(
+                                          activityToEditActivityPageProvider),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          VWidget(
+                            path: '/bookings',
+                            name: 'bookings',
+                            widget: const BookingsPage(),
+                          ),
+                          VWidget(
+                            path: '/profile',
+                            name: 'profile',
+                            widget: const ProfilePage(),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ]),
+            VWidget(
+              path: '/404',
+              widget: const NotFoundPage(),
+            ),
+            VRouteRedirector(
+              path: r':_(.+)',
+              redirectTo: '/404',
+            ),
+          ],
           builder: EasyLoading.init(),
         );
       },

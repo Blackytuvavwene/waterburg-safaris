@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:admin/lib.dart';
@@ -105,11 +106,11 @@ class ActivitiesDatabaseRepository implements ActivitiesDatabaseAbstract {
         final uploadTask = kIsWeb
             ? _firebaseStorage
                 .ref()
-                .child('activities/$activityId')
+                .child('activities/$activityId/${image.name}')
                 .putData(await image.readAsBytes())
             : _firebaseStorage
                 .ref()
-                .child('activities/$activityId')
+                .child('activities/$activityId/${image.name}')
                 .putFile(File(image.path));
 
         final imageUrl = await (await uploadTask).ref.getDownloadURL();
@@ -118,5 +119,20 @@ class ActivitiesDatabaseRepository implements ActivitiesDatabaseAbstract {
     ).toList();
 
     return Future.wait(uploadImages);
+  }
+
+  // generic function update activity on firestore
+  @override
+  Future<T> updateActivity<T>({
+    required String activityId,
+    required Map<String, dynamic> data,
+    required String query,
+  }) async {
+    try {
+      return await FirestoreHelper.updateDataInDoc(
+          docId: activityId, docPath: 'activities', data: data, query: query);
+    } catch (e) {
+      throw e.toString();
+    }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:admin/lib.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ActivityControlNotifier extends StateNotifier<Activity?> {
   ActivityControlNotifier() : super(null);
@@ -20,3 +21,47 @@ class ActivityControlNotifier extends StateNotifier<Activity?> {
     state = state!.copyWith(packages: packages);
   }
 }
+
+// activity repository provider controller
+class ActivityDBController extends StateNotifier<AsyncValue<Activity>?> {
+  ActivityDBController({this.activitiesDatabaseRepository})
+      : super(AsyncValue.data(Activity()));
+  ActivitiesDatabaseRepository? activitiesDatabaseRepository;
+
+  // add a new activity to firestore
+  Future<AsyncValue<Activity>> addActivityToFirestore(
+      {required Activity activity}) async {
+    state = const AsyncValue.loading();
+
+    return state = await AsyncValue.guard(() async {
+      final activityD = await activitiesDatabaseRepository!
+          .addActivityToFirestore(activity: activity);
+      return activityD;
+    });
+  }
+}
+
+class AddImageNotifier extends StateNotifier<AsyncValue<List<String>?>> {
+  AddImageNotifier({this.activitiesDatabaseRepository})
+      : super(const AsyncData(null));
+
+  ActivitiesDatabaseRepository? activitiesDatabaseRepository;
+
+  // add image to firebase storage
+  Future<AsyncValue<List<String>?>> addImagesToFirebaseStorage(
+      {required List<XFile> image, required String activityId}) async {
+    state = const AsyncValue.loading();
+
+    return state = await AsyncValue.guard(() async {
+      final imageUrl = await activitiesDatabaseRepository!
+          .addImagesToFirebaseStorage(images: image, activityId: activityId);
+      return imageUrl;
+    });
+  }
+}
+
+final addImagesNotifierProvider =
+    StateNotifierProvider<AddImageNotifier, AsyncValue<List<String>?>>((ref) {
+  return AddImageNotifier(
+      activitiesDatabaseRepository: ref.watch(activityDbRepositoryProvider));
+});

@@ -1,12 +1,9 @@
 import 'package:admin/lib.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrouter/vrouter.dart';
 
-final appRouterProvider = Provider.autoDispose<List<VRouteElement>>(
+final appRouterProvider = Provider<List<VRouteElement>>(
   (ref) {
-    final user = ref.watch(currentUserProvider);
-    final firstOpen = ref.read(firstLoadProvider);
     return [
       VWidget(
         path: '/',
@@ -131,59 +128,4 @@ final appRouterProvider = Provider.autoDispose<List<VRouteElement>>(
 //       .widget!;
 // }
 
-// routing with flutter modular
-class AppRoutingModule extends Module {
-  @override
-  List<Bind> get binds => [];
 
-  @override
-  List<ModularRoute> get routes => [
-        ChildRoute(
-          '/',
-          child: (context, args) => const WelcomePage(),
-          transition: TransitionType.rightToLeftWithFade,
-          children: [
-            ChildRoute(
-              '/login',
-              child: (context, args) => const LoginPage(),
-              transition: TransitionType.rightToLeftWithFade,
-            ),
-            ChildRoute(
-              '/signup',
-              child: (context, args) => const SignUpPage(),
-              transition: TransitionType.rightToLeftWithFade,
-            ),
-            ChildRoute(
-              '/home',
-              child: (context, args) => const HomePage(),
-              transition: TransitionType.rightToLeftWithFade,
-              children: [
-                ChildRoute(
-                  '/dashboard',
-                  child: (context, args) => const DashboardPage(),
-                  transition: TransitionType.rightToLeftWithFade,
-                ),
-                ChildRoute(
-                  '/activities',
-                  child: (context, args) => const ActivitiesPage(),
-                  transition: TransitionType.rightToLeftWithFade,
-                ),
-                ChildRoute(
-                  '/bookings',
-                  child: (context, args) => const BookingsPage(),
-                  transition: TransitionType.rightToLeftWithFade,
-                ),
-                ChildRoute(
-                  '/profile',
-                  child: (context, args) => const ProfilePage(),
-                  transition: TransitionType.rightToLeftWithFade,
-                ),
-              ],
-            )
-          ],
-        ),
-        WildcardRoute(
-          child: (context, args) => const NotFoundPage(),
-        ),
-      ];
-}
