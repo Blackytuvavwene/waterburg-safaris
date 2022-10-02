@@ -1,8 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
 import 'package:admin/lib.dart';
 import 'package:file_picker/file_picker.dart' as file_picker;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_compression_flutter/image_compression_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,12 +18,14 @@ class ImageHelperModel {
     required this.name,
     required this.bytes,
     required this.imageFile,
+    required this.imageDetails,
   });
   final XFile? xFile;
   final String? name;
   final String? path;
   final Uint8List? bytes;
   final ImageFile? imageFile;
+  Gallery? imageDetails;
 
   ImageHelperModel copyWith({
     XFile? xFile,
@@ -28,6 +33,7 @@ class ImageHelperModel {
     String? path,
     Uint8List? bytes,
     ImageFile? imageFile,
+    Gallery? imageDetails,
   }) {
     return ImageHelperModel(
       xFile: xFile ?? this.xFile,
@@ -35,6 +41,7 @@ class ImageHelperModel {
       path: path ?? this.path,
       bytes: bytes ?? this.bytes,
       imageFile: imageFile ?? this.imageFile,
+      imageDetails: imageDetails ?? this.imageDetails,
     );
   }
 }
@@ -110,7 +117,8 @@ class ImageHelpers {
   }
 
   // pick image
-  static Future<ImageHelperModel?> pickImage({ImageSource? imageSource}) async {
+  static Future<ImageHelperModel?> pickImage(
+      {ImageSource? imageSource, String? storagePath}) async {
     try {
       ImagePicker picker = ImagePicker();
       XFile? image = await picker.pickImage(
@@ -126,12 +134,18 @@ class ImageHelpers {
       // final imageFile = await fileToImageFile(image);
 
       final newImage = ImageHelperModel(
-        xFile: image,
-        name: image.name,
-        path: image.path,
-        imageFile: await image.asImageFile,
-        bytes: await image.readAsBytes(),
-      );
+          xFile: image,
+          name: image.name,
+          path: image.path,
+          imageFile: await image.asImageFile,
+          bytes: await image.readAsBytes(),
+          imageDetails: Gallery(
+              imageTitle: '',
+              imageDescription: '',
+              imageUrl: await addImageToFirebaseStorage(
+                image: image,
+                path: storagePath!,
+              )));
 
       return newImage;
     } catch (e) {
@@ -208,7 +222,8 @@ class ImageHelpers {
   }
 
   // pick multiple images
-  static Future<List<ImageHelperModel>?> pickMultipleImages() async {
+  static Future<List<ImageHelperModel>?> pickMultipleImages(
+      {String? storagePath}) async {
     try {
       final picker = ImagePicker();
       final images = await picker.pickMultiImage(
@@ -224,15 +239,56 @@ class ImageHelpers {
         // image.readAsBytes();
         // final file = await fileToImageFile(image);
         final newImage = ImageHelperModel(
-          xFile: image,
-          name: image.name,
-          path: image.path,
-          imageFile: await image.asImageFile,
-          bytes: await image.readAsBytes(),
-        );
+            xFile: image,
+            name: image.name,
+            path: image.path,
+            imageFile: await image.asImageFile,
+            bytes: await image.readAsBytes(),
+            imageDetails: Gallery(
+                imageTitle: '',
+                imageDescription: '',
+                imageUrl: await addImageToFirebaseStorage(
+                  image: image,
+                  path: storagePath!,
+                )));
         files.add(newImage);
       }
       return files;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  // add image to firebase storage
+  static Future<String> addImageToFirebaseStorage(
+      {required XFile image, required String path}) async {
+    try {
+      final uploadTask = kIsWeb
+          ? FirebaseStorage.instance
+              .ref()
+              .child('$path/${image.name}')
+              .putData(await image.readAsBytes())
+          : FirebaseStorage.instance
+              .ref()
+              .child('$path/${image.name}')
+              .putFile(File(image.path));
+
+      final imageUrl = await (await uploadTask).ref.getDownloadURL();
+      return imageUrl;
+    } on FirebaseException catch (e) {
+      throw e.message.toString();
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  // delete image from firebase storage by download url
+  static Future<void> deleteImageFromFirebaseStorageByDownloadUrl(
+      {required String imageUrl}) async {
+    try {
+      final storage = FirebaseStorage.instance;
+      final ref = storage.refFromURL(imageUrl);
+      await ref.delete();
     } catch (e) {
       throw e.toString();
     }
@@ -335,48 +391,73 @@ class MultipleImageHelperControllerNotifier
   final imageHelper = ImageHelpers();
 
   // pick multiple images
-  Future<AsyncValue<List<ImageHelperModel>?>> pickMultipleImages() async {
+  Future<AsyncValue<List<ImageHelperModel>?>> pickMultipleImages(
+      {String? storagePath}) async {
     state = const AsyncValue.loading();
 
     // use pickMultipleImages method from image helper
     return state = await AsyncValue.guard<List<ImageHelperModel>?>(() async {
-      final images = await ImageHelpers.pickMultipleImages();
+      final images =
+          await ImageHelpers.pickMultipleImages(storagePath: storagePath);
 
       return images;
     });
   }
 
   // pick and add multiple images to list
-  Future<void> pickAndAddMultipleImagesToList() async {
+  Future<AsyncValue<List<ImageHelperModel>?>> pickAndAddMultipleImagesToList(
+      {String? storagePath}) async {
     // state = const AsyncValue.loading();
 
     // use pickMultipleImages method from image helper
-    final images = await ImageHelpers.pickMultipleImages();
+    final images =
+        await ImageHelpers.pickMultipleImages(storagePath: storagePath);
 
     // add images to list
-    state = images != null
+    return state = images != null
         ? AsyncValue.data([...state.asData!.value!, ...images])
         : state;
   }
 
   // delete image from list
   Future<void> deleteImageFromList({required ImageHelperModel image}) async {
+    await ImageHelpers.deleteImageFromFirebaseStorageByDownloadUrl(
+        imageUrl: image.imageDetails!.imageUrl!);
     state = AsyncValue.data(state.asData!.value!
         .where((element) => element.path != image.path)
         .toList());
   }
 
-  // compress multiple images
-  // Future<void> compressMultipleImages({required List<XFile> files}) async {
-  //   state = const AsyncValue.loading();
+//  clear list
+  Future<void> clearList() async {
+    try {
+      EasyLoading.show(status: 'Deleting images...');
+      for (final image in state.asData!.value!) {
+        await ImageHelpers.deleteImageFromFirebaseStorageByDownloadUrl(
+            imageUrl: image.imageDetails!.imageUrl!);
+      }
+      state = const AsyncData(<ImageHelperModel>[]);
+      EasyLoading.dismiss();
+    } catch (e) {
+      EasyLoading.showError(e.toString());
+    }
+  }
 
-  //   // use compressMultipleImages method from image helper
-  //   state = await AsyncValue.guard<List<XFile>?>(() async {
-  //     final images = await ImageHelpers.compressMultipleImages(files: files);
+  // update in list
+  Future<void> updateInList(
+      {required ImageHelperModel image, required int index}) async {
+    final list = state.asData!.value!;
+    list[index] = image;
+    state = AsyncValue.data(list);
+  }
 
-  //     return images;
-  //   });
-  // }
+  // update gallery in list
+  Future<void> updateGalleryInList(
+      {required Gallery gallery, required int index}) async {
+    final list = state.asData!.value!;
+    list[index].imageDetails = gallery;
+    state = AsyncValue.data(list);
+  }
 }
 
 // image  helper web controller notifier

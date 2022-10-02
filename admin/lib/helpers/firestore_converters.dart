@@ -37,6 +37,8 @@ class FirestoreHelper {
     }
   }
 
+  // set gallery model data to firestore
+
   // update data on firestore
   static Future<T> updateDataInDoc<T>({
     required String docId,
@@ -45,8 +47,51 @@ class FirestoreHelper {
     required String query,
   }) async {
     try {
-      await docRef<T>(docPath).doc(docId).update(data);
+      await _firestore
+          .collection(docPath)
+          .doc(docId)
+          .set(data, SetOptions(merge: true));
       return await getDataFromDoc<T>(
+          docId: docId, docPath: docPath, query: query);
+    } on FirebaseException catch (e) {
+      throw e.message.toString();
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  // update from list of data in firestore
+  static Future<List<T>> updateDataInDocList<T>({
+    required String docId,
+    required String docPath,
+    required List<T> data,
+    required String query,
+  }) async {
+    try {
+      await _firestore.collection(docPath).doc(docId).update({
+        query: FieldValue.arrayUnion(data),
+      }).then((value) => print({'Data updated': data}));
+      return await getDataFromDoc<List<T>>(
+          docId: docId, docPath: docPath, query: query);
+    } on FirebaseException catch (e) {
+      throw e.message.toString();
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  // delete from list of data in firestore
+  static Future<List<T>> deleteDataInDocList<T>({
+    required String docId,
+    required String docPath,
+    required List<T> data,
+    required String query,
+  }) async {
+    try {
+      await _firestore.collection(docPath).doc(docId).update({
+        query: FieldValue.arrayRemove(data),
+      });
+      return await getDataFromDoc<List<T>>(
           docId: docId, docPath: docPath, query: query);
     } on FirebaseException catch (e) {
       throw e.message.toString();

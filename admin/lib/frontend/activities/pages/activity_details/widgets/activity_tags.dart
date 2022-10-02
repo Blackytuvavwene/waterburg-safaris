@@ -1,4 +1,5 @@
 import 'package:admin/lib.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -22,10 +23,30 @@ class ActivityTagsNotifier extends StateNotifier<AsyncValue<List<String>>> {
     state = const AsyncValue.loading();
 
     return state = await AsyncValue.guard(() async {
-      final tagD =
-          await activitiesDatabaseRepository.updateActivity<List<String>>(
-              data: tag.toFirestore(), activityId: activityId, query: query);
+      final tagD = await FirestoreHelper.updateDataInDocList<String>(
+          data: tag.tags,
+          docId: activityId,
+          query: query,
+          docPath: 'activities');
       return tagD;
+    });
+  }
+
+  // add tags to firestore
+  Future<AsyncValue<List<String>>> addTagsToFirestore({
+    required List<String> tags,
+    required String activityId,
+    required String query,
+  }) async {
+    state = const AsyncValue.loading();
+
+    return state = await AsyncValue.guard(() async {
+      print({tags: '$tags', activityId: activityId, query: query});
+      final firestore = FirebaseFirestore.instance;
+      await firestore.collection('activities').doc(activityId).update({
+        query: FieldValue.arrayUnion(tags),
+      }).then((value) => print({'Data updated': tags}));
+      return tags;
     });
   }
 
@@ -54,10 +75,11 @@ class ActivityTagsNotifier extends StateNotifier<AsyncValue<List<String>>> {
     state = const AsyncValue.loading();
 
     return state = await AsyncValue.guard(() async {
-      final tagD = await activitiesDatabaseRepository
-          .updateActivity<List<String>>(data: {
-        'tags': [tag]
-      }, activityId: activityId, query: query);
+      final tagD = await FirestoreHelper.deleteDataInDocList<String>(
+          data: <String>[tag],
+          docId: activityId,
+          query: query,
+          docPath: 'activities');
       return tagD;
     });
   }
@@ -136,6 +158,7 @@ class _MobileActivityTags extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tagsController = useTextEditingController();
+    final tagsList = useState<List<String>>(<String>[]);
     final tagsInState = ref.watch(activityTagsNotifierProvider);
     final tagsStateController = ref.read(activityTagsNotifierProvider.notifier);
     return Container(
@@ -157,28 +180,36 @@ class _MobileActivityTags extends HookConsumerWidget {
                 ),
               ),
               IconButton(
-                onPressed: () {
+                onPressed: () async {
                   if (tagsController.text.isNotEmpty) {
-                    tagsStateController.addTagToFirestore(
-                      tag: ActivitTagsModel(
-                          tags: [...tags!, tagsController.text]),
-                      activityId: activityId!,
-                      query: 'tags',
-                    );
+                    tagsList.value.add(tagsController.text);
+                    print('tagsList.value: ${tagsList.value}');
                     tagsController.clear();
                   }
                 },
                 icon: const Icon(Icons.add),
               ),
+              Expanded(
+                child: CustomElevatedButton(
+                  onPressed: () async {
+                    await tagsStateController.addTagsToFirestore(
+                      tags: tagsList.value,
+                      activityId: activityId!,
+                      query: 'tags',
+                    );
+                  },
+                  text: 'Add tags',
+                ),
+              )
             ],
           ),
-          Wrap(
+          Column(
             children: [
               tagsInState.when(
-                data: (tags) {
-                  return tags.isNotEmpty
+                data: (tagList) {
+                  return tagList.isNotEmpty
                       ? Wrap(
-                          children: tags
+                          children: tagList
                               .map(
                                 (tag) => Container(
                                   margin: const EdgeInsets.only(right: 5),
@@ -206,6 +237,28 @@ class _MobileActivityTags extends HookConsumerWidget {
                 loading: () => const SizedBox(),
                 error: (error, stack) => const SizedBox(),
               ),
+
+              // new tags
+              tagsList.value.isNotEmpty
+                  ? Wrap(
+                      children: [
+                        const DText(
+                          text: 'New tags',
+                        ),
+                        for (var tag in tagsList.value)
+                          Container(
+                            margin: const EdgeInsets.only(right: 5),
+                            child: Chip(
+                              label: Text(tag),
+                              deleteIcon: const Icon(Icons.close),
+                              onDeleted: () {
+                                tagsList.value.remove(tag);
+                              },
+                            ),
+                          ),
+                      ],
+                    )
+                  : const SizedBox(),
               for (var tag in tags!)
                 Container(
                   margin: const EdgeInsets.only(right: 10),
@@ -217,15 +270,14 @@ class _MobileActivityTags extends HookConsumerWidget {
                       color: Colors.red,
                     ),
                     onDeleted: () async {
-                      tags?.remove(tag);
+                      // tags?.remove(tag);
                       print(tags);
-                      await tagsStateController.addTagToFirestore(
-                        tag: ActivitTagsModel(tags: tags!),
+                      await tagsStateController.removeTagFromFirestore(
+                        tag: tag,
                         activityId: activityId!,
                         query: 'tags',
                       );
                     },
-                    backgroundColor: Colors.blue,
                   ),
                 ),
             ],

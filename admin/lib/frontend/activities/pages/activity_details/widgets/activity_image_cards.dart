@@ -1,16 +1,20 @@
 import 'dart:io';
 
 import 'package:admin/lib.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:extended_image/extended_image.dart' as ei;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:layout/layout.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:sizer/sizer.dart';
+import 'package:vrouter/vrouter.dart';
 
 // final imaFileProvider = Provider((ref)=>(XFile im) {
 //  ImageFile file;
@@ -166,6 +170,7 @@ class ImagePickerWidget extends HookConsumerWidget {
         (AsyncValue<List<String>?>? previous, AsyncValue<List<String>?> next) {
       next.when(
         data: (data) {
+          final oldData = data;
           if (data!.isNotEmpty) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -212,6 +217,9 @@ class ImagePickerWidget extends HookConsumerWidget {
       width: 100.w,
       color: Theme.of(context).colorScheme.onBackground,
       child: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(
+          vertical: 10.h,
+        ),
         child: Column(
           children: [
             const SizedBox(height: 10),
@@ -220,9 +228,11 @@ class ImagePickerWidget extends HookConsumerWidget {
               onPressed: () async {
                 // await ImageHelpers.webPickImage();
                 if (multiHelper.asData?.value != null) {
-                  await multiImagepicker.pickAndAddMultipleImagesToList();
+                  await multiImagepicker.pickAndAddMultipleImagesToList(
+                      storagePath: 'activities/$activityId');
                 } else {
-                  await multiImagepicker.pickMultipleImages();
+                  await multiImagepicker.pickMultipleImages(
+                      storagePath: 'activities/$activityId');
                 }
                 // convert xfile to imagefile
               },
@@ -247,7 +257,7 @@ class ImagePickerWidget extends HookConsumerWidget {
             ),
             const SizedBox(height: 10),
             // add image to gallery button
-            ElevatedButton(
+            CustomElevatedButton(
               onPressed: () async {
                 // add image to gallery
                 // ref
@@ -257,16 +267,12 @@ class ImagePickerWidget extends HookConsumerWidget {
                 //         imageUrl: imageHelper.value!.xFile!.path,
                 //       ),
                 //     );
-                await ref
-                    .read(addImagesNotifierProvider.notifier)
-                    .addImagesToFirebaseStorage(
-                      image: multiHelper.asData!.value!
-                          .map((e) => e.xFile!)
-                          .toList(),
-                      activityId: activityId!,
-                    );
+                await multiImagepicker.clearList();
               },
-              child: const Text('Add Image to Gallery'),
+              width: 40.w,
+              height: 5.h,
+              borderRadius: BorderRadius.circular(10),
+              text: 'Clear Images',
             ),
             const SizedBox(height: 10),
 
@@ -283,6 +289,7 @@ class ImagePickerWidget extends HookConsumerWidget {
                                 return Center(
                                   child: ImageCard(
                                     image: e,
+                                    index: image.indexOf(e),
                                   ).animate().slide(
                                         begin: const Offset(10, 0),
                                         end: Offset.zero,
@@ -320,7 +327,7 @@ class ImagePickerWidget extends HookConsumerWidget {
                               padding: EdgeInsets.all(
                                 10.w,
                               ),
-                              strokeWidth: 4.sp,
+                              strokeWidth: 2.sp,
                               borderType: BorderType.RRect,
                               dashPattern: const [6, 10, 4],
                               radius: const Radius.circular(10),
@@ -371,30 +378,6 @@ class ImagePickerWidget extends HookConsumerWidget {
                 child: ColoredBox(color: Colors.red, child: Text('Error')),
               ),
             ),
-            const SizedBox(height: 10),
-            // show gallery
-            galleryHelper.when(
-              data: (gallery) {
-                return gallery != null
-                    ? SizedBox(
-                        width: 50.w,
-                        height: 30.h,
-                        child: ListView.builder(
-                          itemCount: gallery.length,
-                          itemBuilder: (context, index) {
-                            return ActivityImageCard(
-                              image: gallery[index],
-                            );
-                          },
-                        ),
-                      )
-                    : const SizedBox();
-              },
-              loading: () => const Center(
-                child: CircularProgressIndicator(),
-              ),
-              error: (error, stackTrace) => const SizedBox(),
-            ),
           ],
         ),
       ),
@@ -407,8 +390,10 @@ class ImageCard extends HookConsumerWidget {
   const ImageCard({
     Key? key,
     this.image,
+    this.index,
   }) : super(key: key);
   final ImageHelperModel? image;
+  final int? index;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final fileI = kIsWeb ? File(image!.path!) : null;
@@ -417,154 +402,339 @@ class ImageCard extends HookConsumerWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      color: Theme.of(context).colorScheme.tertiaryContainer,
-      child: SizedBox(
-        width: context.breakpoint > LayoutBreakpoint.sm ? 20.w : 90.w,
-        height: context.breakpoint > LayoutBreakpoint.sm ? 60.h : 30.h,
-        child: Stack(
-          children: [
-            // image
+      color: Theme.of(context).colorScheme.onTertiaryContainer,
+      child: Column(
+        children: [
+          SizedBox(
+            width: context.breakpoint > LayoutBreakpoint.sm ? 20.w : 90.w,
+            height: context.breakpoint > LayoutBreakpoint.sm ? 60.h : 30.h,
+            child: Stack(
+              children: [
+                // image
 
-            kIsWeb
-                ? ei.ExtendedImage.network(
-                    image!.path!,
-                    fit: BoxFit.cover,
-                    width: 100.w,
-                    height: 100.h,
-                    cache: true,
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.circular(10),
-                    loadStateChanged: (ei.ExtendedImageState state) {
-                      switch (state.extendedImageLoadState) {
-                        case ei.LoadState.loading:
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        case ei.LoadState.completed:
-                          return ei.ExtendedRawImage(
-                            image: state.extendedImageInfo?.image,
-                            fit: BoxFit.cover,
-                            width: 100.w,
-                            height: 100.h,
-                          );
-                        case ei.LoadState.failed:
-                          return const Center(
-                            child: Icon(Icons.error),
-                          );
-                      }
-                    },
-                  )
-                : ei.ExtendedImage.memory(
-                    image!.bytes!,
-                    fit: BoxFit.cover,
-                    width: 100.w,
-                    height: 100.h,
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.circular(10),
-                    loadStateChanged: (ei.ExtendedImageState state) {
-                      switch (state.extendedImageLoadState) {
-                        case ei.LoadState.loading:
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        case ei.LoadState.completed:
-                          return ei.ExtendedRawImage(
-                            image: state.extendedImageInfo?.image,
-                            fit: BoxFit.cover,
-                            width: 100.w,
-                            height: 100.h,
-                          );
-                        case ei.LoadState.failed:
-                          return const Center(
-                            child: Icon(Icons.error),
-                          );
-                      }
-                    },
-                  ),
-            // edit button
-            Positioned(
-              top: 0,
-              right: 0,
-              child: IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.edit),
-              ),
-            ),
-            // delete button
-            Positioned(
-              top: 0,
-              left: 0,
-              child: IconButton(
-                onPressed: () {
-                  ref
-                      .read(multipleImageHelperControllerNotifierProvider
-                          .notifier)
-                      .deleteImageFromList(image: image!);
-                },
-                icon: const Icon(Icons.delete),
-              ),
-            ),
-            // image details
-            Positioned(
-              left: 0,
-              bottom: 0,
-              right: 0,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 10,
-                ),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.background.withOpacity(
-                        0.7,
+                kIsWeb
+                    ? ei.ExtendedImage.network(
+                        image!.path!,
+                        fit: BoxFit.cover,
+                        width: 100.w,
+                        height: 100.h,
+                        cache: true,
+                        shape: BoxShape.rectangle,
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(10),
+                          bottom: Radius.zero,
+                        ),
+                        loadStateChanged: (ei.ExtendedImageState state) {
+                          switch (state.extendedImageLoadState) {
+                            case ei.LoadState.loading:
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            case ei.LoadState.completed:
+                              return ei.ExtendedRawImage(
+                                image: state.extendedImageInfo?.image,
+                                fit: BoxFit.cover,
+                                width: 100.w,
+                                height: 100.h,
+                              );
+                            case ei.LoadState.failed:
+                              return const Center(
+                                child: Icon(Icons.error),
+                              );
+                          }
+                        },
+                      )
+                    : ei.ExtendedImage.memory(
+                        image!.bytes!,
+                        fit: BoxFit.cover,
+                        width: 100.w,
+                        height: 100.h,
+                        shape: BoxShape.rectangle,
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(10),
+                          bottom: Radius.zero,
+                        ),
+                        loadStateChanged: (ei.ExtendedImageState state) {
+                          switch (state.extendedImageLoadState) {
+                            case ei.LoadState.loading:
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            case ei.LoadState.completed:
+                              return ei.ExtendedRawImage(
+                                image: state.extendedImageInfo?.image,
+                                fit: BoxFit.cover,
+                                width: 100.w,
+                                height: 100.h,
+                              );
+                            case ei.LoadState.failed:
+                              return const Center(
+                                child: Icon(Icons.error),
+                              );
+                          }
+                        },
                       ),
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10),
-                  ),
-                ),
-                child: SizedBox(
-                  height: 8.h,
-                  width: 100.w,
-                  child: Column(
+                // edit button and delete button
+
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  left: 0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                        flex: 3,
-                        child: DText(
-                          text: 'Image Details',
-                          textColor: Theme.of(context).colorScheme.onBackground,
-                          fontSize: context.breakpoint > LayoutBreakpoint.sm
-                              ? 6.sp
-                              : 16.sp,
-                        ),
+                      IconButton(
+                        onPressed: () {
+                          // show edit image dialog
+                          showDialog(
+                            context: context,
+                            builder: (context) => ImageDetailsEditDialog(
+                              image: image!,
+                              index: index!,
+                            ),
+                          );
+                        },
+                        icon: LineIcon.editAlt(),
                       ),
-                      Expanded(
-                        flex: 3,
-                        child: DText(
-                          text: 'Image Name : ${image?.name}',
-                          textColor: Theme.of(context).colorScheme.onBackground,
-                          fontSize: context.breakpoint > LayoutBreakpoint.sm
-                              ? 4.sp
-                              : 14.sp,
-                        ),
-                      ),
-                      Expanded(
-                        flex: 4,
-                        child: DText(
-                          text:
-                              'Image Size : ${(image!.imageFile!.sizeInBytes / 1024 / 1024).toStringAsFixed(2)} MB / (${image!.imageFile!.width} x ${image!.imageFile!.height})',
-                          textColor: Theme.of(context).colorScheme.onBackground,
-                          fontSize: context.breakpoint > LayoutBreakpoint.sm
-                              ? 4.sp
-                              : 14.sp,
-                        ),
+                      IconButton(
+                        onPressed: () {
+                          ref
+                              .read(
+                                  multipleImageHelperControllerNotifierProvider
+                                      .notifier)
+                              .deleteImageFromList(image: image!);
+                        },
+                        icon: LineIcon.trash(),
                       ),
                     ],
                   ),
                 ),
+
+                // image details
+                Positioned(
+                  left: 0,
+                  bottom: 0,
+                  right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      color:
+                          Theme.of(context).colorScheme.background.withOpacity(
+                                0.7,
+                              ),
+                      // borderRadius: const BorderRadius.only(
+                      //   bottomLeft: Radius.circular(10),
+                      //   bottomRight: Radius.circular(10),
+                      // ),
+                    ),
+                    child: SizedBox(
+                      height: 8.h,
+                      width: 100.w,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: DText(
+                              text: 'Image Details',
+                              textColor:
+                                  Theme.of(context).colorScheme.onBackground,
+                              fontSize: context.breakpoint > LayoutBreakpoint.sm
+                                  ? 6.sp
+                                  : 16.sp,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: DText(
+                              text: 'Image Name : ${image?.name}',
+                              textColor:
+                                  Theme.of(context).colorScheme.onBackground,
+                              fontSize: context.breakpoint > LayoutBreakpoint.sm
+                                  ? 4.sp
+                                  : 14.sp,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 4,
+                            child: DText(
+                              text:
+                                  'Image Size : ${(image!.imageFile!.sizeInBytes / 1024 / 1024).toStringAsFixed(2)} MB / (${image!.imageFile!.width} x ${image!.imageFile!.height})',
+                              textColor:
+                                  Theme.of(context).colorScheme.onBackground,
+                              fontSize: context.breakpoint > LayoutBreakpoint.sm
+                                  ? 4.sp
+                                  : 14.sp,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: context.breakpoint > LayoutBreakpoint.sm ? 20.w : 90.w,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal:
+                    context.breakpoint > LayoutBreakpoint.sm ? 2.w : 5.w,
+                vertical: context.breakpoint > LayoutBreakpoint.sm ? 1.h : 2.h,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  DText(
+                    text: 'Image title : ${image!.imageDetails?.imageTitle}',
+                    textColor: Theme.of(context).colorScheme.onBackground,
+                    fontSize:
+                        context.breakpoint > LayoutBreakpoint.sm ? 6.sp : 16.sp,
+                  ),
+                  AutoSizeText.rich(
+                    TextSpan(
+                      text: 'Image description : ',
+                      style: GoogleFonts.dosis(
+                        color: Theme.of(context).colorScheme.onBackground,
+                        fontSize: context.breakpoint > LayoutBreakpoint.sm
+                            ? 6.sp
+                            : 16.sp,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: image!.imageDetails?.imageDescription,
+                          style: GoogleFonts.dosis(
+                            color: Theme.of(context).colorScheme.onBackground,
+                            fontSize: context.breakpoint > LayoutBreakpoint.sm
+                                ? 4.sp
+                                : 14.sp,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  DText(
+                    text: image!.imageDetails?.imageDescription,
+                    textColor: Theme.of(context).colorScheme.onBackground,
+                    fontSize:
+                        context.breakpoint > LayoutBreakpoint.sm ? 6.sp : 16.sp,
+                  ),
+                ],
               ),
             ),
-          ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+// image details edit dialog box
+class ImageDetailsEditDialog extends HookConsumerWidget {
+  const ImageDetailsEditDialog({Key? key, required this.image, this.index})
+      : super(key: key);
+  final ImageHelperModel image;
+  final int? index;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final imageTitleController = useTextEditingController();
+    final imageDescriptionController = useTextEditingController();
+    final imageTitleFocusNode = useFocusNode();
+    final imageDescriptionFocusNode = useFocusNode();
+    final formKey = GlobalKey<FormState>();
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 10,
+        ),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.background,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Form(
+          key: formKey,
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            // image title
+            TextFormField(
+              controller: imageTitleController,
+              focusNode: imageTitleFocusNode,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter image title';
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                labelText: 'Image Title',
+                labelStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.onBackground,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            // image description
+            TextFormField(
+              controller: imageDescriptionController,
+              focusNode: imageDescriptionFocusNode,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter image description';
+                }
+                return null;
+              },
+              maxLength: 200,
+              maxLines: 6,
+              minLines: 1,
+              decoration: InputDecoration(
+                labelText: 'Image Description',
+                labelStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.onBackground,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            // save button
+            SizedBox(
+              width: 100.w,
+              height: 6.h,
+              child: CustomElevatedButton(
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    ref
+                        .read(multipleImageHelperControllerNotifierProvider
+                            .notifier)
+                        .updateGalleryInList(
+                            gallery: Gallery(
+                              imageTitle: imageTitleController.text,
+                              imageDescription: imageDescriptionController.text,
+                              imageUrl: image.imageDetails!.imageUrl,
+                            ),
+                            index: 0);
+                    context.vRouter.pop();
+                  }
+                },
+                borderRadius: BorderRadius.circular(10),
+                text: 'Save',
+              ),
+            ),
+          ]),
         ),
       ),
     );

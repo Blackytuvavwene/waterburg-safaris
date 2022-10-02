@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -7,6 +8,15 @@ import 'package:sizer/sizer.dart';
 import 'package:vrouter/vrouter.dart';
 
 import 'lib.dart';
+
+final signedInUser = FutureProvider<User?>((ref) async {
+  final auth = FirebaseAuth.instance;
+  getUser() async {
+    return auth.currentUser;
+  }
+
+  return getUser();
+});
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,12 +40,30 @@ class MyApp extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.read(appRouterProvider);
-    final firstOpen = ref.watch(firstLoadProvider);
+    final isFirstOpen = ref.watch(firstLoadProvider);
+    final isUserConnected = ref.watch(signedInUser);
     // ref.listen(currentUserProvider, (first) {
     //   if (firstOpen) {
     //     ref.read(firstLoadProvider.notifier).setFirstLoad();
     //   }
     // });
+
+    getRedirect(VRedirector vRedirector) async {
+      print(' isUserConnected ${isUserConnected.asData?.value?.uid}');
+
+      if (isUserConnected.value?.uid == '') {
+        print('hello');
+        vRedirector.toNamed('welcome');
+      } else if (isFirstOpen.asData?.value == AppAuthStatus.loaded &&
+          isUserConnected.value?.uid != '') {
+        print('home');
+        vRedirector.toNamed('home');
+      } else if (isUserConnected.value?.uid == null &&
+          isFirstOpen.asData?.value == AppAuthStatus.loaded) {
+        vRedirector.toNamed('login'); // Use VRedirector to redirect
+      }
+    }
+
     return Sizer(
       builder: (context, orientation, deviceType) {
         return VRouter(
@@ -44,6 +72,7 @@ class MyApp extends HookConsumerWidget {
           buildTransition: (animation1, _, child) {
             return FadeTransition(opacity: animation1, child: child);
           },
+          // beforeEnter: (vRedirector) async => getRedirect(vRedirector),
           // You can specify a transition duration (default 300)
           transitionDuration: const Duration(milliseconds: 500),
           debugShowCheckedModeBanner: false,
@@ -72,29 +101,8 @@ class MyApp extends HookConsumerWidget {
           ),
           routes: [
             VGuard(
-                beforeEnter: (vRedirector) async {
-                  final isFirstOpen = ref.watch(firstLoadProvider.future);
-
-                  final isUserConnected = ref.watch(currentUserProvider).value;
-
-                  if (isFirstOpen == AppAuthStatus.firstLoad &&
-                      isUserConnected?.uid == null) {
-                    print('hello');
-                    return vRedirector.toNamed('welcome');
-                  }
-
-                  if (isFirstOpen == AppAuthStatus.loaded &&
-                      isUserConnected?.uid != null) {
-                    print('home');
-                    return vRedirector.toNamed('home');
-                  }
-                  if (isUserConnected?.uid == null &&
-                      isFirstOpen == AppAuthStatus.loaded &&
-                      vRedirector.toNamed != 'login') {
-                    return vRedirector
-                        .toNamed('login'); // Use VRedirector to redirect
-                  }
-                },
+                beforeEnter: (vRedirector) async =>
+                    await getRedirect(vRedirector),
                 stackedRoutes: [
                   VWidget(
                     path: '/',
