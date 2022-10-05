@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:admin/lib.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:extended_image/extended_image.dart' as ei;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -25,6 +25,41 @@ import 'package:vrouter/vrouter.dart';
 
 //   return file;
 // });
+
+class GalleryNotifier extends StateNotifier<AsyncValue<List<Gallery>>> {
+  GalleryNotifier() : super(const AsyncData([]));
+
+  // add to firestore
+  Future<AsyncValue<List<Gallery>>> addImagesToFirestore({
+    required Gallery gallery,
+    required String activityId,
+    required String query,
+  }) async {
+    state = const AsyncValue.loading();
+
+    return state = await AsyncValue.guard(() async {
+      final imagesD = await FirestoreHelper.updateDataInDocList<Gallery>(
+          data: [gallery],
+          docId: activityId,
+          query: query,
+          docPath: 'activities');
+      return imagesD;
+    });
+  }
+
+  // add to state
+  void addImagesToState({required List<Gallery> images}) {
+    state = state.asData!.value != null
+        ? AsyncValue.data([...state.asData!.value, ...images])
+        : AsyncValue.data(images) ?? const AsyncData([]);
+  }
+}
+
+// gallery notifier provider
+final galleryNotifierProvider =
+    StateNotifierProvider<GalleryNotifier, AsyncValue<List<Gallery>>>((ref) {
+  return GalleryNotifier();
+});
 
 class ActivityImageCard extends HookConsumerWidget {
   const ActivityImageCard({
@@ -66,30 +101,87 @@ class ActivityImageCard extends HookConsumerWidget {
 }
 
 class AddImagesDialog extends HookConsumerWidget {
-  const AddImagesDialog({Key? key}) : super(key: key);
+  const AddImagesDialog({
+    Key? key,
+    this.activityId,
+  }) : super(key: key);
+  final String? activityId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final galleryState = ref.watch(galleryNotifierProvider.notifier);
+
+    // show states
+    ref.listen(galleryNotifierProvider,
+        (AsyncValue<List<Gallery>>? previous, AsyncValue<List<Gallery>> next) {
+      next.when(
+        data: (data) {
+          EasyLoading.showSuccess('Uploaded Successfully');
+        },
+        loading: () {
+          EasyLoading.show(status: 'Uploading...');
+        },
+        error: (error, stackTrace) {
+          EasyLoading.showError('Error Uploading');
+        },
+      );
+    });
     return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: SizedBox(
         height: 70.h,
-        width: 80.w,
-        child: Center(
-          child: Column(
-            children: [
-              const Text('Add Images'),
-              const SizedBox(height: 10),
-              const Expanded(
-                child: ImagePickerWidget(),
+        width: 90.w,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            const SizedBox(height: 10),
+            const DText(
+              text: 'Add Images',
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              flex: 10,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  children: const [
+                    ImagePickerWidget(),
+                  ],
+                ),
               ),
-              const SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Done'),
+            ),
+            Expanded(
+              flex: 1,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: CustomElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      text: 'Cancel',
+                      primary: Theme.of(context).colorScheme.errorContainer,
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(10),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: CustomElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      text: 'Upload Images',
+                      borderRadius: const BorderRadius.only(
+                        bottomRight: Radius.circular(10),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
@@ -101,8 +193,10 @@ class ImagePickerWidget extends HookConsumerWidget {
   const ImagePickerWidget({
     Key? key,
     this.activityId,
+    this.galleryNotifier,
   }) : super(key: key);
   final String? activityId;
+  final GalleryNotifier? galleryNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // access image picker helpers
@@ -214,68 +308,48 @@ class ImagePickerWidget extends HookConsumerWidget {
 
     return Center(
         child: Container(
-      width: 100.w,
       color: Theme.of(context).colorScheme.onBackground,
       child: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(
-          vertical: 10.h,
-        ),
+        padding: const EdgeInsets.symmetric(),
         child: Column(
           children: [
-            const SizedBox(height: 10),
-            // pick image button
-            ElevatedButton(
-              onPressed: () async {
-                // await ImageHelpers.webPickImage();
-                if (multiHelper.asData?.value != null) {
-                  await multiImagepicker.pickAndAddMultipleImagesToList(
-                      storagePath: 'activities/$activityId');
-                } else {
-                  await multiImagepicker.pickMultipleImages(
-                      storagePath: 'activities/$activityId');
-                }
-                // convert xfile to imagefile
-              },
-              child: const Text('Pick Image'),
-            ),
-            const SizedBox(height: 10),
-            // compress image button
-            ElevatedButton(
-              onPressed: () async {
-                // await ref
-                //     .read(imageHelperNotifierProvider.notifier)
-                //     .compressImage(
-                //       imageHelperWeb.value!,
-                //     );
+            Row(
+              children: [
+                // pick image button
+                Expanded(
+                  child: CustomElevatedButton(
+                    onPressed: () async {
+                      // await ImageHelpers.webPickImage();
+                      if (multiHelper.asData?.value != null) {
+                        await multiImagepicker.pickAndAddMultipleImagesToList(
+                            storagePath: 'activities/$activityId');
+                      } else {
+                        await multiImagepicker.pickMultipleImages(
+                            storagePath: 'activities/$activityId');
+                      }
+                      // convert xfile to imagefile
+                    },
+                    text: 'Pick Images',
+                  ),
+                ),
 
-                // // convert xfile to imagefile
-                // await ref
-                //     .read(imageFileHelperControllerNotifierProvider.notifier)
-                //     .fileToImageFile(file: imageHelper.value!);
-              },
-              child: const Text('Compress Image'),
+                // clear images
+                multiHelper.maybeMap(orElse: () {
+                  return const SizedBox.shrink();
+                }, data: (value) {
+                  return Expanded(
+                    child: CustomElevatedButton(
+                      primary: Theme.of(context).colorScheme.errorContainer,
+                      onPressed: () async {
+                        await multiImagepicker.clearList();
+                      },
+                      text: 'Clear Images',
+                    ),
+                  );
+                })
+              ],
             ),
             const SizedBox(height: 10),
-            // add image to gallery button
-            CustomElevatedButton(
-              onPressed: () async {
-                // add image to gallery
-                // ref
-                //     .read(galleryImageControllerNotifierProvider.notifier)
-                //     .addImageToGalleryList(
-                //       gallery: Gallery(
-                //         imageUrl: imageHelper.value!.xFile!.path,
-                //       ),
-                //     );
-                await multiImagepicker.clearList();
-              },
-              width: 40.w,
-              height: 5.h,
-              borderRadius: BorderRadius.circular(10),
-              text: 'Clear Images',
-            ),
-            const SizedBox(height: 10),
-
             multiHelper.when(
               data: (image) {
                 return image!.isNotEmpty
@@ -318,55 +392,15 @@ class ImagePickerWidget extends HookConsumerWidget {
                       )
                     : SizedBox(
                         width: 100.w,
+                        height: 50.h,
                         child: Center(
-                          child: SizedBox(
-                            width: context.breakpoint > LayoutBreakpoint.sm
-                                ? 60.w
-                                : 90.w,
-                            child: DottedBorder(
-                              padding: EdgeInsets.all(
-                                10.w,
-                              ),
-                              strokeWidth: 2.sp,
-                              borderType: BorderType.RRect,
-                              dashPattern: const [6, 10, 4],
-                              radius: const Radius.circular(10),
-                              color: Theme.of(context).colorScheme.background,
-                              child: Center(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: LineIcon.plusSquareAlt(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .background,
-                                        size: context.breakpoint >
-                                                LayoutBreakpoint.sm
-                                            ? 10.sp
-                                            : 34.sp,
-                                      ),
-                                    ),
-                                    Center(
-                                      child: DText(
-                                        text: 'Add Images',
-                                        textColor: Theme.of(context)
-                                            .colorScheme
-                                            .background,
-                                        fontSize: context.breakpoint >
-                                                LayoutBreakpoint.sm
-                                            ? 3.sp
-                                            : 16.sp,
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
+                          child: DText(
+                            text: 'Add Images',
+                            textColor: Theme.of(context).colorScheme.background,
+                            fontSize: context.breakpoint > LayoutBreakpoint.sm
+                                ? 3.sp
+                                : 16.sp,
+                            textAlign: TextAlign.center,
                           ),
                         ),
                       );
@@ -622,6 +656,16 @@ class ImageCard extends HookConsumerWidget {
                     fontSize:
                         context.breakpoint > LayoutBreakpoint.sm ? 6.sp : 16.sp,
                   ),
+                  Expanded(child: CustomElevatedButton(
+                    onPressed: () {
+                      ref
+                          .read(galleryNotifierProvider.notifier)
+                          .addImagesToFirestore(
+                              gallery: image!.imageDetails!,
+                              activityId: 'activityId',
+                              query: 'jjhg');
+                    },
+                  ))
                 ],
               ),
             ),

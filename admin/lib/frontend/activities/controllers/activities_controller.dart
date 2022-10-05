@@ -1,6 +1,8 @@
 import 'package:admin/lib.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:line_icons/line_icon.dart';
 
 class ActivityControlNotifier extends StateNotifier<Activity?> {
   ActivityControlNotifier() : super(null);
@@ -65,3 +67,49 @@ final addImagesNotifierProvider =
   return AddImageNotifier(
       activitiesDatabaseRepository: ref.watch(activityDbRepositoryProvider));
 });
+
+// activity tab list model
+class ActivityTabModel {
+  final String? tabName;
+  final Icon? tabIcon;
+  final Widget? tabWidget;
+  final int? tabIndex;
+  ActivityTabModel({
+    this.tabName,
+    this.tabIcon,
+    this.tabWidget,
+    this.tabIndex,
+  });
+}
+
+// activity tabs list with icons, titles and widgets and index
+final activityTabsList = [
+  ActivityTabModel(
+    tabName: 'Info',
+    tabIcon: LineIcon.infoCircle(),
+    tabWidget: const ActivityInfoPage(),
+    tabIndex: 0,
+  ),
+  ActivityTabModel(
+    tabName: 'Gallery',
+    tabIcon: LineIcon.imagesAlt(),
+    tabWidget: const ActivityGalleryPage(),
+    tabIndex: 1,
+  ),
+  ActivityTabModel(
+    tabName: 'Packages',
+    tabIcon: LineIcon.boxes(),
+    tabWidget: const ActivityPackagesPage(),
+    tabIndex: 2,
+  ),
+  ActivityTabModel(
+    tabName: 'Tags',
+    tabIcon: LineIcon.tags(),
+    tabWidget: const ActivityTagsPage(),
+    tabIndex: 3,
+  ),
+];
+
+// activity tabs list provider
+final activityTabsListProvider =
+    Provider<List<ActivityTabModel>>((ref) => activityTabsList);

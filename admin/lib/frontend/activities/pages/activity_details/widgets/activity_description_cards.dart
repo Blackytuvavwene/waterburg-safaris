@@ -26,7 +26,7 @@ class DescriptionNotifier extends StateNotifier<AsyncValue<String>> {
     state = const AsyncValue.loading();
 
     // use async guard to catch errors
-    state = AsyncValue.guard<String>(() async {
+    state = await AsyncValue.guard<String>(() async {
       // update description in firestore
       await firestore
           .collection('activities')
@@ -34,7 +34,7 @@ class DescriptionNotifier extends StateNotifier<AsyncValue<String>> {
           .update({field: description});
 
       return description;
-    }) as AsyncValue<String>;
+    });
   }
 }
 
@@ -44,9 +44,21 @@ final descriptionNotifierProvider =
         (ref) => DescriptionNotifier());
 
 class ActivityDescriptionPopUp extends HookConsumerWidget {
-  const ActivityDescriptionPopUp({Key? key}) : super(key: key);
+  const ActivityDescriptionPopUp({
+    Key? key,
+    this.description,
+    this.field,
+    this.activityId,
+    this.maxLength,
+  }) : super(key: key);
+  final String? description;
+  final String? field;
+  final String? activityId;
+  final int? maxLength;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final formKey = GlobalKey<FormState>();
     // listen to description notifier provider
     ref.listen(descriptionNotifierProvider,
         (AsyncValue<String>? previous, AsyncValue<String> next) {
@@ -81,111 +93,66 @@ class ActivityDescriptionPopUp extends HookConsumerWidget {
       );
     });
 
-    final descriptionController = useTextEditingController();
-    final editType = ref.watch(editActivityTypeProvider);
-    // text listener on description controller
-    useEffect(() {
-      descriptionController.addListener(() {
-        ref
-            .read(descriptionNotifierProvider.notifier)
-            .updateDescription(descriptionController.text);
-      });
-      return () {
-        descriptionController.dispose();
-      };
-    }, [descriptionController]);
-
-    // update description controller
-//     final update = useValueListenable();
-
-//     useEffect(() {
-//  descriptionController.text = update;
-// }, [update]);
-
-    return Dialog(
-      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
+    final descriptionController = useTextEditingController(text: description);
+    return AlertDialog(
+      title: const DText(
+        text: 'Edit Description',
       ),
-      child: SizedBox(
-        width: context.breakpoint > LayoutBreakpoint.sm ? 30.w : 90.w,
-        height: context.breakpoint > LayoutBreakpoint.sm ? 50.h : 70.h,
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.all(10.0),
-                    child: DText(
-                      text: 'Activity Description',
-                      textColor:
-                          Theme.of(context).colorScheme.onPrimaryContainer,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
-                    ),
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    if (editType == ActivityEditType.editAll) {
-                      Navigator.pop(context, descriptionController.text);
-                    } else {
-                      context.vRouter.pop();
-                    }
-                  },
-                  icon: const Icon(Icons.close),
-                ),
-              ],
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      content: Form(
+        key: formKey,
+        child: TextFormField(
+          controller: descriptionController,
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'Description cannot be empty';
+            }
+            return null;
+          },
+          maxLength: maxLength,
+          decoration: InputDecoration(
+            hintText: 'Enter description',
+            hintStyle: GoogleFonts.dosis(),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
             ),
-            Container(
-              padding: const EdgeInsets.all(10.0),
-              child: TextField(
-                controller: descriptionController,
-                maxLines: 10,
-                minLines: 1,
-                // build counter for max 150 words
-                maxLength: 150,
-                decoration: InputDecoration(
-                  filled: true,
-                  counter: TextFieldCounter(
-                    controller: descriptionController.value.text,
-                    maxLength: 150,
-                  ),
-                  fillColor:
-                      Theme.of(context).colorScheme.primary.withOpacity(0.8),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  hintStyle: GoogleFonts.dosis(
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  ),
-                  hintText: 'Enter Activity Description',
-                ),
-              ),
-            ),
-            const Spacer(
-              flex: 6,
-            ),
-            CustomElevatedButton(
-              text: 'Update',
-              width: 25.w,
-              primary: Theme.of(context).colorScheme.primary,
-              textColor: Theme.of(context).colorScheme.onPrimary,
-              onPressed: () {
-                if (editType == ActivityEditType.editAll) {
-                  Navigator.pop(context, descriptionController.text);
-                } else {
-                  // ref.read(descriptionNotifierProvider.notifier).updateDescription(
-                  //     descriptionController.text);
-                  context.vRouter.pop();
-                }
-              },
-            ),
-            const SizedBox(height: 8.0),
-          ],
+          ),
+          maxLines: 8,
+          minLines: 1,
         ),
       ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            context.vRouter.pop();
+          },
+          child: DText(
+            text: 'Cancel',
+            textColor: Theme.of(context).colorScheme.error,
+          ),
+        ),
+        TextButton(
+          onPressed: () async {
+            if (formKey.currentState!.validate()) {
+              // update description in firestore
+              await ref
+                  .read(descriptionNotifierProvider.notifier)
+                  .updateDescriptionInFirestore(
+                    activityId: activityId!,
+                    description: descriptionController.text,
+                    field: field!,
+                  );
+              context.vRouter.pop();
+            }
+          },
+          child: DText(
+            text: 'Update',
+            textColor: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -204,7 +171,9 @@ class ActivityDescriptionViewCard extends HookConsumerWidget {
   final ActivityEditType? editType;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final teCtrl = useTextEditingController();
+    final teCtrl = useTextEditingController(text: description);
+    // form key
+    final formKey = GlobalKey<FormState>();
     return Container(
       padding: EdgeInsets.all(
         context.breakpoint > LayoutBreakpoint.sm ? 1.5.w : 8.w,
@@ -237,9 +206,8 @@ class ActivityDescriptionViewCard extends HookConsumerWidget {
             height: 10.0,
           ),
           editType == ActivityEditType.editAll
-              ? Container(
-                  padding: const EdgeInsets.all(10.0),
-                  child: TextField(
+              ? Form(
+                  child: TextFormField(
                     controller: teCtrl,
                     maxLines: 10,
                     minLines: 1,
@@ -247,10 +215,6 @@ class ActivityDescriptionViewCard extends HookConsumerWidget {
                     maxLength: 1250,
                     decoration: InputDecoration(
                       filled: true,
-                      counter: TextFieldCounter(
-                        controller: teCtrl.value.text,
-                        maxLength: 1250,
-                      ),
                       fillColor: Theme.of(context)
                           .colorScheme
                           .primaryContainer

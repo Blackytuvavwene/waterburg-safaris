@@ -1,5 +1,8 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:sizer/sizer.dart';
@@ -85,17 +88,83 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
   final ActivityEditType? editActivityType;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final tabs = ref.watch(activityTabsListProvider);
+    final tabController = useTabController(initialLength: tabs.length);
+    final activityNameController =
+        useTextEditingController(text: activity?.activityName);
+
+    // activity name animation controller
+    final activityNameAnimationController = useAnimationController(
+      duration: const Duration(milliseconds: 500),
+      reverseDuration: const Duration(milliseconds: 500),
+    );
+
+    // function to reverse activity name animation controller
+    void reverseActivityNameAnimationController() {
+      activityNameAnimationController.reverse(
+        from: 1.0,
+      );
+    }
+
+    // function to forward activity name animation controller
+    void forwardActivityNameAnimationController() {
+      activityNameAnimationController.forward(
+        from: 0.0,
+      );
+    }
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
+        toolbarHeight: 8.h,
         title: Padding(
           padding: EdgeInsets.only(
             left: 2.w,
           ),
-          child: DText(
-            text: activity?.activityName.toString(),
-            fontSize: 16.sp,
-          ),
+          child: editActivityType == ActivityEditType.editActivityName
+              ? Center(
+                  child: SizedBox(
+                    height: 6.h,
+                    child: TextField(
+                      controller: activityNameController,
+                      maxLines: null,
+                      minLines: null,
+                      expands: true,
+                      decoration: InputDecoration(
+                        hintText: 'Activity Name',
+                        hintStyle: GoogleFonts.dosis(
+                          color: Theme.of(context).colorScheme.onBackground,
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 2.5.w,
+                          vertical: 1.h,
+                        ),
+                        suffix: IconButton(
+                          onPressed: () {},
+                          padding: EdgeInsets.zero,
+                          icon: LineIcon.saveAlt(
+                            size: 16.sp,
+                            color: Theme.of(context).colorScheme.onBackground,
+                          ),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color:
+                                  Theme.of(context).colorScheme.onBackground),
+                        ),
+                      ),
+                    ),
+                  ),
+                ).animate().fade(
+                    duration: const Duration(milliseconds: 500),
+                    delay: const Duration(milliseconds: 200),
+                    begin: 0,
+                    end: 1,
+                  )
+              : DText(
+                  text: activity?.activityName.toString(),
+                  fontSize: 16.sp,
+                ),
         ),
         elevation: 0,
         actions: [
@@ -104,195 +173,63 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
               right: 4.w,
             ),
             child: IconButton(
-              icon: LineIcon.editAlt(
-                size: 16.sp,
-                color: Theme.of(context).colorScheme.onBackground,
-              ),
+              icon: editActivityType == ActivityEditType.editActivityName
+                  ? LineIcon.timesCircle(
+                      size: 16.sp,
+                      color: Theme.of(context).colorScheme.onBackground,
+                    )
+                  : LineIcon.editAlt(
+                      size: 16.sp,
+                      color: Theme.of(context).colorScheme.onBackground,
+                    ),
               onPressed: () {
                 // set edit activity type to edit all
-                ref.read(toggleEditType).call();
+                editActivityType == ActivityEditType.editActivityName
+                    ? editActivityTypeController!
+                        .update((state) => state = ActivityEditType.none)
+                    : editActivityTypeController!.update(
+                        (state) => state = ActivityEditType.editActivityName);
+
+                // // reverse activity name animation controller
+                // editActivityType == ActivityEditType.editActivityName
+                //     ? forwardActivityNameAnimationController()
+                //     : reverseActivityNameAnimationController();
               },
             ),
           ),
         ],
+        bottom: TabBar(
+          controller: tabController,
+          tabs: tabs
+              .map((tab) => Tab(
+                    text: tab.tabName,
+                    icon: tab.tabIcon,
+                  ))
+              .toList(),
+        ),
         // toolbarHeight: 10.h,
       ),
       body: SafeArea(
-        child: SizedBox(
-          height: 100.h,
-          width: 100.w,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 4.w,
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ActivityDescriptionViewCard(
-                        title: 'Activity SEO Description',
-                        description: activity!.seoDescription.toString(),
-                        editType: editActivityType,
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) =>
-                                const ActivityDescriptionPopUp(),
-                          ).then(
-                            (value) {
-                              if (value != null) {
-                                // update description in firestore
-                                // ref.read(descriptionNotifierProvider.notifier).updateDescriptionInFirestore(
-                                //       activityId: activity!.activityId.toString(),
-                                //       description: value,
-                                //       field: 'description',
-                                //     );
-                              }
-                            },
-                          );
-                        },
-                      ),
-                      SizedBox(
-                        height: 4.h,
-                      ),
-                      DText(
-                        text: 'Activity Overview',
-                        fontSize: 16.sp,
-                      ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                      DText(
-                        text: activity?.overview.toString(),
-                        fontSize: 14.sp,
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 2.h,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 2.w,
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      DText(
-                        text: 'Activity Images',
-                        fontSize: 16.sp,
-                      ),
-                      SizedBox(
-                        height: 1.h,
-                      ),
-                      SizedBox(
-                        width: 100.w,
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxHeight: 80.h,
-                          ),
-                          child: ListView.separated(
-                            scrollDirection: Axis.vertical,
-                            itemCount:
-                                activity!.activityGallery!.length.toInt(),
-                            separatorBuilder: (context, index) {
-                              return SizedBox(
-                                height: 4.h,
-                              );
-                            },
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: EdgeInsets.only(
-                                  left: 2.w,
-                                  right: 2.w,
-                                ),
-                                child: ActivityImageCard(
-                                  image: activity!.activityGallery![index],
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 60.h,
-                  width: 100.w,
-                  color: Theme.of(context).colorScheme.onSecondaryContainer,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 2.w,
-                    vertical: 2.h,
-                  ),
-                  child: SizedBox(
-                    width: 100.w,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        DText(
-                          text: 'Packages available',
-                          fontSize: 16.sp,
-                          textAlign: TextAlign.center,
-                          textColor: Theme.of(context).colorScheme.background,
-                        ),
-                        const Spacer(),
-                        SizedBox(
-                          width: 100.w,
-                          height: 50.h,
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                              SizedBox(
-                                width: 2.w,
-                              ),
-                              ...activity!.packages!.map(
-                                (e) {
-                                  return Padding(
-                                    padding: EdgeInsets.only(
-                                      right: 2.w,
-                                    ),
-                                    child: PackageCard(
-                                      package: e,
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
-                            // children: activity!.packages!
-                            //     .map(
-                            //       (package) => PackageCard(
-                            //         package: package,
-                            //       ),
-                            //     )
-                            //     .toList(),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Center(
-                  child: ImagePickerWidget(
-                    activityId: activity!.activityId,
-                  ),
-                ),
-                Center(
-                  child: ActivityTags(
-                    tags: activity?.tags,
-                    activityId: activity!.activityId,
-                  ),
-                ),
-              ],
-            ),
+          child: TabBarView(
+        controller: tabController,
+        children: [
+          ActivityInfoPage(
+            activity: activity,
           ),
-        ),
-      ),
+          ActivityGalleryPage(
+            activityId: activity?.activityId,
+            gallery: activity?.activityGallery!,
+          ),
+          ActivityPackagesPage(
+            activityId: activity?.activityId,
+            packages: activity?.packages,
+          ),
+          ActivityTagsPage(
+            activityId: activity?.activityId,
+            tags: activity?.tags,
+          ),
+        ],
+      )),
     );
   }
 }
@@ -310,6 +247,8 @@ class _ActivityDetailsPageTablet extends HookConsumerWidget {
   final ActivityEditType? editActivityType;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final tabs = ref.watch(activityTabsListProvider);
+    final tabController = useTabController(initialLength: tabs.length);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(

@@ -101,8 +101,8 @@ class MyApp extends HookConsumerWidget {
           ),
           routes: [
             VGuard(
-                beforeEnter: (vRedirector) async =>
-                    await getRedirect(vRedirector),
+                // beforeEnter: (vRedirector) async =>
+                //     await getRedirect(vRedirector),
                 stackedRoutes: [
                   VWidget(
                     path: '/',
