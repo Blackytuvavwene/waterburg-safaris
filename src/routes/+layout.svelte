@@ -16,7 +16,7 @@
 
     let isPageLoaded = false;
 
-
+    let openWidget = false;
 
     export let data: LayoutServerData;
     // // console.log(data.about);
@@ -43,8 +43,8 @@
     
 </main>
 <!-- whatsapp chat widget -->
-<div class=" fixed bottom-0 right-0 -translate-x-2 -translate-y-2">
-    <div class=" w-full flex flex-col gpa-0 h-full rounded-xl mb-4">
+<div class=" fixed bottom-0 right-0 -translate-x-2 -translate-y-2 z-40">
+    <div class=" w-full flex flex-col gap-0 transition {openWidget ? "" : "hidden"} h-full rounded-xl mb-4">
         <div class=" bg-secondary-600 p-2 flex border-0 items-center gap-6 rounded-t-xl">
             <div class="bg-white rounded-full w-fit h-fit p-4">
                 <span class="text-lg text-primary-400 font-extrabold">
@@ -77,7 +77,7 @@
             
         </div>
     </div>
-    <button type="button" class="flex items-center gap-2 bg-primary rounded-xl p-4 text-onPrimary font-bold float-right">
+    <button on:click={() => openWidget = !openWidget} class="flex items-center gap-2 bg-primary rounded-xl p-4 text-onPrimary font-bold float-right">
         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-whatsapp" width="32" height="32" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
             <path stroke-width="2" stroke="#35a373" d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9"></path>

@@ -45,7 +45,7 @@ import PackageCard from '$lib/app-components/activities-components/PackageCard.s
         <ul class=" px-6 w-full h-fit">
             {#if packages}
             {#each packages as packageData,index}
-            <FadeTransition delay={300 + (index * 300)} x={ index % 2 == 0 ? 1000 : -1000}>
+            <FadeTransition delay={300 + (index * 300)} x={ index % 2 == 0 ? 30 : -30}>
                 <li class=" bg-secondary-100 p-6 my-4">
                     <FadeTransition delay={500 + (index * 500)}>
                         <h3 class="text-xl text-secondary-500 sm:font-medium font-semibold mb-6">

@@ -9,7 +9,7 @@
     export let duration = 3000;
     export let easing = quintOut;
     export let opacity = 0;
-    export let x = 1000;
+    export let x = 30;
     export let y = 0;
 
     let visible=false;
