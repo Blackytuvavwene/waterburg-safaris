@@ -23,3 +23,6 @@ export const load:PageServerLoad= async () => {
 // export const POST:Action=async ({request}) =>{
 //     const data = await request.formData();
 // }
+
+
+export const prerender = 'auto';

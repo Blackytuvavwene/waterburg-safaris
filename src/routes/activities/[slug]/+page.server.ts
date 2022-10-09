@@ -23,3 +23,6 @@ export const load:PageServerLoad= async ({params}) => {
     throw error(403,'failed to get data');
     
 };
+
+
+export const prerender = 'auto';
