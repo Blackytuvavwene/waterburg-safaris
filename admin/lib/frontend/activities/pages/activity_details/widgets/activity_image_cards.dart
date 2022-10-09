@@ -145,8 +145,10 @@ class AddImagesDialog extends HookConsumerWidget {
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Column(
-                  children: const [
-                    ImagePickerWidget(),
+                  children: [
+                    ImagePickerWidget(
+                      activityId: activityId!,
+                    ),
                   ],
                 ),
               ),
@@ -428,6 +430,7 @@ class ImageCard extends HookConsumerWidget {
   }) : super(key: key);
   final ImageHelperModel? image;
   final int? index;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final fileI = kIsWeb ? File(image!.path!) : null;
@@ -770,7 +773,7 @@ class ImageDetailsEditDialog extends HookConsumerWidget {
                               imageDescription: imageDescriptionController.text,
                               imageUrl: image.imageDetails!.imageUrl,
                             ),
-                            index: 0);
+                            index: index!);
                     context.vRouter.pop();
                   }
                 },

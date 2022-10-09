@@ -7,5 +7,5 @@
 
 
  <img src={logo} alt="Waterburg Safaris logo" 
- class="fixed top-[50%] bottom-[50%] -translate-y-[50%] bg-primary-100 animate-pulse
+ class="fixed top-[50%] bottom-[50%] -translate-y-[50%] bg-primary-600 animate-pulse
  w-full h-full"/>

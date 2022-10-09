@@ -149,6 +149,11 @@ class MyApp extends HookConsumerWidget {
                                           activityToEditActivityPageProvider),
                                     ),
                                   ),
+                                  VWidget(
+                                    path: '/package/edit/:activityId/:package',
+                                    name: 'editPackage',
+                                    widget: const PackageEditPage(),
+                                  ),
                                 ],
                               ),
                             ],

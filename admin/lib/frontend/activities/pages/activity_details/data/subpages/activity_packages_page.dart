@@ -70,6 +70,7 @@ class _MobileActivityPackagesPage extends HookConsumerWidget {
                   ),
                   child: PackageCard(
                     package: e,
+                    activityId: activityId,
                   ),
                 );
               },

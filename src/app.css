@@ -33,32 +33,41 @@
 @font-face {
     font-family: 'Dosis';
     src: url('/Dosis-VariableFont_wght.ttf') format('truetype');
+    font-display: swap;
 }
 
 @layer utilities {
     .font-thin {
         font-variation-settings: 'wght' 100;
+        font-display: swap;
     }
     .font-extralight {
         font-variation-settings: 'wght' 200;
+        font-display: swap;
     }
     .font-light {
         font-variation-settings: 'wght' 300;
+        font-display: swap;
     }
     .font-normal {
         font-variation-settings: 'wght' 400;
+        font-display: swap;
     }
     .font-medium {
         font-variation-settings: 'wght' 500;
+        font-display: swap;
     }
     .font-semibold {
         font-variation-settings: 'wght' 600;
+        font-display: swap;
     }
     .font-bold {
         font-variation-settings: 'wght' 700;
+        font-display: swap;
     }
     .font-extrabold {
         font-variation-settings: 'wght' 800;
+        font-display: swap;
     }
 }
 
@@ -66,6 +75,7 @@
     @font-face {
         font-family: 'Dosis';
         src: url('/Dosis-VariableFont_wght.ttf') format('truetype');
+        font-display: swap;
     }
 }
 
@@ -76,6 +86,7 @@
         line-height: 1.5;
         scrollbar-color: var(--on-background) var(--background);
         scrollbar-width: thin;
+        font-display: swap;
     }
 
     :root{
@@ -116,6 +127,7 @@ body{
     background-color: var(--background); 
     padding: 0;
     margin: 0;
+    font-display: swap;
     min-height:100vh;
 }
 

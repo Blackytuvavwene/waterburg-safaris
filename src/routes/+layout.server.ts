@@ -30,3 +30,5 @@ export const load:LayoutServerLoad= async () => {
     throw error(403,'failed to get data');
     
 };
+
+export const prerender = true;

@@ -67,9 +67,9 @@ import type { BookingFormModel } from "./booking.types";
     $:({activity,packageD}=bookingState);
 </script>
 
-<section class="lg:my-28  xl:px-72 w-full flex flex-col">
-    <h1 class=" text-start pb-10">Book your safari adventure activity now</h1>
-    <form action="" method="post" class="flex flex-col m-auto w-fit rounded-xl drop-shadow-xl bg-primary-50">
+<section class="lg:my-28 my-6 lg:px-32 sm:px-12  xl:px-72 w-full flex flex-col">
+    <h1 class=" text-start pb-10 px-6 sm:px-12 lg:px-32">Book your safari adventure activity now</h1>
+    <form action="" method="post" class="flex flex-col m-auto w-full rounded-xl drop-shadow-xl bg-primary-50">
         <div class=" rounded-t-xl p-6 w-full">
             <h2 class="text-base font-semibold lg:font-bold">Activity & Package selection</h2>
             <p>Choose activity and package that suits you</p>
@@ -117,55 +117,55 @@ import type { BookingFormModel } from "./booking.types";
             </fieldset>
         </div>
         <div class="flex flex-col md:flex-row w-full ">
-            <div class="flex flex-col  p-8 w-full">
+            <div class="flex flex-col  p-8 w-full ">
                 <h3 class="text-base font-semibold lg:font-bold">Card details</h3>
                 <div class="flex flex-col gap-10 w-full">
                     <fieldset class="flex flex-col gap-6">
                         <div class="flex flex-col gap-1">
                             <label for="ccHolderName">Name on card</label>
-                            <input type="text" id="ccHolderName" name="ccHolderName" bind:value={ccHolderName}>
+                            <input type="text" id="ccHolderName" name="ccHolderName" class="sm:w-[20vw] lg:w-[18vw]" bind:value={ccHolderName}>
                         </div>
                         <div class="flex flex-col gap-1">
                             <label for="ccNumber">Credit card number</label>
-                            <input type="text" id="ccNumber" name="ccNumber" bind:value={ccNumber}>
+                            <input type="text" id="ccNumber" name="ccNumber" class="sm:w-[20vw] lg:w-[18vw]" bind:value={ccNumber}>
                         </div>
                         <div class="flex flex-col gap-1">
                             <label for="ccExpiry">Expiry</label>
-                            <input type="month" id="ccExpiry" name="ccExpiry" bind:value={ccExpiry}>
+                            <input type="month" id="ccExpiry" name="ccExpiry" class="sm:w-[20vw] lg:w-[18vw]" bind:value={ccExpiry}>
                         </div>
                         <div class="flex flex-col gap-1">
                             <label for="cvv">CVV</label>
-                            <input type="text" id="cvv" name="cvv" bind:value={cvv}>
+                            <input type="text" id="cvv" name="cvv" class="sm:w-[20vw] lg:w-[18vw]" bind:value={cvv}>
                         </div>
                     </fieldset>
                 </div>
             </div>
-            <div class="flex flex-col  p-8 w-full">
+            <div class="flex flex-col  p-8 w-full ">
                 <h4 class="text-base font-semibold">Billing details</h4>
                 <p>Enter your billing address details</p>
-                <fieldset class="flex flex-col gap-2">
-                    <div class="flex flex-col gap-1">
+                <fieldset class="flex flex-col gap-2 w-full">
+                    <div class="flex flex-col gap-1 ">
                         <label for="customerNames">Full names</label>
-                        <input type="text" id="customerNames" name="customerNames" bind:value={fullName}>
+                        <input type="text" id="customerNames" class="sm:w-[20vw] lg:w-[18vw]" name="customerNames" bind:value={fullName}>
                     </div>
                     <div class="flex flex-col gap-1">
                         <label for="customerEmail">Email</label>
-                        <input type="email" name="customerEmail" id="customerEmail" bind:value={email}>
+                        <input type="email" name="customerEmail" class="sm:w-[20vw] lg:w-[18vw]" id="customerEmail" bind:value={email}>
                     </div>
                 </fieldset>
             </div>
-            <div class="flex flex-col bg-primary-100 p-8 w-full">
+            <div class="flex flex-col bg-primary-100 p-8 w-full ">
                 <h4 class="text-base font-semibold">Bookings dates</h4>
                 <p>Enter your depature and arrival dates</p>
                 <fieldset class="flex flex-col gap-2 w-full">
                     <div class="flex flex-col gap-1 w-full">
                         <label for="departureDate">Departure date</label>
-                        <input type="datetime-local" min={Date.now()} id="departureDate" name="departureDate" 
+                        <input type="datetime-local" min={Date.now()} class="sm:w-[20vw] lg:w-[18vw]" id="departureDate" name="departureDate" 
                         on:click={()=>selectedDepartureDate=true} bind:value={departureDate}>
                     </div>
                     <div class="flex flex-col gap-1 w-full">
                         <label for="arrivalDate">Arrival date</label>
-                        <input type="datetime-local" min={Date.now()} name="arrivalDate" id="arrivalDate" bind:value={arrivalDate}
+                        <input type="datetime-local" min={Date.now()} class="sm:w-[20vw] lg:w-[18vw]" name="arrivalDate" id="arrivalDate" bind:value={arrivalDate}
                         on:click={()=>selectedArrivalDate=true}>
                     </div>
                 </fieldset>
@@ -185,7 +185,7 @@ import type { BookingFormModel } from "./booking.types";
                 
             </div>
         </div>
-        <div class="sticky bottom-0  p-2 flex flex-row items-center justify-between bg-primary">
+        <div class="sticky bottom-0 w-full p-2 flex flex-row items-center justify-between bg-primary">
             <p class=" text-base font-semibold text-onPrimary">$ {selectedPackage?.price}</p>
             <button type="button" value="Proceed to checkout" 
             on:click={()=>{

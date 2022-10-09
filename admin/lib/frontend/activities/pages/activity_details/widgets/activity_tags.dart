@@ -259,27 +259,32 @@ class _MobileActivityTags extends HookConsumerWidget {
                       ],
                     )
                   : const SizedBox(),
-              for (var tag in tags!)
-                Container(
-                  margin: const EdgeInsets.only(right: 10),
-                  child: Chip(
-                    label: DText(
-                      text: tag,
+
+              Wrap(
+                children: [
+                  for (var tag in tags!)
+                    Container(
+                      margin: const EdgeInsets.only(right: 10),
+                      child: Chip(
+                        label: DText(
+                          text: tag,
+                        ),
+                        deleteIcon: LineIcon.minus(
+                          color: Colors.red,
+                        ),
+                        onDeleted: () async {
+                          // tags?.remove(tag);
+                          print(tags);
+                          await tagsStateController.removeTagFromFirestore(
+                            tag: tag,
+                            activityId: activityId!,
+                            query: 'tags',
+                          );
+                        },
+                      ),
                     ),
-                    deleteIcon: LineIcon.minus(
-                      color: Colors.red,
-                    ),
-                    onDeleted: () async {
-                      // tags?.remove(tag);
-                      print(tags);
-                      await tagsStateController.removeTagFromFirestore(
-                        tag: tag,
-                        activityId: activityId!,
-                        query: 'tags',
-                      );
-                    },
-                  ),
-                ),
+                ],
+              )
             ],
           ),
         ],

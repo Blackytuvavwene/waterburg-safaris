@@ -10,7 +10,7 @@ import type { CompanyStaff } from "./about.types";
 </svelte:head>
 
 <div class="flex-col flex w-[100%]  my-6">
-    <h1 class="my-2 py-4 lg:px-32 text-2xl font-bold">Below are the awesome staff at Waterburg Safaris</h1>
+    <h1 class="my-2 py-4 sm:px-12 lg:px-32 text-2xl font-bold">Below are the awesome staff at Waterburg Safaris</h1>
     <div class="flex flex-col sm:flex-wrap sm:flex-row justify-evenly items-center">
         {#each companyStaffData as staff}
         <div class="flex flex-col items-center justify-center w-[100%] sm:w-80 mb-4 bg-tertiaryContainer p-4">

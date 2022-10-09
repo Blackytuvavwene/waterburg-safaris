@@ -17,7 +17,7 @@ import { setCurrentSelectedPersist } from './activity.stores';
    
 </script>
 
-<div class="w-full shadow bg-secondary-50 h-[70vh] flex flex-col justify-between items-center rounded-xl">
+<div class="w-full shadow bg-secondary-50 h-[65vh] sm:h-[50vh] flex flex-col justify-between items-center rounded-xl">
     <div class="w-full h-32 p-4 flex flex-col justify-evenly items-center">
         <h1 class="text-lg  font-bold text-secondary-400">
             <strong >

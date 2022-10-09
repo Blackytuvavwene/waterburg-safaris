@@ -38,16 +38,19 @@ $: ({companyStaff,  companyGallery,companyDetails}=data.about as AboutCompanyRes
         </div>
         
         <div class="absolute  top-[50%] bottom-[50%] -translate-y-[50%]  -z-0 w-96 md:w-96">
-            <FadeTransition>
-                <img src={logo} class="w-96 md:w-96 h-52 lg:h-80" alt="Waterburg Safaris logo">
-            </FadeTransition>
+            <div class="w-full h-full items-center justify-center flex-col flex">
+                <FadeTransition>
+                    <img src={logo} class="w-96 md:w-96 h-52 lg:h-80" alt="Waterburg Safaris logo">
+                </FadeTransition>
+            </div>
+            
         </div>
     </div> 
     {/if}
 </div>
 
 <div class=" flex-1 flex-col justify-center items-center   h-full w-auto">
-    <h1 class=" text-primary text-3xl px-6 lg:px-32 lg:text-4xl font-bold my-2">{companyDetails?.companyName}</h1>
+    <h1 class=" text-primary text-3xl sm:px-12 px-6 lg:px-32 lg:text-4xl font-bold my-2">{companyDetails?.companyName}</h1>
     {#if companyDetails?.overview}
     <Overview overviewData={companyDetails?.overview}/>
     {/if}
@@ -63,36 +66,3 @@ $: ({companyStaff,  companyGallery,companyDetails}=data.about as AboutCompanyRes
 </div>
 
 
-<style>
-.swiper {
-  width: 100%;
-  height: 100%;
-}
-
-.swiper-slide {
-  text-align: center;
-  font-size: 18px;
-  background: #fff;
-
-  /* Center slide text vertically */
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  -webkit-justify-content: center;
-  justify-content: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  -webkit-align-items: center;
-  align-items: center;
-}
-
-.swiper-slide img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-</style>

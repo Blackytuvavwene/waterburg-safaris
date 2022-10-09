@@ -1,4 +1,6 @@
 <script lang="ts">
+	import SliderImage from '$lib/app-components/sliders/SliderImage.svelte';
+	import FadeTransition from '$lib/animations/FadeTransition.svelte';
 import type { ActivitiesResponse } from '$lib/app-components/activities-components/activities.types';
 import SlugActivityImageSlider from '$lib/app-components/activities-components/SlugActivityImageSlider.svelte';
 import PackageCard from '$lib/app-components/activities-components/PackageCard.svelte';
@@ -16,7 +18,7 @@ import PackageCard from '$lib/app-components/activities-components/PackageCard.s
 </svelte:head>
 
 <div class="w-full h-full flex flex-col pt-6">
-    <section class="p-6 lg:px-36">
+    <section class="p-6 lg:px-36 sm:px-12">
         <h1><strong class="text-3xl lg:text-4xl lg:font-bold text-primary">{activityName}</strong></h1>
         <p class="my-6 font-semibold lg:font-medium lg:text-lg">{overview}</p>
         <p class="my-6 font-semibold lg:font-medium lg:text-lg">{seoDescription}</p>
@@ -38,9 +40,50 @@ import PackageCard from '$lib/app-components/activities-components/PackageCard.s
         {/if}
         </div>
     </div>
-    <div class=" flex flex-col justify-center lg:w-full h-full items-cente">
+    <section class="w-full px-6 sm:px-12 lg:px-32 h-fit mb-10">
+        <h2 class=" font-bold text-2xl sm:font-semibold mb-6">{activityName}'s detailed package info</h2>
+        <ul class=" px-6 w-full h-fit">
+            {#if packages}
+            {#each packages as packageData,index}
+            <FadeTransition delay={300 + (index * 300)} x={ index % 2 == 0 ? 1000 : -1000}>
+                <li class=" bg-secondary-100 p-6 my-4">
+                    <FadeTransition delay={500 + (index * 500)}>
+                        <h3 class="text-xl text-secondary-500 sm:font-medium font-semibold mb-6">
+                            {packageData.packageName}
+                        </h3>
+                    </FadeTransition>
+                    <FadeTransition delay={600 + (index * 600)} >
+                        <p>{packageData.description}</p>
+                    </FadeTransition>
+                    {#if packageData.packageOffers}
+                    <h4 class="mt-6 mb-2 text-lg font-medium px-10">{packageData.packageName} offers:</h4>
+                    <FadeTransition delay={700 + (index * 700)}>
+                        <ul class="list-disc px-16 list-inside">
+                            {#each packageData.packageOffers as offer}
+                            <li class="">{offer}</li>
+                            {/each}
+                        </ul>
+                    </FadeTransition>
+                    {/if}
+                </li>
+            </FadeTransition>
+                
+            {/each}
+        {/if}
+           
+        </ul>
+    </section>
+    <div class=" flex flex-col justify-center w-full h-full ">
         {#if activityGallery}
-            <SlugActivityImageSlider images={activityGallery}/>
+            <SliderImage
+                gallery={activityGallery} 
+                slideControls={true} 
+                showIndicators={true} 
+                opacity="" 
+                height="h-[40vh]"
+                lgHeight="h-[50vh]"
+                smHeight="h-[50vh]"
+            />
         {/if}
     </div>
 </div>

@@ -39,18 +39,16 @@ persistHomeDataStore.subscribe((homeData=>{
 </svelte:head>
 
 
-<!-- <Intro homeModel={data.homeData}/>
+<Intro homeModel={data.homeData}/>
 <AboutUs/>
 {#if homeActivities}
 <Activities {homeActivities} />
 {:else}
 <p>No data {aboutCompany?.companyId}</p>
-{/if} -->
+{/if}
 
 
-<div class=" w-full h-screen ">
-<h1 class=" w-full text-center font-bold text-2xl font-primary m-auto">The website is undergoing maintainance. It will be updated soon</h1>
-</div>
+
 
 
 

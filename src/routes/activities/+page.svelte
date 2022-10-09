@@ -19,11 +19,9 @@ let activities= data.activities ;
     <meta name="description" content='Waterburg Safaris offers a variety of safari activities taking you on an adventure that leaves wanting more'>
 </svelte:head>
 
-{#if $navigating}
-    <p>Loading........</p>
-{/if}
 
-<section class="h-full">
+
+<section class="h-full w-full">
     <h1 class="px-6 pt-6 text-2xl font-bold lg:px-10">Waterburg Safaris Activities</h1>
     <p class="px-6 lg:px-10">Our company offers a variety of safari adventure activities that will leave yearning for more</p>
     <div class="flex flex-wrap justify-center py-10">

@@ -4,6 +4,14 @@
     import { quintOut } from 'svelte/easing';
 
 
+    // controll animation
+    export let delay = 1000;
+    export let duration = 3000;
+    export let easing = quintOut;
+    export let opacity = 0;
+    export let x = 1000;
+    export let y = 0;
+
     let visible=false;
 
     function setVisible(entryValue:boolean){
@@ -17,7 +25,7 @@
     onMount(()=>{
         const observer=new IntersectionObserver(entries => {
       entries.forEach(entry =>{
-        if(entry.isIntersecting){
+        if(entry.isIntersecting && entry.boundingClientRect.y > 20){
         setVisible(entry.isIntersecting);
       };
       })
@@ -35,10 +43,10 @@
      $:currentView;
 </script>
 
-<div bind:this={currentView} class=" w-full flex flex-col justify-center items-center h-full">
+<div bind:this={currentView} >
     {#if visible}
-    <div id="current" class="flex flex-col justify-center items-center w-full h-full"
-     transition:fly="{{ duration: 3000,delay:1000, x: 1000, y: 0, opacity: 0, easing: quintOut}}" >
+    <div 
+     transition:fly="{{ duration: duration,delay:delay, x: x, y: y, opacity: opacity, easing: easing}}" >
         <slot ></slot>
     </div>
     {/if}

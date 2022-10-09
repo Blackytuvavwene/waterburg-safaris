@@ -15,14 +15,15 @@ import type { FlyTransistion } from './transitions.helpers';
 
     onMount(()=>{
         const observer=new IntersectionObserver(entries => {
-      entries.forEach(entry =>{
-        if(entry.isIntersecting){
-        setVisible(entry.isIntersecting);
-      };
-      })
-      
-      
-    });
+
+                entries.forEach(entry =>{
+
+                    if(entry.isIntersecting){
+                            setVisible(entry.isIntersecting);
+                        };
+                        
+                })
+         });
 
 
         observer.observe(currentView);
