@@ -39,7 +39,7 @@ dependencies:
   flutter_modular: ^5.0.3
   flutter_riverpod: ^1.0.4
   flutter_svg: ^1.1.4
-  go_router: ^4.3.0
+  go_router: ^5.0.5
   google_fonts: ^3.0.1
   hooks_riverpod: ^1.0.4
   json_annotation: ^4.6.0

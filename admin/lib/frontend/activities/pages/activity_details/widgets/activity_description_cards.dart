@@ -3,11 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:layout/layout.dart';
 import 'package:sizer/sizer.dart';
-import 'package:vrouter/vrouter.dart';
+
+// widget did update hook stateless widget
 
 // description notifier class
 class DescriptionNotifier extends StateNotifier<AsyncValue<String>> {
@@ -126,7 +128,8 @@ class ActivityDescriptionPopUp extends HookConsumerWidget {
       actions: [
         TextButton(
           onPressed: () {
-            context.vRouter.pop();
+            // close dialog
+            GoRouter.of(context).navigator?.pop();
           },
           child: DText(
             text: 'Cancel',
@@ -144,7 +147,7 @@ class ActivityDescriptionPopUp extends HookConsumerWidget {
                     description: descriptionController.text,
                     field: field!,
                   );
-              context.vRouter.pop();
+              context.pop();
             }
           },
           child: DText(

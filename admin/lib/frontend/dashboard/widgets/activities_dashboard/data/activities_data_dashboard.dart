@@ -1,9 +1,9 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:sizer/sizer.dart';
-import 'package:vrouter/vrouter.dart';
 
 // dashboard activities data
 class DashBoardActivitiesData extends HookConsumerWidget {
@@ -65,7 +65,7 @@ class _MobileDashBoardActivitiesData extends HookConsumerWidget {
                           .read(routeIndexProvider.notifier)
                           .setIndexFromPath('activities');
 
-                      context.vRouter.toNamed('activities');
+                      context.pushNamed('activities');
                     },
                     // style: TextButton.styleFrom(),
                     icon: LineIcon.chevronCircleRight(
@@ -135,7 +135,7 @@ class _TabletDashBoardActivitiesData extends HookConsumerWidget {
                         .read(routeIndexProvider.notifier)
                         .setIndexFromPath('activities');
 
-                    context.vRouter.toNamed('activities');
+                    context.pushNamed('activities');
                   },
                   // style: TextButton.styleFrom(),
                   icon: LineIcon.chevronCircleRight(
@@ -220,7 +220,7 @@ class _DesktopDashBoardActivitiesData extends HookConsumerWidget {
                           .read(routeIndexProvider.notifier)
                           .setIndexFromPath('activities');
 
-                      context.vRouter.toNamed('activities');
+                      context.pushNamed('activities');
                     },
                     // style: TextButton.styleFrom(),
                     icon: LineIcon.chevronCircleRight(

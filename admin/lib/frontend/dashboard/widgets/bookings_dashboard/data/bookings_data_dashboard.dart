@@ -1,9 +1,9 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:sizer/sizer.dart';
-import 'package:vrouter/vrouter.dart';
 
 // dashboard bookings data
 class DashBoardBookingsData extends HookConsumerWidget {
@@ -61,7 +61,7 @@ class _MobileDashBoardBookingsData extends HookConsumerWidget {
                           .read(routeIndexProvider.notifier)
                           .setIndexFromPath('bookings');
 
-                      context.vRouter.toNamed('bookings');
+                      context.pushNamed('bookings');
                     },
                     // style: TextButton.styleFrom(),
                     icon: LineIcon.chevronCircleRight(
@@ -129,7 +129,7 @@ class _TabletDashBoardBookingsData extends HookConsumerWidget {
                         .read(routeIndexProvider.notifier)
                         .setIndexFromPath('bookings');
 
-                    context.vRouter.toNamed('bookings');
+                    context.pushNamed('bookings');
                   },
                   // style: TextButton.styleFrom(),
                   icon: LineIcon.chevronCircleRight(
@@ -200,7 +200,7 @@ class _DesktopDashBoardBookingsData extends HookConsumerWidget {
                         .read(routeIndexProvider.notifier)
                         .setIndexFromPath('bookings');
 
-                    context.vRouter.toNamed('bookings');
+                    context.pushNamed('bookings');
                   },
                   // style: TextButton.styleFrom(),
                   icon: LineIcon.chevronCircleRight(
@@ -325,7 +325,7 @@ class _BookingDataCardMobile extends HookConsumerWidget {
                     .read(routeIndexProvider.notifier)
                     .setIndexFromPath('bookings');
 
-                context.vRouter.toNamed('bookings');
+                context.pushNamed('bookings');
               },
             ),
           )
@@ -392,7 +392,7 @@ class _BookingDataCardTablet extends HookConsumerWidget {
                   .read(routeIndexProvider.notifier)
                   .setIndexFromPath('bookings');
 
-              context.vRouter.toNamed('bookings');
+              context.pushNamed('bookings');
             },
           )
         ],
@@ -458,7 +458,7 @@ class _BookingDataCardDesktop extends HookConsumerWidget {
                   .read(routeIndexProvider.notifier)
                   .setIndexFromPath('bookings');
 
-              context.vRouter.toNamed('bookings');
+              context.pushNamed('bookings');
             },
           )
         ],

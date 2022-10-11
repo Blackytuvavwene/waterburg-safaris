@@ -1,8 +1,8 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sizer/sizer.dart';
-import 'package:vrouter/vrouter.dart';
 
 // activity preiview container hook widget with applayout
 class ActivityPreviewContainer extends HookConsumerWidget {
@@ -79,9 +79,9 @@ class _ActivityPreviewContainerMobile extends HookConsumerWidget {
                         text: 'View details',
                         textColor: Theme.of(context).colorScheme.onPrimary,
                         onPressed: () {
-                          context.vRouter.toNamed(
+                          context.pushNamed(
                             'activityDetails',
-                            pathParameters: {
+                            params: {
                               'activityId': activity!.activityId.toString(),
                             },
                           );
@@ -213,9 +213,9 @@ class _ActivityPreviewContainerTablet extends HookConsumerWidget {
                         fontWeight: FontWeight.w600,
                         fontSize: 8.sp,
                         onPressed: () {
-                          context.vRouter.toNamed(
+                          context.pushNamed(
                             'activityDetails',
-                            pathParameters: {
+                            params: {
                               'activityId': activity!.activityId.toString(),
                             },
                           );
@@ -345,9 +345,9 @@ class _ActivityPreviewContainerDesktop extends HookConsumerWidget {
                         text: 'View details',
                         textColor: Theme.of(context).colorScheme.onPrimary,
                         onPressed: () {
-                          context.vRouter.toNamed(
+                          context.pushNamed(
                             'activityDetails',
-                            pathParameters: {
+                            params: {
                               'activityId': activity!.activityId.toString(),
                             },
                           );

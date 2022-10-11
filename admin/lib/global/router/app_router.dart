@@ -1,131 +1,230 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:admin/lib.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vrouter/vrouter.dart';
+import 'package:go_router/go_router.dart';
 
-final appRouterProvider = Provider<List<VRouteElement>>(
+// navigator keys
+final GlobalKey<NavigatorState> _rootNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'root');
+final GlobalKey<NavigatorState> _shellNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'shell');
+
+class AppOpen {
+  final AppAuthStatus? status;
+  final String? user;
+
+  AppOpen({
+    required this.status,
+    required this.user,
+  });
+
+  @override
+  String toString() => 'AppOpen(status: $status, user: $user)';
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'status': status,
+      'user': user,
+    };
+  }
+
+  factory AppOpen.fromMap(Map<String, dynamic> map) {
+    return AppOpen(
+      status: map['status'] as AppAuthStatus,
+      user: map['user'] as String,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory AppOpen.fromJson(String source) =>
+      AppOpen.fromMap(json.decode(source) as Map<String, dynamic>);
+}
+
+// go router
+final goroutingProvider = Provider<GoRouter>(
   (ref) {
-    return [
-      VWidget(
-        path: '/',
-        name: 'welcome',
-        widget: const WelcomePage(),
-        // redirect: (state) {
-        //   // if first open app navigate to welcome screen
-        //   final isFirstOpen = firstOpen.value;
+    return ref.watch(firstLoadProvider).when(
+          data: (dataLoad) {
+            return ref.watch(currentUserProvider).when(
+              data: (dataUser) {
+                return GoRouter(
+                  debugLogDiagnostics: true,
+                  redirectLimit: 50,
+                  redirect: (context, state) {
+                    final welcomeLoc = state.location == '/';
 
-        //   final loggingIn = state.subloc == '/login';
+                    if (dataLoad == AppAuthStatus.firstLoad &&
+                        dataUser == null &&
+                        welcomeLoc) {
+                      return '/';
+                    } else if (dataLoad == AppAuthStatus.loaded &&
+                        dataUser == null &&
+                        welcomeLoc) {
+                      return '/login';
+                    } else if (dataLoad == AppAuthStatus.loaded &&
+                        dataUser != null &&
+                        welcomeLoc) {
+                      return '/home';
+                    } else {
+                      return null;
+                    }
+                  },
+                  routes: <GoRoute>[
+                    GoRoute(
+                      path: '/',
+                      name: 'welcome',
+                      builder: (context, state) => const WelcomePage(),
+                      // redirect: (context, state) {
+                      //   print('hello welcome ${state.location}');
+                      //   final welcomeLoc = state.location == '/';
 
-        //   if (isFirstOpen == AppAuthStatus.firstLoad &&
-        //       user.value?.uid == null) {
-        //     print('hello');
-        //     return '/';
-        //   }
-
-        //   if (isFirstOpen == AppAuthStatus.loaded &&
-        //       user.value?.uid == null) {
-        //     print('login');
-        //     return '/login';
-        //   }
-
-        //   if (isFirstOpen == AppAuthStatus.loaded &&
-        //       user.value?.uid != null &&
-        //       loggingIn) {
-        //     print('home');
-        //     return '/home';
-        //   }
-
-        //   return null;
-        // },
-        stackedRoutes: [
-          VWidget(
-            path: 'login',
-            name: 'login',
-            widget: const LoginPage(),
-          ),
-          VWidget(
-            path: 'signup',
-            name: 'signup',
-            widget: const SignUpPage(),
-          ),
-          VNester(
-            path: '/home',
-            name: 'home',
-            widgetBuilder: (child) => HomePage(
-              child: child,
-            ),
-            nestedRoutes: [
-              VWidget(
-                path: null,
-                name: 'dashboard',
-                widget: const DashboardPage(),
-              ),
-              VWidget(
-                path: '/activities',
-                name: 'activities',
-                widget: const ActivitiesPage(),
-                stackedRoutes: [
-                  VWidget(
-                    path: ':activityId',
-                    name: 'activityDetails',
-                    widget: const ActivityPage(),
-                    stackedRoutes: [
-                      VWidget(
-                        path: '/edit',
-                        name: 'editActivity',
-                        widget: EditActivityPage(
-                          activity:
-                              ref.watch(activityToEditActivityPageProvider),
+                      //   if (data.status == AppAuthStatus.loaded &&
+                      //       data.user != null &&
+                      //       welcomeLoc) {
+                      //     print('home');
+                      //     return '/home';
+                      //   } else if (data.status == AppAuthStatus.loaded &&
+                      //       data.user == null &&
+                      //       welcomeLoc) {
+                      //     print('login');
+                      //     return '/login';
+                      //   } else {
+                      //     return null;
+                      //   }
+                      // },
+                      routes: <RouteBase>[
+                        GoRoute(
+                          path: 'login',
+                          name: 'login',
+                          builder: (context, state) => LoginPage(
+                            key: state.pageKey,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              VWidget(
-                path: '/bookings',
-                name: 'bookings',
-                widget: const BookingsPage(),
-              ),
-              VWidget(
-                path: '/profile',
-                name: 'profile',
-                widget: const ProfilePage(),
+                        GoRoute(
+                          path: 'signup',
+                          name: 'signup',
+                          builder: (context, state) => SignUpPage(
+                            key: state.pageKey,
+                          ),
+                        ),
+                        ShellRoute(
+                          builder: (context, state, child) => HomePage(
+                            key: state.pageKey,
+                            child: child,
+                          ),
+                          routes: <GoRoute>[
+                            GoRoute(
+                              path: 'home',
+                              name: 'dashboard',
+                              builder: (context, state) => DashboardPage(
+                                key: state.pageKey,
+                              ),
+                            ),
+                            GoRoute(
+                              path: 'activities',
+                              name: 'activities',
+                              builder: (context, state) => ActivitiesPage(
+                                key: state.pageKey,
+                              ),
+                              routes: [
+                                GoRoute(
+                                  path: ':activityId',
+                                  name: 'activityDetails',
+                                  builder: (context, state) {
+                                    print(
+                                        'activityId: ${state.params['activityId']}');
+                                    return ActivityPage(
+                                      activityId:
+                                          state.params['activityId'].toString(),
+                                      key: state.pageKey,
+                                    );
+                                  },
+                                  routes: [
+                                    GoRoute(
+                                      path: 'edit',
+                                      name: 'editActivity',
+                                      builder: (context, state) =>
+                                          EditActivityPage(
+                                        key: state.pageKey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            GoRoute(
+                              path: 'bookings',
+                              name: 'bookings',
+                              builder: (context, state) => BookingsPage(
+                                key: state.pageKey,
+                              ),
+                            ),
+                            GoRoute(
+                              path: 'profile',
+                              name: 'profile',
+                              builder: (context, state) => ProfilePage(
+                                key: state.pageKey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              },
+              loading: () {
+                return GoRouter(
+                  routes: [
+                    GoRoute(
+                      path: '/',
+                      builder: (context, state) {
+                        return const SplashScreen();
+                      },
+                    ),
+                  ],
+                );
+              },
+              error: (error, stackTrace) {
+                return GoRouter(
+                  routes: [
+                    GoRoute(
+                      path: '/',
+                      builder: (context, state) {
+                        return const SplashScreen();
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+          loading: () => GoRouter(
+            routes: [
+              GoRoute(
+                path: '/',
+                builder: (context, state) {
+                  return const SplashScreen();
+                },
               ),
             ],
           ),
-        ],
-      ),
-      VWidget(
-        path: '/404',
-        widget: const NotFoundPage(),
-      ),
-      VRouteRedirector(
-        path: r':_(.+)',
-        redirectTo: '/404',
-      ),
-    ];
+          error: (error, stackTrace) {
+            return GoRouter(
+              routes: [
+                GoRoute(
+                  path: '/',
+                  builder: (context, state) {
+                    return const SplashScreen();
+                  },
+                ),
+              ],
+            );
+          },
+        );
   },
 );
-
-// get params path
-// String? path = state.params['id'];
-// //set initial index
-// int pageIndex = 0;
-// // set initial page
-// Widget initialPage =
-//     ref.read(nestedRoutesProvider).first.widget!;
-
-// if (path != null) {
-//   // set initial index
-//   pageIndex = ref
-//       .read(nestedRoutesProvider)
-//       .indexWhere((element) => element.path == path);
-
-//   // set initial page
-//   initialPage = ref
-//       .read(nestedRoutesProvider)
-//       .firstWhere((element) => element.path == path)
-//       .widget!;
-// }
-
-

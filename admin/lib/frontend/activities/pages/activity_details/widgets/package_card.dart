@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:layout/layout.dart';
@@ -72,9 +73,9 @@ class KeywordsControllerNotifier extends StateNotifier<List<String>> {
 // initial keywords
 final intialKeywordsProvider =
     Provider.family<List<String>, BuildContext>((ref, context) {
-  final package = Package.fromJson(
-      jsonDecode(context.vRouter.pathParameters['package']!)
-          as Map<String, dynamic>);
+  //TODO: get keywords from path
+  final package =
+      Package.fromJson(jsonDecode('package') as Map<String, dynamic>);
   final List<String> keywords = package.keywords!;
   return keywords;
 });
@@ -130,11 +131,10 @@ class PackageCard extends HookConsumerWidget {
                         IconButton(
                             onPressed: () async {
                               // navigate to edit package page
-                              context.vRouter.toNamed('editPackage',
-                                  pathParameters: {
-                                    'activityId': activityId!,
-                                    'package': jsonEncode(package?.toJson())
-                                  });
+                              context.pushNamed('editPackage', params: {
+                                'activityId': activityId!,
+                                'package': jsonEncode(package?.toJson())
+                              });
                             },
                             icon: LineIcon.editAlt()),
                       ],
@@ -351,7 +351,7 @@ class _MobilePackageEditPage extends HookConsumerWidget {
         elevation: 0,
         leading: IconButton(
           onPressed: () {
-            context.vRouter.pop();
+            context.pop();
           },
           icon: LineIcon.chevronCircleLeft(),
         ),

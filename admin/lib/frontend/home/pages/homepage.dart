@@ -1,8 +1,8 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:vrouter/vrouter.dart';
 
 class HomePage extends HookConsumerWidget {
   const HomePage({Key? key, this.child}) : super(key: key);
@@ -17,7 +17,7 @@ class HomePage extends HookConsumerWidget {
       ref.read(routeIndexProvider.notifier).setIndex(index);
 
       final route = ref.read(nestedRoutesProvider)[index];
-      context.vRouter.toNamed(route.name.toString());
+      context.pushNamed(route.name.toString());
     }
 
     //list of pages

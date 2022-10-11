@@ -1,6 +1,7 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:line_icons/line_icon.dart';
 import 'package:sizer/sizer.dart';
 
 class DashboardPage extends HookConsumerWidget {
@@ -105,6 +106,13 @@ class _MobileDashboardPage extends HookConsumerWidget {
         title: const DText(
           text: '',
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                ref.read(authProvider).logout();
+              },
+              icon: LineIcon.doorOpen())
+        ],
       ),
       body: SafeArea(
           child: SingleChildScrollView(

@@ -5,7 +5,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sizer/sizer.dart';
-import 'package:vrouter/vrouter.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -21,7 +20,7 @@ class LoginPage extends HookConsumerWidget {
         EasyLoading.showError(state.error.toString());
       } else if (state is AsyncData) {
         EasyLoading.showSuccess('Successfully logged in!');
-        context.vRouter.toNamed('home');
+        // context.goNamed('home');
       }
     });
 

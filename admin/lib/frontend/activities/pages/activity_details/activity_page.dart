@@ -1,18 +1,20 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:vrouter/vrouter.dart';
 
 class ActivityPage extends HookConsumerWidget {
   const ActivityPage({
     Key? key,
+    required this.activityId,
   }) : super(key: key);
+  final String activityId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    print('ActivityPage: $activityId');
     return ref
         .watch(
       activityDataStreamProvider(
-        context.vRouter.pathParameters['activityId'].toString(),
+        activityId.toString(),
       ),
     )
         .when(

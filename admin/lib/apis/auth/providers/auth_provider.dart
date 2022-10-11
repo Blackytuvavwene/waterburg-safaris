@@ -58,7 +58,8 @@ final appStatusProvider =
 });
 
 final firstLoadProvider = FutureProvider<AppAuthStatus>((ref) async {
-  return await ref.read(appStatusProvider.notifier).getOpen();
+  final status = await ref.read(appStatusProvider.notifier).getOpen();
+  return status;
 });
 
 final loggedIn = FutureProvider.autoDispose<AppAuthStatus>(
@@ -66,5 +67,14 @@ final loggedIn = FutureProvider.autoDispose<AppAuthStatus>(
 );
 
 final currentUserProvider = StreamProvider<User?>((ref) {
-  return ref.watch(authProvider).isSignedIn();
+  final user = ref.watch(authProvider).isSignedIn();
+  return user;
+});
+
+final strUserState = StateProvider<User?>((ref) {
+  return ref.watch(currentUserProvider).asData?.value;
+});
+
+final openProvider = StateProvider<AppAuthStatus?>((ref) {
+  return ref.watch(firstLoadProvider).asData?.value;
 });

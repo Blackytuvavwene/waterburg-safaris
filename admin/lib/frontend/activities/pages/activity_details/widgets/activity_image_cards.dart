@@ -8,13 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:layout/layout.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:sizer/sizer.dart';
-import 'package:vrouter/vrouter.dart';
 
 // final imaFileProvider = Provider((ref)=>(XFile im) {
 //  ImageFile file;
@@ -774,7 +774,7 @@ class ImageDetailsEditDialog extends HookConsumerWidget {
                               imageUrl: image.imageDetails!.imageUrl,
                             ),
                             index: index!);
-                    context.vRouter.pop();
+                    context.pop();
                   }
                 },
                 borderRadius: BorderRadius.circular(10),
