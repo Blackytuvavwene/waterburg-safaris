@@ -43,7 +43,7 @@
     
 </main>
 <!-- whatsapp chat widget -->
-<div class=" fixed bottom-0 right-0 -translate-x-2 -translate-y-2 z-40">
+<div class=" fixed bottom-0 right-0 -translate-x-[4vw] -translate-y-[2vh] z-40">
     <div class=" w-full flex flex-col gap-0 transition {openWidget ? "" : "hidden"} h-full rounded-xl mb-4">
         <div class=" bg-secondary-600 p-2 flex border-0 items-center gap-6 rounded-t-xl">
             <div class="bg-white rounded-full w-fit h-fit p-4">

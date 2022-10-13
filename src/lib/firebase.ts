@@ -76,7 +76,7 @@ if (getAboutCompany.exists()) {
 }
 
 // get all activities from firestore
-export const activitiesData=()=>{
+export const activitiesData = async() =>{
 
         // console.log('hello world',getActivities.docs.values());
         return getActivities.docs.map(doc => doc.data());

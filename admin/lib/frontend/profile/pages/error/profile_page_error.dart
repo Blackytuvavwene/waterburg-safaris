@@ -36,9 +36,9 @@ class _MobileProfileErrorPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       color: Colors.redAccent,
-      child: const Center(
+      child: Center(
         child: Text(
-          'Mobile Profile Error',
+          'Mobile Profile Error $error',
         ),
       ),
     );

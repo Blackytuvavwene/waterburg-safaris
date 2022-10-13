@@ -5,9 +5,9 @@ import type { DocumentData, QueryDocumentSnapshot, SnapshotOptions, Timestamp } 
     companyDetails?: CompanyDetails;
     companyGallery?: CompanyGallery[];
     companyStaff?:CompanyStaff[];
-    createdAt?: Date;
+   //  createdAt?: Date;
     companyId?:string;
-    updatedAt?: Date;
+   //  updatedAt?: Date;
    }
 
    export interface CompanyDetails {
@@ -72,8 +72,8 @@ import type { DocumentData, QueryDocumentSnapshot, SnapshotOptions, Timestamp } 
                companyDetails: data.companyDetails,
                companyGallery: data.companyGallery,
                companyStaff: data.companyStaff,
-               createdAt: data.createdAt,
-               updatedAt: data.updatedAt,
+               // createdAt: data.createdAt,
+               // updatedAt: data.updatedAt,
                companyId: data.companyId,
             }
             return newC;
@@ -127,14 +127,14 @@ import type { DocumentData, QueryDocumentSnapshot, SnapshotOptions, Timestamp } 
       fromFirestore(snapshot:QueryDocumentSnapshot,
          options:SnapshotOptions):AboutCompany{
             const data=snapshot.data(options);
-const createdAt=new Date(data.createdAt.toDate());
-const updatedAt=new Date(data.updatedAt.toDate());
+// const createdAt=new Date(data.createdAt.toDate());
+// const updatedAt=new Date(data.updatedAt.toDate());
             return new AboutCompany(
                data.companyDetails,
             data.companyGallery,
             data.companyStaff,
-            createdAt,
-            updatedAt,
+            // createdAt,
+            // updatedAt,
             data.companyId,
             );
          }

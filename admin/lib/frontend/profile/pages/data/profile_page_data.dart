@@ -1,6 +1,8 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:line_icons/line_icon.dart';
 
 class ProfileDataPage extends HookConsumerWidget {
   const ProfileDataPage({
@@ -33,12 +35,56 @@ class _MobileProfileDataPage extends HookConsumerWidget {
   final Company? company;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      color: Theme.of(context).colorScheme.background,
-      child: const Center(
-        child: Text(
-          'Mobile Profile',
+    final tabs = [
+      {
+        'title': 'Details',
+        'icon': LineIcon.infoCircle(),
+      },
+      {
+        'title': 'Staff',
+        'icon': LineIcon.users(),
+      },
+      {
+        'title': 'Gallery',
+        'icon': LineIcon.images(),
+      }
+    ];
+    final tabController = useTabController(
+      initialLength: tabs.length,
+    );
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
+      appBar: AppBar(
+        title: const DText(
+          text: 'Profile',
         ),
+        automaticallyImplyLeading: false,
+        bottom: TabBar(
+          controller: tabController,
+          tabs: tabs
+              .map((e) => Tab(
+                    text: e['title'].toString(),
+                    icon: e['icon'] as Widget,
+                  ))
+              .toList(),
+        ),
+      ),
+      body: TabBarView(
+        controller: tabController,
+        children: [
+          CompanyDetailsPage(
+            companyDetails: company!.companyDetails,
+            comapnyId: company!.companyId,
+          ),
+          CompanyStaffPage(
+            companyStaff: company!.companyStaff,
+            companyId: company!.companyId,
+          ),
+          CompanyGalleryPage(
+            companyGallery: company!.companyGallery,
+            companyId: company!.companyId,
+          ),
+        ],
       ),
     );
   }
