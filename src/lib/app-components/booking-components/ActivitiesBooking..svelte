@@ -67,9 +67,9 @@ import type { BookingFormModel } from "./booking.types";
     $:({activity,packageD}=bookingState);
 </script>
 
-<section class="lg:my-28 my-6 lg:px-32 sm:px-12  xl:px-72 w-full flex flex-col">
+<section class="lg:my-28 my-6 lg:px-32 sm:px-12 w-screen xl:px-72 flex flex-col">
     <h1 class=" text-start pb-10 px-6 sm:px-12 lg:px-32">Book your safari adventure activity now</h1>
-    <form action="" method="post" class="flex flex-col m-auto w-full rounded-xl drop-shadow-xl bg-primary-50">
+    <form action="" method="post" class="flex flex-col px-6 w-full rounded-xl drop-shadow-xl bg-primary-50">
         <div class=" rounded-t-xl p-6 w-full">
             <h2 class="text-base font-semibold lg:font-bold">Activity & Package selection</h2>
             <p>Choose activity and package that suits you</p>

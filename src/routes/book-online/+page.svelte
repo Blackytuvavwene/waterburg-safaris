@@ -57,9 +57,7 @@ let activitiesDataList=data.activities;
 
 
 
-<div class="relative w-full">
-  
-
+<div class="{$bookingState.status === 'Idle'? "" : "relative" } w-full h-fit">
 {#if $bookingState.status === 'Booking' || $bookingState.status === 'Idle'}
     {#if $bookingState.status === 'Booking'}
     <div class="w-full flex flex-col justify-center z-20 items-center h-[100vh] backdrop-invert backdrop-opacity-30 absolute top-0   bottom-0">
@@ -74,14 +72,17 @@ let activitiesDataList=data.activities;
     </div>
     {/if}
     {#if activity}
-        <div class="w-full">
+        <div class="w-full h-fit">
             <CurrentActivityBooking currentActivity={cselected} on:bookSafariActivity={bookActivity}/>
         </div>  
         {:else}
-        <ActivitiesBooking {activitiesDataList} on:bookSafariActivity={bookActivity}/>
+        <div class="w-full h-fit">
+            <ActivitiesBooking {activitiesDataList} on:bookSafariActivity={bookActivity}/>
+        </div>
+        
     {/if}
     {:else if $bookingState.status === 'Success'}
-    <section class="w-full h-full flex flex-col items-center">
+    <section class="w-full h-fit flex flex-col items-center">
         <div class="text-center bg-success-100 p-4 border-2 border-success-200 rounded-xl w-fit my-6">
             <i class="fa-solid fa-circle-check text-xl mr-4 text-success-200"></i>
             Booking {$bookingState.status}
@@ -103,8 +104,6 @@ let activitiesDataList=data.activities;
     </section>
     {:else if $bookingState.status === 'Error'}
     <p>{$bookingState.message}</p>
-    
-    
 {/if}
 </div>
 

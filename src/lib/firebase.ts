@@ -58,9 +58,9 @@ export const db =getFirestore(app);
 
 const getAboutCompany=await getDoc(doc(db,'aboutCompany','ymV8H6FBRjfMBFhAh8o2').withConverter(aboutCompanyConverter));
     
-const getActivities=await getDocs(collection(db,'activities'));
+const getActivities = await getDocs(collection(db,'activities'));
 
-const getActivity=async (activityID:string)=>await getDoc(doc(db,'activities',activityID));
+const getActivity = (activityID:string)=> getDoc(doc(db,'activities',activityID));
   
 export const companyData=()=>{
 if (getAboutCompany.exists()) {
@@ -76,7 +76,7 @@ if (getAboutCompany.exists()) {
 }
 
 // get all activities from firestore
-export const activitiesData=async()=>{
+export const activitiesData=()=>{
 
         // console.log('hello world',getActivities.docs.values());
         return getActivities.docs.map(doc => doc.data());
@@ -86,7 +86,7 @@ export const activitiesData=async()=>{
 
 // get activity data from firestore
 export const activityData=async(docId?:string)=>{
-    const data= await getActivity(docId!);
+    const data= await getActivity(docId?.toString() as string);
     if(data.exists()){
         return data.data();
     } else {

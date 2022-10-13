@@ -3,8 +3,8 @@ import { activitiesData } from "$lib/firebase";
 import { error } from "@sveltejs/kit";
 import type { Action, PageServerLoad } from "./$types";
 
-export const load:PageServerLoad= async () => {
-    const responseData = await activitiesData();
+export const load:PageServerLoad =  () => {
+    const responseData = activitiesData();
 
     if(responseData ) {
         const data = responseData;
