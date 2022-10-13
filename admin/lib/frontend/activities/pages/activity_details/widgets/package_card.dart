@@ -1,6 +1,7 @@
-import 'dart:convert';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 
 import 'package:admin/lib.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -9,7 +10,19 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:layout/layout.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:sizer/sizer.dart';
-import 'package:vrouter/vrouter.dart';
+
+class EditPackageModel {
+  final Package package;
+  final String activityId;
+  final Package packageCopy;
+  final List<Package> packages;
+  EditPackageModel({
+    required this.package,
+    required this.activityId,
+    required this.packageCopy,
+    required this.packages,
+  });
+}
 
 // package update controller
 class PackageControllerNotifier extends StateNotifier<AsyncValue<Package>?> {
@@ -31,14 +44,32 @@ class PackageControllerNotifier extends StateNotifier<AsyncValue<Package>?> {
   }
 
   // save package to firestore
-  // Future<void> savePackage(BuildContext context) async {
-  //   final package = state?.data?.value;
-  //   final activityId = context.vRouter.pathParameters['activityId'];
-  //   final packageRef =
-  //       FirebaseFirestore.instance.collection('activities/$activityId').where();
-  //   final packageData = package?.toJson();
-  //   await packageRef.update(packageData);
-  // }
+  Future<void> savePackage({
+    EditPackageModel? editPackageModel,
+    Package? newPackage,
+  }) async {
+    final activityId = editPackageModel?.activityId;
+    final packageRef =
+        FirebaseFirestore.instance.collection('activities').doc(activityId);
+
+    // update package from list where it equals old package
+    final packages = editPackageModel?.packages;
+    final oldPackage = editPackageModel?.package;
+    final newPackages = packages?.map((e) {
+      if (e == oldPackage) {
+        return newPackage;
+      } else {
+        return e;
+      }
+    }).toList();
+
+    print('newPackages: ${newPackages?.map((e) => e?.toJson()).toList()}');
+
+    // final packageData = package?.toJson();
+    await packageRef.update({
+      'packages': newPackages?.map((e) => e?.toJson()).toList(),
+    });
+  }
 }
 
 // keywords state controller
@@ -72,19 +103,24 @@ class KeywordsControllerNotifier extends StateNotifier<List<String>> {
 
 // initial keywords
 final intialKeywordsProvider =
-    Provider.family<List<String>, BuildContext>((ref, context) {
-  //TODO: get keywords from path
-  final package =
-      Package.fromJson(jsonDecode('package') as Map<String, dynamic>);
-  final List<String> keywords = package.keywords!;
+    Provider.family<List<String>, List<String>>((ref, keywords) {
   return keywords;
 });
 
 // kewords state notifier
 final keywordsControllerProvider = StateNotifierProvider.family<
-    KeywordsControllerNotifier, List<String>, BuildContext>(
-  (ref, context) => KeywordsControllerNotifier(
-      keywords: ref.read<List<String>>(intialKeywordsProvider(context))),
+    KeywordsControllerNotifier, List<String>, List<String>>(
+  (ref, keywords) => KeywordsControllerNotifier(
+    keywords: ref.read<List<String>>(
+      intialKeywordsProvider(keywords),
+    ),
+  ),
+);
+
+// package controller notifier
+final packageControllerProvider =
+    StateNotifierProvider<PackageControllerNotifier, AsyncValue<Package>?>(
+  (ref) => PackageControllerNotifier(),
 );
 
 class PackageCard extends HookConsumerWidget {
@@ -92,9 +128,11 @@ class PackageCard extends HookConsumerWidget {
     Key? key,
     this.package,
     this.activityId,
+    this.packages,
   }) : super(key: key);
   final Package? package;
   final String? activityId;
+  final List<Package>? packages;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -131,10 +169,16 @@ class PackageCard extends HookConsumerWidget {
                         IconButton(
                             onPressed: () async {
                               // navigate to edit package page
-                              context.pushNamed('editPackage', params: {
-                                'activityId': activityId!,
-                                'package': jsonEncode(package?.toJson())
-                              });
+                              context.pushNamed('editPackage',
+                                  extra: EditPackageModel(
+                                      package: package!,
+                                      activityId: activityId!,
+                                      packageCopy: package!,
+                                      packages: packages!),
+                                  params: {
+                                    'activityId': activityId!,
+                                    'packageName': package!.packageName!,
+                                  });
                             },
                             icon: LineIcon.editAlt()),
                       ],
@@ -242,33 +286,36 @@ class PackageCard extends HookConsumerWidget {
 class PackageEditPage extends HookConsumerWidget {
   const PackageEditPage({
     Key? key,
+    this.editPackageModel,
   }) : super(key: key);
+  final EditPackageModel? editPackageModel;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final package = Package.fromJson(
-        jsonDecode(context.vRouter.pathParameters['package']!)
-            as Map<String, dynamic>);
-    final activityId = context.vRouter.pathParameters['activityId']!;
-
     // controllers
-    final packageName = useTextEditingController(text: package.packageName);
-    final keywords = ref.watch(keywordsControllerProvider(context));
-    final keywordsController = useTextEditingController();
-    final description = useTextEditingController(text: package.description);
-    final price = useTextEditingController(text: package.price.toString());
-    final lastPrice =
-        useTextEditingController(text: package.lastPrice.toString());
+    final tryState = useState(editPackageModel!.package.keywords);
+    final packageName =
+        useTextEditingController(text: editPackageModel!.package.packageName);
 
-    final discountPercentage =
-        useTextEditingController(text: package.discountPercentage.toString());
-    final coupon = useTextEditingController(text: package.coupon);
-    final packageOffers = useRef(package.packageOffers);
+    final keywordsController = useTextEditingController();
+    final description =
+        useTextEditingController(text: editPackageModel!.package.description);
+    final price = useTextEditingController(
+        text: editPackageModel!.package.price.toString());
+    final lastPrice = useTextEditingController(
+        text: editPackageModel!.package.lastPrice.toString());
+
+    final discountPercentage = useTextEditingController(
+        text: editPackageModel!.package.discountPercentage.toString());
+    final coupon =
+        useTextEditingController(text: editPackageModel!.package.coupon);
+    final packageOffers = useState(editPackageModel!.package.packageOffers);
     final packageOffersController = useTextEditingController();
+
     return AppLayout(
       mobile: _MobilePackageEditPage(
-        package: package,
+        package: editPackageModel!.package,
         packageName: packageName,
-        keywords: keywords,
+        keywords: tryState,
         keywordsController: keywordsController,
         description: description,
         price: price,
@@ -277,12 +324,13 @@ class PackageEditPage extends HookConsumerWidget {
         coupon: coupon,
         packageOffers: packageOffers,
         packageOffersController: packageOffersController,
-        activityId: activityId,
+        activityId: editPackageModel!.activityId,
+        editPackageModel: editPackageModel,
       ),
       tablet: _TabletPackageEditPage(
-        package: package,
+        package: editPackageModel!.package,
         packageName: packageName,
-        keywords: keywords,
+        keywords: tryState,
         keywordsController: keywordsController,
         description: description,
         price: price,
@@ -291,12 +339,12 @@ class PackageEditPage extends HookConsumerWidget {
         coupon: coupon,
         packageOffers: packageOffers,
         packageOffersController: packageOffersController,
-        activityId: activityId,
+        activityId: editPackageModel!.activityId,
       ),
       desktop: _DesktopPackageEditPage(
-        package: package,
+        package: editPackageModel!.package,
         packageName: packageName,
-        keywords: keywords,
+        keywords: tryState,
         keywordsController: keywordsController,
         description: description,
         price: price,
@@ -305,7 +353,7 @@ class PackageEditPage extends HookConsumerWidget {
         coupon: coupon,
         packageOffers: packageOffers,
         packageOffersController: packageOffersController,
-        activityId: activityId,
+        activityId: editPackageModel!.activityId,
       ),
     );
   }
@@ -313,7 +361,7 @@ class PackageEditPage extends HookConsumerWidget {
 
 // mobile package edit page
 class _MobilePackageEditPage extends HookConsumerWidget {
-  _MobilePackageEditPage({
+  const _MobilePackageEditPage({
     Key? key,
     this.package,
     this.packageName,
@@ -327,19 +375,21 @@ class _MobilePackageEditPage extends HookConsumerWidget {
     this.packageOffers,
     this.packageOffersController,
     this.activityId,
+    this.editPackageModel,
   }) : super(key: key);
   final Package? package;
   final TextEditingController? packageName;
-  List<String>? keywords;
+  final ValueNotifier<List<String>?>? keywords;
   final TextEditingController? keywordsController;
   final TextEditingController? description;
   final TextEditingController? price;
   final TextEditingController? lastPrice;
   final TextEditingController? discountPercentage;
   final TextEditingController? coupon;
-  final ObjectRef<List<String>?>? packageOffers;
+  final ValueNotifier<List<String>?>? packageOffers;
   final TextEditingController? packageOffersController;
   final String? activityId;
+  final EditPackageModel? editPackageModel;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -361,7 +411,7 @@ class _MobilePackageEditPage extends HookConsumerWidget {
               final packageD = Package(
                 packageId: package!.packageId,
                 packageName: packageName!.text,
-                keywords: keywords!,
+                keywords: keywords!.value,
                 description: description!.text,
                 price: double.parse(price!.text),
                 lastPrice: double.parse(lastPrice!.text),
@@ -377,6 +427,11 @@ class _MobilePackageEditPage extends HookConsumerWidget {
               // if (result) {
               //   context.vRouter.pop();
               // }
+
+              ref.read(packageControllerProvider.notifier).savePackage(
+                    editPackageModel: editPackageModel!,
+                    newPackage: packageD,
+                  );
             },
             icon: LineIcon.save(),
           ),
@@ -412,7 +467,7 @@ class _MobilePackageEditPage extends HookConsumerWidget {
 
 // tablet package edit page
 class _TabletPackageEditPage extends HookConsumerWidget {
-  _TabletPackageEditPage({
+  const _TabletPackageEditPage({
     Key? key,
     this.package,
     this.packageName,
@@ -429,14 +484,14 @@ class _TabletPackageEditPage extends HookConsumerWidget {
   }) : super(key: key);
   final Package? package;
   final TextEditingController? packageName;
-  List<String>? keywords;
+  final ValueNotifier<List<String>?>? keywords;
   final TextEditingController? keywordsController;
   final TextEditingController? description;
   final TextEditingController? price;
   final TextEditingController? lastPrice;
   final TextEditingController? discountPercentage;
   final TextEditingController? coupon;
-  final ObjectRef<List<String>?>? packageOffers;
+  final ValueNotifier<List<String>?>? packageOffers;
   final TextEditingController? packageOffersController;
   final String? activityId;
   @override
@@ -479,7 +534,7 @@ class _TabletPackageEditPage extends HookConsumerWidget {
 
 // desktop package edit page
 class _DesktopPackageEditPage extends HookConsumerWidget {
-  _DesktopPackageEditPage({
+  const _DesktopPackageEditPage({
     Key? key,
     this.package,
     this.packageName,
@@ -496,14 +551,14 @@ class _DesktopPackageEditPage extends HookConsumerWidget {
   }) : super(key: key);
   final Package? package;
   final TextEditingController? packageName;
-  List<String>? keywords;
+  final ValueNotifier<List<String>?>? keywords;
   final TextEditingController? keywordsController;
   final TextEditingController? description;
   final TextEditingController? price;
   final TextEditingController? lastPrice;
   final TextEditingController? discountPercentage;
   final TextEditingController? coupon;
-  final ObjectRef<List<String>?>? packageOffers;
+  final ValueNotifier<List<String>?>? packageOffers;
   final TextEditingController? packageOffersController;
   final String? activityId;
   @override
@@ -546,7 +601,7 @@ class _DesktopPackageEditPage extends HookConsumerWidget {
 
 // package edit form with app layout
 class PackageEditForm extends HookConsumerWidget {
-  PackageEditForm({
+  const PackageEditForm({
     Key? key,
     this.package,
     this.packageName,
@@ -563,14 +618,14 @@ class PackageEditForm extends HookConsumerWidget {
   }) : super(key: key);
   final Package? package;
   final TextEditingController? packageName;
-  List<String>? keywords;
+  final ValueNotifier<List<String>?>? keywords;
   final TextEditingController? keywordsController;
   final TextEditingController? description;
   final TextEditingController? price;
   final TextEditingController? lastPrice;
   final TextEditingController? discountPercentage;
   final TextEditingController? coupon;
-  final ObjectRef<List<String>?>? packageOffers;
+  final ValueNotifier<List<String>?>? packageOffers;
   final TextEditingController? packageOffersController;
   final String? activityId;
   @override
@@ -624,7 +679,7 @@ class PackageEditForm extends HookConsumerWidget {
 
 // mobile package edit form with all fields
 class _MobilePackageEditForm extends HookConsumerWidget {
-  _MobilePackageEditForm({
+  const _MobilePackageEditForm({
     Key? key,
     this.package,
     this.packageName,
@@ -641,18 +696,19 @@ class _MobilePackageEditForm extends HookConsumerWidget {
   }) : super(key: key);
   final Package? package;
   final TextEditingController? packageName;
-  List<String>? keywords;
+  final ValueNotifier<List<String>?>? keywords;
   final TextEditingController? keywordsController;
   final TextEditingController? description;
   final TextEditingController? price;
   final TextEditingController? lastPrice;
   final TextEditingController? discountPercentage;
   final TextEditingController? coupon;
-  final ObjectRef<List<String>?>? packageOffers;
+  final ValueNotifier<List<String>?>? packageOffers;
   final TextEditingController? packageOffersController;
   final String? activityId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final tryDOOOList = useState<List<String>?>(['hekeke', 'dhdbc']);
     return Form(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -679,7 +735,7 @@ class _MobilePackageEditForm extends HookConsumerWidget {
                 Wrap(
                   spacing: 2.w,
                   children: [
-                    ...keywords!
+                    ...keywords!.value!
                         .map((keyword) => Chip(
                               label: Text(keyword),
                             ))
@@ -696,7 +752,7 @@ class _MobilePackageEditForm extends HookConsumerWidget {
               child: TextFormField(
                 controller: keywordsController,
                 onSaved: (newValue) {
-                  keywords!.add(newValue!);
+                  keywords!.value = [...keywords!.value!, newValue!];
                 },
                 decoration: InputDecoration(
                   labelText: 'Keywords',
@@ -706,21 +762,33 @@ class _MobilePackageEditForm extends HookConsumerWidget {
                     fontSize: 14.sp,
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
-                  suffix: TextButton.icon(
-                    style: TextButton.styleFrom(
+                  suffixIconConstraints: BoxConstraints(
+                    minHeight: 2.h,
+                    minWidth: 26.w,
+                  ),
+                  suffixIcon: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextButton(
+                      style: TextButton.styleFrom(
                         minimumSize: Size(
-                      6.w,
-                      4.h,
-                    )),
-                    onPressed: () {
-                      ref
-                          .read(keywordsControllerProvider(context).notifier)
-                          .addKeyword(keywordsController!.text);
-                      keywordsController!.clear();
-                    },
-                    icon: LineIcon.plus(),
-                    label: const DText(
-                      text: 'Add',
+                          6.w,
+                          7.h,
+                        ),
+                        backgroundColor: Theme.of(context)
+                            .colorScheme
+                            .surfaceVariant
+                            .withOpacity(0.2),
+                      ),
+                      onPressed: () {
+                        keywords!.value = [
+                          ...keywords!.value!,
+                          keywordsController!.text
+                        ];
+                        keywordsController!.clear();
+                      },
+                      child: const DText(
+                        text: 'Add',
+                      ),
                     ),
                   ),
                 ),
@@ -804,10 +872,39 @@ class _MobilePackageEditForm extends HookConsumerWidget {
             ),
             TextFormField(
               controller: packageOffersController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Package Offers',
                 hintText: 'Enter Package Offers',
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
+                suffixIconConstraints: BoxConstraints(
+                  minHeight: 2.h,
+                  minWidth: 26.w,
+                ),
+                suffixIcon: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      minimumSize: Size(
+                        6.w,
+                        7.h,
+                      ),
+                      backgroundColor: Theme.of(context)
+                          .colorScheme
+                          .surfaceVariant
+                          .withOpacity(0.2),
+                    ),
+                    onPressed: () {
+                      packageOffers!.value = [
+                        ...packageOffers!.value!,
+                        packageOffersController!.text
+                      ];
+                      packageOffersController!.clear();
+                    },
+                    child: const DText(
+                      text: 'Add',
+                    ),
+                  ),
+                ),
               ),
             ),
             SizedBox(
@@ -823,9 +920,23 @@ class _MobilePackageEditForm extends HookConsumerWidget {
                   spacing: 2.w,
                   children: [
                     ...packageOffers!.value!
-                        .map((keyword) => Chip(
-                              label: Text(keyword),
-                            ))
+                        .map(
+                          (keyword) => Chip(
+                            label: DText(text: keyword),
+                            padding: EdgeInsets.all(
+                              10.sp,
+                            ),
+                            deleteIcon: LineIcon.trash(
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                            onDeleted: () {
+                              packageOffers!.value =
+                                  packageOffers!.value!.where((element) {
+                                return element != keyword;
+                              }).toList();
+                            },
+                          ),
+                        )
                         .toList()
                   ],
                 ),
@@ -848,7 +959,7 @@ class _MobilePackageEditForm extends HookConsumerWidget {
 
 // tablet package edit form with all fields
 class _TabletPackageEditForm extends HookConsumerWidget {
-  _TabletPackageEditForm({
+  const _TabletPackageEditForm({
     Key? key,
     this.package,
     this.packageName,
@@ -865,14 +976,14 @@ class _TabletPackageEditForm extends HookConsumerWidget {
   }) : super(key: key);
   final Package? package;
   final TextEditingController? packageName;
-  List<String>? keywords;
+  final ValueNotifier<List<String>?>? keywords;
   final TextEditingController? keywordsController;
   final TextEditingController? description;
   final TextEditingController? price;
   final TextEditingController? lastPrice;
   final TextEditingController? discountPercentage;
   final TextEditingController? coupon;
-  final ObjectRef<List<String>?>? packageOffers;
+  final ValueNotifier<List<String>?>? packageOffers;
   final TextEditingController? packageOffersController;
   final String? activityId;
   @override
@@ -977,7 +1088,7 @@ class _TabletPackageEditForm extends HookConsumerWidget {
 
 // desktop package edit form with all fields
 class _DesktopPackageEditForm extends HookConsumerWidget {
-  _DesktopPackageEditForm({
+  const _DesktopPackageEditForm({
     Key? key,
     this.package,
     this.packageName,
@@ -994,14 +1105,14 @@ class _DesktopPackageEditForm extends HookConsumerWidget {
   }) : super(key: key);
   final Package? package;
   final TextEditingController? packageName;
-  List<String>? keywords;
+  final ValueNotifier<List<String>?>? keywords;
   final TextEditingController? keywordsController;
   final TextEditingController? description;
   final TextEditingController? price;
   final TextEditingController? lastPrice;
   final TextEditingController? discountPercentage;
   final TextEditingController? coupon;
-  final ObjectRef<List<String>?>? packageOffers;
+  final ValueNotifier<List<String>?>? packageOffers;
   final TextEditingController? packageOffersController;
   final String? activityId;
   @override

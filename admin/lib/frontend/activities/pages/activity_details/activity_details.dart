@@ -1,6 +1,6 @@
 export 'activity_page.dart';
+export 'add_activity/add_activity.dart';
 export 'data/data.dart';
-export 'edit_activity/edit_activity.dart';
 export 'error/error.dart';
 export 'loading/loading.dart';
 export 'widgets/widgets.dart';

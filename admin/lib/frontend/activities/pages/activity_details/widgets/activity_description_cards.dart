@@ -20,7 +20,7 @@ class DescriptionNotifier extends StateNotifier<AsyncValue<String>> {
   final firestore = FirebaseFirestore.instance;
 
   // update description in firestore
-  Future<void> updateDescriptionInFirestore({
+  Future<void> updateStringFieldInFirestore({
     required String activityId,
     required String description,
     required String field,
@@ -65,34 +65,13 @@ class ActivityDescriptionPopUp extends HookConsumerWidget {
     ref.listen(descriptionNotifierProvider,
         (AsyncValue<String>? previous, AsyncValue<String> next) {
       // show loading indicator
-      if (next is AsyncLoading) {
-        // show loading indicator
-        EasyLoading.show(
-          status: 'Updating description...',
-          maskType: EasyLoadingMaskType.custom,
-        );
-      }
-      if (next is AsyncData) {
-        // show snackbar
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Description updated successfully',
-              style: GoogleFonts.poppins(),
-            ),
-          ),
-        );
-      }
-      // show snackbar if error occurs
-    }, onError: (Object error, StackTrace stackTrace) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Error updating description',
-            style: GoogleFonts.poppins(),
-          ),
-        ),
-      );
+      next.when(data: (data) {
+        return EasyLoading.showSuccess('Description updated');
+      }, error: (error, stackTrace) {
+        return EasyLoading.showError('Error updating description');
+      }, loading: () {
+        return EasyLoading.show(status: 'Updating description...');
+      });
     });
 
     final descriptionController = useTextEditingController(text: description);
@@ -142,13 +121,13 @@ class ActivityDescriptionPopUp extends HookConsumerWidget {
               // update description in firestore
               await ref
                   .read(descriptionNotifierProvider.notifier)
-                  .updateDescriptionInFirestore(
+                  .updateStringFieldInFirestore(
                     activityId: activityId!,
                     description: descriptionController.text,
                     field: field!,
                   );
-              context.pop();
             }
+            GoRouter.of(context).navigator?.pop();
           },
           child: DText(
             text: 'Update',

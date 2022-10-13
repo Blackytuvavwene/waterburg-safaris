@@ -38,7 +38,7 @@ class RouteModel {
 List<RouteModel> nestedMainAppRoutes({int? iconColor}) => [
       RouteModel(
         widget: const DashboardPage(),
-        path: null,
+        path: '/home',
         name: 'dashboard',
         label: 'Dashboard',
         icon: LineIcon.alternateTachometer(

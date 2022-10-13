@@ -17,7 +17,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // use url path strategy
-
+// usePathUrlStrategy();
   // initialize firebase_core
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

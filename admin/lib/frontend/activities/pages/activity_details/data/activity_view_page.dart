@@ -1,6 +1,7 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -75,6 +76,72 @@ class ActivityDetailsPage extends HookConsumerWidget {
   }
 }
 
+class UpdateNameField extends HookConsumerWidget {
+  const UpdateNameField({
+    super.key,
+    this.activityId,
+    this.activityName,
+    this.editActivityTypeController,
+  });
+  final String? activityId;
+  final String? activityName;
+  final StateController<ActivityEditType>? editActivityTypeController;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final activityNameController = useTextEditingController(text: activityName);
+    // listen to updates on activity name
+    ref.listen(descriptionNotifierProvider,
+        (AsyncValue<String>? previous, AsyncValue<String> current) {
+      current.when(data: (data) {
+        return EasyLoading.showSuccess('Activity name updated to $data');
+      }, error: (error, stackTrace) {
+        return EasyLoading.showError('Error updating activity name');
+      }, loading: () {
+        return EasyLoading.show(status: 'Updating activity name...');
+      });
+    });
+    return TextField(
+      controller: activityNameController,
+      maxLines: null,
+      minLines: null,
+      expands: true,
+      decoration: InputDecoration(
+        hintText: 'Activity Name',
+        hintStyle: GoogleFonts.dosis(
+          color: Theme.of(context).colorScheme.onBackground,
+        ),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 2.5.w,
+          vertical: 1.h,
+        ),
+        suffix: IconButton(
+          onPressed: () async {
+            await ref
+                .read(descriptionNotifierProvider.notifier)
+                .updateStringFieldInFirestore(
+                  activityId: activityId!,
+                  description: activityNameController.text,
+                  field: 'activityName',
+                );
+
+            editActivityTypeController!
+                .update((state) => state = ActivityEditType.none);
+          },
+          padding: EdgeInsets.zero,
+          icon: LineIcon.saveAlt(
+            size: 16.sp,
+            color: Theme.of(context).colorScheme.onBackground,
+          ),
+        ),
+        border: OutlineInputBorder(
+          borderSide:
+              BorderSide(color: Theme.of(context).colorScheme.onBackground),
+        ),
+      ),
+    );
+  }
+}
+
 // activity view page for mobile
 class _ActivityDetailsPageMobile extends HookConsumerWidget {
   const _ActivityDetailsPageMobile({
@@ -90,28 +157,6 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final tabs = ref.watch(activityTabsListProvider);
     final tabController = useTabController(initialLength: tabs.length);
-    final activityNameController =
-        useTextEditingController(text: activity?.activityName);
-
-    // activity name animation controller
-    final activityNameAnimationController = useAnimationController(
-      duration: const Duration(milliseconds: 500),
-      reverseDuration: const Duration(milliseconds: 500),
-    );
-
-    // function to reverse activity name animation controller
-    void reverseActivityNameAnimationController() {
-      activityNameAnimationController.reverse(
-        from: 1.0,
-      );
-    }
-
-    // function to forward activity name animation controller
-    void forwardActivityNameAnimationController() {
-      activityNameAnimationController.forward(
-        from: 0.0,
-      );
-    }
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -125,34 +170,10 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
               ? Center(
                   child: SizedBox(
                     height: 6.h,
-                    child: TextField(
-                      controller: activityNameController,
-                      maxLines: null,
-                      minLines: null,
-                      expands: true,
-                      decoration: InputDecoration(
-                        hintText: 'Activity Name',
-                        hintStyle: GoogleFonts.dosis(
-                          color: Theme.of(context).colorScheme.onBackground,
-                        ),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 2.5.w,
-                          vertical: 1.h,
-                        ),
-                        suffix: IconButton(
-                          onPressed: () {},
-                          padding: EdgeInsets.zero,
-                          icon: LineIcon.saveAlt(
-                            size: 16.sp,
-                            color: Theme.of(context).colorScheme.onBackground,
-                          ),
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color:
-                                  Theme.of(context).colorScheme.onBackground),
-                        ),
-                      ),
+                    child: UpdateNameField(
+                      activityId: activity?.activityId,
+                      editActivityTypeController: editActivityTypeController,
+                      activityName: activity?.activityName,
                     ),
                   ),
                 ).animate().fade(

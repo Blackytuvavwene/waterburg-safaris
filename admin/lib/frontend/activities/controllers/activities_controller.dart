@@ -22,6 +22,8 @@ class ActivityControlNotifier extends StateNotifier<Activity?> {
   void updatePackagesInActivity({required List<Package> packages}) {
     state = state!.copyWith(packages: packages);
   }
+
+  // update activity name in
 }
 
 // activity repository provider controller

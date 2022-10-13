@@ -20,9 +20,12 @@ class CompanyDatabaseRepository implements CompanyDatabaseAbstract {
   // stream company info from firestore
   @override
   Stream<Company> streamCompanyFromFirestore({String? companyId}) {
-    return _firestore.collection('aboutCompany').doc(companyId).snapshots().map(
-          (data) => Company.fromJson(data.data()!),
-        );
+    final companyData =
+        _firestore.collection('aboutCompany').doc(companyId).snapshots().map(
+              (data) => Company.fromJson(data.data()!),
+            );
+
+    return companyData;
   }
 
   // update company info on firestore

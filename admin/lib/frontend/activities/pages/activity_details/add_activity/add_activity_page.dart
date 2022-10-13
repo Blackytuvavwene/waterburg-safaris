@@ -2,8 +2,8 @@ import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class EditActivityPage extends HookConsumerWidget {
-  const EditActivityPage({
+class AddActivityPage extends HookConsumerWidget {
+  const AddActivityPage({
     Key? key,
     this.activity,
   }) : super(key: key);
@@ -12,13 +12,13 @@ class EditActivityPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final activityData = ref.watch(activityToEditActivityPageProvider);
     return AppLayout(
-      mobile: _MobileEditActivityPage(
+      mobile: _MobileAddActivityPage(
         activity: activityData,
       ),
-      tablet: _TabletEditActivityPage(
+      tablet: _TabletAddActivityPage(
         activity: activityData,
       ),
-      desktop: _DesktopEditActivityPage(
+      desktop: _DesktopAddActivityPage(
         activity: activityData,
       ),
     );
@@ -26,8 +26,8 @@ class EditActivityPage extends HookConsumerWidget {
 }
 
 // mobile edit activity page
-class _MobileEditActivityPage extends HookConsumerWidget {
-  const _MobileEditActivityPage({
+class _MobileAddActivityPage extends HookConsumerWidget {
+  const _MobileAddActivityPage({
     Key? key,
     this.activity,
   }) : super(key: key);
@@ -39,8 +39,8 @@ class _MobileEditActivityPage extends HookConsumerWidget {
 }
 
 // tablet edit activity page
-class _TabletEditActivityPage extends HookConsumerWidget {
-  const _TabletEditActivityPage({
+class _TabletAddActivityPage extends HookConsumerWidget {
+  const _TabletAddActivityPage({
     Key? key,
     this.activity,
   }) : super(key: key);
@@ -52,8 +52,8 @@ class _TabletEditActivityPage extends HookConsumerWidget {
 }
 
 // desktop edit activity page
-class _DesktopEditActivityPage extends HookConsumerWidget {
-  const _DesktopEditActivityPage({
+class _DesktopAddActivityPage extends HookConsumerWidget {
+  const _DesktopAddActivityPage({
     Key? key,
     this.activity,
   }) : super(key: key);

@@ -43,76 +43,74 @@ class _MobileActivityGalleryPage extends HookConsumerWidget {
   final String? activityId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
+    return SizedBox(
+      height: 90.h,
       child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: 2.w,
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                width: 90.w,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    DText(
-                      text: 'Activity Images',
-                      fontSize: 16.sp,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: 90.w,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  DText(
+                    text: 'Activity Images',
+                    fontSize: 16.sp,
+                  ),
+                  IconButton(
+                    icon: LineIcon.editAlt(
+                      size: 16.sp,
+                      color: Theme.of(context).colorScheme.onBackground,
                     ),
-                    IconButton(
-                      icon: LineIcon.editAlt(
-                        size: 16.sp,
-                        color: Theme.of(context).colorScheme.onBackground,
+                    onPressed: () {
+                      // show add image dialog
+                      showDialog(
+                        context: context,
+                        builder: (context) => AddImagesDialog(
+                          activityId: activityId.toString(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 1.h,
+            ),
+            SizedBox(
+              width: 100.w,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: 58.h,
+                ),
+                child: ListView.separated(
+                  scrollDirection: Axis.vertical,
+                  itemCount: gallery!.length.toInt(),
+                  separatorBuilder: (context, index) {
+                    return SizedBox(
+                      height: 4.h,
+                    );
+                  },
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsets.only(
+                        left: 2.w,
+                        right: 2.w,
                       ),
-                      onPressed: () {
-                        // show add image dialog
-                        showDialog(
-                          context: context,
-                          builder: (context) => AddImagesDialog(
-                            activityId: activityId.toString(),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                      child: ActivityImageCard(
+                        image: gallery![index],
+                      ),
+                    );
+                  },
                 ),
               ),
-              SizedBox(
-                height: 1.h,
-              ),
-              SizedBox(
-                width: 100.w,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: 80.h,
-                  ),
-                  child: ListView.separated(
-                    physics: const NeverScrollableScrollPhysics(),
-                    scrollDirection: Axis.vertical,
-                    itemCount: gallery!.length.toInt(),
-                    separatorBuilder: (context, index) {
-                      return SizedBox(
-                        height: 4.h,
-                      );
-                    },
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          left: 2.w,
-                          right: 2.w,
-                        ),
-                        child: ActivityImageCard(
-                          image: gallery![index],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

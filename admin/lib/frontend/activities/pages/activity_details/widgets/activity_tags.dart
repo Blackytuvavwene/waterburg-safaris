@@ -1,6 +1,7 @@
 import 'package:admin/lib.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icon.dart';
@@ -161,133 +162,153 @@ class _MobileActivityTags extends HookConsumerWidget {
     final tagsList = useState<List<String>>(<String>[]);
     final tagsInState = ref.watch(activityTagsNotifierProvider);
     final tagsStateController = ref.read(activityTagsNotifierProvider.notifier);
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 4.w,
-        vertical: 8.h,
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  controller: tagsController,
-                  decoration: const InputDecoration(
-                    labelText: 'Add a tag',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-              IconButton(
-                onPressed: () async {
-                  if (tagsController.text.isNotEmpty) {
-                    tagsList.value.add(tagsController.text);
-                    print('tagsList.value: ${tagsList.value}');
-                    tagsController.clear();
-                  }
-                },
-                icon: const Icon(Icons.add),
-              ),
-              Expanded(
-                child: CustomElevatedButton(
-                  onPressed: () async {
-                    await tagsStateController.addTagsToFirestore(
-                      tags: tagsList.value,
-                      activityId: activityId!,
-                      query: 'tags',
-                    );
-                  },
-                  text: 'Add tags',
-                ),
-              )
-            ],
-          ),
-          Column(
-            children: [
-              tagsInState.when(
-                data: (tagList) {
-                  return tagList.isNotEmpty
-                      ? Wrap(
-                          children: tagList
-                              .map(
-                                (tag) => Container(
-                                  margin: const EdgeInsets.only(right: 5),
-                                  child: Chip(
-                                    label: Text(tag),
-                                    deleteIcon: const Icon(Icons.close),
-                                    onDeleted: () async {
-                                      await tagsStateController
-                                          .removeTagFromFirestore(
-                                        tag: tag,
-                                        activityId: activityId!,
-                                        query: 'tags',
-                                      );
-                                      tagsStateController.removeTagFromState(
-                                        tag: tag,
-                                      );
-                                    },
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                        )
-                      : const SizedBox();
-                },
-                loading: () => const SizedBox(),
-                error: (error, stack) => const SizedBox(),
-              ),
-
-              // new tags
-              tagsList.value.isNotEmpty
-                  ? Wrap(
-                      children: [
-                        const DText(
-                          text: 'New tags',
+    return Scaffold(
+      body: Container(
+        height: 100.h,
+        width: 100.w,
+        padding: EdgeInsets.only(
+          left: 4.w,
+          top: 2.h,
+          right: 4.w,
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              top: 0,
+              right: 0,
+              left: 0,
+              child: SizedBox(
+                width: 100.w,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: TextFormField(
+                        controller: tagsController,
+                        decoration: const InputDecoration(
+                          labelText: 'Add a tag',
+                          border: OutlineInputBorder(),
                         ),
-                        for (var tag in tagsList.value)
-                          Container(
-                            margin: const EdgeInsets.only(right: 5),
-                            child: Chip(
-                              label: Text(tag),
-                              deleteIcon: const Icon(Icons.close),
-                              onDeleted: () {
-                                tagsList.value.remove(tag);
-                              },
-                            ),
-                          ),
-                      ],
-                    )
-                  : const SizedBox(),
-
-              Wrap(
-                children: [
-                  for (var tag in tags!)
-                    Container(
-                      margin: const EdgeInsets.only(right: 10),
-                      child: Chip(
-                        label: DText(
-                          text: tag,
-                        ),
-                        deleteIcon: LineIcon.minus(
-                          color: Colors.red,
-                        ),
-                        onDeleted: () async {
-                          // tags?.remove(tag);
-                          print(tags);
-                          await tagsStateController.removeTagFromFirestore(
-                            tag: tag,
-                            activityId: activityId!,
-                            query: 'tags',
-                          );
-                        },
                       ),
                     ),
-                ],
-              )
-            ],
-          ),
-        ],
+                    IconButton(
+                      onPressed: () async {
+                        if (tagsController.text.isNotEmpty) {
+                          tagsList.value = [
+                            ...tagsList.value,
+                            tagsController.text
+                          ];
+                          print('tagsList.value: ${tagsList.value}');
+                          tagsController.clear();
+                        }
+                      },
+                      icon: const Icon(Icons.add),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              top: 10.h,
+              right: 0,
+              left: 0,
+              bottom: 0,
+              child: SizedBox(
+                height: 80.h,
+                width: 100.w,
+                child: ListView(
+                  children: [
+                    // new tags
+                    tagsList.value.isNotEmpty
+                        ? SizedBox(
+                            width: 100.w,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                SizedBox(
+                                  child: DText(
+                                    text: 'New tags',
+                                    fontSize: 18.sp,
+                                  ),
+                                ),
+                                Wrap(
+                                  spacing: 2.w,
+                                  children: [
+                                    for (var tag in tagsList.value)
+                                      Container(
+                                        child: Chip(
+                                          label: Text(tag),
+                                          deleteIcon: LineIcon.trash(),
+                                          onDeleted: () {
+                                            tagsList.value = tagsList.value
+                                                .where(
+                                                    (element) => element != tag)
+                                                .toList();
+                                          },
+                                        ).animate().scale().slide(),
+                                      ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
+                        : const SizedBox(),
+                    SizedBox(
+                      width: 100.w,
+                      child: DText(
+                        text: 'Tags from database tags',
+                        fontSize: 18.sp,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 100.w,
+                      child: Wrap(
+                        spacing: 2.w,
+                        children: [
+                          for (var tag in tags!)
+                            Container(
+                              child: Chip(
+                                label: DText(
+                                  text: tag,
+                                ),
+                                deleteIcon: LineIcon.trash(
+                                  color: Colors.red,
+                                ),
+                                onDeleted: () async {
+                                  // tags?.remove(tag);
+                                  print(tags);
+                                  await tagsStateController
+                                      .removeTagFromFirestore(
+                                    tag: tag,
+                                    activityId: activityId!,
+                                    query: 'tags',
+                                  );
+                                  tagsStateController.removeTagFromState(
+                                    tag: tag,
+                                  );
+                                },
+                              ),
+                            ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: CustomElevatedButton(
+        onPressed: () async {
+          await tagsStateController.addTagsToFirestore(
+            tags: tagsList.value,
+            activityId: activityId!,
+            query: 'tags',
+          );
+          tagsList.value = [];
+        },
+        text: 'Upload new tags  ( ${tagsList.value.length} )',
       ),
     );
   }

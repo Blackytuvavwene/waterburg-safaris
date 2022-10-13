@@ -31,19 +31,20 @@ class GalleryNotifier extends StateNotifier<AsyncValue<List<Gallery>>> {
 
   // add to firestore
   Future<AsyncValue<List<Gallery>>> addImagesToFirestore({
-    required Gallery gallery,
+    required List<Gallery> gallery,
     required String activityId,
     required String query,
   }) async {
     state = const AsyncValue.loading();
 
     return state = await AsyncValue.guard(() async {
-      final imagesD = await FirestoreHelper.updateDataInDocList<Gallery>(
-          data: [gallery],
-          docId: activityId,
-          query: query,
-          docPath: 'activities');
-      return imagesD;
+      final imagesD =
+          await FirestoreHelper.updateDataInDocList<Map<String, dynamic>>(
+              data: gallery.map((e) => e.toJson()).toList(),
+              docId: activityId,
+              query: query,
+              docPath: 'activities');
+      return imagesD.map((e) => Gallery.fromJson(e)).toList();
     });
   }
 
@@ -106,9 +107,12 @@ class AddImagesDialog extends HookConsumerWidget {
     this.activityId,
   }) : super(key: key);
   final String? activityId;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final galleryState = ref.watch(galleryNotifierProvider.notifier);
+    final gallery =
+        ref.watch(multipleImageHelperControllerNotifierProvider).value;
 
     // show states
     ref.listen(galleryNotifierProvider,
@@ -171,10 +175,16 @@ class AddImagesDialog extends HookConsumerWidget {
                   ),
                   Expanded(
                     child: CustomElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        await galleryState.addImagesToFirestore(
+                          gallery:
+                              gallery!.map((e) => e.imageDetails!).toList(),
+                          activityId: activityId!,
+                          query: 'activityGallery',
+                        );
                         Navigator.pop(context);
                       },
-                      text: 'Upload Images',
+                      text: 'Upload Images ${gallery?.length}',
                       borderRadius: const BorderRadius.only(
                         bottomRight: Radius.circular(10),
                       ),
@@ -310,15 +320,18 @@ class ImagePickerWidget extends HookConsumerWidget {
 
     return Center(
         child: Container(
+      height: 60.h,
       color: Theme.of(context).colorScheme.onBackground,
       child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 // pick image button
-                Expanded(
+                Flexible(
                   child: CustomElevatedButton(
                     onPressed: () async {
                       // await ImageHelpers.webPickImage();
@@ -339,15 +352,18 @@ class ImagePickerWidget extends HookConsumerWidget {
                 multiHelper.maybeMap(orElse: () {
                   return const SizedBox.shrink();
                 }, data: (value) {
-                  return Expanded(
-                    child: CustomElevatedButton(
-                      primary: Theme.of(context).colorScheme.errorContainer,
-                      onPressed: () async {
-                        await multiImagepicker.clearList();
-                      },
-                      text: 'Clear Images',
-                    ),
-                  );
+                  return value.asData?.value?.isNotEmpty != false
+                      ? Flexible(
+                          child: CustomElevatedButton(
+                            primary:
+                                Theme.of(context).colorScheme.errorContainer,
+                            onPressed: () async {
+                              await multiImagepicker.clearList();
+                            },
+                            text: 'Clear Images',
+                          ),
+                        )
+                      : const SizedBox.shrink();
                 })
               ],
             ),
@@ -571,8 +587,9 @@ class ImageCard extends HookConsumerWidget {
                       height: 8.h,
                       width: 100.w,
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Expanded(
+                          Flexible(
                             flex: 3,
                             child: DText(
                               text: 'Image Details',
@@ -583,7 +600,7 @@ class ImageCard extends HookConsumerWidget {
                                   : 16.sp,
                             ),
                           ),
-                          Expanded(
+                          Flexible(
                             flex: 3,
                             child: DText(
                               text: 'Image Name : ${image?.name}',
@@ -594,7 +611,7 @@ class ImageCard extends HookConsumerWidget {
                                   : 14.sp,
                             ),
                           ),
-                          Expanded(
+                          Flexible(
                             flex: 4,
                             child: DText(
                               text:
@@ -623,6 +640,7 @@ class ImageCard extends HookConsumerWidget {
                 vertical: context.breakpoint > LayoutBreakpoint.sm ? 1.h : 2.h,
               ),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   DText(
@@ -659,16 +677,6 @@ class ImageCard extends HookConsumerWidget {
                     fontSize:
                         context.breakpoint > LayoutBreakpoint.sm ? 6.sp : 16.sp,
                   ),
-                  Expanded(child: CustomElevatedButton(
-                    onPressed: () {
-                      ref
-                          .read(galleryNotifierProvider.notifier)
-                          .addImagesToFirestore(
-                              gallery: image!.imageDetails!,
-                              activityId: 'activityId',
-                              query: 'jjhg');
-                    },
-                  ))
                 ],
               ),
             ),
@@ -774,7 +782,7 @@ class ImageDetailsEditDialog extends HookConsumerWidget {
                               imageUrl: image.imageDetails!.imageUrl,
                             ),
                             index: index!);
-                    context.pop();
+                    GoRouter.of(context).navigator?.pop();
                   }
                 },
                 borderRadius: BorderRadius.circular(10),

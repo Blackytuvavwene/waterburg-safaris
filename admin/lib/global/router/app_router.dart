@@ -53,27 +53,43 @@ final goroutingProvider = Provider<GoRouter>(
               data: (dataUser) {
                 return GoRouter(
                   debugLogDiagnostics: true,
-                  redirectLimit: 50,
                   redirect: (context, state) {
-                    final welcomeLoc = state.location == '/';
+                    final welcomeLoc = state.subloc == '/';
+                    String _getRoutePath() {
+                      final route = ref.read(nestedRoutesProvider)[
+                          ref.read(routeIndexProvider.notifier).state];
+                      return route.path.toString();
+                    }
+
+                    final routePath = _getRoutePath();
 
                     if (dataLoad == AppAuthStatus.firstLoad &&
                         dataUser == null &&
-                        welcomeLoc) {
+                        welcomeLoc &&
+                        routePath != '') {
                       return '/';
-                    } else if (dataLoad == AppAuthStatus.loaded &&
-                        dataUser == null &&
-                        welcomeLoc) {
-                      return '/login';
-                    } else if (dataLoad == AppAuthStatus.loaded &&
-                        dataUser != null &&
-                        welcomeLoc) {
-                      return '/home';
-                    } else {
-                      return null;
                     }
+                    if (dataLoad == AppAuthStatus.loaded &&
+                        dataUser == null &&
+                        welcomeLoc &&
+                        routePath != '') {
+                      return '/login';
+                    }
+                    if (dataLoad == AppAuthStatus.loaded &&
+                        dataUser != null &&
+                        welcomeLoc &&
+                        routePath == '/home') {
+                      return '/home';
+                    }
+                    if (dataLoad == AppAuthStatus.loaded &&
+                        dataUser != null &&
+                        welcomeLoc &&
+                        routePath != '/home') {
+                      return routePath;
+                    }
+                    return null;
                   },
-                  routes: <GoRoute>[
+                  routes: <RouteBase>[
                     GoRoute(
                       path: '/',
                       name: 'welcome',
@@ -132,11 +148,17 @@ final goroutingProvider = Provider<GoRouter>(
                               ),
                               routes: [
                                 GoRoute(
+                                  path: 'add-activity',
+                                  name: 'addActivity',
+                                  builder: (context, state) => AddActivityPage(
+                                    key: state.pageKey,
+                                  ),
+                                  routes: const [],
+                                ),
+                                GoRoute(
                                   path: ':activityId',
                                   name: 'activityDetails',
                                   builder: (context, state) {
-                                    print(
-                                        'activityId: ${state.params['activityId']}');
                                     return ActivityPage(
                                       activityId:
                                           state.params['activityId'].toString(),
@@ -145,12 +167,18 @@ final goroutingProvider = Provider<GoRouter>(
                                   },
                                   routes: [
                                     GoRoute(
-                                      path: 'edit',
-                                      name: 'editActivity',
-                                      builder: (context, state) =>
-                                          EditActivityPage(
-                                        key: state.pageKey,
-                                      ),
+                                      path: 'edit-package/:packageName',
+                                      name: 'editPackage',
+                                      builder: (context, state) {
+                                        final EditPackageModel
+                                            packageEditModel =
+                                            state.extra as EditPackageModel;
+
+                                        return PackageEditPage(
+                                          key: state.pageKey,
+                                          editPackageModel: packageEditModel,
+                                        );
+                                      },
                                     ),
                                   ],
                                 ),
