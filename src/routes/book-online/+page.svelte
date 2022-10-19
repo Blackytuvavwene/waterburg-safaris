@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" >
 import type { ActivitiesResponse, Package } from '$lib/app-components/activities-components/activities.types';
 import {  persistCurrentSelectedStore, type currentA } from '$lib/app-components/activities-components/activity.stores';
 import ActivitiesBooking from '$lib/app-components/booking-components/ActivitiesBooking..svelte';

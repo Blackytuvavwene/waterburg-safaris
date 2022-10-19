@@ -7,13 +7,13 @@ part 'user.model.g.dart';
   explicitToJson: true,
 )
 class UserModel {
-  final String? uid;
-  final String? username;
-  final String? password;
-  final String? email;
-  final String? phoneNumber;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
+  String? uid;
+  String? username;
+  String? password;
+  String? email;
+  String? phoneNumber;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   UserModel({
     this.uid,

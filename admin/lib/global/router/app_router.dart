@@ -53,8 +53,10 @@ final goroutingProvider = Provider<GoRouter>(
               data: (dataUser) {
                 return GoRouter(
                   debugLogDiagnostics: true,
+                  redirectLimit: 50,
                   redirect: (context, state) {
                     final welcomeLoc = state.subloc == '/';
+
                     String _getRoutePath() {
                       final route = ref.read(nestedRoutesProvider)[
                           ref.read(routeIndexProvider.notifier).state];
@@ -62,34 +64,33 @@ final goroutingProvider = Provider<GoRouter>(
                     }
 
                     final routePath = _getRoutePath();
-
+                    // print(' welcomeLoc: $welcomeLoc');
+                    // print('{user: $dataUser, status: $dataLoad}');
                     if (dataLoad == AppAuthStatus.firstLoad &&
                         dataUser == null &&
                         welcomeLoc &&
                         routePath != '') {
-                      return '/';
-                    }
-                    if (dataLoad == AppAuthStatus.loaded &&
+                      return null;
+                    } else if (dataLoad == AppAuthStatus.loaded &&
                         dataUser == null &&
                         welcomeLoc &&
                         routePath != '') {
                       return '/login';
-                    }
-                    if (dataLoad == AppAuthStatus.loaded &&
-                        dataUser != null &&
+                    } else if (dataLoad == AppAuthStatus.loaded &&
                         welcomeLoc &&
+                        dataUser != null &&
                         routePath == '/home') {
                       return '/home';
-                    }
-                    if (dataLoad == AppAuthStatus.loaded &&
-                        dataUser != null &&
+                    } else if (dataLoad == AppAuthStatus.loaded &&
                         welcomeLoc &&
+                        dataUser != null &&
                         routePath != '/home') {
                       return routePath;
+                    } else {
+                      return null;
                     }
-                    return null;
                   },
-                  routes: <RouteBase>[
+                  routes: <GoRoute>[
                     GoRoute(
                       path: '/',
                       name: 'welcome',

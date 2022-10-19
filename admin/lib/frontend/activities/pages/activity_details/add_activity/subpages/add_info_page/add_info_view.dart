@@ -1,0 +1,156 @@
+import 'package:admin/lib.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:line_icons/line_icon.dart';
+import 'package:sizer/sizer.dart';
+
+// add info view hook consumer widget with app layout
+class AddInfoView extends HookConsumerWidget {
+  const AddInfoView({
+    super.key,
+    this.overview,
+    this.seoDescription,
+    this.activityData,
+  });
+  final String? overview;
+  final String? seoDescription;
+  final ValueNotifier<Activity>? activityData;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return AppLayout(
+      mobile: _MobileAddInfoView(
+        activityData: activityData,
+      ),
+      tablet: const _TabletAddInfoView(),
+      desktop: const _DesktopAddInfoView(),
+    );
+  }
+}
+
+// mobile add info view
+class _MobileAddInfoView extends HookConsumerWidget {
+  const _MobileAddInfoView({
+    this.activityData,
+  });
+  final ValueNotifier<Activity>? activityData;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final overviewController =
+        useTextEditingController(text: activityData?.value.overview);
+    final seoDescriptionController =
+        useTextEditingController(text: activityData?.value.seoDescription);
+    final editOverview = useState(false);
+    final editSeoDescription = useState(false);
+    return SizedBox(
+      height: 100.h,
+      width: 100.w,
+      child: Stack(
+        children: [
+          Positioned(
+            child: Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    color: Theme.of(context).colorScheme.surfaceVariant,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 4.w,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          DText(
+                            text: 'Activity overview',
+                            fontSize: 14.sp,
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              editOverview.value = !editOverview.value;
+                            },
+                            child: DText(
+                              text: 'Edit',
+                              fontSize: 14.sp,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 4.w,
+                      vertical: 2.h,
+                    ),
+                    child: editOverview.value == true
+                        ? Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      editOverview.value = false;
+                                    },
+                                    icon: LineIcon.times(),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      activityData?.value.overview =
+                                          overviewController.text;
+
+                                      editOverview.value = false;
+                                    },
+                                    icon: LineIcon.check(),
+                                  )
+                                ],
+                              ),
+                              TextField(
+                                maxLength: 1200,
+                                maxLines: 10,
+                                minLines: 1,
+                                controller: overviewController,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        : DText(
+                            text: activityData?.value.overview ??
+                                'No activity overview given click on \'Edit\'',
+                            fontSize: 12.sp,
+                          ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// tablet add info view
+class _TabletAddInfoView extends HookConsumerWidget {
+  const _TabletAddInfoView();
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container();
+  }
+}
+
+// desktop add info view
+class _DesktopAddInfoView extends HookConsumerWidget {
+  const _DesktopAddInfoView();
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container();
+  }
+}

@@ -20,11 +20,11 @@ class ImageHelperModel {
     required this.imageFile,
     required this.imageDetails,
   });
-  final XFile? xFile;
-  final String? name;
-  final String? path;
-  final Uint8List? bytes;
-  final ImageFile? imageFile;
+  XFile? xFile;
+  String? name;
+  String? path;
+  Uint8List? bytes;
+  ImageFile? imageFile;
   Gallery? imageDetails;
 
   ImageHelperModel copyWith({
@@ -153,19 +153,41 @@ class ImageHelpers {
     }
   }
 
-  // pick imagefile
-  // static Future<ImageFile?> pickImageFile({ImageSource? imageSource}) async {
-  //   try {
-  //     final image = await pickImage(imageSource: imageSource);
-  //     if (image == null) {
-  //       return null;
-  //     }
-  //     final imageFile = await fileToImageFile(image);
-  //     return imageFile;
-  //   } catch (e) {
-  //     throw e.toString();
-  //   }
-  // }
+  // pick add image
+  static Future<ImageHelperModel?> pickAddImage(
+      {ImageSource? imageSource, String? storagePath}) async {
+    try {
+      ImagePicker picker = ImagePicker();
+      XFile? image = await picker.pickImage(
+        source: imageSource!,
+        imageQuality: 80,
+        maxHeight: 720,
+        maxWidth: 2000,
+      );
+      if (image == null) {
+        return null;
+      }
+
+      // final imageFile = await fileToImageFile(image);
+
+      final newImage = ImageHelperModel(
+        xFile: image,
+        name: image.name,
+        path: image.path,
+        imageFile: await image.asImageFile,
+        bytes: await image.readAsBytes(),
+        imageDetails: Gallery(
+          imageTitle: '',
+          imageDescription: '',
+          imageUrl: '',
+        ),
+      );
+
+      return newImage;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
 
   // web pick image
   static Future<Uint8List> webPickImage() async {
@@ -259,6 +281,43 @@ class ImageHelpers {
     }
   }
 
+  // pick add multiple images
+  static Future<List<ImageHelperModel>?> pickAddMultipleImages(
+      {String? storagePath}) async {
+    try {
+      final picker = ImagePicker();
+      final images = await picker.pickMultiImage(
+        imageQuality: 80,
+        maxHeight: 720,
+        maxWidth: 2000,
+      );
+      if (images == null) {
+        return null;
+      }
+      final files = <ImageHelperModel>[];
+      for (final image in images) {
+        // image.readAsBytes();
+        // final file = await fileToImageFile(image);
+        final newImage = ImageHelperModel(
+          xFile: image,
+          name: image.name,
+          path: image.path,
+          imageFile: await image.asImageFile,
+          bytes: await image.readAsBytes(),
+          imageDetails: Gallery(
+            imageTitle: '',
+            imageDescription: '',
+            imageUrl: '',
+          ),
+        );
+        files.add(newImage);
+      }
+      return files;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
   // add image to firebase storage
   static Future<String> addImageToFirebaseStorage(
       {required XFile image, required String path}) async {
@@ -335,32 +394,6 @@ class ImageHelperNotifier extends StateNotifier<AsyncValue<ImageHelperModel?>> {
   Future<void> setImage(ImageHelperModel? image) async {
     state = AsyncValue.data(image);
   }
-
-  // c
-
-  // web pick image
-  // Future<void> webPickImage() async {
-  //   state = const AsyncValue.loading();
-
-  //   // use webPickImage method from image helper
-  //   state = AsyncValue.guard<File?>(() {
-  //     final image = ImageHelpers.webPickImage();
-
-  //     return image;
-  //   }) as AsyncValue<File?>;
-  // }
-
-  // compress image
-  // Future<void> compressImage(ImageFile? imageFile) async {
-  //   state = const AsyncValue.loading();
-
-  //   // use compressImage method from image helper
-  //   state = await AsyncValue.guard<ImageHelperModel?>(() async {
-  //     final image = await ImageHelpers.compressImage(imageFile!);
-
-  //     return image;
-  //   });
-  // }
 }
 
 // notifier to add picked image to company gallery model

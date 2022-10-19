@@ -8,12 +8,12 @@ part 'company.model.g.dart';
   explicitToJson: true,
 )
 class Company {
-  final String? companyId;
-  final CompanyDetails? companyDetails;
-  final List<CompanyStaff>? companyStaff;
-  final List<Gallery>? companyGallery;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
+  String? companyId;
+  CompanyDetails? companyDetails;
+  List<CompanyStaff>? companyStaff;
+  List<Gallery>? companyGallery;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   Company({
     this.companyId,
@@ -35,9 +35,9 @@ class Company {
   explicitToJson: true,
 )
 class Gallery {
-  final String? imageUrl;
-  final String? imageTitle;
-  final String? imageDescription;
+  String? imageUrl;
+  String? imageTitle;
+  String? imageDescription;
 
   Gallery({this.imageUrl, this.imageTitle, this.imageDescription});
 
@@ -52,13 +52,13 @@ class Gallery {
   explicitToJson: true,
 )
 class CompanyStaff {
-  final String? imageUrl;
-  final String? fullName;
-  final String? email;
-  final List<String>? phoneNos;
-  final String? jobTitle;
-  final String? jobDescription;
-  final String? title;
+  String? imageUrl;
+  String? fullName;
+  String? email;
+  List<String>? phoneNos;
+  String? jobTitle;
+  String? jobDescription;
+  String? title;
 
   CompanyStaff({
     this.imageUrl,
@@ -81,16 +81,16 @@ class CompanyStaff {
   explicitToJson: true,
 )
 class CompanyDetails {
-  final String? companyName;
-  final String? companyAddress;
-  final String? registrationNumber;
-  final String? vatNo;
-  final String? companyLogoUrl;
-  final String? seoDescription;
-  final String? overview;
-  final List<String>? cellPhoneNos;
-  final String? email;
-  final String? telNo;
+  String? companyName;
+  String? companyAddress;
+  String? registrationNumber;
+  String? vatNo;
+  String? companyLogoUrl;
+  String? seoDescription;
+  String? overview;
+  List<String>? cellPhoneNos;
+  String? email;
+  String? telNo;
   CompanyDetails({
     this.companyName,
     this.companyAddress,

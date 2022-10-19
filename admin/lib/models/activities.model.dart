@@ -9,15 +9,15 @@ part 'activities.model.g.dart';
   explicitToJson: true,
 )
 class Activity {
-  final String? activityId;
-  final String? activityName;
-  final String? seoDescription;
-  final List<String>? tags;
-  final List<Package>? packages;
-  final List<Gallery>? activityGallery;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-  final String? overview;
+  String? activityId;
+  String? activityName;
+  String? seoDescription;
+  List<String>? tags;
+  List<Package>? packages;
+  List<Gallery>? activityGallery;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  String? overview;
   Activity({
     this.activityId,
     this.activityName,

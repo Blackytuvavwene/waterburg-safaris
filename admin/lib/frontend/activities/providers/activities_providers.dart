@@ -20,10 +20,17 @@ final activityDataStreamProvider =
 
 // activity pass to edit activity page provider
 final activityToEditActivityPageProvider =
-    StateProvider<Activity?>((ref) => null);
+    StateProvider<Activity?>((ref) => Activity());
 
 // final activity controller notifier provider
 final activityControlNotifierProvider =
     StateNotifierProvider<ActivityControlNotifier, Activity?>((ref) {
   return ActivityControlNotifier();
+});
+
+// add activity to firestore provider
+final addActivityToFirestoreProvider =
+    StateNotifierProvider<ActivityDBController, AsyncValue<Activity>?>((ref) {
+  return ActivityDBController(
+      activitiesDatabaseRepository: ref.watch(activityDbRepositoryProvider));
 });

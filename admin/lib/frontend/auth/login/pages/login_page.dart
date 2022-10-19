@@ -256,7 +256,7 @@ class _TabletLoginScreen extends HookConsumerWidget {
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(20.w),
+          padding: EdgeInsets.all(18.w),
           child: Center(
             child: ConstrainedBox(
               constraints: BoxConstraints(
@@ -276,137 +276,148 @@ class _TabletLoginScreen extends HookConsumerWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(
-                    height: 2.h,
+                  const Spacer(
+                    flex: 2,
                   ),
                   SvgPicture.asset(
                     'assets/images/enter.svg',
                     height: 26.h,
                   ),
-                  SizedBox(
-                    height: 4.h,
+                  const Spacer(
+                    flex: 2,
                   ),
-                  Center(
-                    child: Form(
-                      onChanged: () {
-                        _formKey.currentState?.validate();
-                      },
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      key: _formKey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(
-                              bottom: 1.h,
-                            ),
-                            child: const DText(
-                              text: 'Email',
-                            ),
-                          ),
-                          TextFormField(
-                            controller: emailController,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  width: 2,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .surfaceVariant,
-                                ),
+                  Flexible(
+                    flex: 8,
+                    child: Center(
+                      child: Form(
+                        onChanged: () {
+                          _formKey.currentState?.validate();
+                        },
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        key: _formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                bottom: 1.h,
                               ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  width: 2,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primaryContainer,
-                                ),
-                              ),
-                              disabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  width: 2,
-                                  color: Theme.of(context).colorScheme.surface,
-                                ),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  width: 2,
-                                  color: Theme.of(context).colorScheme.error,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  width: 2,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
+                              child: const DText(
+                                text: 'Email',
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 2.h,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              bottom: 1.h,
-                            ),
-                            child: const DText(
-                              text: 'Password',
-                            ),
-                          ),
-                          TextFormField(
-                            controller: passwordController,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  width: 2,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .surfaceVariant,
+                            TextFormField(
+                              controller: emailController,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    width: 2,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .surfaceVariant,
+                                  ),
                                 ),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  width: 2,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primaryContainer,
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    width: 2,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primaryContainer,
+                                  ),
                                 ),
-                              ),
-                              disabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  width: 2,
-                                  color: Theme.of(context).colorScheme.surface,
+                                disabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    width: 2,
+                                    color:
+                                        Theme.of(context).colorScheme.surface,
+                                  ),
                                 ),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  width: 2,
-                                  color: Theme.of(context).colorScheme.error,
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    width: 2,
+                                    color: Theme.of(context).colorScheme.error,
+                                  ),
                                 ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  width: 2,
-                                  color: Theme.of(context).colorScheme.primary,
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    width: 2,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 4.h,
-                          ),
-                          CustomElevatedButton(
-                            onPressed: () {
-                              login!(
-                                emailController.text.trim(),
-                                passwordController.text.trim(),
-                              );
-                            },
-                            text: 'Login',
-                          ),
-                        ],
+                            SizedBox(
+                              height: 2.h,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                bottom: 1.h,
+                              ),
+                              child: const DText(
+                                text: 'Password',
+                              ),
+                            ),
+                            TextFormField(
+                              controller: passwordController,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    width: 2,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .surfaceVariant,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    width: 2,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primaryContainer,
+                                  ),
+                                ),
+                                disabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    width: 2,
+                                    color:
+                                        Theme.of(context).colorScheme.surface,
+                                  ),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    width: 2,
+                                    color: Theme.of(context).colorScheme.error,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    width: 2,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 4.h,
+                            ),
+                            Flexible(
+                              flex: 2,
+                              child: CustomElevatedButton(
+                                onPressed: () {
+                                  login!(
+                                    emailController.text.trim(),
+                                    passwordController.text.trim(),
+                                  );
+                                },
+                                text: 'Login',
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -444,7 +455,7 @@ class _DesktopLoginScreen extends HookConsumerWidget {
             child: ConstrainedBox(
               constraints: BoxConstraints(
                 maxHeight: 100.h,
-                maxWidth: 40.w,
+                maxWidth: 30.w,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

@@ -1,5 +1,6 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sizer/sizer.dart';
 
@@ -36,14 +37,32 @@ class _ActivitiesDataMobile extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: DText(
-          text: 'Activities',
-          fontSize: 19.sp,
-        ),
-        leading: null,
-        automaticallyImplyLeading: false,
-        elevation: 0,
-      ),
+          title: DText(
+            text: 'Activities',
+            fontSize: 19.sp,
+          ),
+          leading: null,
+          automaticallyImplyLeading: false,
+          elevation: 0,
+          actions: [
+            PopupMenuButton(
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  onTap: () {
+                    context.pushNamed('addActivity');
+                  },
+                  child: SizedBox(
+                    width: 25.w,
+                    height: 5.h,
+                    child: DText(
+                      text: 'Add Activity',
+                      fontSize: 15.sp,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ]),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: SingleChildScrollView(

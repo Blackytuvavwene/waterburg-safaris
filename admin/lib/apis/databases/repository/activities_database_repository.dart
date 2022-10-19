@@ -28,6 +28,10 @@ class ActivitiesDatabaseRepository implements ActivitiesDatabaseAbstract {
       return activity;
     } on FirebaseException catch (e) {
       throw e.toString();
+    } on Exception catch (e) {
+      throw e.toString();
+    } catch (e) {
+      throw e.toString();
     }
   }
 

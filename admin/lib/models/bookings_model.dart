@@ -8,13 +8,13 @@ part 'bookings_model.g.dart';
   explicitToJson: true,
 )
 class BookingModel {
-  final String? bookingCode;
-  final CustomerDetails? customerDetails;
-  final ActivityDetails? activityDetails;
-  final DateTime? departureDate;
-  final DateTime? arrivalDate;
-  final bool? paid;
-  final double? amountPaid;
+  String? bookingCode;
+  CustomerDetails? customerDetails;
+  ActivityDetails? activityDetails;
+  DateTime? departureDate;
+  DateTime? arrivalDate;
+  bool? paid;
+  double? amountPaid;
 
   BookingModel({
     this.bookingCode,
@@ -57,9 +57,9 @@ class BookingModel {
   explicitToJson: true,
 )
 class ActivityDetails {
-  final String? activityId;
-  final String? activityName;
-  final BookedPackage? bookedPackage;
+  String? activityId;
+  String? activityName;
+  BookedPackage? bookedPackage;
 
   ActivityDetails({
     this.activityId,
@@ -90,8 +90,8 @@ class ActivityDetails {
   explicitToJson: true,
 )
 class BookedPackage {
-  final String? packageId;
-  final String? packageName;
+  String? packageId;
+  String? packageName;
 
   BookedPackage({
     this.packageId,
@@ -119,9 +119,9 @@ class BookedPackage {
   explicitToJson: true,
 )
 class CustomerDetails {
-  final String? fullNames;
-  final String? email;
-  final CreditCardModel? creditCardDetails;
+  String? fullNames;
+  String? email;
+  CreditCardModel? creditCardDetails;
 
   CustomerDetails({
     this.fullNames,
@@ -152,11 +152,11 @@ class CustomerDetails {
   explicitToJson: true,
 )
 class CreditCardModel {
-  final String? cardNumber;
-  final String? cardHolderNames;
+  String? cardNumber;
+  String? cardHolderNames;
   @ExpiryDateConverter()
-  final DateTime? expiryDate;
-  final String? cvv;
+  DateTime? expiryDate;
+  String? cvv;
 
   CreditCardModel({
     this.cardNumber,
