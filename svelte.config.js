@@ -8,6 +8,7 @@ const config = {
 	preprocess:[
 		preprocess({
 			postcss:true,
+			
 		})
 	] ,
 
@@ -15,9 +16,9 @@ const config = {
 		adapter: adapter(),
 		
 	},
-	files:{
-		routes:'src/routes/frontend'
-	}
+	// files:{
+	// 	routes:'src/**'
+	// }
 };
 
 export default config;
