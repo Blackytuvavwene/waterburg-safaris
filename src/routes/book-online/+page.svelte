@@ -55,7 +55,10 @@ let activitiesDataList=data.activities;
     <title>Book {activity!= null? activity.activityName :"activities"} online</title>
 </svelte:head>
 
+{#await data.activities}
+    <div class="h-screen w-screen bg-black text-white text-4xl">loading...</div>
 
+{/await}
 
 <div class="{$bookingState.status === 'Idle'? "" : "relative" } w-full h-fit">
 {#if $bookingState.status === 'Booking' || $bookingState.status === 'Idle'}

@@ -49,6 +49,11 @@ afterNavigate(async (url) => {
 {/if}
 
 
+{#await data.homeData}
+    <div class="h-screen w-screen bg-black text-white text-4xl">loading...</div>
+
+{/await}
+
 <Header/>
 <main >
     <slot />
