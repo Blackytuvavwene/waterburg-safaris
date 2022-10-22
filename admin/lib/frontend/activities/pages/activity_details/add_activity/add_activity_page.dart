@@ -39,7 +39,7 @@ class AddActivityPage extends HookConsumerWidget {
       },
       {
         'name': 'Gallery',
-        'view': AddGalleryView(galleryData: activityData.value.activityGallery),
+        'view': AddGalleryView(galleryData: pickedImages),
         'icon': LineIcon.imagesAlt(),
       },
       {

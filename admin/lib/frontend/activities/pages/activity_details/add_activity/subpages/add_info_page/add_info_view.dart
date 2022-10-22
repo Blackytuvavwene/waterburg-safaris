@@ -45,90 +45,146 @@ class _MobileAddInfoView extends HookConsumerWidget {
     return SizedBox(
       height: 100.h,
       width: 100.w,
-      child: Stack(
-        children: [
-          Positioned(
-            child: Container(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    color: Theme.of(context).colorScheme.surfaceVariant,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 4.w,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          DText(
-                            text: 'Activity overview',
-                            fontSize: 14.sp,
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              editOverview.value = !editOverview.value;
-                            },
-                            child: DText(
-                              text: 'Edit',
-                              fontSize: 14.sp,
+      child: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+            pinned: true,
+            automaticallyImplyLeading: false,
+            title: DText(
+              text: 'Activity overview',
+              fontSize: 14.sp,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  editOverview.value = !editOverview.value;
+                },
+                child: DText(
+                  text: 'Edit',
+                  fontSize: 14.sp,
+                ),
+              ),
+            ],
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 4.w,
+                vertical: 2.h,
+              ),
+              child: editOverview.value == true
+                  ? Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                editOverview.value = false;
+                              },
+                              icon: LineIcon.times(),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                activityData?.value.overview =
+                                    overviewController.text;
+
+                                editOverview.value = false;
+                              },
+                              icon: LineIcon.check(),
+                            )
+                          ],
+                        ),
+                        TextField(
+                          maxLength: 1200,
+                          maxLines: 10,
+                          minLines: 1,
+                          controller: overviewController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
                           ),
-                        ],
-                      ),
+                        )
+                      ],
+                    )
+                  : DText(
+                      text: activityData?.value.overview ??
+                          'No activity overview given click on \'Edit\'',
+                      fontSize: 12.sp,
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 4.w,
-                      vertical: 2.h,
-                    ),
-                    child: editOverview.value == true
-                        ? Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      editOverview.value = false;
-                                    },
-                                    icon: LineIcon.times(),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      activityData?.value.overview =
-                                          overviewController.text;
-
-                                      editOverview.value = false;
-                                    },
-                                    icon: LineIcon.check(),
-                                  )
-                                ],
-                              ),
-                              TextField(
-                                maxLength: 1200,
-                                maxLines: 10,
-                                minLines: 1,
-                                controller: overviewController,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                ),
-                              )
-                            ],
-                          )
-                        : DText(
-                            text: activityData?.value.overview ??
-                                'No activity overview given click on \'Edit\'',
-                            fontSize: 12.sp,
-                          ),
-                  )
-                ],
+            ),
+          ),
+          SliverAppBar(
+            backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+            pinned: true,
+            automaticallyImplyLeading: false,
+            title: DText(
+              text: 'Activity SEO description',
+              fontSize: 14.sp,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  editSeoDescription.value = !editSeoDescription.value;
+                },
+                child: DText(
+                  text: 'Edit',
+                  fontSize: 14.sp,
+                ),
               ),
+            ],
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 4.w,
+                vertical: 2.h,
+              ),
+              child: editSeoDescription.value == true
+                  ? Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                editOverview.value = false;
+                              },
+                              icon: LineIcon.times(),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                activityData?.value.seoDescription =
+                                    seoDescriptionController.text;
+
+                                editSeoDescription.value = false;
+                              },
+                              icon: LineIcon.check(),
+                            )
+                          ],
+                        ),
+                        TextField(
+                          maxLength: 1200,
+                          maxLines: 10,
+                          minLines: 1,
+                          controller: seoDescriptionController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  : DText(
+                      text: activityData?.value.seoDescription ??
+                          'No activity SEO description given given click on \'Edit\'',
+                      fontSize: 12.sp,
+                    ),
             ),
           ),
         ],

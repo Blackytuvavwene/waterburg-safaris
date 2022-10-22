@@ -154,7 +154,16 @@ final goroutingProvider = Provider<GoRouter>(
                                   builder: (context, state) => AddActivityPage(
                                     key: state.pageKey,
                                   ),
-                                  routes: const [],
+                                  routes: [
+                                    GoRoute(
+                                      path: 'pick-images',
+                                      name: 'pickImages',
+                                      builder: (context, state) =>
+                                          PickImagesPage(
+                                        key: state.pageKey,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 GoRoute(
                                   path: ':activityId',

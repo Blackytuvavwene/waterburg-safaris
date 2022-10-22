@@ -8,8 +8,8 @@ const endpoint='https://6300056a9350a1e548e9706d.mockapi.io/activities';
 
 // /** @type {import('./$types').PageServerLoad} */
 
-export const load:PageServerLoad= async () => {
-    const responseData = await activitiesData();
+export const load:PageServerLoad = () => {
+    const responseData =  activitiesData();
 
     if(responseData ) {
         const data = responseData;

@@ -282,8 +282,7 @@ class ImageHelpers {
   }
 
   // pick add multiple images
-  static Future<List<ImageHelperModel>?> pickAddMultipleImages(
-      {String? storagePath}) async {
+  static Future<List<ImageHelperModel>?> pickAddMultipleImages() async {
     try {
       final picker = ImagePicker();
       final images = await picker.pickMultiImage(
