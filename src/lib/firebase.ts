@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { getApps, initializeApp, type FirebaseApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+
 import { collection, doc, getDoc, getDocs, getFirestore} from "firebase/firestore";
 import { aboutCompanyConverter } from "./app-components/about-components/about.types";
 // import { 
@@ -62,7 +62,7 @@ const getActivities = await  getDocs(collection(db,'activities'));
 
 const getActivity = (activityID:string)=> getDoc(doc(db,'activities',activityID));
   
-export const companyData=()=>{
+export const companyData = async()=>{
 if (getAboutCompany.exists()) {
     // console.log(getAboutCompany.data());
     const company=getAboutCompany.data();
@@ -76,7 +76,7 @@ if (getAboutCompany.exists()) {
 }
 
 // get all activities from firestore
-export const activitiesData = () =>{
+export const activitiesData =async () =>{
     const _activities = getActivities.docs.map((doc) => {return doc.data()});
 
         // console.log('hello world',getActivities.docs.values());
