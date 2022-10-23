@@ -17,7 +17,10 @@ import { Spinner } from 'flowbite-svelte';
 
 let cselected:currentA;
 
-
+currentSelected.subscribe(data =>{
+        cselected = data;
+        // console.log(data);
+    });
 
 
 
@@ -42,14 +45,7 @@ if(model){
     
 }
 
-onMount(async ()=>{
-    if(data.activities == undefined || data.activities == null){
-        currentSelected.subscribe(data =>{
-        cselected = data;
-        // console.log(data);
-    });
-    }
-});
+
 
 let activitiesDataList=data.activities;
 
