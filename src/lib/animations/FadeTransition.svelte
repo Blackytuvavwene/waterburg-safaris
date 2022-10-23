@@ -1,3 +1,17 @@
+
+
+<div bind:this={currentView} >
+    {#if visible}
+    <div 
+     transition:fly|local="{{ duration: duration,delay:delay, x: x, y: y, opacity: opacity, easing: easing}}" >
+        <slot ></slot>
+    </div>
+    {/if}
+</div>
+
+
+
+
 <script lang="ts">
 	import { fade, fly } from 'svelte/transition';
     import { onMount } from "svelte";
@@ -42,15 +56,5 @@
 
      $:currentView;
 </script>
-
-<div bind:this={currentView} >
-    {#if visible}
-    <div 
-     transition:fly="{{ duration: duration,delay:delay, x: x, y: y, opacity: opacity, easing: easing}}" >
-        <slot ></slot>
-    </div>
-    {/if}
-</div>
-
 
 

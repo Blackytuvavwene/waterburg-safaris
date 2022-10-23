@@ -1,47 +1,4 @@
-<script lang="ts">
 
-	import { isLoading, pageLoading } from '$lib/helpers/global.stores';
-	import { page,navigating } from '$app/stores';
-    import type {  AboutCompanyResponse } from '$lib/app-components/about-components/about.types';
-    import ContactFormFooter from '$lib/app-components/contact-form/ContactFormFooter.svelte';
-    import {
-  afterNavigate,
-  beforeNavigate,
-  disableScrollHandling,
-  goto,
-  invalidate,
-  invalidateAll,
-  prefetch,
-  prefetchRoutes
-} from '$app/navigation';
-
-    import Footer from '$lib/app-components/footer/footer.svelte';
-    import Header from '$lib/app-components/header/Header.svelte';
-    import '../app.css';
-    import logo from "$lib/wblogolg.svg";
-
-    import type { LayoutServerData } from './$types';
-    import { onMount } from 'svelte';
-    import PageLoader from '$lib/animations/PageLoader.svelte';
-
-    let isPageLoaded = false;
-
-    let openWidget = false;
-
-    export let data: LayoutServerData;
-    // // console.log(data.about);
-
-    // $: ({ companyDetails } = data.about as AboutCompanyResponse);
-
-beforeNavigate(async (url) => {
-  pageLoading.set(true);
-});
-
-afterNavigate(async (url) => {
-  pageLoading.set(false);
-});
-    
-</script>
 
 
 {#if $pageLoading}
@@ -110,6 +67,48 @@ afterNavigate(async (url) => {
 
 
 <Footer footerData={data.homeData} />
+
+
+
+
+<script lang="ts">
+
+	import { isLoading, pageLoading } from '$lib/helpers/global.stores';
+	import { page,navigating } from '$app/stores';
+    import type {  AboutCompanyResponse } from '$lib/app-components/about-components/about.types';
+    import ContactFormFooter from '$lib/app-components/contact-form/ContactFormFooter.svelte';
+    import {
+  afterNavigate,
+  beforeNavigate
+} from '$app/navigation';
+
+    import Footer from '$lib/app-components/footer/footer.svelte';
+    import Header from '$lib/app-components/header/Header.svelte';
+    import '../app.css';
+    import logo from "$lib/wblogolg.svg";
+
+    import type { LayoutServerData } from './$types';
+    import { onMount } from 'svelte';
+    import PageLoader from '$lib/animations/PageLoader.svelte';
+
+    let isPageLoaded = false;
+
+    let openWidget = false;
+
+    export let data: LayoutServerData;
+    // // console.log(data.about);
+
+    // $: ({ companyDetails } = data.about as AboutCompanyResponse);
+
+beforeNavigate(async (url) => {
+  pageLoading.set(true);
+});
+
+afterNavigate(async (url) => {
+  pageLoading.set(false);
+});
+    
+</script>
 
 
 

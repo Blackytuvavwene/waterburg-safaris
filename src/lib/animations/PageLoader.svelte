@@ -1,11 +1,3 @@
-<script lang="ts">
-	import { isLoading } from '$lib/helpers/global.stores';
-    import logo from '$lib/wblogos.svg';
-
-    
-</script>
-
-
 
 <div class="w-screen h-screen bg-black relative z-60">
     <img src={logo} alt="Waterburg Safaris logo" 
@@ -13,3 +5,9 @@
     w-[60vw] h-[30vh]"/>
 </div>
 
+<script lang="ts">
+	import { isLoading } from '$lib/helpers/global.stores';
+    import logo from '$lib/wblogos.svg';
+
+    
+</script>
