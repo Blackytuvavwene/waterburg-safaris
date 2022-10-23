@@ -1,6 +1,6 @@
 <script lang="ts" >
 import type { ActivitiesResponse, Package } from '$lib/app-components/activities-components/activities.types';
-import {  persistCurrentSelectedStore, type currentA } from '$lib/app-components/activities-components/activity.stores';
+import {  currentSelected, persistCurrentSelectedStore, type currentA } from '$lib/app-components/activities-components/activity.stores';
 import ActivitiesBooking from '$lib/app-components/booking-components/ActivitiesBooking..svelte';
 import CurrentActivityBooking from '$lib/app-components/booking-components/CurrentActivityBooking.svelte';
 import { activitiesData, activityData, db } from '$lib/firebase';
@@ -16,15 +16,14 @@ import { Spinner } from 'flowbite-svelte';
 	import { goto } from '$app/navigation';
 
 let cselected:currentA;
-let bookingError:any;
-let bookingResult:any;
 
-persistCurrentSelectedStore.subscribe(data =>{
+
+currentSelected.subscribe(data =>{
         cselected = data;
         // console.log(data);
     });
 
-let loading=false;
+
 
 async function bookActivity(event:any){
     
@@ -55,10 +54,7 @@ let activitiesDataList=data.activities;
     <title>Book {activity!= null? activity.activityName :"activities"} online</title>
 </svelte:head>
 
-{#await data.activities}
-    <div class="h-screen w-screen bg-black text-white text-4xl">loading...</div>
 
-{/await}
 
 <div class="{$bookingState.status === 'Idle'? "" : "relative" } w-full h-fit">
 {#if $bookingState.status === 'Booking' || $bookingState.status === 'Idle'}

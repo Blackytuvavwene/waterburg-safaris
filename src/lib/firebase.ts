@@ -58,7 +58,7 @@ export const db =getFirestore(app);
 
 const getAboutCompany=await getDoc(doc(db,'aboutCompany','ymV8H6FBRjfMBFhAh8o2').withConverter(aboutCompanyConverter));
     
-const getActivities = await getDocs(collection(db,'activities'));
+const getActivities = await  getDocs(collection(db,'activities'));
 
 const getActivity = (activityID:string)=> getDoc(doc(db,'activities',activityID));
   

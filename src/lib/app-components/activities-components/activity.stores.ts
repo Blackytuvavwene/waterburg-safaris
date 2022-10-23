@@ -8,16 +8,16 @@ export type currentA={
     packageD?:Package|null;
 }
 
-// export const currentSelected = writable<currentA>();
+export const currentSelected = writable<currentA>({});
 
-// export const setCurrentSelected=(activityID:string,packageID:string) => {
-//     console.log('hello select ',packageID,activityID);
-//     const newC:currentA={
-//         aID:activityID,
-//         pID:packageID
-//     }
-//     return currentSelected.set(newC);
-// };
+export const setCurrentSelected=(activityData:ActivitiesResponse,packageData:Package) => {
+    console.log('hello select ',packageData,activityData);
+    const newC:currentA={
+       activity:activityData,
+         packageD:packageData
+    }
+    return currentSelected.set(newC);
+};
 
 export const persistCurrentSelectedStore = createStore(
     {name: 'currentSelected'},
