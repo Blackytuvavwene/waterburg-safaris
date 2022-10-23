@@ -11,6 +11,14 @@ const config = {
 			
 		})
 	] ,
+	prerender: {
+		crawl: true,
+		default: true,
+		enabled: true,
+		entries: ['*'],
+		onError: 'continue',
+		origin: 'http://sveltekit-prerender'
+	  },
 
 	kit: {
 		adapter: adapter(),
