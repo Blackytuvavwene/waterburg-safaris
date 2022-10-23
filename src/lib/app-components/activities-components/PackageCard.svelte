@@ -3,14 +3,14 @@
 
 	
     import type { ActivitiesResponse, Package } from './activities.types';
-import { setCurrentSelectedPersist } from './activity.stores';
+import { setCurrentSelected, setCurrentSelectedPersist } from './activity.stores';
     export let packageData:Package;
     export let activity:ActivitiesResponse;
 
     const setBookActivity=()=>{
         if(activity.activityId && packageData){
             console.log(activity,'set');
-            return setCurrentSelectedPersist(activity,packageData);
+            return setCurrentSelected(activity,packageData);
         }
     }
 

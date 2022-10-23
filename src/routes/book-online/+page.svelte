@@ -1,12 +1,12 @@
 <script lang="ts" >
-import type { ActivitiesResponse, Package } from '$lib/app-components/activities-components/activities.types';
+
 import {  currentSelected, persistCurrentSelectedStore, type currentA } from '$lib/app-components/activities-components/activity.stores';
 import ActivitiesBooking from '$lib/app-components/booking-components/ActivitiesBooking..svelte';
 import CurrentActivityBooking from '$lib/app-components/booking-components/CurrentActivityBooking.svelte';
-import { activitiesData, activityData, db } from '$lib/firebase';
+
 import type { PageServerData } from './$types';
 import { onMount } from 'svelte';
-import { doc, setDoc,  } from 'firebase/firestore';
+
 import { DatabaseHandler } from '$lib/helpers/firestore.converters';
 import type { BookingFormModel } from '$lib/app-components/booking-components/booking.types';
 import { bookingState } from '$lib/app-components/booking-components/booking.stores';
@@ -18,10 +18,7 @@ import { Spinner } from 'flowbite-svelte';
 let cselected:currentA;
 
 
-currentSelected.subscribe(data =>{
-        cselected = data;
-        // console.log(data);
-    });
+
 
 
 
@@ -44,6 +41,15 @@ if(model){
 
     
 }
+
+onMount(async ()=>{
+    if(data.activities == undefined || data.activities == null){
+        currentSelected.subscribe(data =>{
+        cselected = data;
+        // console.log(data);
+    });
+    }
+});
 
 let activitiesDataList=data.activities;
 
