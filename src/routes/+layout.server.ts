@@ -23,7 +23,7 @@ export const load:LayoutServerLoad= async () => {
 
        
         return {
-            homeData: Hdata as HomeModel,
+            homeData: JSON.parse(JSON.stringify(Hdata)) as HomeModel,
         } 
     }
 

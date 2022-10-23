@@ -1,5 +1,5 @@
 
-import { error } from "@sveltejs/kit";
+import { error, json } from "@sveltejs/kit";
 import type { PageServerLoad } from './$types';
 import type {  ActivitiesResponse } from "$lib/app-components/activities-components/activities.types";
 import { activitiesData } from "$lib/firebase";
@@ -14,9 +14,11 @@ export const load:PageServerLoad = async () => {
     if(responseData ) {
         const data = responseData;
         const activities=data as ActivitiesResponse[];
+
+       
        
         return {
-            activities: activities,
+            activities: JSON.parse(JSON.stringify(activities)) as ActivitiesResponse[],
         } 
     }
 
@@ -24,4 +26,4 @@ export const load:PageServerLoad = async () => {
     
 };
 
-export const prerender = 'auto';
+export const prerender = true;
