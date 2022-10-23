@@ -15,10 +15,12 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		
+		
 	},
 	// files:{
 	// 	routes:'src/**'
 	// }
+	
 };
 
 export default config;

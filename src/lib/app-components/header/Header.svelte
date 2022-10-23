@@ -83,7 +83,7 @@ import { resetCurrentSelectedPersist } from '$lib/app-components/activities-comp
                     {#each  navLinks as link}
                         <a href={link.path} class="cursor-pointer text-onPrimary sm:text-center font-bold p-4 hover:bg-onPrimaryContainer hover:text-primaryContainer
                         {link === navLinks[navLinks.length - 1] ? "border-b-0" : "border-b-2"}
-                          border-surfaceVariant w-full" on:click={toggleNavBar}>
+                          border-surfaceVariant w-full" on:click={toggleNavBar} data-sveltekit-noscroll>
                             {link.name}
                         </a>
                     {/each}
@@ -95,7 +95,8 @@ import { resetCurrentSelectedPersist } from '$lib/app-components/activities-comp
             {#each  navLinks as link}
                 <a href={link.path} class="cursor-pointe w-fit h-fit px-7 hover:bg-tertiaryContainer   
                 hover:text-onTertiaryContainer items-center py-7 text-center font-semibold 
-                {$page.routeId ===link.id ?"text-onTertiaryContainer bg-tertiaryContainer": "text-onPrimary"} " on:click={$page.routeId ==='book-online' ? resetCurrentSelectedPersist : null} >
+                {$page.routeId ===link.id ?"text-onTertiaryContainer bg-tertiaryContainer": "text-onPrimary"} " 
+                on:click={$page.routeId ==='book-online' ? resetCurrentSelectedPersist : null} data-sveltekit-noscroll>
                     {link.name}
                 </a>
             {/each}
