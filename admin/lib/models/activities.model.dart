@@ -66,15 +66,15 @@ class Activity {
 )
 class Package {
   final String? packageId;
-  final String? packageName;
-  final List<String>? keywords;
-  final String? description;
-  final double? price;
-  final double? lastPrice;
-  final double? rating;
-  final double? discountPercentage;
-  final String? coupon;
-  final List<String>? packageOffers;
+  String? packageName;
+  List<String>? keywords;
+  String? description;
+  double? price;
+  double? lastPrice;
+  double? rating;
+  double? discountPercentage;
+  String? coupon;
+  List<String>? packageOffers;
   Package({
     this.packageId,
     this.packageName,
@@ -92,4 +92,30 @@ class Package {
       _$PackageFromJson(json);
 
   Map<String, dynamic> toJson() => _$PackageToJson(this);
+
+  Package copyWith({
+    String? packageId,
+    String? packageName,
+    List<String>? keywords,
+    String? description,
+    double? price,
+    double? lastPrice,
+    double? rating,
+    double? discountPercentage,
+    String? coupon,
+    List<String>? packageOffers,
+  }) {
+    return Package(
+      packageId: packageId ?? this.packageId,
+      packageName: packageName ?? this.packageName,
+      keywords: keywords ?? this.keywords,
+      description: description ?? this.description,
+      price: price ?? this.price,
+      lastPrice: lastPrice ?? this.lastPrice,
+      rating: rating ?? this.rating,
+      discountPercentage: discountPercentage ?? this.discountPercentage,
+      coupon: coupon ?? this.coupon,
+      packageOffers: packageOffers ?? this.packageOffers,
+    );
+  }
 }

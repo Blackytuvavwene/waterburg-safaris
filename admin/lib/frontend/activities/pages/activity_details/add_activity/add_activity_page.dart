@@ -27,7 +27,12 @@ class AddActivityPage extends HookConsumerWidget {
     });
 
     final activityData = useState(Activity());
-    final pickedImages = useState<List<ImageHelperModel>>([]);
+    // final pickedImages = useState<List<ImageHelperModel>>([]);
+    final packages = useState<List<Package>>([]);
+    final tags = useState<List<String>>([]);
+
+    final imagesPicked = ref.watch(addImageNotifierProvider);
+    final addImageNotifier = ref.read(addImageNotifierProvider.notifier);
 
     final tabs = [
       {
@@ -39,20 +44,23 @@ class AddActivityPage extends HookConsumerWidget {
       },
       {
         'name': 'Gallery',
-        'view': AddGalleryView(galleryData: pickedImages),
+        'view': AddGalleryView(
+          galleryData: imagesPicked,
+          addImageNotifier: addImageNotifier,
+        ),
         'icon': LineIcon.imagesAlt(),
       },
       {
         'name': 'Packages',
         'view': AddPackagesView(
-          packageData: activityData.value.packages,
+          packageData: packages,
         ),
         'icon': LineIcon.boxOpen(),
       },
       {
         'name': 'Tags',
         'view': AddTagsView(
-          tagData: activityData.value.tags,
+          tagData: tags,
         ),
         'icon': LineIcon.tags(),
       }
@@ -113,7 +121,7 @@ class AddActivityPage extends HookConsumerWidget {
         activity: activityData,
         tabView: tabView,
         tabBar: tabBar,
-        pickedImages: pickedImages,
+        pickedImages: imagesPicked,
       ),
       tablet: _TabletAddActivityPage(
         activity: activityData,
@@ -141,7 +149,7 @@ class _MobileAddActivityPage extends HookConsumerWidget {
   final ValueNotifier<Activity>? activity;
   final TabBarView? tabView;
   final TabBar? tabBar;
-  final ValueNotifier<List<ImageHelperModel>>? pickedImages;
+  final List<ImageHelperModel>? pickedImages;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -161,8 +169,8 @@ class _MobileAddActivityPage extends HookConsumerWidget {
                 activityName: activity!.value.activityName,
                 overview: activity!.value.overview,
                 seoDescription: activity!.value.seoDescription,
-                activityGallery: await Future.wait(
-                    pickedImages!.value.map((imageModel) async {
+                activityGallery:
+                    await Future.wait(pickedImages!.map((imageModel) async {
                   final newGallery = Gallery(
                       imageDescription:
                           imageModel.imageDetails?.imageDescription,

@@ -205,11 +205,149 @@ class _TabletBookingsDataPage extends HookConsumerWidget {
   final List<BookingModel>? bookingModel;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      color: Colors.greenAccent,
-      child: const Center(
-        child: Text(
-          'Tablet Bookings',
+    return Scaffold(
+      body: SafeArea(
+        child: SizedBox(
+          height: 100.h,
+          width: 100.w,
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                title: const DText(
+                  text: 'Bookings',
+                ),
+                floating: true,
+                snap: true,
+                automaticallyImplyLeading: false,
+                actions: [
+                  IconButton(
+                    onPressed: () {},
+                    icon: LineIcon.search(),
+                  ),
+                ],
+              ),
+              SliverToBoxAdapter(
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 4.w,
+                  ),
+                  width: 100.w,
+                  child: Row(
+                    children: [
+                      const Expanded(
+                        flex: 3,
+                        child: DText(
+                          text: 'Filter',
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 8.0,
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: DropdownButtonFormField(
+                          isExpanded: true,
+                          items: const [
+                            DropdownMenuItem(
+                              value: 'all',
+                              child: Text(
+                                'All',
+                              ),
+                            ),
+                            DropdownMenuItem(
+                              value: 'pending',
+                              child: Text(
+                                'Pending',
+                              ),
+                            ),
+                            DropdownMenuItem(
+                              value: 'confirmed',
+                              child: Text(
+                                'Confirmed',
+                              ),
+                            ),
+                            DropdownMenuItem(
+                              value: 'cancelled',
+                              child: Text(
+                                'Cancelled',
+                              ),
+                            ),
+                          ],
+                          onChanged: (value) {},
+                          value: 'all',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: DataTable(
+                  dataRowHeight: 6.h,
+                  columnSpacing: 8.w,
+                  columns: [
+                    DataColumn(
+                      label: SizedBox(
+                        width: 24.w,
+                        child: const DText(
+                          text: 'Booking code',
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 20.w,
+                        child: const DText(
+                          text: 'Customer email',
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 30.w,
+                        child: const DText(
+                          text: 'Booked package name',
+                        ),
+                      ),
+                    ),
+                  ],
+                  rows: bookingModel!
+                      .map(
+                        (bookingModel) => DataRow(
+                          cells: [
+                            DataCell(
+                              SizedBox(
+                                width: 24.w,
+                                child: DText(
+                                  text: bookingModel.bookingCode.toString(),
+                                ),
+                              ),
+                            ),
+                            DataCell(
+                              SizedBox(
+                                width: 20.w,
+                                child: DText(
+                                  text: bookingModel.customerDetails?.email,
+                                ),
+                              ),
+                            ),
+                            DataCell(
+                              SizedBox(
+                                width: 30.w,
+                                child: DText(
+                                  text: bookingModel.activityDetails
+                                      ?.bookedPackage?.packageName,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                      .toList(),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

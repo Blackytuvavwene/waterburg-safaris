@@ -39,12 +39,28 @@ class Gallery {
   String? imageTitle;
   String? imageDescription;
 
-  Gallery({this.imageUrl, this.imageTitle, this.imageDescription});
+  Gallery({
+    this.imageUrl,
+    this.imageTitle,
+    this.imageDescription,
+  });
 
   factory Gallery.fromJson(Map<String, dynamic> json) =>
       _$GalleryFromJson(json);
 
   Map<String, dynamic> toJson() => _$GalleryToJson(this);
+
+  Gallery copyWith({
+    String? imageUrl,
+    String? imageTitle,
+    String? imageDescription,
+  }) {
+    return Gallery(
+      imageUrl: imageUrl ?? this.imageUrl,
+      imageTitle: imageTitle ?? this.imageTitle,
+      imageDescription: imageDescription ?? this.imageDescription,
+    );
+  }
 }
 
 @JsonSerializable(

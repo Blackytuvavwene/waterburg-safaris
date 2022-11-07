@@ -13,9 +13,11 @@ class AddInfoView extends HookConsumerWidget {
     this.seoDescription,
     this.activityData,
   });
+
+  final ValueNotifier<Activity>? activityData;
   final String? overview;
   final String? seoDescription;
-  final ValueNotifier<Activity>? activityData;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
@@ -33,7 +35,9 @@ class _MobileAddInfoView extends HookConsumerWidget {
   const _MobileAddInfoView({
     this.activityData,
   });
+
   final ValueNotifier<Activity>? activityData;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final overviewController =
@@ -196,6 +200,7 @@ class _MobileAddInfoView extends HookConsumerWidget {
 // tablet add info view
 class _TabletAddInfoView extends HookConsumerWidget {
   const _TabletAddInfoView();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container();
@@ -205,6 +210,7 @@ class _TabletAddInfoView extends HookConsumerWidget {
 // desktop add info view
 class _DesktopAddInfoView extends HookConsumerWidget {
   const _DesktopAddInfoView();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container();

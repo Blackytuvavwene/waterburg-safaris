@@ -8,19 +8,24 @@ class AddGalleryView extends HookConsumerWidget {
   const AddGalleryView({
     super.key,
     required this.galleryData,
+    required this.addImageNotifier,
   });
-  final ValueNotifier<List<ImageHelperModel>> galleryData;
+  final List<ImageHelperModel> galleryData;
+  final AddImagesNotifier addImageNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
       mobile: _MobileAddGalleryView(
         galleryData: galleryData,
+        addImageNotifier: addImageNotifier,
       ),
       tablet: _TabletAddGalleryView(
         galleryData: galleryData,
+        addImageNotifier: addImageNotifier,
       ),
       desktop: _DesktopAddGalleryView(
         galleryData: galleryData,
+        addImageNotifier: addImageNotifier,
       ),
     );
   }
@@ -30,8 +35,10 @@ class AddGalleryView extends HookConsumerWidget {
 class _MobileAddGalleryView extends HookConsumerWidget {
   const _MobileAddGalleryView({
     required this.galleryData,
+    required this.addImageNotifier,
   });
-  final ValueNotifier<List<ImageHelperModel>> galleryData;
+  final List<ImageHelperModel> galleryData;
+  final AddImagesNotifier addImageNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
@@ -39,7 +46,7 @@ class _MobileAddGalleryView extends HookConsumerWidget {
       width: 100.w,
       child: CustomScrollView(
         slivers: [
-          galleryData.value.isNotEmpty
+          galleryData.isNotEmpty
               ? SliverAppBar(
                   backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
                   pinned: true,
@@ -52,12 +59,7 @@ class _MobileAddGalleryView extends HookConsumerWidget {
                     TextButton(
                       onPressed: () async {
                         //TODO: add gallery
-                        final newGallery =
-                            await ImageHelpers.pickAddMultipleImages();
-
-                        galleryData.value = newGallery != null
-                            ? [...galleryData.value, ...newGallery]
-                            : galleryData.value;
+                        await addImageNotifier.addImageToList();
                       },
                       child: DText(
                         text: 'Pick images',
@@ -69,11 +71,11 @@ class _MobileAddGalleryView extends HookConsumerWidget {
               : const SliverToBoxAdapter(),
           SliverPersistentHeader(
             delegate: ImageCounterHeader(
-              galleryCount: galleryData.value.length,
+              galleryCount: galleryData.length,
             ),
             pinned: true,
           ),
-          galleryData.value.isNotEmpty
+          galleryData.isNotEmpty
               ? SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
@@ -84,10 +86,14 @@ class _MobileAddGalleryView extends HookConsumerWidget {
                           left: 2.w,
                           right: 2.w,
                         ),
-                        child: AddPickedImage(image: galleryData.value[index]),
+                        child: AddPickedImage(
+                          image: galleryData[index],
+                          index: index,
+                          addImageNotifier: addImageNotifier,
+                        ),
                       );
                     },
-                    childCount: galleryData.value.length,
+                    childCount: galleryData.length,
                   ),
                 )
               : SliverToBoxAdapter(
@@ -106,12 +112,7 @@ class _MobileAddGalleryView extends HookConsumerWidget {
                         TextButton(
                           onPressed: () async {
                             //TODO: add gallery
-                            final newGallery =
-                                await ImageHelpers.pickAddMultipleImages();
-
-                            galleryData.value = newGallery != null
-                                ? [...galleryData.value, ...newGallery]
-                                : galleryData.value;
+                            await addImageNotifier.addImageToList();
                           },
                           style: TextButton.styleFrom(
                             backgroundColor: Theme.of(context)
@@ -143,9 +144,11 @@ class _MobileAddGalleryView extends HookConsumerWidget {
 // tablet add gallery view
 class _TabletAddGalleryView extends HookConsumerWidget {
   const _TabletAddGalleryView({
-    this.galleryData,
+    required this.galleryData,
+    required this.addImageNotifier,
   });
-  final ValueNotifier<List<ImageHelperModel>>? galleryData;
+  final List<ImageHelperModel> galleryData;
+  final AddImagesNotifier addImageNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container();
@@ -155,9 +158,11 @@ class _TabletAddGalleryView extends HookConsumerWidget {
 // desktop add gallery view
 class _DesktopAddGalleryView extends HookConsumerWidget {
   const _DesktopAddGalleryView({
-    this.galleryData,
+    required this.galleryData,
+    required this.addImageNotifier,
   });
-  final ValueNotifier<List<ImageHelperModel>>? galleryData;
+  final List<ImageHelperModel> galleryData;
+  final AddImagesNotifier addImageNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container();

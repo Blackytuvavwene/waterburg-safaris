@@ -159,7 +159,7 @@ class PackageCard extends HookConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         DText(
-                          text: package!.packageName,
+                          text: package?.packageName,
                           textColor: Theme.of(context).colorScheme.onPrimary,
                           fontSize: context.breakpoint > LayoutBreakpoint.sm
                               ? 6.sp
@@ -190,7 +190,7 @@ class PackageCard extends HookConsumerWidget {
                   SizedBox(
                     width: 100.w,
                     child: DText(
-                      text: '\$ ${package!.price.toString()}',
+                      text: '\$ ${package?.price.toString()}',
                       textColor: Theme.of(context).colorScheme.onPrimary,
                       fontSize: context.breakpoint > LayoutBreakpoint.sm
                           ? 4.sp
@@ -220,7 +220,7 @@ class PackageCard extends HookConsumerWidget {
                     SizedBox(
                       height: 2.h,
                     ),
-                    package!.packageOffers!.isNotEmpty
+                    package?.packageOffers != null
                         ? Expanded(
                             flex: 6,
                             child: ListView.separated(
@@ -263,14 +263,7 @@ class PackageCard extends HookConsumerWidget {
                               },
                             ),
                           )
-                        : Expanded(
-                            child: DText(
-                              text: 'No offers',
-                              textColor:
-                                  Theme.of(context).colorScheme.onPrimary,
-                              fontSize: 6.sp,
-                            ),
-                          ),
+                        : const SizedBox.shrink(),
                   ],
                 ),
               ),

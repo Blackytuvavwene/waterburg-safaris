@@ -101,7 +101,7 @@ class _ActivitiesDataTablet extends HookConsumerWidget {
             fontSize: 12.sp,
           ),
         ),
-        toolbarHeight: 8.h,
+        toolbarHeight: 6.h,
         leading: null,
         automaticallyImplyLeading: false,
         elevation: 0,
@@ -152,9 +152,38 @@ class _ActivitiesDataDesktop extends HookConsumerWidget {
           ),
         ),
         leading: null,
-        toolbarHeight: 16.h,
+        toolbarHeight: 6.h,
         automaticallyImplyLeading: false,
         elevation: 0,
+        actions: [
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: 4.w,
+              vertical: 1.h,
+            ),
+            child: TextButton(
+              onPressed: () {},
+              style: TextButton.styleFrom(
+                backgroundColor: Theme.of(context)
+                    .colorScheme
+                    .primaryContainer
+                    .withOpacity(0.1),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                minimumSize: Size(
+                  20.w,
+                  1.h,
+                ),
+              ),
+              child: DText(
+                text: 'Add activity',
+                textColor: Theme.of(context).colorScheme.onPrimaryContainer,
+                fontSize: 8.sp,
+              ),
+            ),
+          ),
+        ],
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
