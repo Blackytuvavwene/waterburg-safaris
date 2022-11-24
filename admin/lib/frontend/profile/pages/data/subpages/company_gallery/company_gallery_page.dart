@@ -41,20 +41,34 @@ class _MobileCompanyGalleryPage extends HookConsumerWidget {
   final String? companyId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      color: Theme.of(context).colorScheme.background,
-      child: Center(
-        child: Column(
-          children: const [
-            DText(
-              text: 'Mobile Company Gallery',
-            ),
-            Center(
-              child: CircularProgressIndicator(),
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          title: const Text('Company Gallery'),
+          automaticallyImplyLeading: false,
+          pinned: true,
+          actions: [
+            IconButton(
+              onPressed: () {
+                // ref.read(companyGalleryProvider.notifier).addGallery(
+                //       companyId: companyId,
+                //     );
+              },
+              icon: const Icon(Icons.add),
             ),
           ],
         ),
-      ),
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return CompanyGalleryCard(
+                companyGallery: companyGallery![index],
+              );
+            },
+            childCount: companyGallery!.length,
+          ),
+        ),
+      ],
     );
   }
 }

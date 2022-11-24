@@ -46,7 +46,8 @@ class AddPackageNotifier extends StateNotifier<Package> {
 }
 
 // add package state provider
-final addPackageProvider = StateNotifierProvider<AddPackageNotifier, Package>(
+final addPackageProvider =
+    StateNotifierProvider.autoDispose<AddPackageNotifier, Package>(
   (ref) => AddPackageNotifier(),
 );
 
@@ -58,25 +59,21 @@ class AddPackagePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final packageData = useState(Package());
     final packageNotifier = ref.watch(addPackageProvider.notifier);
     final packageState = ref.watch(addPackageProvider);
     final tryKeywords = useState<List<String>>([]);
 
     return AppLayout(
       mobile: _MobileAddPackagePage(
-        packageData: packageData,
         packageNotifier: packageNotifier,
         tryKeywords: tryKeywords,
         packageState: packageState,
       ),
       tablet: _TabletAddPackagePage(
-        packageData: packageData,
         packageState: packageState,
         packageNotifier: packageNotifier,
       ),
       desktop: _DesktopAddPackagePage(
-        packageData: packageData,
         packageState: packageState,
         packageNotifier: packageNotifier,
       ),
@@ -87,33 +84,33 @@ class AddPackagePage extends HookConsumerWidget {
 // mobile add package page with child container
 class _MobileAddPackagePage extends HookConsumerWidget {
   const _MobileAddPackagePage({
-    required this.packageData,
     required this.packageNotifier,
     required this.tryKeywords,
     required this.packageState,
   });
-  final ValueNotifier<Package> packageData;
+
   final Package packageState;
   final AddPackageNotifier packageNotifier;
   final ValueNotifier<List<String>> tryKeywords;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = GlobalKey<FormState>();
+    final formFocus = useFocusNode();
     final packageNameController = useTextEditingController(
-      text: packageData.value.packageName,
+      text: packageState.packageName,
     );
     final keywordsController = useTextEditingController();
     final descriptionController = useTextEditingController(
-      text: packageData.value.description,
+      text: packageState.description,
     );
     final priceController = useTextEditingController(
-      text: packageData.value.price.toString(),
+      text: packageState.price.toString(),
     );
     final discountController = useTextEditingController(
-      text: packageData.value.discountPercentage.toString(),
+      text: packageState.discountPercentage.toString(),
     );
     final couponController = useTextEditingController(
-      text: packageData.value.coupon,
+      text: packageState.coupon,
     );
 
     final packageOffersController = useTextEditingController();
@@ -131,7 +128,7 @@ class _MobileAddPackagePage extends HookConsumerWidget {
             leading: IconButton(
               onPressed: () {
                 packageState.packageName != null
-                    ? Navigator.pop(context, packageData.value)
+                    ? Navigator.pop(context, packageState)
                     : Navigator.pop(context);
               },
               icon: LineIcon.arrowLeft(),
@@ -160,6 +157,14 @@ class _MobileAddPackagePage extends HookConsumerWidget {
                             hintText: 'Enter Package Name',
                             border: OutlineInputBorder(),
                           ),
+                          onSaved: (newValue) {
+                            packageNotifier.updatePackageName(newValue!);
+                          },
+                          autofocus: true,
+                          textInputAction: TextInputAction.next,
+                          onEditingComplete: () {
+                            FocusScope.of(context).nextFocus();
+                          },
                         ),
                         SizedBox(
                           height: 2.h,
@@ -264,6 +269,11 @@ class _MobileAddPackagePage extends HookConsumerWidget {
                                 ),
                               ),
                             ),
+                            textInputAction: TextInputAction.next,
+                            autofocus: true,
+                            onEditingComplete: () {
+                              FocusScope.of(context).nextFocus();
+                            },
                           ),
                         ),
                         SizedBox(
@@ -279,6 +289,14 @@ class _MobileAddPackagePage extends HookConsumerWidget {
                             hintText: 'Enter Description',
                             border: OutlineInputBorder(),
                           ),
+                          onSaved: (newValue) {
+                            packageNotifier.updatePackageDescription(newValue!);
+                          },
+                          textInputAction: TextInputAction.next,
+                          autofocus: true,
+                          onEditingComplete: () {
+                            FocusScope.of(context).nextFocus();
+                          },
                         ),
                         SizedBox(
                           height: 2.h,
@@ -295,6 +313,16 @@ class _MobileAddPackagePage extends HookConsumerWidget {
                             hintText: 'Enter Price',
                             border: OutlineInputBorder(),
                           ),
+                          onSaved: (newValue) {
+                            packageNotifier.updatePackagePrice(
+                              double.parse(newValue!),
+                            );
+                          },
+                          textInputAction: TextInputAction.next,
+                          autofocus: true,
+                          onEditingComplete: () {
+                            FocusScope.of(context).nextFocus();
+                          },
                         ),
                         // SizedBox(
                         //   height: 2.h,
@@ -327,6 +355,16 @@ class _MobileAddPackagePage extends HookConsumerWidget {
                             hintText: 'Enter Discount Percentage',
                             border: OutlineInputBorder(),
                           ),
+                          onSaved: (newValue) {
+                            packageNotifier.updatePackageDiscountPercentage(
+                              double.parse(newValue!),
+                            );
+                          },
+                          textInputAction: TextInputAction.next,
+                          autofocus: true,
+                          onEditingComplete: () {
+                            FocusScope.of(context).nextFocus();
+                          },
                         ),
                         SizedBox(
                           height: 2.h,
@@ -338,6 +376,14 @@ class _MobileAddPackagePage extends HookConsumerWidget {
                             hintText: 'Enter Coupon',
                             border: OutlineInputBorder(),
                           ),
+                          onSaved: (newValue) {
+                            packageNotifier.updatePackageCoupon(newValue!);
+                          },
+                          textInputAction: TextInputAction.next,
+                          autofocus: true,
+                          onEditingComplete: () {
+                            FocusScope.of(context).nextFocus();
+                          },
                         ),
                         SizedBox(
                           height: 2.h,
@@ -366,10 +412,13 @@ class _MobileAddPackagePage extends HookConsumerWidget {
                                       .withOpacity(0.2),
                                 ),
                                 onPressed: () {
-                                  packageData.value.packageOffers = [
-                                    ...packageData.value.packageOffers!,
+                                  final newOffers = [
+                                    if (packageState.packageOffers != null)
+                                      ...packageState.packageOffers!,
                                     packageOffersController.text
                                   ];
+                                  packageNotifier
+                                      .updatePackageOffers(newOffers);
                                   packageOffersController.clear();
                                 },
                                 child: const DText(
@@ -378,6 +427,11 @@ class _MobileAddPackagePage extends HookConsumerWidget {
                               ),
                             ),
                           ),
+                          textInputAction: TextInputAction.done,
+                          autofocus: true,
+                          // onEditingComplete: () {
+                          //   FocusScope.of(context).unfocus();
+                          // },
                         ),
                         SizedBox(
                           height: 2.h,
@@ -390,8 +444,8 @@ class _MobileAddPackagePage extends HookConsumerWidget {
                             ),
                             Wrap(
                               spacing: 2.w,
-                              children: packageData.value.packageOffers != null
-                                  ? packageData.value.packageOffers!
+                              children: packageState.packageOffers != null
+                                  ? packageState.packageOffers!
                                       .map(
                                         (keyword) => Chip(
                                           label: DText(text: keyword),
@@ -404,8 +458,8 @@ class _MobileAddPackagePage extends HookConsumerWidget {
                                                 .error,
                                           ),
                                           onDeleted: () {
-                                            packageData.value.packageOffers =
-                                                packageData.value.packageOffers!
+                                            packageState.packageOffers =
+                                                packageState.packageOffers!
                                                     .where((element) {
                                               return element != keyword;
                                             }).toList();
@@ -441,16 +495,32 @@ class _MobileAddPackagePage extends HookConsumerWidget {
 // tablet add package page with child container
 class _TabletAddPackagePage extends HookConsumerWidget {
   const _TabletAddPackagePage({
-    required this.packageData,
     required this.packageState,
     required this.packageNotifier,
   });
-  final ValueNotifier<Package> packageData;
+
   final Package packageState;
   final AddPackageNotifier packageNotifier;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final formKey = GlobalKey<FormState>();
+    final packageNameController = useTextEditingController(
+      text: packageState.packageName,
+    );
+    final keywordsController = useTextEditingController();
+    final descriptionController = useTextEditingController(
+      text: packageState.description,
+    );
+    final priceController = useTextEditingController(
+      text: packageState.price.toString(),
+    );
+    final discountController = useTextEditingController(
+      text: packageState.discountPercentage.toString(),
+    );
+    final couponController = useTextEditingController(
+      text: packageState.coupon,
+    );
     return SizedBox(
       height: 100.h,
       width: 100.w,
@@ -478,15 +548,31 @@ class _TabletAddPackagePage extends HookConsumerWidget {
 // desktop add package page with child container
 class _DesktopAddPackagePage extends HookConsumerWidget {
   const _DesktopAddPackagePage({
-    required this.packageData,
     required this.packageNotifier,
     required this.packageState,
   });
-  final ValueNotifier<Package> packageData;
+
   final Package packageState;
   final AddPackageNotifier packageNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final formKey = GlobalKey<FormState>();
+    final packageNameController = useTextEditingController(
+      text: packageState.packageName,
+    );
+    final keywordsController = useTextEditingController();
+    final descriptionController = useTextEditingController(
+      text: packageState.description,
+    );
+    final priceController = useTextEditingController(
+      text: packageState.price.toString(),
+    );
+    final discountController = useTextEditingController(
+      text: packageState.discountPercentage.toString(),
+    );
+    final couponController = useTextEditingController(
+      text: packageState.coupon,
+    );
     return SizedBox(
       height: 100.h,
       width: 100.w,

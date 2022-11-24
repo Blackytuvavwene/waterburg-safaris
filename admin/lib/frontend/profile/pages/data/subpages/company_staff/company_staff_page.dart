@@ -41,20 +41,44 @@ class _MobileCompanyStaffPage extends HookConsumerWidget {
   final String? companyId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      color: Theme.of(context).colorScheme.background,
-      child: Center(
-        child: Column(
-          children: const [
-            DText(
-              text: 'Mobile Company Staff',
-            ),
-            Center(
-              child: CircularProgressIndicator(),
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          title: const Text('Company Staff'),
+          automaticallyImplyLeading: false,
+          pinned: true,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.add),
+              onPressed: () {
+                //TODO: add company staff
+                // ref.read(companyStaffProvider.notifier).createCompanyStaff(
+                //       companyId: companyId,
+                //     );
+              },
             ),
           ],
         ),
-      ),
+        SliverPadding(
+          padding: const EdgeInsets.all(8.0),
+          sliver: SliverGrid(
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 200.0,
+              mainAxisSpacing: 10.0,
+              crossAxisSpacing: 10.0,
+              childAspectRatio: 1.0,
+            ),
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return CompanyStaffCard(
+                  companyStaff: companyStaff![index],
+                );
+              },
+              childCount: companyStaff!.length,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

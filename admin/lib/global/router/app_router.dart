@@ -202,12 +202,26 @@ final goroutingProvider = Provider<GoRouter>(
                               ),
                             ),
                             GoRoute(
-                              path: 'profile',
-                              name: 'profile',
-                              builder: (context, state) => ProfilePage(
-                                key: state.pageKey,
-                              ),
-                            ),
+                                path: 'profile',
+                                name: 'profile',
+                                builder: (context, state) => ProfilePage(
+                                      key: state.pageKey,
+                                    ),
+                                routes: [
+                                  GoRoute(
+                                    path: 'edit-staff',
+                                    name: 'editStaffDetails',
+                                    builder: (context, state) {
+                                      final CompanyStaff editStaffModel =
+                                          state.extra as CompanyStaff;
+
+                                      return EditStaffDetails(
+                                        key: state.pageKey,
+                                        companyStaff: editStaffModel,
+                                      );
+                                    },
+                                  ),
+                                ]),
                           ],
                         ),
                       ],

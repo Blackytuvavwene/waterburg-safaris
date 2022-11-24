@@ -90,6 +90,26 @@ class CompanyStaff {
       _$CompanyStaffFromJson(json);
 
   Map<String, dynamic> toJson() => _$CompanyStaffToJson(this);
+
+  CompanyStaff copyWith({
+    String? imageUrl,
+    String? fullName,
+    String? email,
+    List<String>? phoneNos,
+    String? jobTitle,
+    String? jobDescription,
+    String? title,
+  }) {
+    return CompanyStaff(
+      imageUrl: imageUrl ?? this.imageUrl,
+      fullName: fullName ?? this.fullName,
+      email: email ?? this.email,
+      phoneNos: phoneNos ?? this.phoneNos,
+      jobTitle: jobTitle ?? this.jobTitle,
+      jobDescription: jobDescription ?? this.jobDescription,
+      title: title ?? this.title,
+    );
+  }
 }
 
 @JsonSerializable(
