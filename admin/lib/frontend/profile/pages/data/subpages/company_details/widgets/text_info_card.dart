@@ -24,6 +24,7 @@ class TextInfoCard extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final edit = useState(false);
+    final expand = useState(false);
     return Container(
       padding: EdgeInsets.all(
         context.breakpoint > LayoutBreakpoint.sm ? 1.5.w : 8.w,
@@ -49,6 +50,13 @@ class TextInfoCard extends HookConsumerWidget {
               IconButton(
                 onPressed: onTap,
                 icon: const Icon(Icons.edit),
+              ),
+              TextButton(
+                onPressed: () => expand.value = !expand.value,
+                child: DText(
+                  text: expand.value == false ? 'Expand' : 'Collapse',
+                  textColor: Theme.of(context).colorScheme.onTertiaryContainer,
+                ),
               ),
             ],
           ),
@@ -85,6 +93,10 @@ class TextInfoCard extends HookConsumerWidget {
                   textColor: Theme.of(context).colorScheme.onPrimary,
                   fontWeight: FontWeight.normal,
                   fontSize: 16.0,
+                  minFontSize: 16.0,
+                  overflow:
+                      expand.value == false ? TextOverflow.ellipsis : null,
+                  maxLines: expand.value == false ? 3 : null,
                 ),
         ],
       ),

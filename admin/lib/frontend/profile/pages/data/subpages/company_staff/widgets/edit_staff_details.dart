@@ -1,7 +1,48 @@
 import 'package:admin/lib.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+class EditStaffControllerNotifier
+    extends StateNotifier<AsyncValue<CompanyStaff>> {
+  EditStaffControllerNotifier() : super(AsyncData(CompanyStaff()));
+
+  void setStaff(CompanyStaff? staff) {
+    state = AsyncValue.data(staff!);
+  }
+
+  // update staff details in firestore
+  Future<AsyncValue<CompanyStaff>?> updateStaffDetails({
+    required CompanyStaff staff,
+    required CompanyStaff newStaff,
+    required String docId,
+  }) async {
+    state = const AsyncValue.loading();
+
+    return state = await AsyncValue.guard(() {
+      final db = FirebaseFirestore.instance;
+      final docRef = db.collection('aboutCompany').doc(docId);
+      return db.runTransaction((transaction) {
+        return transaction.get(docRef).then((value) {
+          transaction.update(docRef, {
+            'companyStaff': FieldValue.arrayRemove([staff.toJson()]),
+          });
+          transaction.update(docRef, {
+            'companyStaff': FieldValue.arrayUnion([newStaff.toJson()]),
+          });
+          return newStaff;
+        });
+      });
+    });
+  }
+}
+
+// edit staff controller provider
+final editStaffControllerProvider = StateNotifierProvider<
+    EditStaffControllerNotifier,
+    AsyncValue<CompanyStaff>>((ref) => EditStaffControllerNotifier());
 
 // edit staff details hook consumer widget with app layout
 class EditStaffDetails extends HookConsumerWidget {
@@ -13,15 +54,49 @@ class EditStaffDetails extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentStaff = useState(companyStaff);
+    final formKey = GlobalKey<FormState>();
+
+    final staffController = ref.read(editStaffControllerProvider.notifier);
+
+    ref.listen<AsyncValue<CompanyStaff>>(
+      editStaffControllerProvider,
+      (AsyncValue<CompanyStaff>? previous, AsyncValue<CompanyStaff> next) {
+        next.when(data: (data) {
+          return EasyLoading.showSuccess('${data.fullName} updated');
+        }, error: (error, stackTrace) {
+          return EasyLoading.showError('Error updating staff details');
+        }, loading: () {
+          return EasyLoading.show(status: 'Updating staff...');
+        });
+      },
+    );
+
+    void updateStaffDetails() {
+      if (formKey.currentState!.validate()) {
+        formKey.currentState!.save();
+        staffController.updateStaffDetails(
+          staff: companyStaff!,
+          newStaff: currentStaff.value!,
+          docId: 'companyStaff',
+        );
+      }
+    }
+
     return AppLayout(
       mobile: _MobileEditStaffDetails(
         companyStaff: currentStaff,
+        formKey: formKey,
+        updateStaffDetails: updateStaffDetails,
       ),
       tablet: _TabletEditStaffDetails(
         companyStaff: currentStaff,
+        formKey: formKey,
+        updateStaffDetails: updateStaffDetails,
       ),
       desktop: _DesktopEditStaffDetails(
         companyStaff: currentStaff,
+        formKey: formKey,
+        updateStaffDetails: updateStaffDetails,
       ),
     );
   }
@@ -32,8 +107,12 @@ class _MobileEditStaffDetails extends HookConsumerWidget {
   const _MobileEditStaffDetails({
     Key? key,
     this.companyStaff,
+    this.formKey,
+    this.updateStaffDetails,
   }) : super(key: key);
   final ValueNotifier<CompanyStaff?>? companyStaff;
+  final GlobalKey<FormState>? formKey;
+  final VoidCallback? updateStaffDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -129,8 +208,12 @@ class _TabletEditStaffDetails extends HookConsumerWidget {
   const _TabletEditStaffDetails({
     Key? key,
     this.companyStaff,
+    this.formKey,
+    this.updateStaffDetails,
   }) : super(key: key);
   final ValueNotifier<CompanyStaff?>? companyStaff;
+  final GlobalKey<FormState>? formKey;
+  final VoidCallback? updateStaffDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -214,8 +297,12 @@ class _DesktopEditStaffDetails extends HookConsumerWidget {
   const _DesktopEditStaffDetails({
     Key? key,
     this.companyStaff,
+    this.formKey,
+    this.updateStaffDetails,
   }) : super(key: key);
   final ValueNotifier<CompanyStaff?>? companyStaff;
+  final GlobalKey<FormState>? formKey;
+  final VoidCallback? updateStaffDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(

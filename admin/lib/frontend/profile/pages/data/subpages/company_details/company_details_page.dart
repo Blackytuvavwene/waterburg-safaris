@@ -1,5 +1,6 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sizer/sizer.dart';
 
@@ -42,31 +43,51 @@ class _MobileCompanyDetailsPage extends HookConsumerWidget {
   final String? comapnyId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      height: 100.h,
-      width: 100.w,
-      color: Theme.of(context).colorScheme.background,
-      child: SingleChildScrollView(
-        padding: EdgeInsets.only(
-          top: 2.h,
-          bottom: 2.h,
-          left: 3.w,
-          right: 3.w,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const DText(
-              text: 'Mobile Company Details',
-            ),
-            TextInfoCard(
-              companyId: comapnyId,
-              title: 'Company SEO Description',
-              text: companyDetails?.seoDescription,
-            ),
-          ],
-        ),
+    final pageViewController = usePageController();
+    final pageViewIndex = useState(0);
+
+    final pages = [
+      CompanyAboutDetailsPage(
+        companyDetails: companyDetails,
+        companyId: comapnyId,
       ),
+      CompanyAddressDetailsPage(
+        companyDetails: companyDetails,
+        companyId: comapnyId,
+      ),
+      CompanyExtraDetailsPage(
+        companyDetails: companyDetails,
+        companyId: comapnyId,
+      ),
+    ];
+
+    // on page change function
+    void onPageChange(int index) {
+      pageViewIndex.value = index;
+      pageViewController.jumpToPage(index);
+    }
+
+    return CustomScrollView(
+      slivers: [
+        SliverPersistentHeader(
+          delegate: CompanyDetailsTabbar(
+            pageViewController: pageViewController,
+            pageViewIndex: pageViewIndex.value,
+            onPageChange: onPageChange,
+          ),
+          pinned: true,
+        ),
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: 68.h,
+            child: PageView(
+              controller: pageViewController,
+              onPageChanged: onPageChange,
+              children: pages,
+            ),
+          ),
+        )
+      ],
     );
   }
 }

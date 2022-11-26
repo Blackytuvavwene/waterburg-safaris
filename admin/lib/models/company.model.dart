@@ -28,6 +28,22 @@ class Company {
       _$CompanyFromJson(json);
 
   Map<String, dynamic> toJson() => _$CompanyToJson(this);
+
+  Company copyWith({
+    String? companyId,
+    List<CompanyStaff>? companyStaff,
+    List<Gallery>? companyGallery,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return Company(
+      companyId: companyId ?? this.companyId,
+      companyStaff: companyStaff ?? this.companyStaff,
+      companyGallery: companyGallery ?? this.companyGallery,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
 }
 
 @JsonSerializable(
@@ -144,4 +160,30 @@ class CompanyDetails {
       _$CompanyDetailsFromJson(json);
 
   Map<String, dynamic> toJson() => _$CompanyDetailsToJson(this);
+
+  CompanyDetails copyWith({
+    String? companyName,
+    String? companyAddress,
+    String? registrationNumber,
+    String? vatNo,
+    String? companyLogoUrl,
+    String? seoDescription,
+    String? overview,
+    List<String>? cellPhoneNos,
+    String? email,
+    String? telNo,
+  }) {
+    return CompanyDetails(
+      companyName: companyName ?? this.companyName,
+      companyAddress: companyAddress ?? this.companyAddress,
+      registrationNumber: registrationNumber ?? this.registrationNumber,
+      vatNo: vatNo ?? this.vatNo,
+      companyLogoUrl: companyLogoUrl ?? this.companyLogoUrl,
+      seoDescription: seoDescription ?? this.seoDescription,
+      overview: overview ?? this.overview,
+      cellPhoneNos: cellPhoneNos ?? this.cellPhoneNos,
+      email: email ?? this.email,
+      telNo: telNo ?? this.telNo,
+    );
+  }
 }

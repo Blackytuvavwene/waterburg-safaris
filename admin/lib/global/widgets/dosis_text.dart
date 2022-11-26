@@ -43,6 +43,10 @@ class DText extends StatelessWidget {
   final TextOverflow? overflow;
   final int? maxLines;
   final TextDecoration? textDecoration;
+  final bool? wrapWords;
+  final bool? softWrap;
+  final Widget? overFlowReplacement;
+  final double? minFontSize;
 
   const DText({
     Key? key,
@@ -54,6 +58,10 @@ class DText extends StatelessWidget {
     this.overflow,
     this.maxLines,
     this.textDecoration,
+    this.wrapWords,
+    this.softWrap,
+    this.overFlowReplacement,
+    this.minFontSize,
   }) : super(key: key);
 
   @override
@@ -67,8 +75,10 @@ class DText extends StatelessWidget {
         decoration: textDecoration,
       ),
 
-      softWrap: true,
-      minFontSize: 1,
+      softWrap: softWrap ?? true,
+      wrapWords: wrapWords ?? true,
+      minFontSize: minFontSize ?? 1,
+      overflowReplacement: overFlowReplacement,
       //wrapWords: false,
       overflow: overflow,
       maxLines: maxLines,
