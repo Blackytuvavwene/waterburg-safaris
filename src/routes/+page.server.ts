@@ -19,4 +19,4 @@ export const load:PageServerLoad= async ({parent}) => {
     
 };
 
-export const prerender = 'auto';
+// export const prerender = 'auto';

@@ -1,6 +1,7 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:line_icons/line_icon.dart';
 
 // company address details page hook consumer widget with app layout
 class CompanyAddressDetailsPage extends HookConsumerWidget {
@@ -41,8 +42,51 @@ class _MobileCompanyAddressDetailsPage extends HookConsumerWidget {
   final String? companyId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const Center(
-      child: Text('Mobile Company Address Details Page'),
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          title: const DText(
+            text: 'Company Address Details',
+          ),
+          pinned: true,
+          floating: true,
+          snap: true,
+          actions: [
+            IconButton(
+              icon: LineIcon.editAlt(),
+              onPressed: () {
+                // ref.read(companyDetailsProvider.notifier).editCompanyDetails(
+                //       companyId: companyId,
+                //       companyDetails: companyDetails,
+                //     );
+              },
+            ),
+          ],
+        ),
+        SliverPadding(
+          padding: const EdgeInsets.all(16),
+          sliver: SliverToBoxAdapter(
+              child: Column(
+            children: [
+              InfoTile(
+                title: 'Email',
+                subtitle: companyDetails?.email,
+              ),
+              SizedBoxAppSpacing.smallY(),
+              InfoTile(
+                title: 'Address',
+                subtitle: companyDetails?.companyAddress,
+              ),
+              SizedBoxAppSpacing.smallY(),
+              InfoTile(
+                title: 'Telephone',
+                subtitle: companyDetails?.telNo,
+              ),
+              SizedBoxAppSpacing.smallY(),
+            ],
+          )),
+        )
+      ],
     );
   }
 }

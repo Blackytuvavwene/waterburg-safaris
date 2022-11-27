@@ -24,6 +24,6 @@ export const load:PageServerLoad= async () => {
     
 };
 
-export const prerender = true;
+// export const prerender = true;
 
 

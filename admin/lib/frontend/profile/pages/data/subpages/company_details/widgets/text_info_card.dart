@@ -26,8 +26,9 @@ class TextInfoCard extends HookConsumerWidget {
     final edit = useState(false);
     final expand = useState(false);
     return Container(
-      padding: EdgeInsets.all(
-        context.breakpoint > LayoutBreakpoint.sm ? 1.5.w : 8.w,
+      padding: EdgeInsets.symmetric(
+        horizontal: context.breakpoint > LayoutBreakpoint.sm ? 1.5.w : 6.w,
+        vertical: context.breakpoint > LayoutBreakpoint.sm ? 1.5.h : 2.h,
       ),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.tertiaryContainer,
@@ -47,14 +48,20 @@ class TextInfoCard extends HookConsumerWidget {
                 fontSize: 20.0,
               ),
               const Spacer(),
-              IconButton(
-                onPressed: onTap,
-                icon: const Icon(Icons.edit),
-              ),
               TextButton(
                 onPressed: () => expand.value = !expand.value,
+                style: TextButton.styleFrom(
+                  backgroundColor:
+                      Theme.of(context).colorScheme.background.withOpacity(
+                            0.2,
+                          ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
                 child: DText(
                   text: expand.value == false ? 'Expand' : 'Collapse',
+                  fontWeight: FontWeight.bold,
                   textColor: Theme.of(context).colorScheme.onTertiaryContainer,
                 ),
               ),

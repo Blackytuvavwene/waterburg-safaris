@@ -55,10 +55,10 @@ class _MobileCompanyDetailsPage extends HookConsumerWidget {
         companyDetails: companyDetails,
         companyId: comapnyId,
       ),
-      CompanyExtraDetailsPage(
-        companyDetails: companyDetails,
-        companyId: comapnyId,
-      ),
+      // CompanyExtraDetailsPage(
+      //   companyDetails: companyDetails,
+      //   companyId: comapnyId,
+      // ),
     ];
 
     // on page change function
@@ -76,6 +76,7 @@ class _MobileCompanyDetailsPage extends HookConsumerWidget {
             onPageChange: onPageChange,
           ),
           pinned: true,
+          floating: true,
         ),
         SliverToBoxAdapter(
           child: SizedBox(

@@ -30,10 +30,10 @@ class CompanyDetailsTabbar extends SliverPersistentHeaderDelegate {
               },
               style: OutlinedButton.styleFrom(
                 foregroundColor: pageViewIndex == 0
-                    ? Theme.of(context).colorScheme.primary
+                    ? Theme.of(context).colorScheme.primaryContainer
                     : Theme.of(context).colorScheme.onBackground,
                 backgroundColor: pageViewIndex == 0
-                    ? Theme.of(context).colorScheme.primary
+                    ? Theme.of(context).colorScheme.primaryContainer
                     : Theme.of(context).colorScheme.background,
                 side: BorderSide(
                   color: pageViewIndex == 0
@@ -42,7 +42,10 @@ class CompanyDetailsTabbar extends SliverPersistentHeaderDelegate {
                 ),
               ),
               child: DText(
-                text: 'About $pageViewIndex',
+                text: 'About ',
+                textColor: pageViewIndex == 0
+                    ? Theme.of(context).colorScheme.onPrimaryContainer
+                    : Theme.of(context).colorScheme.onBackground,
               ),
             ),
             OutlinedButton(
@@ -51,10 +54,10 @@ class CompanyDetailsTabbar extends SliverPersistentHeaderDelegate {
               },
               style: OutlinedButton.styleFrom(
                 foregroundColor: pageViewIndex == 1
-                    ? Theme.of(context).colorScheme.primary
+                    ? Theme.of(context).colorScheme.primaryContainer
                     : Theme.of(context).colorScheme.onBackground,
                 backgroundColor: pageViewIndex == 1
-                    ? Theme.of(context).colorScheme.primary
+                    ? Theme.of(context).colorScheme.primaryContainer
                     : Theme.of(context).colorScheme.background,
                 side: BorderSide(
                   color: pageViewIndex == 1
@@ -63,30 +66,36 @@ class CompanyDetailsTabbar extends SliverPersistentHeaderDelegate {
                 ),
               ),
               child: DText(
-                text: 'Address $pageViewIndex',
-              ),
-            ),
-            OutlinedButton(
-              onPressed: () {
-                onPageChange!(2);
-              },
-              style: OutlinedButton.styleFrom(
-                foregroundColor: pageViewIndex == 2
-                    ? Theme.of(context).colorScheme.primary
+                text: 'Address & Contact Details',
+                textColor: pageViewIndex == 1
+                    ? Theme.of(context).colorScheme.onPrimaryContainer
                     : Theme.of(context).colorScheme.onBackground,
-                backgroundColor: pageViewIndex == 2
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.background,
-                side: BorderSide(
-                  color: pageViewIndex == 2
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).colorScheme.onBackground,
-                ),
-              ),
-              child: DText(
-                text: 'Extra $pageViewIndex',
               ),
             ),
+            // OutlinedButton(
+            //   onPressed: () {
+            //     onPageChange!(2);
+            //   },
+            //   style: OutlinedButton.styleFrom(
+            //     foregroundColor: pageViewIndex == 2
+            //         ? Theme.of(context).colorScheme.primaryContainer
+            //         : Theme.of(context).colorScheme.onBackground,
+            //     backgroundColor: pageViewIndex == 2
+            //         ? Theme.of(context).colorScheme.primaryContainer
+            //         : Theme.of(context).colorScheme.background,
+            //     side: BorderSide(
+            //       color: pageViewIndex == 2
+            //           ? Theme.of(context).colorScheme.primary
+            //           : Theme.of(context).colorScheme.onBackground,
+            //     ),
+            //   ),
+            //   child: DText(
+            //     text: 'Extra ',
+            //     textColor: pageViewIndex == 2
+            //         ? Theme.of(context).colorScheme.onPrimaryContainer
+            //         : Theme.of(context).colorScheme.onBackground,
+            //   ),
+            // ),
           ],
         ),
       ),

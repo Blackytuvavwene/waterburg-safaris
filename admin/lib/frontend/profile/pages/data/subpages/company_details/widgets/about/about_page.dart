@@ -2,6 +2,8 @@ import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:line_icons/line_icon.dart';
+import 'package:sizer/sizer.dart';
 
 // company about details page hook consumer widget with app layout
 class CompanyAboutDetailsPage extends HookConsumerWidget {
@@ -52,84 +54,51 @@ class _MobileCompanyAboutDetailsPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomScrollView(
       slivers: [
-        SliverToBoxAdapter(
-          child: Column(
-            children: [
-              ListTile(
-                title: const DText(
-                  text: 'Company name',
+        SliverAppBar(
+          title: const DText(
+            text: 'Company About Details',
+          ),
+          pinned: true,
+          actions: [
+            IconButton(
+              icon: LineIcon.editAlt(),
+              onPressed: () {
+                // ref.read(companyDetailsProvider.notifier).editCompanyDetails(
+                //       companyId: companyId,
+                //       companyDetails: companyDetails,
+                //     );
+              },
+            ),
+          ],
+        ),
+        SliverPadding(
+          padding: EdgeInsets.all(
+            10.sp,
+          ),
+          sliver: SliverToBoxAdapter(
+            child: Column(
+              children: [
+                InfoTile(
+                  title: 'Company name',
+                  subtitle: companyDetails?.companyName.toString(),
                 ),
-                subtitle: DText(text: companyDetails?.companyName.toString()),
-                trailing: IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: () {},
+                SizedBoxAppSpacing.smallY(),
+                InfoTile(
+                  title: 'Company registration',
+                  subtitle: companyDetails?.registrationNumber.toString(),
                 ),
-              ),
-              SizedBoxAppSpacing.smallY(),
-              ListTile(
-                title: const DText(
-                  text: 'Company registrations',
+                SizedBoxAppSpacing.mediumY(),
+                TextInfoCard(
+                  title: 'Overview',
+                  text: companyDetails?.overview,
                 ),
-                subtitle: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    DText(
-                      text: companyDetails?.registrationNumber.toString(),
-                    ),
-                    SizedBoxAppSpacing.smallY(),
-                    DText(
-                      text: companyDetails?.vatNo.toString(),
-                    ),
-                  ],
+                SizedBoxAppSpacing.mediumY(),
+                TextInfoCard(
+                  title: 'SEO Description',
+                  text: companyDetails?.seoDescription,
                 ),
-                trailing: IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: () {},
-                ),
-              ),
-              SizedBoxAppSpacing.mediumY(),
-              Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: AppSpacing.mediumX,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const DText(
-                          text: 'Company descriptions',
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: AppSpacing.mediumX,
-                    ),
-                    child: TextInfoCard(
-                      title: 'Overview',
-                      text: companyDetails?.overview,
-                    ),
-                  ),
-                  SizedBoxAppSpacing.mediumY(),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: AppSpacing.mediumX,
-                    ),
-                    child: TextInfoCard(
-                      title: 'Overview',
-                      text: companyDetails?.seoDescription,
-                    ),
-                  ),
-                ],
-              )
-            ],
+              ],
+            ),
           ),
         ),
       ],

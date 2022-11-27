@@ -64,6 +64,14 @@
     </button>
     
 </div>
+<!-- Messenger Chat Plugin Code -->
+<div id="fb-root"></div>
+
+<!-- Your Chat Plugin code -->
+<div id="fb-customer-chat" class="fb-customerchat">
+</div>
+
+
 
 
 <Footer footerData={data.homeData} />
@@ -95,7 +103,13 @@
 
     let openWidget = false;
 
+
+   
+
     export let data: LayoutServerData;
+
+
+   
     // // console.log(data.about);
 
     // $: ({ companyDetails } = data.about as AboutCompanyResponse);
