@@ -187,3 +187,31 @@ class CompanyDetails {
     );
   }
 }
+
+class AddressAndContact {
+  final String? address;
+  final String? telNo;
+  final String? email;
+  final List<String>? cellPhoneNos;
+
+  AddressAndContact({
+    this.address,
+    this.telNo,
+    this.cellPhoneNos,
+    this.email,
+  });
+
+  AddressAndContact copyWith({
+    final String? address,
+    final String? telNo,
+    final String? email,
+    final List<String>? cellPhoneNos,
+  }) {
+    return AddressAndContact(
+      address: address ?? this.address,
+      telNo: telNo ?? this.telNo,
+      email: email ?? this.email,
+      cellPhoneNos: cellPhoneNos ?? this.cellPhoneNos,
+    );
+  }
+}

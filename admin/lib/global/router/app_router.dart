@@ -4,7 +4,8 @@ import 'dart:convert';
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+import 'package:go_router_flow/go_router_flow.dart';
+// import 'package:go_router_flow/go_router_flow.dart';
 
 // navigator keys
 final GlobalKey<NavigatorState> _rootNavigatorKey =
@@ -202,26 +203,40 @@ final goroutingProvider = Provider<GoRouter>(
                               ),
                             ),
                             GoRoute(
-                                path: 'profile',
-                                name: 'profile',
-                                builder: (context, state) => ProfilePage(
-                                      key: state.pageKey,
-                                    ),
-                                routes: [
-                                  GoRoute(
-                                    path: 'edit-staff',
-                                    name: 'editStaffDetails',
-                                    builder: (context, state) {
-                                      final CompanyStaff editStaffModel =
-                                          state.extra as CompanyStaff;
+                              path: 'profile',
+                              name: 'profile',
+                              builder: (context, state) => ProfilePage(
+                                key: state.pageKey,
+                              ),
+                              routes: [
+                                GoRoute(
+                                  path: 'edit-staff',
+                                  name: 'editStaffDetails',
+                                  builder: (context, state) {
+                                    final CompanyStaff editStaffModel =
+                                        state.extra as CompanyStaff;
 
-                                      return EditStaffDetails(
-                                        key: state.pageKey,
-                                        companyStaff: editStaffModel,
-                                      );
-                                    },
-                                  ),
-                                ]),
+                                    return EditStaffDetails(
+                                      key: state.pageKey,
+                                      companyStaff: editStaffModel,
+                                    );
+                                  },
+                                ),
+                                GoRoute(
+                                  path: 'edit-address',
+                                  name: 'editAddress',
+                                  builder: (context, state) {
+                                    final AddressAndContact editAddressModel =
+                                        state.extra as AddressAndContact;
+
+                                    return EditAddressContactPage(
+                                      key: state.pageKey,
+                                      addressAndContact: editAddressModel,
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ],

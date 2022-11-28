@@ -1,5 +1,6 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router_flow/go_router_flow.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icon.dart';
 
@@ -54,11 +55,23 @@ class _MobileCompanyAddressDetailsPage extends HookConsumerWidget {
           actions: [
             IconButton(
               icon: LineIcon.editAlt(),
-              onPressed: () {
+              onPressed: () async {
                 // ref.read(companyDetailsProvider.notifier).editCompanyDetails(
                 //       companyId: companyId,
                 //       companyDetails: companyDetails,
                 //     );
+                final AddressAndContact addressAndContact = AddressAndContact(
+                  address: companyDetails?.companyAddress,
+                  email: companyDetails?.email,
+                  telNo: companyDetails?.telNo,
+                  cellPhoneNos: companyDetails?.cellPhoneNos,
+                );
+
+                final newAddressAndContact =
+                    await context.pushNamed<AddressAndContact>(
+                  'editAddress',
+                  extra: addressAndContact,
+                );
               },
             ),
           ],

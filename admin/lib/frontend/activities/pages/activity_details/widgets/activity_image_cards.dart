@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
+import 'package:go_router_flow/go_router_flow.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -782,7 +782,7 @@ class ImageDetailsEditDialog extends HookConsumerWidget {
                               imageUrl: image.imageDetails!.imageUrl,
                             ),
                             index: index!);
-                    GoRouter.of(context).navigator?.pop();
+                    GoRouter.of(context).pop();
                   }
                 },
                 borderRadius: BorderRadius.circular(10),
