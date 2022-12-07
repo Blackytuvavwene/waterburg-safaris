@@ -12,15 +12,21 @@ class ProfileDataPage extends HookConsumerWidget {
   final Company? company;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final companyDetails = ref.watch(companyNotifierProvider(company));
+    final companyDetailsState =
+        ref.watch(companyNotifierProvider(company).notifier);
     return AppLayout(
       mobile: _MobileProfileDataPage(
-        company: company,
+        company: companyDetails,
+        companyDetailsState: companyDetailsState,
       ),
       tablet: _TabletProfileDataPage(
-        company: company,
+        company: companyDetails,
+        companyDetailsState: companyDetailsState,
       ),
       desktop: _DesktopProfileDataPage(
-        company: company,
+        company: companyDetails,
+        companyDetailsState: companyDetailsState,
       ),
     );
   }
@@ -31,8 +37,10 @@ class _MobileProfileDataPage extends HookConsumerWidget {
   const _MobileProfileDataPage({
     Key? key,
     this.company,
+    this.companyDetailsState,
   }) : super(key: key);
   final Company? company;
+  final CompanyNotifier? companyDetailsState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tabs = [
@@ -75,14 +83,17 @@ class _MobileProfileDataPage extends HookConsumerWidget {
           CompanyDetailsPage(
             companyDetails: company!.companyDetails,
             comapnyId: company!.companyId,
+            companyDetailsState: companyDetailsState,
           ),
           CompanyStaffPage(
             companyStaff: company!.companyStaff,
             companyId: company!.companyId,
+            companyDetailsState: companyDetailsState,
           ),
           CompanyGalleryPage(
             companyGallery: company!.companyGallery,
             companyId: company!.companyId,
+            companyDetailsState: companyDetailsState,
           ),
         ],
       ),
@@ -95,8 +106,10 @@ class _TabletProfileDataPage extends HookConsumerWidget {
   const _TabletProfileDataPage({
     Key? key,
     this.company,
+    this.companyDetailsState,
   }) : super(key: key);
   final Company? company;
+  final CompanyNotifier? companyDetailsState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
@@ -115,8 +128,10 @@ class _DesktopProfileDataPage extends HookConsumerWidget {
   const _DesktopProfileDataPage({
     Key? key,
     this.company,
+    this.companyDetailsState,
   }) : super(key: key);
   final Company? company;
+  final CompanyNotifier? companyDetailsState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(

@@ -8,23 +8,28 @@ class CompanyStaffPage extends HookConsumerWidget {
     Key? key,
     this.companyId,
     this.companyStaff,
+    this.companyDetailsState,
   }) : super(key: key);
   final List<CompanyStaff>? companyStaff;
   final String? companyId;
+  final CompanyNotifier? companyDetailsState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
       mobile: _MobileCompanyStaffPage(
         companyStaff: companyStaff,
         companyId: companyId,
+        companyDetailsState: companyDetailsState,
       ),
       tablet: _TabletCompanyStaffPage(
         companyStaff: companyStaff,
         companyId: companyId,
+        companyDetailsState: companyDetailsState,
       ),
       desktop: _DesktopCompanyStaffPage(
         companyStaff: companyStaff,
         companyId: companyId,
+        companyDetailsState: companyDetailsState,
       ),
     );
   }
@@ -36,9 +41,11 @@ class _MobileCompanyStaffPage extends HookConsumerWidget {
     Key? key,
     this.companyStaff,
     this.companyId,
+    this.companyDetailsState,
   }) : super(key: key);
   final List<CompanyStaff>? companyStaff;
   final String? companyId;
+  final CompanyNotifier? companyDetailsState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomScrollView(
@@ -89,9 +96,11 @@ class _TabletCompanyStaffPage extends HookConsumerWidget {
     Key? key,
     this.companyStaff,
     this.companyId,
+    this.companyDetailsState,
   }) : super(key: key);
   final List<CompanyStaff>? companyStaff;
   final String? companyId;
+  final CompanyNotifier? companyDetailsState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
@@ -118,9 +127,11 @@ class _DesktopCompanyStaffPage extends HookConsumerWidget {
     Key? key,
     this.companyStaff,
     this.companyId,
+    this.companyDetailsState,
   }) : super(key: key);
   final List<CompanyStaff>? companyStaff;
   final String? companyId;
+  final CompanyNotifier? companyDetailsState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(

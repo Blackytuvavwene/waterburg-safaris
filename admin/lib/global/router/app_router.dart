@@ -235,6 +235,19 @@ final goroutingProvider = Provider<GoRouter>(
                                     );
                                   },
                                 ),
+                                GoRoute(
+                                  path: 'edit-about',
+                                  name: 'editAbout',
+                                  builder: (context, state) {
+                                    final editAbout =
+                                        state.extra as CompanyDetails;
+
+                                    return CompanyEditAbout(
+                                      key: state.pageKey,
+                                      companyDetails: editAbout,
+                                    );
+                                  },
+                                ),
                               ],
                             ),
                           ],

@@ -11,12 +11,13 @@ class CompanyAboutDetailsPage extends HookConsumerWidget {
     Key? key,
     this.companyId,
     this.companyDetails,
+    this.companyDetailsState,
   }) : super(key: key);
   final CompanyDetails? companyDetails;
   final String? companyId;
+  final CompanyNotifier? companyDetailsState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final companyDetailsState = useState(companyDetails);
     final loading = useState(false);
     final error = useState('');
     return AppLayout(
@@ -49,7 +50,7 @@ class _MobileCompanyAboutDetailsPage extends HookConsumerWidget {
   }) : super(key: key);
   final CompanyDetails? companyDetails;
   final String? companyId;
-  final ValueNotifier<CompanyDetails?>? companyDetailsState;
+  final CompanyNotifier? companyDetailsState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomScrollView(
@@ -62,11 +63,27 @@ class _MobileCompanyAboutDetailsPage extends HookConsumerWidget {
           actions: [
             IconButton(
               icon: LineIcon.editAlt(),
-              onPressed: () {
-                // ref.read(companyDetailsProvider.notifier).editCompanyDetails(
-                //       companyId: companyId,
-                //       companyDetails: companyDetails,
-                //     );
+              onPressed: () async {
+                final result = await Navigator.push<CompanyDetails>(context,
+                    MaterialPageRoute(builder: (context) {
+                  return CompanyEditAbout(
+                    companyDetails: companyDetails,
+                  );
+                }));
+
+                if (result != null) {
+                  print('result: $result');
+                  companyDetailsState?.editCompanyDetails(
+                      companyDetails: result);
+                } else {
+                  print('result: $result');
+                }
+
+                // if (result != companyDetails) {
+                //   print('result: $result');
+                //   companyDetailsState?.editCompanyDetails(
+                //       companyDetails: result);
+                // }
               },
             ),
           ],
@@ -116,7 +133,7 @@ class _TabletCompanyAboutDetailsPage extends HookConsumerWidget {
   }) : super(key: key);
   final CompanyDetails? companyDetails;
   final String? companyId;
-  final ValueNotifier<CompanyDetails?>? companyDetailsState;
+  final CompanyNotifier? companyDetailsState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return const Center(
@@ -135,7 +152,7 @@ class _DesktopCompanyAboutDetailsPage extends HookConsumerWidget {
   }) : super(key: key);
   final CompanyDetails? companyDetails;
   final String? companyId;
-  final ValueNotifier<CompanyDetails?>? companyDetailsState;
+  final CompanyNotifier? companyDetailsState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return const Center(

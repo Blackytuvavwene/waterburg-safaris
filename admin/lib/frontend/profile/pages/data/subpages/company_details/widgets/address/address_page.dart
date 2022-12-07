@@ -10,23 +10,28 @@ class CompanyAddressDetailsPage extends HookConsumerWidget {
     Key? key,
     this.companyId,
     this.companyDetails,
+    this.companyDetailsState,
   }) : super(key: key);
   final CompanyDetails? companyDetails;
   final String? companyId;
+  final CompanyNotifier? companyDetailsState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
       mobile: _MobileCompanyAddressDetailsPage(
         companyDetails: companyDetails,
         companyId: companyId,
+        companyDetailsState: companyDetailsState,
       ),
       tablet: _TabletCompanyAddressDetailsPage(
         companyDetails: companyDetails,
         companyId: companyId,
+        companyDetailsState: companyDetailsState,
       ),
       desktop: _DesktopCompanyAddressDetailsPage(
         companyDetails: companyDetails,
         companyId: companyId,
+        companyDetailsState: companyDetailsState,
       ),
     );
   }
@@ -38,9 +43,11 @@ class _MobileCompanyAddressDetailsPage extends HookConsumerWidget {
     Key? key,
     this.companyDetails,
     this.companyId,
+    this.companyDetailsState,
   }) : super(key: key);
   final CompanyDetails? companyDetails;
   final String? companyId;
+  final CompanyNotifier? companyDetailsState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomScrollView(
@@ -67,11 +74,25 @@ class _MobileCompanyAddressDetailsPage extends HookConsumerWidget {
                   cellPhoneNos: companyDetails?.cellPhoneNos,
                 );
 
-                final newAddressAndContact =
-                    await context.pushNamed<AddressAndContact>(
-                  'editAddress',
-                  extra: addressAndContact,
-                );
+                await context
+                    .pushNamed<AddressAndContact>(
+                      'editAddress',
+                      extra: addressAndContact,
+                    )
+                    .then((value) => print(value));
+
+                // print(newAddressAndContact);
+
+                // if (newAddressAndContact != null) {
+                //   companyDetailsState?.editCompanyDetails(
+                //     companyDetails: companyDetails?.copyWith(
+                //       companyAddress: newAddressAndContact.address,
+                //       email: newAddressAndContact.email,
+                //       telNo: newAddressAndContact.telNo,
+                //       cellPhoneNos: newAddressAndContact.cellPhoneNos,
+                //     ),
+                //   );
+                // }
               },
             ),
           ],
@@ -110,9 +131,11 @@ class _TabletCompanyAddressDetailsPage extends HookConsumerWidget {
     Key? key,
     this.companyDetails,
     this.companyId,
+    this.companyDetailsState,
   }) : super(key: key);
   final CompanyDetails? companyDetails;
   final String? companyId;
+  final CompanyNotifier? companyDetailsState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return const Center(
@@ -127,9 +150,11 @@ class _DesktopCompanyAddressDetailsPage extends HookConsumerWidget {
     Key? key,
     this.companyDetails,
     this.companyId,
+    this.companyDetailsState,
   }) : super(key: key);
   final CompanyDetails? companyDetails;
   final String? companyId;
+  final CompanyNotifier? companyDetailsState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return const Center(

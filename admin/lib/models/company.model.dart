@@ -33,6 +33,7 @@ class Company {
     String? companyId,
     List<CompanyStaff>? companyStaff,
     List<Gallery>? companyGallery,
+    CompanyDetails? companyDetails,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -40,6 +41,7 @@ class Company {
       companyId: companyId ?? this.companyId,
       companyStaff: companyStaff ?? this.companyStaff,
       companyGallery: companyGallery ?? this.companyGallery,
+      companyDetails: companyDetails ?? this.companyDetails,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );

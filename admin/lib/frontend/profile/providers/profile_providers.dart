@@ -4,8 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 const String aboutCompanyID = 'ymV8H6FBRjfMBFhAh8o2';
 
 final companyNotifierProvider =
-    StateNotifierProvider<CompanyNotifier, Company>((ref) {
-  return CompanyNotifier();
+    StateNotifierProvider.family<CompanyNotifier, Company?, Company?>(
+        (ref, company) {
+  return CompanyNotifier(company: company);
 });
 
 final currentUserNotifierProvider =

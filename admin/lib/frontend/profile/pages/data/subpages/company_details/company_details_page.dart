@@ -10,23 +10,28 @@ class CompanyDetailsPage extends HookConsumerWidget {
     Key? key,
     this.comapnyId,
     this.companyDetails,
+    this.companyDetailsState,
   }) : super(key: key);
   final CompanyDetails? companyDetails;
   final String? comapnyId;
+  final CompanyNotifier? companyDetailsState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
       mobile: _MobileCompanyDetailsPage(
         companyDetails: companyDetails,
         comapnyId: comapnyId,
+        companyDetailsState: companyDetailsState,
       ),
       tablet: _TabletCompanyDetailsPage(
         companyDetails: companyDetails,
         comapnyId: comapnyId,
+        companyDetailsState: companyDetailsState,
       ),
       desktop: _DesktopCompanyDetailsPage(
         companyDetails: companyDetails,
         comapnyId: comapnyId,
+        companyDetailsState: companyDetailsState,
       ),
     );
   }
@@ -38,9 +43,11 @@ class _MobileCompanyDetailsPage extends HookConsumerWidget {
     Key? key,
     this.companyDetails,
     this.comapnyId,
+    this.companyDetailsState,
   }) : super(key: key);
   final CompanyDetails? companyDetails;
   final String? comapnyId;
+  final CompanyNotifier? companyDetailsState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pageViewController = usePageController();
@@ -50,10 +57,12 @@ class _MobileCompanyDetailsPage extends HookConsumerWidget {
       CompanyAboutDetailsPage(
         companyDetails: companyDetails,
         companyId: comapnyId,
+        companyDetailsState: companyDetailsState,
       ),
       CompanyAddressDetailsPage(
         companyDetails: companyDetails,
         companyId: comapnyId,
+        companyDetailsState: companyDetailsState,
       ),
       // CompanyExtraDetailsPage(
       //   companyDetails: companyDetails,
@@ -99,9 +108,11 @@ class _TabletCompanyDetailsPage extends HookConsumerWidget {
     Key? key,
     this.companyDetails,
     this.comapnyId,
+    this.companyDetailsState,
   }) : super(key: key);
   final CompanyDetails? companyDetails;
   final String? comapnyId;
+  final CompanyNotifier? companyDetailsState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
@@ -128,9 +139,11 @@ class _DesktopCompanyDetailsPage extends HookConsumerWidget {
     Key? key,
     this.companyDetails,
     this.comapnyId,
+    this.companyDetailsState,
   }) : super(key: key);
   final CompanyDetails? companyDetails;
   final String? comapnyId;
+  final CompanyNotifier? companyDetailsState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(

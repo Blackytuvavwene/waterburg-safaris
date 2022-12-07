@@ -45,7 +45,12 @@ class _MobileEditAddressContactPage extends HookConsumerWidget {
             leading: IconButton(
               icon: LineIcon.arrowLeft(),
               onPressed: () {
-                context.pop(addressAndContact);
+                final newAddress = AddressAndContact(
+                  address: 'new address',
+                  cellPhoneNos: addressAndContact?.cellPhoneNos,
+                  email: addressAndContact?.email,
+                );
+                context.pop(newAddress);
               },
             ),
             pinned: true,
@@ -72,6 +77,7 @@ class _MobileEditAddressContactPage extends HookConsumerWidget {
                     decoration: const InputDecoration(
                       labelText: 'Company Address',
                     ),
+                    onChanged: (value) {},
                   ),
                   TextFormField(
                     initialValue: addressAndContact?.address,

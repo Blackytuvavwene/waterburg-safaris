@@ -6,6 +6,7 @@ import { companyData } from "$lib/firebase";
 import { setFooterProps, type FooterContactProps } from "$lib/app-components/footer/footerprops.types";
 import { getHomeActivities, type HomeActivities, type HomeModel } from "$lib/app-components/home-components/helpers/home.firestore.helpers";
 import { setHomeDataPersist } from "$lib/app-components/home-components/helpers/home.stores";
+import { serializeNonPOJOs } from "$lib/helpers/helpers";
 
 // const endpoint='http://localhost:3000/api/about-company';
 
@@ -23,7 +24,7 @@ export const load:LayoutServerLoad= async () => {
 
        
         return {
-            homeData: Hdata as HomeModel,
+            homeData: serializeNonPOJOs<HomeModel>(data) ,
         } 
     }
 

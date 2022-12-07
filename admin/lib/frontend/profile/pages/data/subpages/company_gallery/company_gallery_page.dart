@@ -8,23 +8,28 @@ class CompanyGalleryPage extends HookConsumerWidget {
     Key? key,
     this.companyId,
     this.companyGallery,
+    this.companyDetailsState,
   }) : super(key: key);
   final List<Gallery>? companyGallery;
   final String? companyId;
+  final CompanyNotifier? companyDetailsState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
       mobile: _MobileCompanyGalleryPage(
         companyGallery: companyGallery,
         companyId: companyId,
+        companyDetailsState: companyDetailsState,
       ),
       tablet: _TabletCompanyGalleryPage(
         companyGallery: companyGallery,
         companyId: companyId,
+        companyDetailsState: companyDetailsState,
       ),
       desktop: _DesktopCompanyGalleryPage(
         companyGallery: companyGallery,
         companyId: companyId,
+        companyDetailsState: companyDetailsState,
       ),
     );
   }
@@ -36,9 +41,11 @@ class _MobileCompanyGalleryPage extends HookConsumerWidget {
     Key? key,
     this.companyGallery,
     this.companyId,
+    this.companyDetailsState,
   }) : super(key: key);
   final List<Gallery>? companyGallery;
   final String? companyId;
+  final CompanyNotifier? companyDetailsState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomScrollView(
@@ -79,9 +86,11 @@ class _TabletCompanyGalleryPage extends HookConsumerWidget {
     Key? key,
     this.companyGallery,
     this.companyId,
+    this.companyDetailsState,
   }) : super(key: key);
   final List<Gallery>? companyGallery;
   final String? companyId;
+  final CompanyNotifier? companyDetailsState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
@@ -108,9 +117,11 @@ class _DesktopCompanyGalleryPage extends HookConsumerWidget {
     Key? key,
     this.companyGallery,
     this.companyId,
+    this.companyDetailsState,
   }) : super(key: key);
   final List<Gallery>? companyGallery;
   final String? companyId;
+  final CompanyNotifier? companyDetailsState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
