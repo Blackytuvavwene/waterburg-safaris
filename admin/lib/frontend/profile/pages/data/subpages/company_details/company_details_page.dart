@@ -8,30 +8,35 @@ import 'package:sizer/sizer.dart';
 class CompanyDetailsPage extends HookConsumerWidget {
   const CompanyDetailsPage({
     Key? key,
-    this.comapnyId,
+    this.companyId,
     this.companyDetails,
     this.companyDetailsState,
+    this.editCompanyDetails,
   }) : super(key: key);
   final CompanyDetails? companyDetails;
-  final String? comapnyId;
+  final String? companyId;
   final CompanyNotifier? companyDetailsState;
+  final ValueNotifier<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
       mobile: _MobileCompanyDetailsPage(
         companyDetails: companyDetails,
-        comapnyId: comapnyId,
+        companyId: companyId,
         companyDetailsState: companyDetailsState,
+        editCompanyDetails: editCompanyDetails,
       ),
       tablet: _TabletCompanyDetailsPage(
         companyDetails: companyDetails,
-        comapnyId: comapnyId,
+        companyId: companyId,
         companyDetailsState: companyDetailsState,
+        editCompanyDetails: editCompanyDetails,
       ),
       desktop: _DesktopCompanyDetailsPage(
         companyDetails: companyDetails,
-        comapnyId: comapnyId,
+        companyId: companyId,
         companyDetailsState: companyDetailsState,
+        editCompanyDetails: editCompanyDetails,
       ),
     );
   }
@@ -42,12 +47,14 @@ class _MobileCompanyDetailsPage extends HookConsumerWidget {
   const _MobileCompanyDetailsPage({
     Key? key,
     this.companyDetails,
-    this.comapnyId,
+    this.companyId,
     this.companyDetailsState,
+    this.editCompanyDetails,
   }) : super(key: key);
   final CompanyDetails? companyDetails;
-  final String? comapnyId;
+  final String? companyId;
   final CompanyNotifier? companyDetailsState;
+  final ValueNotifier<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pageViewController = usePageController();
@@ -56,23 +63,26 @@ class _MobileCompanyDetailsPage extends HookConsumerWidget {
     final pages = [
       CompanyAboutDetailsPage(
         companyDetails: companyDetails,
-        companyId: comapnyId,
+        companyId: companyId,
         companyDetailsState: companyDetailsState,
+        editCompanyDetails: editCompanyDetails,
       ),
       CompanyAddressDetailsPage(
         companyDetails: companyDetails,
-        companyId: comapnyId,
+        companyId: companyId,
         companyDetailsState: companyDetailsState,
+        editCompanyDetails: editCompanyDetails,
       ),
       // CompanyExtraDetailsPage(
       //   companyDetails: companyDetails,
-      //   companyId: comapnyId,
+      //   companyId: companyId,
       // ),
     ];
 
     // on page change function
     void onPageChange(int index) {
       pageViewIndex.value = index;
+
       pageViewController.jumpToPage(index);
     }
 
@@ -107,12 +117,14 @@ class _TabletCompanyDetailsPage extends HookConsumerWidget {
   const _TabletCompanyDetailsPage({
     Key? key,
     this.companyDetails,
-    this.comapnyId,
+    this.companyId,
     this.companyDetailsState,
+    this.editCompanyDetails,
   }) : super(key: key);
   final CompanyDetails? companyDetails;
-  final String? comapnyId;
+  final String? companyId;
   final CompanyNotifier? companyDetailsState;
+  final ValueNotifier<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
@@ -138,12 +150,14 @@ class _DesktopCompanyDetailsPage extends HookConsumerWidget {
   const _DesktopCompanyDetailsPage({
     Key? key,
     this.companyDetails,
-    this.comapnyId,
+    this.companyId,
     this.companyDetailsState,
+    this.editCompanyDetails,
   }) : super(key: key);
   final CompanyDetails? companyDetails;
-  final String? comapnyId;
+  final String? companyId;
   final CompanyNotifier? companyDetailsState;
+  final ValueNotifier<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(

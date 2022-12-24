@@ -13,20 +13,27 @@ class ProfileDataPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final companyDetails = ref.watch(companyNotifierProvider(company));
+    final editCompanyDetails = useState(false);
     final companyDetailsState =
         ref.watch(companyNotifierProvider(company).notifier);
     return AppLayout(
       mobile: _MobileProfileDataPage(
         company: companyDetails,
         companyDetailsState: companyDetailsState,
+        editCompanyDetails: editCompanyDetails,
+        oldDetails: company,
       ),
       tablet: _TabletProfileDataPage(
         company: companyDetails,
         companyDetailsState: companyDetailsState,
+        editCompanyDetails: editCompanyDetails,
+        oldDetails: company,
       ),
       desktop: _DesktopProfileDataPage(
         company: companyDetails,
         companyDetailsState: companyDetailsState,
+        editCompanyDetails: editCompanyDetails,
+        oldDetails: company,
       ),
     );
   }
@@ -38,9 +45,13 @@ class _MobileProfileDataPage extends HookConsumerWidget {
     Key? key,
     this.company,
     this.companyDetailsState,
+    this.editCompanyDetails,
+    this.oldDetails,
   }) : super(key: key);
   final Company? company;
   final CompanyNotifier? companyDetailsState;
+  final ValueNotifier<bool>? editCompanyDetails;
+  final Company? oldDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tabs = [
@@ -66,6 +77,31 @@ class _MobileProfileDataPage extends HookConsumerWidget {
         title: const DText(
           text: 'Profile',
         ),
+        actions: [
+          if (editCompanyDetails?.value != false)
+            TextButton(
+              onPressed: () {
+                // TODO:implement cancellation of any changes made to company
+                // TODO: reset company details state
+                companyDetailsState?.updateCompany(company: oldDetails);
+                editCompanyDetails?.value = false;
+              },
+              child: DText(
+                text: 'Discard changes',
+                textColor: Theme.of(context).colorScheme.error,
+              ),
+            ),
+          if (editCompanyDetails?.value != false)
+            TextButton(
+              onPressed: () {
+                //TODO : implement updating of company details to firestore
+              },
+              child: DText(
+                text: 'Save changes',
+                textColor: Theme.of(context).colorScheme.primary,
+              ),
+            )
+        ],
         automaticallyImplyLeading: false,
         bottom: TabBar(
           controller: tabController,
@@ -82,8 +118,9 @@ class _MobileProfileDataPage extends HookConsumerWidget {
         children: [
           CompanyDetailsPage(
             companyDetails: company!.companyDetails,
-            comapnyId: company!.companyId,
+            companyId: company!.companyId,
             companyDetailsState: companyDetailsState,
+            editCompanyDetails: editCompanyDetails,
           ),
           CompanyStaffPage(
             companyStaff: company!.companyStaff,
@@ -107,9 +144,13 @@ class _TabletProfileDataPage extends HookConsumerWidget {
     Key? key,
     this.company,
     this.companyDetailsState,
+    this.editCompanyDetails,
+    this.oldDetails,
   }) : super(key: key);
   final Company? company;
   final CompanyNotifier? companyDetailsState;
+  final ValueNotifier<bool>? editCompanyDetails;
+  final Company? oldDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
@@ -129,9 +170,13 @@ class _DesktopProfileDataPage extends HookConsumerWidget {
     Key? key,
     this.company,
     this.companyDetailsState,
+    this.editCompanyDetails,
+    this.oldDetails,
   }) : super(key: key);
   final Company? company;
   final CompanyNotifier? companyDetailsState;
+  final ValueNotifier<bool>? editCompanyDetails;
+  final Company? oldDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(

@@ -205,6 +205,7 @@ class _DesktopDashBoardActivitiesData extends HookConsumerWidget {
             vertical: 10.h,
           ),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Row(
                 children: [
@@ -234,7 +235,7 @@ class _DesktopDashBoardActivitiesData extends HookConsumerWidget {
                 ],
               ),
               const SizedBox(height: 10),
-              Expanded(
+              Flexible(
                 child: GridView.custom(
                   shrinkWrap: true,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -294,7 +295,7 @@ class _ActivityCardMobile extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       width: 100.w,
-      height: 16.h,
+      height: 12.h,
       padding: EdgeInsets.symmetric(
         horizontal: 4.w,
         vertical: 2.h,
@@ -318,7 +319,7 @@ class _ActivityCardMobile extends HookConsumerWidget {
           //   ),
           // ),
           // const SizedBox(height: 10),
-          Expanded(
+          Flexible(
             child: DText(
               text: activity!.activityName!,
               fontSize: 12.sp,
@@ -327,14 +328,13 @@ class _ActivityCardMobile extends HookConsumerWidget {
             ),
           ),
           const SizedBox(height: 5),
-          Expanded(
-            child: DText(
-              text: activity!.seoDescription!,
-              fontSize: 10.sp,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              textColor: Theme.of(context).colorScheme.onSecondaryContainer,
-            ),
+          DText(
+            text: activity!.seoDescription!,
+            fontSize: 16.0,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            minFontSize: 16.0,
+            textColor: Theme.of(context).colorScheme.onSecondaryContainer,
           ),
         ],
       ),

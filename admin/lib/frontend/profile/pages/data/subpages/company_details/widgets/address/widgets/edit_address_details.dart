@@ -1,6 +1,6 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router_flow/go_router_flow.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icon.dart';
 
@@ -13,15 +13,19 @@ class EditAddressContactPage extends HookConsumerWidget {
   final AddressAndContact? addressAndContact;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final detailsState = useState(addressAndContact);
     return AppLayout(
       mobile: _MobileEditAddressContactPage(
-        addressAndContact: addressAndContact,
+        addressAndContact: detailsState.value,
+        state: detailsState,
       ),
       tablet: _TabletEditAddressContactPage(
-        addressAndContact: addressAndContact,
+        addressAndContact: detailsState.value,
+        state: detailsState,
       ),
       desktop: _DesktopEditAddressContactPage(
-        addressAndContact: addressAndContact,
+        addressAndContact: detailsState.value,
+        state: detailsState,
       ),
     );
   }
@@ -31,8 +35,10 @@ class EditAddressContactPage extends HookConsumerWidget {
 class _MobileEditAddressContactPage extends HookConsumerWidget {
   const _MobileEditAddressContactPage({
     this.addressAndContact,
+    this.state,
   });
   final AddressAndContact? addressAndContact;
+  final ValueNotifier<AddressAndContact?>? state;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -50,7 +56,7 @@ class _MobileEditAddressContactPage extends HookConsumerWidget {
                   cellPhoneNos: addressAndContact?.cellPhoneNos,
                   email: addressAndContact?.email,
                 );
-                context.pop(newAddress);
+                Navigator.of(context).pop(newAddress);
               },
             ),
             pinned: true,
@@ -69,46 +75,89 @@ class _MobileEditAddressContactPage extends HookConsumerWidget {
             ],
           ),
           SliverToBoxAdapter(
-            child: Form(
-              child: Column(
-                children: [
-                  TextFormField(
-                    initialValue: addressAndContact?.address,
-                    decoration: const InputDecoration(
-                      labelText: 'Company Address',
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: AppSpacing.smallX,
+              ),
+              child: Form(
+                child: Column(
+                  children: [
+                    TextFormField(
+                      initialValue: addressAndContact?.email,
+                      decoration: const InputDecoration(
+                        labelText: 'Company Email Address',
+                        border: OutlineInputBorder(),
+                      ),
+                      onChanged: (value) {},
                     ),
-                    onChanged: (value) {},
-                  ),
-                  TextFormField(
-                    initialValue: addressAndContact?.address,
-                    decoration: const InputDecoration(
-                      labelText: 'Company Address',
+                    TextFormField(
+                      initialValue: addressAndContact?.address,
+                      decoration: const InputDecoration(
+                        labelText: 'Company Physical/Postal Address',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
-                  ),
-                  TextFormField(
-                    initialValue: addressAndContact?.address,
-                    decoration: const InputDecoration(
-                      labelText: 'Company Address',
+                    Container(
+                      child: Row(
+                        children: [
+                          Wrap(
+                            children: [
+                              ...addressAndContact?.cellPhoneNos?.map(
+                                    (e) => Chip(
+                                      label: DText(
+                                        text: e,
+                                      ),
+                                    ),
+                                  ) ??
+                                  [],
+                            ],
+                          ),
+                          Flexible(
+                            child: TextFormField(
+                              // expands: true,
+                              // minLines: null,
+                              // maxLines: null,
+                              onFieldSubmitted: (value) {
+                                final List<String> newCellPhoneNos = [
+                                  ...addressAndContact?.cellPhoneNos ?? [],
+                                  value,
+                                ];
+                                state?.value = addressAndContact?.copyWith(
+                                  cellPhoneNos: newCellPhoneNos,
+                                );
+                              },
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBoxAppSpacing.smallY(),
-                  Wrap(
-                    children: addressAndContact?.cellPhoneNos
-                            ?.map(
-                              (e) => DText(
-                                text: e,
-                              ),
-                            )
-                            .toList() ??
-                        [],
-                  ),
-                  TextFormField(
-                    initialValue: addressAndContact?.address,
-                    decoration: const InputDecoration(
-                      labelText: 'Company Address',
+                    TextFormField(
+                      initialValue: addressAndContact?.address,
+                      decoration: const InputDecoration(
+                        labelText: 'Cellphone Numbers',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
-                  ),
-                ],
+                    SizedBoxAppSpacing.smallY(),
+                    Wrap(
+                      children: addressAndContact?.cellPhoneNos
+                              ?.map(
+                                (e) => DText(
+                                  text: e,
+                                ),
+                              )
+                              .toList() ??
+                          [],
+                    ),
+                    TextFormField(
+                      initialValue: addressAndContact?.address,
+                      decoration: const InputDecoration(
+                        labelText: 'Company Address',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -122,8 +171,10 @@ class _MobileEditAddressContactPage extends HookConsumerWidget {
 class _TabletEditAddressContactPage extends HookConsumerWidget {
   const _TabletEditAddressContactPage({
     this.addressAndContact,
+    this.state,
   });
   final AddressAndContact? addressAndContact;
+  final ValueNotifier<AddressAndContact?>? state;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container();
@@ -134,8 +185,10 @@ class _TabletEditAddressContactPage extends HookConsumerWidget {
 class _DesktopEditAddressContactPage extends HookConsumerWidget {
   const _DesktopEditAddressContactPage({
     this.addressAndContact,
+    this.state,
   });
   final AddressAndContact? addressAndContact;
+  final ValueNotifier<AddressAndContact?>? state;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container();

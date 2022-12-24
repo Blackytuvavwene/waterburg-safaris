@@ -1,6 +1,5 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router_flow/go_router_flow.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icon.dart';
 
@@ -11,10 +10,12 @@ class CompanyAddressDetailsPage extends HookConsumerWidget {
     this.companyId,
     this.companyDetails,
     this.companyDetailsState,
+    this.editCompanyDetails,
   }) : super(key: key);
   final CompanyDetails? companyDetails;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
+  final ValueNotifier<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
@@ -22,16 +23,19 @@ class CompanyAddressDetailsPage extends HookConsumerWidget {
         companyDetails: companyDetails,
         companyId: companyId,
         companyDetailsState: companyDetailsState,
+        editCompanyDetails: editCompanyDetails,
       ),
       tablet: _TabletCompanyAddressDetailsPage(
         companyDetails: companyDetails,
         companyId: companyId,
         companyDetailsState: companyDetailsState,
+        editCompanyDetails: editCompanyDetails,
       ),
       desktop: _DesktopCompanyAddressDetailsPage(
         companyDetails: companyDetails,
         companyId: companyId,
         companyDetailsState: companyDetailsState,
+        editCompanyDetails: editCompanyDetails,
       ),
     );
   }
@@ -44,10 +48,12 @@ class _MobileCompanyAddressDetailsPage extends HookConsumerWidget {
     this.companyDetails,
     this.companyId,
     this.companyDetailsState,
+    this.editCompanyDetails,
   }) : super(key: key);
   final CompanyDetails? companyDetails;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
+  final ValueNotifier<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomScrollView(
@@ -58,11 +64,16 @@ class _MobileCompanyAddressDetailsPage extends HookConsumerWidget {
           ),
           pinned: true,
           floating: true,
+          automaticallyImplyLeading: false,
           snap: true,
           actions: [
             IconButton(
               icon: LineIcon.editAlt(),
               onPressed: () async {
+                if (editCompanyDetails?.value != true) {
+                  editCompanyDetails?.value = true;
+                }
+
                 // ref.read(companyDetailsProvider.notifier).editCompanyDetails(
                 //       companyId: companyId,
                 //       companyDetails: companyDetails,
@@ -74,25 +85,25 @@ class _MobileCompanyAddressDetailsPage extends HookConsumerWidget {
                   cellPhoneNos: companyDetails?.cellPhoneNos,
                 );
 
-                await context
-                    .pushNamed<AddressAndContact>(
-                      'editAddress',
-                      extra: addressAndContact,
-                    )
-                    .then((value) => print(value));
+                final newDetails = await dataRoutePush<AddressAndContact>(
+                  context: context,
+                  target: EditAddressContactPage(
+                    addressAndContact: addressAndContact,
+                  ),
+                );
 
                 // print(newAddressAndContact);
 
-                // if (newAddressAndContact != null) {
-                //   companyDetailsState?.editCompanyDetails(
-                //     companyDetails: companyDetails?.copyWith(
-                //       companyAddress: newAddressAndContact.address,
-                //       email: newAddressAndContact.email,
-                //       telNo: newAddressAndContact.telNo,
-                //       cellPhoneNos: newAddressAndContact.cellPhoneNos,
-                //     ),
-                //   );
-                // }
+                if (newDetails != null) {
+                  companyDetailsState?.editCompanyDetails(
+                    companyDetails: companyDetails?.copyWith(
+                      companyAddress: newDetails.address,
+                      email: newDetails.email,
+                      telNo: newDetails.telNo,
+                      cellPhoneNos: newDetails.cellPhoneNos,
+                    ),
+                  );
+                }
               },
             ),
           ],
@@ -132,10 +143,12 @@ class _TabletCompanyAddressDetailsPage extends HookConsumerWidget {
     this.companyDetails,
     this.companyId,
     this.companyDetailsState,
+    this.editCompanyDetails,
   }) : super(key: key);
   final CompanyDetails? companyDetails;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
+  final ValueNotifier<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return const Center(
@@ -151,10 +164,12 @@ class _DesktopCompanyAddressDetailsPage extends HookConsumerWidget {
     this.companyDetails,
     this.companyId,
     this.companyDetailsState,
+    this.editCompanyDetails,
   }) : super(key: key);
   final CompanyDetails? companyDetails;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
+  final ValueNotifier<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return const Center(

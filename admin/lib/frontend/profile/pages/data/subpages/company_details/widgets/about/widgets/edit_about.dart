@@ -1,9 +1,14 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router_flow/go_router_flow.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icon.dart';
+import 'package:sizer/sizer.dart';
+
+// function to add two numbers
+dynamic addTwoNumbers(int a, int b) {
+  var sum = a + b;
+}
 
 // company edit about page hook consumer widget with app layout
 class CompanyEditAbout extends HookConsumerWidget {
@@ -60,7 +65,7 @@ class _MobileCompanyEditAbout extends HookConsumerWidget {
                 print('company details changed ${companyDetails?.toJson()}}');
                 Navigator.pop<CompanyDetails>(context, companyDetails);
               } else {
-                context.pop();
+                Navigator.pop(context);
               }
             },
             icon: LineIcon.arrowLeft(),
@@ -76,29 +81,80 @@ class _MobileCompanyEditAbout extends HookConsumerWidget {
           ],
         ),
         SliverToBoxAdapter(
-          child: Form(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                DText(
-                  text: companyDetails?.companyName ?? '',
-                ),
-                TextFormField(
-                  initialValue: companyDetails?.companyName,
-                  onChanged: (value) {
-                    companyDetailsNotifier?.value =
-                        companyDetails?.copyWith(companyName: value.trim());
-                  },
-                  decoration: const InputDecoration(
-                    labelText: 'Company Name',
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: 2.w,
+            ),
+            child: Form(
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 20,
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-              ],
+                  TextFormField(
+                    initialValue: companyDetails?.companyName,
+                    onChanged: (value) {
+                      companyDetailsNotifier?.value =
+                          companyDetails?.copyWith(companyName: value.trim());
+                    },
+                    decoration: const InputDecoration(
+                      labelText: 'Company Name',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    initialValue: companyDetails?.registrationNumber,
+                    onChanged: (value) {
+                      companyDetailsNotifier?.value = companyDetails?.copyWith(
+                          registrationNumber: value.trim());
+                    },
+                    decoration: const InputDecoration(
+                      labelText: 'Company Registration Number',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    initialValue: companyDetails?.seoDescription,
+                    onChanged: (value) {
+                      companyDetailsNotifier?.value = companyDetails?.copyWith(
+                          seoDescription: value.trim());
+                    },
+                    maxLength: 500,
+                    maxLines: 10,
+                    minLines: 1,
+                    decoration: const InputDecoration(
+                      labelText: 'Company SEO Description',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    initialValue: companyDetails?.overview,
+                    onChanged: (value) {
+                      companyDetailsNotifier?.value =
+                          companyDetails?.copyWith(overview: value.trim());
+                    },
+                    maxLength: 2000,
+                    maxLines: 10,
+                    minLines: 1,
+                    decoration: const InputDecoration(
+                      labelText: 'Company Overview',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

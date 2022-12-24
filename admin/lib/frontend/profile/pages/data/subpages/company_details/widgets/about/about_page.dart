@@ -12,10 +12,12 @@ class CompanyAboutDetailsPage extends HookConsumerWidget {
     this.companyId,
     this.companyDetails,
     this.companyDetailsState,
+    this.editCompanyDetails,
   }) : super(key: key);
   final CompanyDetails? companyDetails;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
+  final ValueNotifier<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final loading = useState(false);
@@ -25,16 +27,19 @@ class CompanyAboutDetailsPage extends HookConsumerWidget {
         companyDetails: companyDetails,
         companyId: companyId,
         companyDetailsState: companyDetailsState,
+        editCompanyDetails: editCompanyDetails,
       ),
       tablet: _TabletCompanyAboutDetailsPage(
         companyDetails: companyDetails,
         companyId: companyId,
         companyDetailsState: companyDetailsState,
+        editCompanyDetails: editCompanyDetails,
       ),
       desktop: _DesktopCompanyAboutDetailsPage(
         companyDetails: companyDetails,
         companyId: companyId,
         companyDetailsState: companyDetailsState,
+        editCompanyDetails: editCompanyDetails,
       ),
     );
   }
@@ -47,10 +52,12 @@ class _MobileCompanyAboutDetailsPage extends HookConsumerWidget {
     this.companyDetails,
     this.companyId,
     this.companyDetailsState,
+    this.editCompanyDetails,
   }) : super(key: key);
   final CompanyDetails? companyDetails;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
+  final ValueNotifier<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomScrollView(
@@ -60,16 +67,24 @@ class _MobileCompanyAboutDetailsPage extends HookConsumerWidget {
             text: 'Company About Details',
           ),
           pinned: true,
+          automaticallyImplyLeading: false,
           actions: [
             IconButton(
               icon: LineIcon.editAlt(),
               onPressed: () async {
-                final result = await Navigator.push<CompanyDetails>(context,
-                    MaterialPageRoute(builder: (context) {
-                  return CompanyEditAbout(
-                    companyDetails: companyDetails,
-                  );
-                }));
+                if (editCompanyDetails?.value != true) {
+                  editCompanyDetails?.value = true;
+                }
+                final result = await Navigator.push<CompanyDetails>(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return CompanyEditAbout(
+                        companyDetails: companyDetails,
+                      );
+                    },
+                  ),
+                );
 
                 if (result != null) {
                   print('result: $result');
@@ -130,10 +145,12 @@ class _TabletCompanyAboutDetailsPage extends HookConsumerWidget {
     this.companyDetails,
     this.companyId,
     this.companyDetailsState,
+    this.editCompanyDetails,
   }) : super(key: key);
   final CompanyDetails? companyDetails;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
+  final ValueNotifier<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return const Center(
@@ -149,10 +166,12 @@ class _DesktopCompanyAboutDetailsPage extends HookConsumerWidget {
     this.companyDetails,
     this.companyId,
     this.companyDetailsState,
+    this.editCompanyDetails,
   }) : super(key: key);
   final CompanyDetails? companyDetails;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
+  final ValueNotifier<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return const Center(

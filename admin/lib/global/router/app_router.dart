@@ -308,3 +308,20 @@ final goroutingProvider = Provider<GoRouter>(
         );
   },
 );
+
+// navigator push future
+Future<T?> dataRoutePush<T>({
+  T? arguments,
+  Widget? target,
+  BuildContext? context,
+}) async {
+  final result = await Navigator.push<T>(
+    context!,
+    MaterialPageRoute(
+      builder: (context) => target!,
+      // settings: RouteSettings(arguments: arguments),
+    ),
+  );
+
+  return result;
+}
