@@ -155,7 +155,7 @@ class ImageHelpers {
 
   // pick add image
   static Future<ImageHelperModel?> pickAddImage(
-      {ImageSource? imageSource, String? storagePath}) async {
+      {ImageSource? imageSource}) async {
     try {
       ImagePicker picker = ImagePicker();
       XFile? image = await picker.pickImage(
@@ -381,7 +381,7 @@ class ImageHelperNotifier extends StateNotifier<AsyncValue<ImageHelperModel?>> {
 
     // use pickImage method from image helper
     return state = await AsyncValue.guard(() async {
-      final image = await ImageHelpers.pickImage(
+      final image = await ImageHelpers.pickAddImage(
         imageSource: imageSource,
       );
 

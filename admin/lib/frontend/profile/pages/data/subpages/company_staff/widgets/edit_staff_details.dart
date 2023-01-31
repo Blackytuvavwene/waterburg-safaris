@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:admin/lib.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditStaffControllerNotifier
     extends StateNotifier<AsyncValue<CompanyStaff>> {
@@ -39,6 +42,17 @@ class EditStaffControllerNotifier
   }
 }
 
+// staff image control provider
+final imageControlProvider =
+    StateProvider.autoDispose<ImageHelperModel?>((ref) {
+  // get image helper notifier
+  // final imageHelperNotifier = ref.watch(imageHelperNotifierProvider.notifier);
+
+  // get image from gallery
+  // final newImage =imageHelperNotifier.pickImage(imageSource: ImageSource.gallery).then((value) => value.asData?.value);
+  return null;
+});
+
 // edit staff controller provider
 final editStaffControllerProvider = StateNotifierProvider<
     EditStaffControllerNotifier,
@@ -55,6 +69,9 @@ class EditStaffDetails extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentStaff = useState(companyStaff);
     final formKey = GlobalKey<FormState>();
+    final editImage = useState(false);
+    final imageNotifier = ref.watch(imageHelperNotifierProvider);
+    final newImage = ref.watch(imageControlProvider);
 
     final staffController = ref.read(editStaffControllerProvider.notifier);
 
@@ -87,16 +104,19 @@ class EditStaffDetails extends HookConsumerWidget {
         companyStaff: currentStaff,
         formKey: formKey,
         updateStaffDetails: updateStaffDetails,
+        imageNotifier: imageNotifier,
       ),
       tablet: _TabletEditStaffDetails(
         companyStaff: currentStaff,
         formKey: formKey,
         updateStaffDetails: updateStaffDetails,
+        imageNotifier: imageNotifier,
       ),
       desktop: _DesktopEditStaffDetails(
         companyStaff: currentStaff,
         formKey: formKey,
         updateStaffDetails: updateStaffDetails,
+        imageNotifier: imageNotifier,
       ),
     );
   }
@@ -109,10 +129,12 @@ class _MobileEditStaffDetails extends HookConsumerWidget {
     this.companyStaff,
     this.formKey,
     this.updateStaffDetails,
+    this.imageNotifier,
   }) : super(key: key);
   final ValueNotifier<CompanyStaff?>? companyStaff;
   final GlobalKey<FormState>? formKey;
   final VoidCallback? updateStaffDetails;
+  final AsyncValue<ImageHelperModel?>? imageNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -134,19 +156,47 @@ class _MobileEditStaffDetails extends HookConsumerWidget {
             Center(
               child: Stack(
                 children: [
-                  CircleAvatar(
-                    radius: 60,
-                    backgroundColor: Colors.grey,
-                    backgroundImage: companyStaff?.value?.imageUrl == null
-                        ? null
-                        : NetworkImage(companyStaff?.value?.imageUrl ?? ''),
+                  Center(
+                    child: CircleAvatar(
+                      radius: 60,
+                      backgroundColor: Colors.grey,
+                      backgroundImage: imageNotifier?.when(
+                        data: (data) {
+                          // final image = data?.path != null
+                          //     ?  Image(
+                          //         File(data!.path.toString()),
+                          //       )
+                          //     : Image(
+                          //         '${companyStaff?.value?.imageUrl.toString()}');
+                          if (data?.path != null) {
+                            return FileImage(
+                              File(
+                                data!.path.toString(),
+                              ),
+                            );
+                          } else {
+                            return NetworkImage(
+                                '${companyStaff?.value?.imageUrl.toString()}');
+                          }
+                        },
+                        error: (error, stackTrace) {
+                          return const AssetImage('assets/images/error.png');
+                        },
+                        loading: () {
+                          return const AssetImage('assets/images/loading.png');
+                        },
+                      ),
+                    ),
                   ),
                   Positioned(
                     bottom: 0,
                     right: 0,
                     child: InkWell(
-                      onTap: () {
+                      onTap: () async {
                         // TODO: add image in mobile view
+                        await ref
+                            .read(imageHelperNotifierProvider.notifier)
+                            .pickImage(imageSource: ImageSource.gallery);
                       },
                       child: const Icon(
                         Icons.camera_alt,
@@ -210,10 +260,12 @@ class _TabletEditStaffDetails extends HookConsumerWidget {
     this.companyStaff,
     this.formKey,
     this.updateStaffDetails,
+    this.imageNotifier,
   }) : super(key: key);
   final ValueNotifier<CompanyStaff?>? companyStaff;
   final GlobalKey<FormState>? formKey;
   final VoidCallback? updateStaffDetails;
+  final AsyncValue<ImageHelperModel?>? imageNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -299,10 +351,12 @@ class _DesktopEditStaffDetails extends HookConsumerWidget {
     this.companyStaff,
     this.formKey,
     this.updateStaffDetails,
+    this.imageNotifier,
   }) : super(key: key);
   final ValueNotifier<CompanyStaff?>? companyStaff;
   final GlobalKey<FormState>? formKey;
   final VoidCallback? updateStaffDetails;
+  final AsyncValue<ImageHelperModel?>? imageNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
