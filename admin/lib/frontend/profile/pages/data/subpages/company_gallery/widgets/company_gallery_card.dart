@@ -90,7 +90,9 @@ class _MobileCompanyGalleryCard extends HookConsumerWidget {
                 ),
                 Flexible(
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      // await ref.read(f)
+                    },
                     color: Theme.of(context).colorScheme.errorContainer,
                     icon: LineIcon.trash(),
                   ),

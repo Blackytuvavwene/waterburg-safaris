@@ -50,9 +50,9 @@ class GalleryNotifier extends StateNotifier<AsyncValue<List<Gallery>>> {
 
   // add to state
   void addImagesToState({required List<Gallery> images}) {
-    state = state.asData!.value != null
+    state = state.asData?.value != null
         ? AsyncValue.data([...state.asData!.value, ...images])
-        : AsyncValue.data(images) ?? const AsyncData([]);
+        : AsyncValue.data(images);
   }
 }
 

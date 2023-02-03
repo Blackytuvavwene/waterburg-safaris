@@ -22,14 +22,13 @@ class SignUpNotifier extends StateNotifier<AsyncValue<void>> {
     // let state to be loading
     state = const AsyncValue.loading();
 
-    try {
+    return state = await AsyncValue.guard<UserCredential>(() async {
       final user = await authRepository.signup(
         email: email,
         password: password,
       );
-      return state = AsyncData<UserCredential>(user);
-    } catch (e) {
-      throw state = AsyncValue.error(e);
-    }
+
+      return user;
+    });
   }
 }

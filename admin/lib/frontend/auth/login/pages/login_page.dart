@@ -1,4 +1,5 @@
 import 'package:admin/lib.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -12,16 +13,18 @@ class LoginPage extends HookConsumerWidget {
   const LoginPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<AsyncValue>(loginStateProvider, (previousState, state) {
-      if (state is AsyncLoading) {
-        EasyLoading.show(status: 'Loading...');
-      } else if (state is AsyncError) {
-        EasyLoading.dismiss();
-        EasyLoading.showError(state.error.toString());
-      } else if (state is AsyncData) {
-        EasyLoading.showSuccess('Successfully logged in!');
-        // context.goNamed('home');
-      }
+    ref.listen<AsyncValue<User?>>(loginStateProvider, (previousState, state) {
+      state.when(
+        data: (data) {
+          return EasyLoading.showSuccess('Successfully logged in!...');
+        },
+        error: (error, stackTrace) {
+          return EasyLoading.showError(state.error.toString());
+        },
+        loading: () {
+          return EasyLoading.show(status: 'Loading...');
+        },
+      );
     });
 
     // text controllers

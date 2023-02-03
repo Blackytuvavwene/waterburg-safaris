@@ -87,9 +87,11 @@ class ActivityTagsNotifier extends StateNotifier<AsyncValue<List<String>>> {
 
   // remove tag from state
   void removeTagFromState({required String tag}) {
-    final tags = state.asData?.value;
-    tags!.remove(tag);
-    state = AsyncData(tags);
+    if (state.asData?.value != null) {
+      final tags = state.asData!.value;
+      tags.remove(tag);
+      state = AsyncData(tags);
+    }
   }
 }
 

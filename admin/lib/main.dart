@@ -31,8 +31,6 @@ Future<void> main() async {
   );
 }
 
-
-
 class MyApp extends HookConsumerWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -49,26 +47,27 @@ class MyApp extends HookConsumerWidget {
           title: 'Flutter Demo',
           theme: ThemeData.from(
             colorScheme: const ColorScheme(
-                brightness: Brightness.dark,
-                primary: Color(0xFF92ccff),
-                onPrimary: Color(0xFF003351),
-                primaryContainer: Color(0xFF004b73),
-                onPrimaryContainer: Color(0xFFcce5ff),
-                secondary: Color(0xFF71dba6),
-                onSecondary: Color(0xFF003823),
-                secondaryContainer: Color(0xFF005235),
-                onSecondaryContainer: Color(0xFF8df7c1),
-                error: Color(0xFFffb4ab),
-                onError: Color(0xFF690005),
-                errorContainer: Color(0xFF93000a),
-                onErrorContainer: Color(0xFFffdad6),
-                background: Color(0xFF1a1c1e),
-                onBackground: Color(0xFFe2e2e5),
-                surface: Color(0xFF1a1c1e),
-                onSurface: Color(0xFFe2e2e5),
-                surfaceVariant: Color(0xFF42474e),
-                onSurfaceVariant: Color(0xFFc2c7ce),
-                outline: Color(0xFF8c9198)),
+              brightness: Brightness.dark,
+              primary: Color(0xFF92ccff),
+              onPrimary: Color(0xFF003351),
+              primaryContainer: Color(0xFF004b73),
+              onPrimaryContainer: Color(0xFFcce5ff),
+              secondary: Color(0xFF71dba6),
+              onSecondary: Color(0xFF003823),
+              secondaryContainer: Color(0xFF005235),
+              onSecondaryContainer: Color(0xFF8df7c1),
+              error: Color(0xFFffb4ab),
+              onError: Color(0xFF690005),
+              errorContainer: Color(0xFF93000a),
+              onErrorContainer: Color(0xFFffdad6),
+              background: Color(0xFF1a1c1e),
+              onBackground: Color(0xFFe2e2e5),
+              surface: Color(0xFF1a1c1e),
+              onSurface: Color(0xFFe2e2e5),
+              surfaceVariant: Color(0xFF42474e),
+              onSurfaceVariant: Color(0xFFc2c7ce),
+              outline: Color(0xFF8c9198),
+            ),
           ),
           builder: EasyLoading.init(),
           routerConfig: goRouter,
