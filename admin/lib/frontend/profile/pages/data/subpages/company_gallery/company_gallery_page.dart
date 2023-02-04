@@ -65,6 +65,11 @@ class _MobileCompanyGalleryPage extends HookConsumerWidget {
             ),
           ],
         ),
+        const SliverAppBar(
+          title: DText(
+            text: 'New images',
+          ),
+        ),
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {

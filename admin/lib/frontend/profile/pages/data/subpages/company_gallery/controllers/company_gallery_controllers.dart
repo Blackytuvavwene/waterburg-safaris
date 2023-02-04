@@ -1,0 +1,53 @@
+import 'package:admin/lib.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class CompanyGalleryCardNotifier extends StateNotifier<AsyncValue<Gallery?>> {
+  CompanyGalleryCardNotifier({
+    required this.gallery,
+  }) : super(AsyncData(gallery));
+  final Gallery? gallery;
+
+  void _setData(Gallery? gallery) {
+    state = AsyncData(gallery);
+  }
+
+  // delete selected image from firebase firestore and firebase storage
+  Future<AsyncValue<Gallery?>> deleteFromFirebase({
+    required String docPath,
+    required String docId,
+    required String query,
+    required Gallery image,
+  }) async {
+    state = const AsyncLoading();
+
+    return state = await AsyncValue.guard<Gallery?>(() async {
+      final Gallery data = await FirestoreHelper.deleteInDocList<Gallery>(
+        docPath: docPath,
+        docId: docId,
+        query: query,
+        data: image,
+      );
+      return null;
+    });
+  }
+
+  // update image in firestore
+  Future<AsyncValue<Gallery?>> updateInFirebase({
+    required String docPath,
+    required String docId,
+    required String query,
+    required Gallery image,
+  }) async {
+    state = const AsyncLoading();
+
+    return state = await AsyncValue.guard<Gallery?>(() async {
+      final Gallery data = await FirestoreHelper.deleteInDocList<Gallery>(
+        docPath: docPath,
+        docId: docId,
+        query: query,
+        data: image,
+      );
+      return null;
+    });
+  }
+}

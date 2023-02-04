@@ -99,6 +99,61 @@ class FirestoreHelper {
       throw e.toString();
     }
   }
+
+  // delete and update list in firebase
+  static Future<T> deleteAndUpdateInDocList<T>({
+    required String docId,
+    required String docPath,
+    required T data,
+    required T newData,
+    required String query,
+  }) async {
+    try {
+      final getDocRef = docRef(docPath).doc(docId);
+      final docData = _firestore.runTransaction<T>((transaction) {
+        return transaction.get(getDocRef).then((value) {
+          transaction.update(getDocRef, {
+            query: FieldValue.arrayRemove([data]),
+          });
+          transaction.update(getDocRef, {
+            query: FieldValue.arrayUnion([newData]),
+          });
+          return newData;
+        });
+      });
+      return docData;
+    } on FirebaseException catch (firestoreError) {
+      throw firestoreError.message.toString();
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  // delete from list using run transaction
+  static Future<T> deleteInDocList<T>({
+    required String docPath,
+    required String docId,
+    required String query,
+    required T data,
+  }) async {
+    try {
+      final getDocRef = docRef(docPath).doc(docId);
+      final docData = _firestore.runTransaction<T>((transaction) {
+        return transaction.get(getDocRef).then((value) {
+          transaction.update(getDocRef, {
+            query: FieldValue.arrayRemove([data]),
+          });
+
+          return data;
+        });
+      });
+      return docData;
+    } on FirebaseException catch (firestoreError) {
+      throw firestoreError.message.toString();
+    } catch (e) {
+      throw e.toString();
+    }
+  }
 }
 
 // delete data from firestore with runTransaction

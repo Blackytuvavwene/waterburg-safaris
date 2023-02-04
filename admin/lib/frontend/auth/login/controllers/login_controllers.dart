@@ -6,7 +6,7 @@ class LoginNotifier extends StateNotifier<AsyncValue<User?>> {
   LoginNotifier({
     required this.authRepository,
     this.ref,
-  }) : super(AsyncData<User?>(null));
+  }) : super(const AsyncData<User?>(null));
 
   // access auth repository
   final AuthRepository authRepository;
