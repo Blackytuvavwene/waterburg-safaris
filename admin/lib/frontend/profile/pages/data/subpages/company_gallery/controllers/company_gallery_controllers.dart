@@ -1,8 +1,8 @@
 import 'package:admin/lib.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CompanyGalleryCardNotifier extends StateNotifier<AsyncValue<Gallery?>> {
-  CompanyGalleryCardNotifier({
+class CompanyGalleryDbNotifier extends StateNotifier<AsyncValue<Gallery?>> {
+  CompanyGalleryDbNotifier({
     required this.gallery,
   }) : super(AsyncData(gallery));
   final Gallery? gallery;
@@ -49,5 +49,15 @@ class CompanyGalleryCardNotifier extends StateNotifier<AsyncValue<Gallery?>> {
       );
       return null;
     });
+  }
+}
+
+// controller for picking and adding company images
+class CompanyGalleryNotifier extends StateNotifier<List<ImageHelperModel>?> {
+  CompanyGalleryNotifier() : super([]);
+
+  // pick images
+  Future pickImages() async {
+    state = await ImageHelpers.pickAddMultipleImages();
   }
 }

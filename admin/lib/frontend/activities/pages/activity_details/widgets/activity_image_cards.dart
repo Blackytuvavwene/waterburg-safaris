@@ -5,7 +5,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:extended_image/extended_image.dart' as ei;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router_flow/go_router_flow.dart';
@@ -111,8 +110,6 @@ class AddImagesDialog extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final galleryState = ref.watch(galleryNotifierProvider.notifier);
-    final gallery =
-        ref.watch(multipleImageHelperControllerNotifierProvider).value;
 
     // show states
     ref.listen(galleryNotifierProvider,
@@ -176,15 +173,16 @@ class AddImagesDialog extends HookConsumerWidget {
                   Expanded(
                     child: CustomElevatedButton(
                       onPressed: () async {
-                        await galleryState.addImagesToFirestore(
-                          gallery:
-                              gallery!.map((e) => e.imageDetails!).toList(),
-                          activityId: activityId!,
-                          query: 'activityGallery',
-                        );
+                        // await galleryState.addImagesToFirestore(
+                        //   gallery:
+                        //       gallery!.map((e) => e.imageDetails!).toList(),
+                        //   activityId: activityId!,
+                        //   query: 'activityGallery',
+                        // );
+                        //TODO: fix upload images to firebase on activity image dialog
                         Navigator.pop(context);
                       },
-                      text: 'Upload Images ${gallery?.length}',
+                      text: 'Upload Images ',
                       borderRadius: const BorderRadius.only(
                         bottomRight: Radius.circular(10),
                       ),
@@ -214,9 +212,6 @@ class ImagePickerWidget extends HookConsumerWidget {
     // access image picker helpers
     final imageHelper = ref.watch(imageHelperNotifierProvider);
     final galleryHelper = ref.watch(galleryImageControllerNotifierProvider);
-    final imageHelperWeb = ref.watch(imageFileHelperControllerNotifierProvider);
-    final multiHelper =
-        ref.watch(multipleImageHelperControllerNotifierProvider);
 
     getImage() async {
       try {
@@ -233,43 +228,44 @@ class ImagePickerWidget extends HookConsumerWidget {
     }
 
     // show toast on error for picking image
-    ref.listen(multipleImageHelperControllerNotifierProvider,
-        (AsyncValue<List<ImageHelperModel>?>? previous,
-            AsyncValue<List<ImageHelperModel>?> next) {
-      next.when(
-        data: (data) {
-          if (data!.isNotEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Successfully added ${data.length} images'),
-              ),
-            );
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('No images selected'),
-              ),
-            );
-          }
-        },
-        loading: () {},
-        error: (error, stackTrace) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(error.toString()),
-            ),
-          );
-        },
-      );
+    //todo: change to new image controll notifier #image_picker_widget
+    // ref.listen(multipleImageHelperControllerNotifierProvider,
+    //     (AsyncValue<List<ImageHelperModel>?>? previous,
+    //         AsyncValue<List<ImageHelperModel>?> next) {
+    //   next.when(
+    //     data: (data) {
+    //       if (data!.isNotEmpty) {
+    //         ScaffoldMessenger.of(context).showSnackBar(
+    //           SnackBar(
+    //             content: Text('Successfully added ${data.length} images'),
+    //           ),
+    //         );
+    //       } else {
+    //         ScaffoldMessenger.of(context).showSnackBar(
+    //           const SnackBar(
+    //             content: Text('No images selected'),
+    //           ),
+    //         );
+    //       }
+    //     },
+    //     loading: () {},
+    //     error: (error, stackTrace) {
+    //       ScaffoldMessenger.of(context).showSnackBar(
+    //         SnackBar(
+    //           content: Text(error.toString()),
+    //         ),
+    //       );
+    //     },
+    //   );
 
-      if (next.asData?.value == previous) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Operation failed'),
-          ),
-        );
-      }
-    });
+    //   if (next.asData?.value == previous) {
+    //     ScaffoldMessenger.of(context).showSnackBar(
+    //       const SnackBar(
+    //         content: Text('Operation failed'),
+    //       ),
+    //     );
+    //   }
+    // });
 
     // listen to adding images to gallery and show toast
     ref.listen(addImagesNotifierProvider,
@@ -311,8 +307,7 @@ class ImagePickerWidget extends HookConsumerWidget {
 
     // access image picker state
     final imagePickerState = ref.read(imageHelperNotifierProvider.notifier);
-    final multiImagepicker =
-        ref.read(multipleImageHelperControllerNotifierProvider.notifier);
+
     // final galleryImageState =
     //     ref.watch(galleryImageControllerNotifierProvider.notifier);
     // final imagePickerWebState =
@@ -335,13 +330,7 @@ class ImagePickerWidget extends HookConsumerWidget {
                   child: CustomElevatedButton(
                     onPressed: () async {
                       // await ImageHelpers.webPickImage();
-                      if (multiHelper.asData?.value != null) {
-                        await multiImagepicker.pickAndAddMultipleImagesToList(
-                            storagePath: 'activities/$activityId');
-                      } else {
-                        await multiImagepicker.pickMultipleImages(
-                            storagePath: 'activities/$activityId');
-                      }
+                      //TODO: change to use improved image picker
                       // convert xfile to imagefile
                     },
                     text: 'Pick Images',
@@ -349,87 +338,89 @@ class ImagePickerWidget extends HookConsumerWidget {
                 ),
 
                 // clear images
-                multiHelper.maybeMap(orElse: () {
-                  return const SizedBox.shrink();
-                }, data: (value) {
-                  return value.asData?.value?.isNotEmpty != false
-                      ? Flexible(
-                          child: CustomElevatedButton(
-                            primary:
-                                Theme.of(context).colorScheme.errorContainer,
-                            onPressed: () async {
-                              await multiImagepicker.clearList();
-                            },
-                            text: 'Clear Images',
-                          ),
-                        )
-                      : const SizedBox.shrink();
-                })
+                //TODO:implement clear images here
+                // multiHelper.maybeMap(orElse: () {
+                //   return const SizedBox.shrink();
+                // }, data: (value) {
+                //   return value.asData?.value?.isNotEmpty != false
+                //       ? Flexible(
+                //           child: CustomElevatedButton(
+                //             primary:
+                //                 Theme.of(context).colorScheme.errorContainer,
+                //             onPressed: () async {
+                //               await multiImagepicker.clearList();
+                //             },
+                //             text: 'Clear Images',
+                //           ),
+                //         )
+                //       : const SizedBox.shrink();
+                // })
               ],
             ),
-            const SizedBox(height: 10),
-            multiHelper.when(
-              data: (image) {
-                return image!.isNotEmpty
-                    ? SizedBox(
-                        width: 100.w,
-                        child: Center(
-                          child: Wrap(
-                            spacing: 2.w,
-                            children: [
-                              ...image.map((e) {
-                                return Center(
-                                  child: ImageCard(
-                                    image: e,
-                                    index: image.indexOf(e),
-                                  ).animate().slide(
-                                        begin: const Offset(10, 0),
-                                        end: Offset.zero,
-                                        duration: const Duration(
-                                          milliseconds: 500,
-                                        ),
-                                        curve: Curves.easeInOut,
-                                      ),
-                                );
-                              }),
-                              Center(
-                                child: TextButton(
-                                    onPressed: () {},
-                                    child: DText(
-                                      text: 'Add Image',
-                                      textColor: Theme.of(context)
-                                          .colorScheme
-                                          .background,
-                                      fontSize: 16.sp,
-                                      textAlign: TextAlign.center,
-                                    )),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    : SizedBox(
-                        width: 100.w,
-                        height: 50.h,
-                        child: Center(
-                          child: DText(
-                            text: 'Add Images',
-                            textColor: Theme.of(context).colorScheme.background,
-                            fontSize: context.breakpoint > LayoutBreakpoint.sm
-                                ? 3.sp
-                                : 16.sp,
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      );
-              },
-              loading: () => const Center(
-                child: CircularProgressIndicator(),
-              ),
-              error: (error, stackTrace) => const SizedBox(
-                child: ColoredBox(color: Colors.red, child: Text('Error')),
-              ),
-            ),
+            // const SizedBox(height: 10),
+            //TODO handle picked image list
+            // multiHelper.when(
+            //   data: (image) {
+            //     return image!.isNotEmpty
+            //         ? SizedBox(
+            //             width: 100.w,
+            //             child: Center(
+            //               child: Wrap(
+            //                 spacing: 2.w,
+            //                 children: [
+            //                   ...image.map((e) {
+            //                     return Center(
+            //                       child: ImageCard(
+            //                         image: e,
+            //                         index: image.indexOf(e),
+            //                       ).animate().slide(
+            //                             begin: const Offset(10, 0),
+            //                             end: Offset.zero,
+            //                             duration: const Duration(
+            //                               milliseconds: 500,
+            //                             ),
+            //                             curve: Curves.easeInOut,
+            //                           ),
+            //                     );
+            //                   }),
+            //                   Center(
+            //                     child: TextButton(
+            //                         onPressed: () {},
+            //                         child: DText(
+            //                           text: 'Add Image',
+            //                           textColor: Theme.of(context)
+            //                               .colorScheme
+            //                               .background,
+            //                           fontSize: 16.sp,
+            //                           textAlign: TextAlign.center,
+            //                         )),
+            //                   ),
+            //                 ],
+            //               ),
+            //             ),
+            //           )
+            //         : SizedBox(
+            //             width: 100.w,
+            //             height: 50.h,
+            //             child: Center(
+            //               child: DText(
+            //                 text: 'Add Images',
+            //                 textColor: Theme.of(context).colorScheme.background,
+            //                 fontSize: context.breakpoint > LayoutBreakpoint.sm
+            //                     ? 3.sp
+            //                     : 16.sp,
+            //                 textAlign: TextAlign.center,
+            //               ),
+            //             ),
+            //           );
+            //   },
+            //   loading: () => const Center(
+            //     child: CircularProgressIndicator(),
+            //   ),
+            //   error: (error, stackTrace) => const SizedBox(
+            //     child: ColoredBox(color: Colors.red, child: Text('Error')),
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -551,11 +542,12 @@ class ImageCard extends HookConsumerWidget {
                       ),
                       IconButton(
                         onPressed: () {
-                          ref
-                              .read(
-                                  multipleImageHelperControllerNotifierProvider
-                                      .notifier)
-                              .deleteImageFromList(image: image!);
+                          //Todo: handle delete image from picked list
+                          // ref
+                          //     .read(
+                          //         multipleImageHelperControllerNotifierProvider
+                          //             .notifier)
+                          //     .deleteImageFromList(image: image!);
                         },
                         icon: LineIcon.trash(),
                       ),
@@ -772,16 +764,17 @@ class ImageDetailsEditDialog extends HookConsumerWidget {
               child: CustomElevatedButton(
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
-                    ref
-                        .read(multipleImageHelperControllerNotifierProvider
-                            .notifier)
-                        .updateGalleryInList(
-                            gallery: Gallery(
-                              imageTitle: imageTitleController.text,
-                              imageDescription: imageDescriptionController.text,
-                              imageUrl: image.imageDetails!.imageUrl,
-                            ),
-                            index: index!);
+                    //todo: handle updating image values here
+                    // ref
+                    //     .read(multipleImageHelperControllerNotifierProvider
+                    //         .notifier)
+                    //     .updateGalleryInList(
+                    //         gallery: Gallery(
+                    //           imageTitle: imageTitleController.text,
+                    //           imageDescription: imageDescriptionController.text,
+                    //           imageUrl: image.imageDetails!.imageUrl,
+                    //         ),
+                    //         index: index!);
                     GoRouter.of(context).pop();
                   }
                 },

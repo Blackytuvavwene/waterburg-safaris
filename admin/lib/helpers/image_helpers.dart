@@ -5,7 +5,6 @@ import 'package:admin/lib.dart';
 import 'package:file_picker/file_picker.dart' as file_picker;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_compression_flutter/image_compression_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -56,7 +55,7 @@ class ImageHelpers {
   static Future<XFile?> compressImage(ImageFile image) async {
     try {
       const compressionConfig = Configuration(
-        outputType: ImageOutputType.webpThenPng,
+        outputType: ImageOutputType.webpThenJpg,
         useJpgPngNativeCompressor: false,
         quality: 40,
       );
@@ -116,43 +115,6 @@ class ImageHelpers {
     }
   }
 
-  // pick image
-  static Future<ImageHelperModel?> pickImage(
-      {ImageSource? imageSource, String? storagePath}) async {
-    try {
-      ImagePicker picker = ImagePicker();
-      XFile? image = await picker.pickImage(
-        source: imageSource!,
-        imageQuality: 80,
-        maxHeight: 720,
-        maxWidth: 2000,
-      );
-      if (image == null) {
-        return null;
-      }
-
-      // final imageFile = await fileToImageFile(image);
-
-      final newImage = ImageHelperModel(
-          xFile: image,
-          name: image.name,
-          path: image.path,
-          imageFile: await image.asImageFile,
-          bytes: await image.readAsBytes(),
-          imageDetails: Gallery(
-              imageTitle: '',
-              imageDescription: '',
-              imageUrl: await addImageToFirebaseStorage(
-                image: image,
-                path: storagePath!,
-              )));
-
-      return newImage;
-    } catch (e) {
-      throw e.toString();
-    }
-  }
-
   // pick add image
   static Future<ImageHelperModel?> pickAddImage(
       {ImageSource? imageSource}) async {
@@ -184,22 +146,6 @@ class ImageHelpers {
       );
 
       return newImage;
-    } catch (e) {
-      throw e.toString();
-    }
-  }
-
-  // web pick image
-  static Future<Uint8List> webPickImage() async {
-    try {
-      final picker = ImagePicker();
-      final image =
-          await picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
-      // if (image == null) {
-      //   return null;
-      // }
-      final imageWeb = await image!.readAsBytes();
-      return imageWeb;
     } catch (e) {
       throw e.toString();
     }
@@ -238,44 +184,6 @@ class ImageHelpers {
       final storage = FirebaseStorage.instance;
       final ref = storage.refFromURL(imageUrl);
       await ref.delete();
-    } catch (e) {
-      throw e.toString();
-    }
-  }
-
-  // pick multiple images
-  static Future<List<ImageHelperModel>?> pickMultipleImages(
-      {String? storagePath}) async {
-    try {
-      final picker = ImagePicker();
-      final images = await picker.pickMultiImage(
-        imageQuality: 80,
-        maxHeight: 720,
-        maxWidth: 2000,
-      );
-      if (images == null) {
-        return null;
-      }
-      final files = <ImageHelperModel>[];
-      for (final image in images) {
-        // image.readAsBytes();
-        // final file = await fileToImageFile(image);
-        final newImage = ImageHelperModel(
-            xFile: image,
-            name: image.name,
-            path: image.path,
-            imageFile: await image.asImageFile,
-            bytes: await image.readAsBytes(),
-            imageDetails: Gallery(
-                imageTitle: '',
-                imageDescription: '',
-                imageUrl: await addImageToFirebaseStorage(
-                  image: image,
-                  path: storagePath!,
-                )));
-        files.add(newImage);
-      }
-      return files;
     } catch (e) {
       throw e.toString();
     }
@@ -369,6 +277,63 @@ class ImageHelpers {
   }
 }
 
+// image controller notifier
+class ImageControllerNotifier
+    extends StateNotifier<AsyncValue<List<ImageHelperModel>?>> {
+  ImageControllerNotifier() : super(const AsyncData([]));
+
+// pick images and add them to the state
+  Future pickImages({
+    ImageSource? imageSource,
+  }) async {
+    if (state.asData?.value != null || state.value != []) {
+      final imagesInState = state.asData?.value;
+      state = await AsyncValue.guard(() async {
+        final images = await ImageHelpers.pickAddMultipleImages();
+
+        // add images only if they are not null
+        if (imagesInState != null && images != null) {
+          return [...imagesInState, ...images];
+        } else {
+          return imagesInState;
+        }
+      });
+    } else {
+      state = await AsyncValue.guard(() async {
+        final images = await ImageHelpers.pickAddMultipleImages();
+        return images;
+      });
+    }
+  }
+
+  // delete an image from the list
+  void removeImageFromState({required ImageHelperModel image}) {
+    final images = state.asData?.value?.where((e) => e != image).toList();
+    state = AsyncData(images);
+  }
+
+  // update image gallery values from specific image in list
+  void updateImageGalleryDetails({
+    required Gallery galleryDetails,
+    required ImageHelperModel theImage,
+  }) {
+    final images = state.asData?.value?.map((element) {
+      if (element == theImage) {
+        element.copyWith(imageDetails: galleryDetails);
+      }
+
+      return element;
+    }).toList();
+    state = AsyncData(images);
+  }
+}
+
+// expose image controller notifier as a provider
+final imageControllerNotifierProvider = StateNotifierProvider.autoDispose<
+    ImageControllerNotifier, AsyncValue<List<ImageHelperModel>?>>((ref) {
+  return ImageControllerNotifier();
+});
+
 class ImageHelperNotifier extends StateNotifier<AsyncValue<ImageHelperModel?>> {
   ImageHelperNotifier() : super(const AsyncData(null));
   // get image helper
@@ -413,123 +378,6 @@ class GalleryImageControllerNotifier
   }
 }
 
-// multiple image helper controller notifier
-class MultipleImageHelperControllerNotifier
-    extends StateNotifier<AsyncValue<List<ImageHelperModel>?>> {
-  MultipleImageHelperControllerNotifier()
-      : super(const AsyncData(<ImageHelperModel>[]));
-
-  // get image helper
-  final imageHelper = ImageHelpers();
-
-  // pick multiple images
-  Future<AsyncValue<List<ImageHelperModel>?>> pickMultipleImages(
-      {String? storagePath}) async {
-    state = const AsyncValue.loading();
-
-    // use pickMultipleImages method from image helper
-    return state = await AsyncValue.guard<List<ImageHelperModel>?>(() async {
-      final images =
-          await ImageHelpers.pickMultipleImages(storagePath: storagePath);
-
-      return images;
-    });
-  }
-
-  // pick and add multiple images to list
-  Future<AsyncValue<List<ImageHelperModel>?>> pickAndAddMultipleImagesToList(
-      {String? storagePath}) async {
-    // state = const AsyncValue.loading();
-
-    // use pickMultipleImages method from image helper
-    final images =
-        await ImageHelpers.pickMultipleImages(storagePath: storagePath);
-
-    // add images to list
-    return state = images != null
-        ? AsyncValue.data([...state.asData!.value!, ...images])
-        : state;
-  }
-
-  // delete image from list
-  Future<void> deleteImageFromList({required ImageHelperModel image}) async {
-    await ImageHelpers.deleteImageFromFirebaseStorageByDownloadUrl(
-        imageUrl: image.imageDetails!.imageUrl!);
-    state = AsyncValue.data(state.asData!.value!
-        .where((element) => element.path != image.path)
-        .toList());
-  }
-
-//  clear list
-  Future<void> clearList() async {
-    try {
-      EasyLoading.show(status: 'Deleting images...');
-      for (final image in state.asData!.value!) {
-        await ImageHelpers.deleteImageFromFirebaseStorageByDownloadUrl(
-            imageUrl: image.imageDetails!.imageUrl!);
-      }
-      state = const AsyncData(<ImageHelperModel>[]);
-      EasyLoading.dismiss();
-    } catch (e) {
-      EasyLoading.showError(e.toString());
-    }
-  }
-
-  // update in list
-  Future<void> updateInList(
-      {required ImageHelperModel image, required int index}) async {
-    final list = state.asData!.value!;
-    list[index] = image;
-    state = AsyncValue.data(list);
-  }
-
-  // update gallery in list
-  Future<void> updateGalleryInList(
-      {required Gallery gallery, required int index}) async {
-    final list = state.asData!.value!;
-    list[index].imageDetails = gallery;
-    state = AsyncValue.data(list);
-  }
-}
-
-// image  helper web controller notifier
-class ImageHelperWebControllerNotifier
-    extends StateNotifier<AsyncValue<ImageFile?>> {
-  ImageHelperWebControllerNotifier() : super(const AsyncData(null));
-
-  // get image helper
-  final imageHelper = ImageHelpers();
-
-  // convert file to image file
-  Future<void> fileToImageFile({required XFile file}) async {
-    state = const AsyncValue.loading();
-
-    // use fileToImageFile method from image helper
-    state = await AsyncValue.guard<ImageFile?>(() async {
-      final imageFile = await ImageHelpers.fileToImageFile(file);
-
-      return imageFile;
-    });
-  }
-
-  // pick image
-  // Future<void> pickImage() async {
-  //   state = const AsyncValue.loading();
-
-  //   // use pickImage method from image helper
-  //   state = await AsyncValue.guard<Uint8List?>(() {
-  //     final image = ImageHelpers.webPickImage();
-
-  //     return image;
-  //   });
-  // }
-}
-
-// image file helper controller notifier provider
-final imageFileHelperControllerNotifierProvider = StateNotifierProvider<
-    ImageHelperWebControllerNotifier,
-    AsyncValue<ImageFile?>>((ref) => ImageHelperWebControllerNotifier());
-
 // gallery image controller notifier provider
 final galleryImageControllerNotifierProvider =
     StateNotifierProvider.autoDispose<GalleryImageControllerNotifier,
@@ -539,12 +387,6 @@ final galleryImageControllerNotifierProvider =
 final imageHelperNotifierProvider = StateNotifierProvider.autoDispose<
     ImageHelperNotifier,
     AsyncValue<ImageHelperModel?>>((ref) => ImageHelperNotifier());
-
-// multiple image helper controller notifier provider
-final multipleImageHelperControllerNotifierProvider =
-    StateNotifierProvider.autoDispose<MultipleImageHelperControllerNotifier,
-            AsyncValue<List<ImageHelperModel>?>>(
-        (ref) => MultipleImageHelperControllerNotifier());
 
 // image helper all devices using file picker
 class ImageHelperAll {
@@ -565,6 +407,7 @@ class ImageHelperAll {
       );
 
       final result = image?.files.first;
+
       return result!;
     } catch (e) {
       throw e.toString();

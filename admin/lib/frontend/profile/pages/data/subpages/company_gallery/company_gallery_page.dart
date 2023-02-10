@@ -1,6 +1,7 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:line_icons/line_icon.dart';
 
 // company gallery page hook consumer widget with app layout
 class CompanyGalleryPage extends HookConsumerWidget {
@@ -48,6 +49,9 @@ class _MobileCompanyGalleryPage extends HookConsumerWidget {
   final CompanyNotifier? companyDetailsState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final imageControllerNotifier =
+        ref.watch(imageControllerNotifierProvider.notifier);
+    final newImages = ref.watch(imageControllerNotifierProvider);
     return CustomScrollView(
       slivers: [
         SliverAppBar(
@@ -56,20 +60,58 @@ class _MobileCompanyGalleryPage extends HookConsumerWidget {
           pinned: true,
           actions: [
             IconButton(
-              onPressed: () {
-                // ref.read(companyGalleryProvider.notifier).addGallery(
-                //       companyId: companyId,
-                //     );
-              },
-              icon: const Icon(Icons.add),
-            ),
+                onPressed: () async {
+                  // ref.read(companyGalleryProvider.notifier).addGallery(
+                  //       companyId: companyId,
+                  //     );
+                  await imageControllerNotifier.pickImages();
+                },
+                icon: LineIcon.plusCircle()),
           ],
         ),
-        const SliverAppBar(
-          title: DText(
-            text: 'New images',
-          ),
-        ),
+        newImages.when(data: (images) {
+          return images != null
+              ? images.isNotEmpty
+                  ? SliverAppBar(
+                      title: DText(
+                        text: '${images.length} new images picked',
+                      ),
+                      pinned: true,
+                      automaticallyImplyLeading: false,
+                    )
+                  : const SliverToBoxAdapter(
+                      child: SizedBox.shrink(),
+                    )
+              : const SliverToBoxAdapter();
+        }, error: (error, stackTrace) {
+          return SliverToBoxAdapter(
+            child: DText(
+              text: error.toString(),
+            ),
+          );
+        }, loading: () {
+          return const SliverToBoxAdapter(
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }),
+        newImages.asData?.value != null
+            ? newImages.asData!.value!.isNotEmpty
+                ? SliverGrid.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                    ),
+                    itemBuilder: (context, index) {
+                      return PickedCompanyGalleryCard(
+                        companyGallery: newImages.asData?.value?[index],
+                      );
+                    },
+                    itemCount: newImages.value?.length,
+                  )
+                : const SliverToBoxAdapter()
+            : const SliverToBoxAdapter(),
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
