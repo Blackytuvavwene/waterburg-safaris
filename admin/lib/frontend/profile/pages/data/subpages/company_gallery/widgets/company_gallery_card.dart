@@ -10,19 +10,24 @@ class CompanyGalleryCard extends HookConsumerWidget {
   const CompanyGalleryCard({
     super.key,
     this.companyGallery,
+    this.companyId,
   });
   final Gallery? companyGallery;
+  final String? companyId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
       mobile: _MobileCompanyGalleryCard(
         companyGallery: companyGallery,
+        companyId: companyId,
       ),
       tablet: _TabletCompanyGalleryCard(
         companyGallery: companyGallery,
+        companyId: companyId,
       ),
       desktop: _DesktopCompanyGalleryCard(
         companyGallery: companyGallery,
+        companyId: companyId,
       ),
     );
   }
@@ -32,8 +37,10 @@ class CompanyGalleryCard extends HookConsumerWidget {
 class _MobileCompanyGalleryCard extends HookConsumerWidget {
   const _MobileCompanyGalleryCard({
     this.companyGallery,
+    this.companyId,
   });
   final Gallery? companyGallery;
+  final String? companyId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
@@ -92,7 +99,14 @@ class _MobileCompanyGalleryCard extends HookConsumerWidget {
                 Flexible(
                   child: IconButton(
                     onPressed: () async {
-                      // await ref.read(f)
+                      // delete image from firebase storage
+
+                      await ref
+                          .read(companyFirestoreControllerProvider.notifier)
+                          .deleteGalleryImageFromFirestore(
+                            gallery: companyGallery!,
+                            companyId: companyId,
+                          );
                     },
                     color: Theme.of(context).colorScheme.errorContainer,
                     icon: LineIcon.trash(),
@@ -111,8 +125,10 @@ class _MobileCompanyGalleryCard extends HookConsumerWidget {
 class _TabletCompanyGalleryCard extends HookConsumerWidget {
   const _TabletCompanyGalleryCard({
     this.companyGallery,
+    this.companyId,
   });
   final Gallery? companyGallery;
+  final String? companyId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
@@ -136,8 +152,10 @@ class _TabletCompanyGalleryCard extends HookConsumerWidget {
 class _DesktopCompanyGalleryCard extends HookConsumerWidget {
   const _DesktopCompanyGalleryCard({
     this.companyGallery,
+    this.companyId,
   });
   final Gallery? companyGallery;
+  final String? companyId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
@@ -164,6 +182,7 @@ class PickedCompanyGalleryCard extends HookConsumerWidget {
     this.companyGallery,
   });
   final ImageHelperModel? companyGallery;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(

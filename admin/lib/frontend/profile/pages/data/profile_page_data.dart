@@ -1,5 +1,6 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icon.dart';
@@ -16,24 +17,33 @@ class ProfileDataPage extends HookConsumerWidget {
     final editCompanyDetails = useState(false);
     final companyDetailsState =
         ref.watch(companyNotifierProvider(company).notifier);
+    final imageControllerNotifier =
+        ref.watch(imageControllerNotifierProvider.notifier);
+    final newImages = ref.watch(imageControllerNotifierProvider);
     return AppLayout(
       mobile: _MobileProfileDataPage(
         company: companyDetails,
         companyDetailsState: companyDetailsState,
         editCompanyDetails: editCompanyDetails,
         oldDetails: company,
+        imageControllerNotifier: imageControllerNotifier,
+        newImages: newImages,
       ),
       tablet: _TabletProfileDataPage(
         company: companyDetails,
         companyDetailsState: companyDetailsState,
         editCompanyDetails: editCompanyDetails,
         oldDetails: company,
+        imageControllerNotifier: imageControllerNotifier,
+        newImages: newImages,
       ),
       desktop: _DesktopProfileDataPage(
         company: companyDetails,
         companyDetailsState: companyDetailsState,
         editCompanyDetails: editCompanyDetails,
         oldDetails: company,
+        imageControllerNotifier: imageControllerNotifier,
+        newImages: newImages,
       ),
     );
   }
@@ -47,13 +57,39 @@ class _MobileProfileDataPage extends HookConsumerWidget {
     this.companyDetailsState,
     this.editCompanyDetails,
     this.oldDetails,
+    this.imageControllerNotifier,
+    this.newImages,
   }) : super(key: key);
   final Company? company;
   final CompanyNotifier? companyDetailsState;
   final ValueNotifier<bool>? editCompanyDetails;
   final Company? oldDetails;
+  final ImageControllerNotifier? imageControllerNotifier;
+  final AsyncValue<List<ImageHelperModel>?>? newImages;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // listen to image database changes
+    ref.listen(imageDatabaseControllerNotifierProvider,
+        (AsyncValue<List<Gallery>?>? previous,
+            AsyncValue<List<Gallery>?>? next) {
+      return next?.whenOrNull(
+        data: (data) {
+          // show upload success easyloading toast when data is not null
+          if (data != null) {
+            EasyLoading.showSuccess('Upload successful');
+          }
+        },
+        loading: () {
+          // show upload progress easyloading toast when loading
+          EasyLoading.showInfo('Uploading images...');
+        },
+        error: (e, s) {
+          // show error on upload fail
+          EasyLoading.showError('Upload failed');
+        },
+      );
+    });
+
     final tabs = [
       {
         'title': 'Details',
@@ -93,8 +129,38 @@ class _MobileProfileDataPage extends HookConsumerWidget {
             ),
           if (editCompanyDetails?.value != false)
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 //TODO : implement updating of company details to firestore
+
+                // make a new list of gallery and add current gallery to it
+                final newGallery = <Gallery>[
+                  ...companyDetailsState?.company?.companyGallery ?? []
+                ];
+
+                // if new images are not null, upload them to firebase storage
+                if (newImages?.value != null) {
+                  // upload images to firebase storage and return a list of gallery
+                  final newUploadedImages = await ref
+                      .read(imageDatabaseControllerNotifierProvider.notifier)
+                      .uploadImagesToFirebaseStorage(
+                        images: newImages?.value ?? [],
+                        path:
+                            companyDetailsState!.company!.companyId.toString(),
+                      );
+                  // add the returned gallery to the new gallery list
+                  newGallery.addAll(newUploadedImages.asData!.value!);
+                }
+
+                // create a new company object with the new gallery
+                final newCompanyData = Company(
+                  companyDetails: companyDetailsState?.company?.companyDetails,
+                  companyId: companyDetailsState?.company?.companyId,
+                  companyStaff: companyDetailsState?.company?.companyStaff,
+                  // TODO: fix updating gallery
+                  companyGallery: newGallery,
+                  createdAt: companyDetailsState?.company?.createdAt,
+                  updatedAt: DateTime.now(),
+                );
               },
               child: DText(
                 text: 'Save changes',
@@ -131,6 +197,8 @@ class _MobileProfileDataPage extends HookConsumerWidget {
             companyGallery: company!.companyGallery,
             companyId: company!.companyId,
             companyDetailsState: companyDetailsState,
+            imageControllerNotifier: imageControllerNotifier,
+            newImages: newImages,
           ),
         ],
       ),
@@ -146,11 +214,15 @@ class _TabletProfileDataPage extends HookConsumerWidget {
     this.companyDetailsState,
     this.editCompanyDetails,
     this.oldDetails,
+    this.imageControllerNotifier,
+    this.newImages,
   }) : super(key: key);
   final Company? company;
   final CompanyNotifier? companyDetailsState;
   final ValueNotifier<bool>? editCompanyDetails;
   final Company? oldDetails;
+  final ImageControllerNotifier? imageControllerNotifier;
+  final AsyncValue<List<ImageHelperModel>?>? newImages;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
@@ -172,11 +244,15 @@ class _DesktopProfileDataPage extends HookConsumerWidget {
     this.companyDetailsState,
     this.editCompanyDetails,
     this.oldDetails,
+    this.imageControllerNotifier,
+    this.newImages,
   }) : super(key: key);
   final Company? company;
   final CompanyNotifier? companyDetailsState;
   final ValueNotifier<bool>? editCompanyDetails;
   final Company? oldDetails;
+  final ImageControllerNotifier? imageControllerNotifier;
+  final AsyncValue<List<ImageHelperModel>?>? newImages;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(

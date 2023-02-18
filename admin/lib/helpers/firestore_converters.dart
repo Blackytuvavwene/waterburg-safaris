@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FirestoreConverters<T> {
   static T fromFirestore<T>(DocumentSnapshot snapshot) {
@@ -100,7 +102,6 @@ class FirestoreHelper {
     }
   }
 
-  // delete and update list in firebase
   static Future<T> deleteAndUpdateInDocList<T>({
     required String docId,
     required String docPath,
@@ -109,12 +110,16 @@ class FirestoreHelper {
     required String query,
   }) async {
     try {
-      final getDocRef = docRef(docPath).doc(docId);
-      final docData = _firestore.runTransaction<T>((transaction) {
+      // Get the reference of the document
+      final getDocRef = docRef<T>(docPath).doc(docId);
+      // Get the data from the document
+      final docData = await _firestore.runTransaction<T>((transaction) {
         return transaction.get(getDocRef).then((value) {
+          // Delete the old list data
           transaction.update(getDocRef, {
             query: FieldValue.arrayRemove([data]),
           });
+          // Add the new list data
           transaction.update(getDocRef, {
             query: FieldValue.arrayUnion([newData]),
           });
@@ -137,18 +142,28 @@ class FirestoreHelper {
     required T data,
   }) async {
     try {
-      final getDocRef = docRef(docPath).doc(docId);
+      final getDocRef = docRef<T>(docPath).doc(docId);
       final docData = _firestore.runTransaction<T>((transaction) {
         return transaction.get(getDocRef).then((value) {
-          transaction.update(getDocRef, {
-            query: FieldValue.arrayRemove([data]),
-          });
+          if (value.exists) {
+            // get document reference
 
-          return data;
+            transaction.update(getDocRef, {
+              // pass the query and update data
+
+              query: FieldValue.arrayRemove([data]),
+            });
+            debugPrint('Data image deleted: $data');
+            return data;
+          } else {
+            throw 'Document does not exist';
+          }
         });
       });
       return docData;
     } on FirebaseException catch (firestoreError) {
+      debugPrint(
+          'Firestore error image delete failed: ${firestoreError.message}');
       throw firestoreError.message.toString();
     } catch (e) {
       throw e.toString();
@@ -172,3 +187,73 @@ Future<void> deleteDataFromDoc<T>({
     throw e.toString();
   }
 }
+
+// firestore helper controller notifier using generic type on state notifier
+class FirestoreHelperController<T> extends StateNotifier<AsyncValue<T>> {
+  FirestoreHelperController() : super(AsyncData(T as T));
+
+// get data from firestore
+  Future getDataFromDoc({
+    required String docId,
+    required String docPath,
+    required String query,
+  }) async {
+    state = const AsyncLoading();
+    return state = await AsyncValue.guard(() async {
+      final data = await FirestoreHelper.getDataFromDoc<T>(
+          docId: docId, docPath: docPath, query: query);
+      return data;
+    });
+  }
+
+// set data to firestore in doc
+  Future updateDataInDoc({
+    required String docId,
+    required String docPath,
+    required Map<String, dynamic> data,
+    required String query,
+  }) async {
+    state = const AsyncLoading();
+    return state = await AsyncValue.guard(() async {
+      final updatedData = await FirestoreHelper.updateDataInDoc<T>(
+          docId: docId, docPath: docPath, data: data, query: query);
+      return updatedData;
+    });
+  }
+
+// update data in firestore in doc list
+  Future updateDataInDocList({
+    required String docId,
+    required String docPath,
+    required List<T> data,
+    required String query,
+  }) async {
+    state = const AsyncLoading();
+    return state = await AsyncValue.guard(() async {
+      final updatedData = await FirestoreHelper.updateDataInDocList<T>(
+          docId: docId, docPath: docPath, data: data, query: query);
+      return updatedData as T;
+    });
+  }
+
+// delete data in firestore in doc list
+  Future deleteDataInDocList({
+    required String docId,
+    required String docPath,
+    required List<T> data,
+    required String query,
+  }) async {
+    state = const AsyncLoading();
+    return state = await AsyncValue.guard(() async {
+      final updatedData = await FirestoreHelper.deleteDataInDocList<T>(
+          docId: docId, docPath: docPath, data: data, query: query);
+      return updatedData as T;
+    });
+  }
+}
+
+// firestore helper controller noitifier provider
+final firestoreHelperControllerProvider = <T>() => StateNotifierProvider
+        .autoDispose<FirestoreHelperController<T>, AsyncValue<T>>((ref) {
+      return FirestoreHelperController();
+    });

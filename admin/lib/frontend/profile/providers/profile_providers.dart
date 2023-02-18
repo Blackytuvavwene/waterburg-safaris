@@ -3,9 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 const String aboutCompanyID = 'ymV8H6FBRjfMBFhAh8o2';
 
-final companyNotifierProvider =
-    StateNotifierProvider.family<CompanyNotifier, Company?, Company?>(
-        (ref, company) {
+final companyNotifierProvider = StateNotifierProvider.family
+    .autoDispose<CompanyNotifier, Company?, Company?>((ref, company) {
   return CompanyNotifier(company: company);
 });
 
@@ -14,7 +13,7 @@ final currentUserNotifierProvider =
   return CurrentUserNotifier();
 });
 
-final companyStreamProvider = StreamProvider<Company>((ref) {
+final companyStreamProvider = StreamProvider.autoDispose<Company>((ref) {
   return ref.watch(companyDbRepositoryProvider).streamCompanyFromFirestore(
         companyId: aboutCompanyID,
       );

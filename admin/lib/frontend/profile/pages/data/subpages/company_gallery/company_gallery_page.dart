@@ -10,10 +10,14 @@ class CompanyGalleryPage extends HookConsumerWidget {
     this.companyId,
     this.companyGallery,
     this.companyDetailsState,
+    this.imageControllerNotifier,
+    this.newImages,
   }) : super(key: key);
   final List<Gallery>? companyGallery;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
+  final ImageControllerNotifier? imageControllerNotifier;
+  final AsyncValue<List<ImageHelperModel>?>? newImages;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
@@ -21,16 +25,22 @@ class CompanyGalleryPage extends HookConsumerWidget {
         companyGallery: companyGallery,
         companyId: companyId,
         companyDetailsState: companyDetailsState,
+        imageControllerNotifier: imageControllerNotifier,
+        newImages: newImages,
       ),
       tablet: _TabletCompanyGalleryPage(
         companyGallery: companyGallery,
         companyId: companyId,
         companyDetailsState: companyDetailsState,
+        imageControllerNotifier: imageControllerNotifier,
+        newImages: newImages,
       ),
       desktop: _DesktopCompanyGalleryPage(
         companyGallery: companyGallery,
         companyId: companyId,
         companyDetailsState: companyDetailsState,
+        imageControllerNotifier: imageControllerNotifier,
+        newImages: newImages,
       ),
     );
   }
@@ -43,15 +53,16 @@ class _MobileCompanyGalleryPage extends HookConsumerWidget {
     this.companyGallery,
     this.companyId,
     this.companyDetailsState,
+    this.imageControllerNotifier,
+    this.newImages,
   }) : super(key: key);
   final List<Gallery>? companyGallery;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
+  final ImageControllerNotifier? imageControllerNotifier;
+  final AsyncValue<List<ImageHelperModel>?>? newImages;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final imageControllerNotifier =
-        ref.watch(imageControllerNotifierProvider.notifier);
-    final newImages = ref.watch(imageControllerNotifierProvider);
     return CustomScrollView(
       slivers: [
         SliverAppBar(
@@ -64,40 +75,41 @@ class _MobileCompanyGalleryPage extends HookConsumerWidget {
                   // ref.read(companyGalleryProvider.notifier).addGallery(
                   //       companyId: companyId,
                   //     );
-                  await imageControllerNotifier.pickImages();
+                  await imageControllerNotifier?.pickImages();
                 },
                 icon: LineIcon.plusCircle()),
           ],
         ),
-        newImages.when(data: (images) {
-          return images != null
-              ? images.isNotEmpty
-                  ? SliverAppBar(
-                      title: DText(
-                        text: '${images.length} new images picked',
-                      ),
-                      pinned: true,
-                      automaticallyImplyLeading: false,
-                    )
-                  : const SliverToBoxAdapter(
-                      child: SizedBox.shrink(),
-                    )
-              : const SliverToBoxAdapter();
-        }, error: (error, stackTrace) {
-          return SliverToBoxAdapter(
-            child: DText(
-              text: error.toString(),
-            ),
-          );
-        }, loading: () {
-          return const SliverToBoxAdapter(
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        }),
-        newImages.asData?.value != null
-            ? newImages.asData!.value!.isNotEmpty
+        if (newImages != null)
+          newImages!.when(data: (images) {
+            return images != null
+                ? images.isNotEmpty
+                    ? SliverAppBar(
+                        title: DText(
+                          text: '${images.length} new images picked',
+                        ),
+                        pinned: true,
+                        automaticallyImplyLeading: false,
+                      )
+                    : const SliverToBoxAdapter(
+                        child: SizedBox.shrink(),
+                      )
+                : const SliverToBoxAdapter();
+          }, error: (error, stackTrace) {
+            return SliverToBoxAdapter(
+              child: DText(
+                text: error.toString(),
+              ),
+            );
+          }, loading: () {
+            return const SliverToBoxAdapter(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }),
+        newImages?.asData?.value != null
+            ? newImages!.asData!.value!.isNotEmpty
                 ? SliverGrid.builder(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
@@ -105,10 +117,10 @@ class _MobileCompanyGalleryPage extends HookConsumerWidget {
                     ),
                     itemBuilder: (context, index) {
                       return PickedCompanyGalleryCard(
-                        companyGallery: newImages.asData?.value?[index],
+                        companyGallery: newImages?.asData?.value?[index],
                       );
                     },
-                    itemCount: newImages.value?.length,
+                    itemCount: newImages?.value?.length,
                   )
                 : const SliverToBoxAdapter()
             : const SliverToBoxAdapter(),
@@ -117,6 +129,7 @@ class _MobileCompanyGalleryPage extends HookConsumerWidget {
             (context, index) {
               return CompanyGalleryCard(
                 companyGallery: companyGallery![index],
+                companyId: companyId,
               );
             },
             childCount: companyGallery!.length,
@@ -134,10 +147,14 @@ class _TabletCompanyGalleryPage extends HookConsumerWidget {
     this.companyGallery,
     this.companyId,
     this.companyDetailsState,
+    this.imageControllerNotifier,
+    this.newImages,
   }) : super(key: key);
   final List<Gallery>? companyGallery;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
+  final ImageControllerNotifier? imageControllerNotifier;
+  final AsyncValue<List<ImageHelperModel>?>? newImages;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
@@ -165,10 +182,14 @@ class _DesktopCompanyGalleryPage extends HookConsumerWidget {
     this.companyGallery,
     this.companyId,
     this.companyDetailsState,
+    this.imageControllerNotifier,
+    this.newImages,
   }) : super(key: key);
   final List<Gallery>? companyGallery;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
+  final ImageControllerNotifier? imageControllerNotifier;
+  final AsyncValue<List<ImageHelperModel>?>? newImages;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(

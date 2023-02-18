@@ -124,3 +124,58 @@ class CompanyNotifier extends StateNotifier<Company?> {
 class CurrentUserNotifier extends StateNotifier<UserModel> {
   CurrentUserNotifier() : super(UserModel());
 }
+
+// company firestore controller notifier
+class CompanyFirestoreControllerNotifier
+    extends StateNotifier<AsyncValue<Company>> {
+  CompanyFirestoreControllerNotifier() : super(AsyncValue.data(Company()));
+
+  // update company in firestore
+  Future<AsyncValue<Company>> updateCompanyInFirestore({
+    required Company? company,
+  }) async {
+    state = const AsyncValue.loading();
+
+    return state = await AsyncValue.guard(() async {
+      await FirestoreHelper.updateDataInDoc<Company>(
+        docId: company!.companyId!,
+        docPath: 'aboutCompany',
+        data: company.toJson(),
+        query: 'companyId',
+      );
+
+      return company;
+    });
+  }
+
+  // delete gallery image from firestore
+  Future<AsyncValue<Company>> deleteGalleryImageFromFirestore({
+    required String? companyId,
+    required Gallery? gallery,
+  }) async {
+    state = const AsyncValue.loading();
+
+    return state = await AsyncValue.guard(() async {
+      // delete image from firebase storage first
+      await ImageHelpers.deleteImageFromFirebaseStorageByDownloadUrl(
+        imageUrl: gallery!.imageUrl!,
+      );
+
+      // delete image from firestore
+      await FirestoreHelper.deleteInDocList<Map<String, dynamic>>(
+        docId: companyId!,
+        docPath: 'aboutCompany',
+        query: 'companyGallery',
+        data: gallery.toJson(),
+      );
+
+      return Company();
+    });
+  }
+}
+
+// company firestore controller provider
+final companyFirestoreControllerProvider = StateNotifierProvider<
+    CompanyFirestoreControllerNotifier, AsyncValue<Company>>(
+  (ref) => CompanyFirestoreControllerNotifier(),
+);

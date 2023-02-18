@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:admin/lib.dart';
@@ -255,7 +256,18 @@ class ImageHelpers {
       final storage = FirebaseStorage.instance;
       final ref = storage.refFromURL(imageUrl);
       await ref.delete();
+    } on FirebaseException catch (e) {
+      debugPrint(
+        jsonEncode(
+          {
+            'task': 'Delete image',
+            'error': e.message.toString(),
+          },
+        ),
+      );
+      throw e.message.toString();
     } catch (e) {
+      debugPrint(e.toString());
       throw e.toString();
     }
   }
@@ -327,6 +339,71 @@ class ImageControllerNotifier
     state = AsyncData(images);
   }
 }
+
+// image database controller notifier
+class ImageDatabaseControllerNotifier
+    extends StateNotifier<AsyncValue<List<Gallery>?>> {
+  ImageDatabaseControllerNotifier() : super(const AsyncData([]));
+
+  // upload images to firebase storage
+  Future<AsyncValue<List<Gallery>?>> uploadImagesToFirebaseStorage({
+    required List<ImageHelperModel> images,
+    required String path,
+  }) async {
+    state = const AsyncValue.loading();
+    return state = await AsyncValue.guard(() async {
+      final uploadedImages = <Gallery>[];
+      for (final image in images) {
+        final imageUrl = await ImageHelpers.addImageToFirebaseStorage(
+          image: image.xFile!,
+          path: path,
+        );
+        final imageWithUrl = Gallery(
+          imageTitle: image.imageDetails?.imageTitle,
+          imageDescription: image.imageDetails?.imageDescription,
+          imageUrl: imageUrl,
+        );
+        uploadedImages.add(imageWithUrl);
+      }
+      return uploadedImages;
+    });
+  }
+
+  // delete images from firebase storage
+  Future deleteImagesFromFirebaseStorage({
+    required List<Gallery> images,
+  }) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      for (final image in images) {
+        await ImageHelpers.deleteImageFromFirebaseStorageByDownloadUrl(
+          imageUrl: image.imageUrl!,
+        );
+      }
+      return [];
+    });
+  }
+
+  // delete image from firebase storage
+  Future deleteImageFromFirebaseStorage({
+    required Gallery image,
+  }) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      await ImageHelpers.deleteImageFromFirebaseStorageByDownloadUrl(
+        imageUrl: image.imageUrl!,
+      );
+      return [];
+    });
+  }
+}
+
+// image database controller notifier provider
+final imageDatabaseControllerNotifierProvider =
+    StateNotifierProvider.autoDispose<ImageDatabaseControllerNotifier,
+        AsyncValue<List<Gallery>?>>((ref) {
+  return ImageDatabaseControllerNotifier();
+});
 
 // expose image controller notifier as a provider
 final imageControllerNotifierProvider = StateNotifierProvider.autoDispose<
