@@ -33,12 +33,14 @@ class CompanyDatabaseRepository implements CompanyDatabaseAbstract {
   Future<Company> updateCompanyInFirestore({Company? companyModel}) async {
     try {
       await _firestore
-          .collection('bookings')
+          .collection('aboutCompany')
           .doc(companyModel?.companyId)
           .update(companyModel!.toJson());
 
       return companyModel;
     } on FirebaseException catch (e) {
+      throw e.toString();
+    } catch (e) {
       throw e.toString();
     }
   }
@@ -47,7 +49,7 @@ class CompanyDatabaseRepository implements CompanyDatabaseAbstract {
   @override
   Future<void> deleteCompanyFromFirestore({String? companyId}) async {
     try {
-      await _firestore.collection('activities').doc(companyId).delete();
+      await _firestore.collection('aboutCompany').doc(companyId).delete();
     } on FirebaseException catch (e) {
       throw e.toString();
     }

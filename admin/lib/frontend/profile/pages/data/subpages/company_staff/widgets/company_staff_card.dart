@@ -10,19 +10,24 @@ class CompanyStaffCard extends HookConsumerWidget {
   const CompanyStaffCard({
     Key? key,
     this.companyStaff,
+    this.companyId,
   }) : super(key: key);
   final CompanyStaff? companyStaff;
+  final String? companyId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
       mobile: _MobileCompanyStaffCard(
         companyStaff: companyStaff,
+        companyId: companyId,
       ),
       tablet: _TabletCompanyStaffCard(
         companyStaff: companyStaff,
+        companyId: companyId,
       ),
       desktop: _DesktopCompanyStaffCard(
         companyStaff: companyStaff,
+        companyId: companyId,
       ),
     );
   }
@@ -32,8 +37,10 @@ class CompanyStaffCard extends HookConsumerWidget {
 class _MobileCompanyStaffCard extends HookConsumerWidget {
   const _MobileCompanyStaffCard({
     this.companyStaff,
+    this.companyId,
   });
   final CompanyStaff? companyStaff;
+  final String? companyId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
@@ -90,8 +97,15 @@ class _MobileCompanyStaffCard extends HookConsumerWidget {
                       value: 'edit',
                       child: const Text('Edit'),
                       onTap: () {
-                        context.pushNamed('editStaffDetails',
-                            extra: companyStaff);
+                        // pass company staff data & company ID to edit page as arguments
+                        final args = EditStaffRouteArguments(
+                          staff: companyStaff,
+                          companyId: companyId,
+                        );
+                        context.pushNamed(
+                          'editStaffDetails',
+                          extra: args,
+                        );
                       },
                     ),
                     const PopupMenuItem(
@@ -114,8 +128,10 @@ class _MobileCompanyStaffCard extends HookConsumerWidget {
 class _TabletCompanyStaffCard extends HookConsumerWidget {
   const _TabletCompanyStaffCard({
     this.companyStaff,
+    this.companyId,
   });
   final CompanyStaff? companyStaff;
+  final String? companyId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
@@ -139,8 +155,10 @@ class _TabletCompanyStaffCard extends HookConsumerWidget {
 class _DesktopCompanyStaffCard extends HookConsumerWidget {
   const _DesktopCompanyStaffCard({
     this.companyStaff,
+    this.companyId,
   });
   final CompanyStaff? companyStaff;
+  final String? companyId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(

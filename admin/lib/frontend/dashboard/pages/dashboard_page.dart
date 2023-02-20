@@ -104,8 +104,9 @@ class _MobileDashboardPage extends HookConsumerWidget {
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         title: const DText(
-          text: '',
+          text: 'Dashboard',
         ),
+        elevation: 0,
         actions: [
           IconButton(
               onPressed: () {
@@ -151,6 +152,20 @@ class _TabletDashboardPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
+      appBar: AppBar(
+        title: const DText(
+          text: 'Dashboard',
+        ),
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+              onPressed: () {
+                ref.read(authProvider).logout();
+              },
+              icon: LineIcon.doorOpen())
+        ],
+      ),
       body: SafeArea(
         child: ListView(
           children: [

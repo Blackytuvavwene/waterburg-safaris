@@ -109,19 +109,21 @@ class _ActivitiesDataTablet extends HookConsumerWidget {
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: SizedBox(
-            width: 100.w,
-            height: 100.h,
-            child: ListView.custom(
-              shrinkWrap: true,
-              childrenDelegate: SliverChildListDelegate(
-                activitiesData!
-                    .map(
-                      (e) => ActivityPreviewContainer(
-                        activity: e,
-                      ),
-                    )
-                    .toList(),
+          child: ColoredBox(
+            color: Colors.blue,
+            child: SizedBox(
+              height: 100.h,
+              child: ListView.custom(
+                shrinkWrap: true,
+                childrenDelegate: SliverChildListDelegate(
+                  activitiesData!
+                      .map(
+                        (e) => ActivityPreviewContainer(
+                          activity: e,
+                        ),
+                      )
+                      .toList(),
+                ),
               ),
             ),
           ),

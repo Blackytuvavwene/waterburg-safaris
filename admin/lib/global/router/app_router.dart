@@ -59,8 +59,8 @@ final goroutingProvider = Provider<GoRouter>(
                     final welcomeLoc = state.subloc == '/';
 
                     String _getRoutePath() {
-                      final route = ref.read(nestedRoutesProvider)[
-                          ref.read(routeIndexProvider.notifier).state];
+                      final route = ref.read(
+                          nestedRoutesProvider)[ref.read(routeIndexProvider)];
                       return route.path.toString();
                     }
 
@@ -213,12 +213,14 @@ final goroutingProvider = Provider<GoRouter>(
                                   path: 'edit-staff',
                                   name: 'editStaffDetails',
                                   builder: (context, state) {
-                                    final CompanyStaff editStaffModel =
-                                        state.extra as CompanyStaff;
+                                    final EditStaffRouteArguments
+                                        editStaffModel =
+                                        state.extra as EditStaffRouteArguments;
 
                                     return EditStaffDetails(
                                       key: state.pageKey,
-                                      companyStaff: editStaffModel,
+                                      companyStaff: editStaffModel.staff,
+                                      companyId: editStaffModel.companyId,
                                     );
                                   },
                                 ),

@@ -217,3 +217,14 @@ class AddressAndContact {
     );
   }
 }
+
+// edit staff route arguments
+class EditStaffRouteArguments {
+  final CompanyStaff? staff;
+  final String? companyId;
+
+  EditStaffRouteArguments({
+    this.staff,
+    this.companyId,
+  });
+}

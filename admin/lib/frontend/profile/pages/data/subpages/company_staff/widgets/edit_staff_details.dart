@@ -7,6 +7,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:line_icons/line_icon.dart';
+import 'package:sizer/sizer.dart';
 
 class EditStaffControllerNotifier
     extends StateNotifier<AsyncValue<CompanyStaff>> {
@@ -20,11 +22,28 @@ class EditStaffControllerNotifier
   Future<AsyncValue<CompanyStaff>?> updateStaffDetails({
     required CompanyStaff staff,
     required CompanyStaff newStaff,
+    required ImageHelperModel image,
     required String docId,
   }) async {
     state = const AsyncValue.loading();
 
-    return state = await AsyncValue.guard(() {
+    return state = await AsyncValue.guard(() async {
+      // upload new image to firebase storage
+      final newImageUrl = await ImageHelpers.addImageToFirebaseStorage(
+          image: image.xFile!, path: 'staffImages');
+
+      // create new staff details
+      final newStaffData = CompanyStaff(
+        fullName: newStaff.fullName,
+        email: newStaff.email,
+        phoneNos: newStaff.phoneNos,
+        imageUrl: newImageUrl,
+        jobDescription: newStaff.jobDescription,
+        jobTitle: newStaff.jobTitle,
+        title: newStaff.title,
+      );
+
+      // update staff details in firestore
       final db = FirebaseFirestore.instance;
       final docRef = db.collection('aboutCompany').doc(docId);
       return db.runTransaction((transaction) {
@@ -33,7 +52,7 @@ class EditStaffControllerNotifier
             'companyStaff': FieldValue.arrayRemove([staff.toJson()]),
           });
           transaction.update(docRef, {
-            'companyStaff': FieldValue.arrayUnion([newStaff.toJson()]),
+            'companyStaff': FieldValue.arrayUnion([newStaffData.toJson()]),
           });
           return newStaff;
         });
@@ -63,8 +82,10 @@ class EditStaffDetails extends HookConsumerWidget {
   const EditStaffDetails({
     Key? key,
     this.companyStaff,
+    this.companyId,
   }) : super(key: key);
   final CompanyStaff? companyStaff;
+  final String? companyId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentStaff = useState(companyStaff);
@@ -94,6 +115,7 @@ class EditStaffDetails extends HookConsumerWidget {
         staffController.updateStaffDetails(
           staff: companyStaff!,
           newStaff: currentStaff.value!,
+          image: newImage!,
           docId: 'companyStaff',
         );
       }
@@ -105,18 +127,21 @@ class EditStaffDetails extends HookConsumerWidget {
         formKey: formKey,
         updateStaffDetails: updateStaffDetails,
         imageNotifier: imageNotifier,
+        companyId: companyId,
       ),
       tablet: _TabletEditStaffDetails(
         companyStaff: currentStaff,
         formKey: formKey,
         updateStaffDetails: updateStaffDetails,
         imageNotifier: imageNotifier,
+        companyId: companyId,
       ),
       desktop: _DesktopEditStaffDetails(
         companyStaff: currentStaff,
         formKey: formKey,
         updateStaffDetails: updateStaffDetails,
         imageNotifier: imageNotifier,
+        companyId: companyId,
       ),
     );
   }
@@ -130,16 +155,21 @@ class _MobileEditStaffDetails extends HookConsumerWidget {
     this.formKey,
     this.updateStaffDetails,
     this.imageNotifier,
+    this.companyId,
   }) : super(key: key);
   final ValueNotifier<CompanyStaff?>? companyStaff;
   final GlobalKey<FormState>? formKey;
   final VoidCallback? updateStaffDetails;
   final AsyncValue<ImageHelperModel?>? imageNotifier;
+  final String? companyId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Staff Details'),
+        title: const DText(
+          text: 'Edit Staff Details',
+        ),
+        elevation: 0,
         actions: [
           IconButton(
             onPressed: () {
@@ -154,57 +184,46 @@ class _MobileEditStaffDetails extends HookConsumerWidget {
           children: [
             const SizedBox(height: 20),
             Center(
-              child: Stack(
-                children: [
-                  Center(
-                    child: CircleAvatar(
-                      radius: 60,
-                      backgroundColor: Colors.grey,
-                      backgroundImage: imageNotifier?.when(
-                        data: (data) {
-                          // final image = data?.path != null
-                          //     ?  Image(
-                          //         File(data!.path.toString()),
-                          //       )
-                          //     : Image(
-                          //         '${companyStaff?.value?.imageUrl.toString()}');
-                          if (data?.path != null) {
-                            return FileImage(
-                              File(
-                                data!.path.toString(),
-                              ),
-                            );
-                          } else {
-                            return NetworkImage(
-                                '${companyStaff?.value?.imageUrl.toString()}');
-                          }
-                        },
-                        error: (error, stackTrace) {
-                          return const AssetImage('assets/images/error.png');
-                        },
-                        loading: () {
-                          return const AssetImage('assets/images/loading.png');
-                        },
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: InkWell(
-                      onTap: () async {
-                        // TODO: add image in mobile view
-                        await ref
-                            .read(imageHelperNotifierProvider.notifier)
-                            .pickImage(imageSource: ImageSource.gallery);
-                      },
-                      child: const Icon(
-                        Icons.camera_alt,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
+              child: CircleAvatar(
+                radius: 60,
+                backgroundColor: Colors.grey,
+                backgroundImage: imageNotifier?.when(
+                  data: (data) {
+                    // final image = data?.path != null
+                    //     ?  Image(
+                    //         File(data!.path.toString()),
+                    //       )
+                    //     : Image(
+                    //         '${companyStaff?.value?.imageUrl.toString()}');
+                    if (data?.path != null) {
+                      return FileImage(
+                        File(
+                          data!.path.toString(),
+                        ),
+                      );
+                    } else {
+                      return NetworkImage(
+                          '${companyStaff?.value?.imageUrl.toString()}');
+                    }
+                  },
+                  error: (error, stackTrace) {
+                    return const AssetImage('assets/images/error.png');
+                  },
+                  loading: () {
+                    return const AssetImage('assets/images/loading.png');
+                  },
+                ),
+                child: IconButton(
+                  color: Theme.of(context).colorScheme.onBackground,
+                  iconSize: 32.sp,
+                  onPressed: () async {
+                    // TODO: add image in mobile view
+                    await ref
+                        .read(imageHelperNotifierProvider.notifier)
+                        .pickImage(imageSource: ImageSource.gallery);
+                  },
+                  icon: LineIcon.camera(),
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -261,11 +280,13 @@ class _TabletEditStaffDetails extends HookConsumerWidget {
     this.formKey,
     this.updateStaffDetails,
     this.imageNotifier,
+    this.companyId,
   }) : super(key: key);
   final ValueNotifier<CompanyStaff?>? companyStaff;
   final GlobalKey<FormState>? formKey;
   final VoidCallback? updateStaffDetails;
   final AsyncValue<ImageHelperModel?>? imageNotifier;
+  final String? companyId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -352,11 +373,13 @@ class _DesktopEditStaffDetails extends HookConsumerWidget {
     this.formKey,
     this.updateStaffDetails,
     this.imageNotifier,
+    this.companyId,
   }) : super(key: key);
   final ValueNotifier<CompanyStaff?>? companyStaff;
   final GlobalKey<FormState>? formKey;
   final VoidCallback? updateStaffDetails;
   final AsyncValue<ImageHelperModel?>? imageNotifier;
+  final String? companyId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(

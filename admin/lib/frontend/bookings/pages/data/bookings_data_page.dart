@@ -209,7 +209,6 @@ class _TabletBookingsDataPage extends HookConsumerWidget {
       body: SafeArea(
         child: SizedBox(
           height: 100.h,
-          width: 100.w,
           child: CustomScrollView(
             slivers: [
               SliverAppBar(

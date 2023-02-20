@@ -128,7 +128,16 @@ class CurrentUserNotifier extends StateNotifier<UserModel> {
 // company firestore controller notifier
 class CompanyFirestoreControllerNotifier
     extends StateNotifier<AsyncValue<Company>> {
-  CompanyFirestoreControllerNotifier() : super(AsyncValue.data(Company()));
+  CompanyFirestoreControllerNotifier({
+    this.companyDatabaseRepository,
+  }) : super(
+          AsyncValue.data(
+            Company(),
+          ),
+        );
+
+// get company database repository
+  final CompanyDatabaseRepository? companyDatabaseRepository;
 
   // update company in firestore
   Future<AsyncValue<Company>> updateCompanyInFirestore({
