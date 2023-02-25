@@ -8,7 +8,7 @@
 
 
 <div class=" h-screen flex flex-col justify-center items-center bg-errorContainer">
-    <p class="text-error">{$page.error.message}</p>
+    <p class="text-error">{$page.error}</p>
 </div>
 
 

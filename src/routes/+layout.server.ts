@@ -1,12 +1,7 @@
-import { getAbout } from "$lib/app-components/about-components/about.api";
 import { error } from "@sveltejs/kit";
-import type { AboutCompanyResponse } from "$lib/app-components/about-components/about.types";
 import type { LayoutServerLoad } from './$types'; 
-import { companyData } from "$lib/firebase";
-import { setFooterProps, type FooterContactProps } from "$lib/app-components/footer/footerprops.types";
-import { getHomeActivities, type HomeActivities, type HomeModel } from "$lib/app-components/home-components/helpers/home.firestore.helpers";
+import { getHomeActivities,  type HomeModel } from "$lib/app-components/home-components/helpers/home.firestore.helpers";
 import { setHomeDataPersist } from "$lib/app-components/home-components/helpers/home.stores";
-import { serializeNonPOJOs } from "$lib/helpers/helpers";
 
 // const endpoint='http://localhost:3000/api/about-company';
 
@@ -14,7 +9,7 @@ import { serializeNonPOJOs } from "$lib/helpers/helpers";
 
 export const load:LayoutServerLoad= async () => {
    
-    const Hdata=await getHomeActivities();
+    const Hdata=await getHomeActivities().then(data=>data);
 
     if(Hdata) {
         const data = Hdata as HomeModel;
@@ -24,7 +19,7 @@ export const load:LayoutServerLoad= async () => {
 
        
         return {
-            homeData: serializeNonPOJOs<HomeModel>(data) ,
+            homeData: data,
         } 
     }
 
@@ -32,4 +27,4 @@ export const load:LayoutServerLoad= async () => {
     
 };
 
-export const prerender = 'auto';
+// export const prerender = 'auto';

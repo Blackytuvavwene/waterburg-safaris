@@ -16,7 +16,7 @@ export const load:PageServerLoad= async () => {
 
       
         return {
-            about: aboutCompanyInfo as AboutCompanyResponse,
+            about: aboutCompanyInfo,
         } 
     }
 

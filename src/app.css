@@ -120,7 +120,7 @@
 
 
 
-body{
+/* body{
     font-family: 'Dosis', sans-serif;
     font-size: 16px;
     color: var(--on-background);
@@ -129,5 +129,5 @@ body{
     margin: 0;
     font-display: swap;
     min-height:100vh;
-}
+} */
 

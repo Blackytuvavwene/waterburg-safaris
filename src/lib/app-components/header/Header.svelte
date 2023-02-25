@@ -69,11 +69,11 @@ import { resetCurrentSelectedPersist } from '$lib/app-components/activities-comp
                     <span class="float-left s:text-base text-xl w-full font-bold mx-2 text-onPrimary">Waterburg Safaris</span>
                 </div>
                 <div class="lg:hidden h-full float-right transition delay-1000 flex flex-col w-fit justify-end items-end">
-                    <div class="w-8 h-full mr-4 " on:click={toggleNavBar}>
+                    <button class="w-8 h-full mr-4 " on:click={toggleNavBar}>
                         <div class="bg-white w-full h-1 {mobileNavBarShow ? "rotate-45 translate-y-1" : ""}"></div>
                         <div class="bg-none w-full h-2 {mobileNavBarShow ? "hidden" : ""}"></div>
                         <div class="bg-white w-full h-1 {mobileNavBarShow ? "-rotate-45" : ""}"></div>
-                    </div>
+                    </button>
                 </div>
             </div>
             {#if mobileNavBarShow}
@@ -95,8 +95,8 @@ import { resetCurrentSelectedPersist } from '$lib/app-components/activities-comp
             {#each  navLinks as link}
                 <a href={link.path} class="cursor-pointe w-fit h-fit px-7 hover:bg-tertiaryContainer   
                 hover:text-onTertiaryContainer items-center py-7 text-center font-semibold 
-                {$page.routeId ===link.id ?"text-onTertiaryContainer bg-tertiaryContainer": "text-onPrimary"} " 
-                on:click={$page.routeId ==='book-online' ? resetCurrentSelectedPersist : null} data-sveltekit-noscroll>
+                {$page.route.id ===link.id ?"text-onTertiaryContainer bg-tertiaryContainer": "text-onPrimary"} " 
+                on:click={$page.route.id ==='book-online' ? resetCurrentSelectedPersist : null} data-sveltekit-noscroll>
                     {link.name}
                 </a>
             {/each}

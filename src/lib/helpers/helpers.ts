@@ -1,3 +1,6 @@
+import * as devalue from "devalue";
+
+
 export function serializeNonPOJOs<T>(obj: T): T {
-    return JSON.parse(JSON.stringify(obj))
+    return devalue.parse(devalue.uneval(obj))
   }
