@@ -398,6 +398,9 @@ class _DesktopEditStaffDetails extends HookConsumerWidget {
         child: Column(
           children: [
             const SizedBox(height: 20),
+            DText(
+              text: companyStaff?.value?.fullName,
+            ),
             Center(
               child: Stack(
                 children: [
@@ -431,7 +434,9 @@ class _DesktopEditStaffDetails extends HookConsumerWidget {
               child: TextFormField(
                 initialValue: companyStaff?.value?.fullName,
                 onChanged: (value) {
-                  companyStaff?.value?.fullName = value;
+                  companyStaff?.value = companyStaff?.value?.copyWith(
+                    fullName: value,
+                  );
                 },
                 decoration: const InputDecoration(
                   labelText: 'Staff Name',
@@ -444,7 +449,9 @@ class _DesktopEditStaffDetails extends HookConsumerWidget {
               child: TextFormField(
                 initialValue: companyStaff?.value?.jobTitle,
                 onChanged: (value) {
-                  companyStaff?.value?.jobTitle = value;
+                  companyStaff?.value = companyStaff?.value?.copyWith(
+                    jobTitle: value,
+                  );
                 },
                 decoration: const InputDecoration(
                   labelText: 'Staff Role',

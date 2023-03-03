@@ -250,6 +250,19 @@ final goroutingProvider = Provider<GoRouter>(
                                     );
                                   },
                                 ),
+                                GoRoute(
+                                  path: 'add-staff',
+                                  name: 'addStaff',
+                                  builder: (context, state) {
+                                    final LocalCompanyStaffModel? staffModel =
+                                        state.extra as LocalCompanyStaffModel?;
+
+                                    return ManageLocalCompanyStaffPage(
+                                      key: state.pageKey,
+                                      staffDetails: staffModel,
+                                    );
+                                  },
+                                ),
                               ],
                             ),
                           ],

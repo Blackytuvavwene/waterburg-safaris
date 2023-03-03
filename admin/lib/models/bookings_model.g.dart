@@ -6,37 +6,6 @@ part of 'bookings_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-BookingModel _$BookingModelFromJson(Map json) => BookingModel(
-      bookingCode: json['bookingCode'] as String?,
-      customerDetails: json['customerDetails'] == null
-          ? null
-          : CustomerDetails.fromJson(
-              Map<String, dynamic>.from(json['customerDetails'] as Map)),
-      activityDetails: json['activityDetails'] == null
-          ? null
-          : ActivityDetails.fromJson(
-              Map<String, dynamic>.from(json['activityDetails'] as Map)),
-      departureDate: json['departureDate'] == null
-          ? null
-          : DateTime.parse(json['departureDate'] as String),
-      arrivalDate: json['arrivalDate'] == null
-          ? null
-          : DateTime.parse(json['arrivalDate'] as String),
-      paid: json['paid'] as bool?,
-      amountPaid: (json['amountPaid'] as num?)?.toDouble(),
-    );
-
-Map<String, dynamic> _$BookingModelToJson(BookingModel instance) =>
-    <String, dynamic>{
-      'bookingCode': instance.bookingCode,
-      'customerDetails': instance.customerDetails?.toJson(),
-      'activityDetails': instance.activityDetails?.toJson(),
-      'departureDate': instance.departureDate?.toIso8601String(),
-      'arrivalDate': instance.arrivalDate?.toIso8601String(),
-      'paid': instance.paid,
-      'amountPaid': instance.amountPaid,
-    };
-
 ActivityDetails _$ActivityDetailsFromJson(Map json) => ActivityDetails(
       activityId: json['activityId'] as String?,
       activityName: json['activityName'] as String?,
@@ -108,3 +77,35 @@ Json? _$JsonConverterToJson<Json, Value>(
   Json? Function(Value value) toJson,
 ) =>
     value == null ? null : toJson(value);
+
+_$_BookingModel _$$_BookingModelFromJson(Map<String, dynamic> json) =>
+    _$_BookingModel(
+      bookingCode: json['bookingCode'] as String?,
+      customerDetails: json['customerDetails'] == null
+          ? null
+          : CustomerDetails.fromJson(
+              json['customerDetails'] as Map<String, dynamic>),
+      activityDetails: json['activityDetails'] == null
+          ? null
+          : ActivityDetails.fromJson(
+              json['activityDetails'] as Map<String, dynamic>),
+      departureDate: json['departureDate'] == null
+          ? null
+          : DateTime.parse(json['departureDate'] as String),
+      arrivalDate: json['arrivalDate'] == null
+          ? null
+          : DateTime.parse(json['arrivalDate'] as String),
+      paid: json['paid'] as bool?,
+      amountPaid: (json['amountPaid'] as num?)?.toDouble(),
+    );
+
+Map<String, dynamic> _$$_BookingModelToJson(_$_BookingModel instance) =>
+    <String, dynamic>{
+      'bookingCode': instance.bookingCode,
+      'customerDetails': instance.customerDetails,
+      'activityDetails': instance.activityDetails,
+      'departureDate': instance.departureDate?.toIso8601String(),
+      'arrivalDate': instance.arrivalDate?.toIso8601String(),
+      'paid': instance.paid,
+      'amountPaid': instance.amountPaid,
+    };

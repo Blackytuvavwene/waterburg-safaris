@@ -2,6 +2,7 @@ import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icon.dart';
 
@@ -13,13 +14,21 @@ class ProfileDataPage extends HookConsumerWidget {
   final Company? company;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // watch company details state from firestore
     final companyDetails = ref.watch(companyNotifierProvider(company));
+    // watch edit company details state
     final editCompanyDetails = useState(false);
+    // watch company details state notifier
     final companyDetailsState =
         ref.watch(companyNotifierProvider(company).notifier);
+    // watch image controller notifier
     final imageControllerNotifier =
         ref.watch(imageControllerNotifierProvider.notifier);
+    // watch image database controller notifier
     final newImages = ref.watch(imageControllerNotifierProvider);
+    // watch multiple local company staff state
+    final localStaffState =
+        ref.watch(multipleCompanyStaffLocalControllerProvider);
     return AppLayout(
       mobile: _MobileProfileDataPage(
         company: companyDetails,
@@ -28,6 +37,7 @@ class ProfileDataPage extends HookConsumerWidget {
         oldDetails: company,
         imageControllerNotifier: imageControllerNotifier,
         newImages: newImages,
+        localStaffState: localStaffState,
       ),
       tablet: _TabletProfileDataPage(
         company: companyDetails,
@@ -36,6 +46,7 @@ class ProfileDataPage extends HookConsumerWidget {
         oldDetails: company,
         imageControllerNotifier: imageControllerNotifier,
         newImages: newImages,
+        localStaffState: localStaffState,
       ),
       desktop: _DesktopProfileDataPage(
         company: companyDetails,
@@ -44,6 +55,7 @@ class ProfileDataPage extends HookConsumerWidget {
         oldDetails: company,
         imageControllerNotifier: imageControllerNotifier,
         newImages: newImages,
+        localStaffState: localStaffState,
       ),
     );
   }
@@ -59,6 +71,7 @@ class _MobileProfileDataPage extends HookConsumerWidget {
     this.oldDetails,
     this.imageControllerNotifier,
     this.newImages,
+    this.localStaffState,
   }) : super(key: key);
   final Company? company;
   final CompanyNotifier? companyDetailsState;
@@ -66,6 +79,7 @@ class _MobileProfileDataPage extends HookConsumerWidget {
   final Company? oldDetails;
   final ImageControllerNotifier? imageControllerNotifier;
   final AsyncValue<List<ImageHelperModel>?>? newImages;
+  final List<LocalCompanyStaffModel?>? localStaffState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // listen to image database changes
@@ -90,6 +104,7 @@ class _MobileProfileDataPage extends HookConsumerWidget {
       );
     });
 
+    // tabs for the profile page
     final tabs = [
       {
         'title': 'Details',
@@ -104,9 +119,12 @@ class _MobileProfileDataPage extends HookConsumerWidget {
         'icon': LineIcon.images(),
       }
     ];
+
+    // tab controller for the profile page
     final tabController = useTabController(
       initialLength: tabs.length,
     );
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
@@ -171,6 +189,7 @@ class _MobileProfileDataPage extends HookConsumerWidget {
         automaticallyImplyLeading: false,
         bottom: TabBar(
           controller: tabController,
+          labelStyle: GoogleFonts.dosis(),
           tabs: tabs
               .map((e) => Tab(
                     text: e['title'].toString(),
@@ -192,6 +211,7 @@ class _MobileProfileDataPage extends HookConsumerWidget {
             companyStaff: company!.companyStaff,
             companyId: company!.companyId,
             companyDetailsState: companyDetailsState,
+            localStaffState: localStaffState,
           ),
           CompanyGalleryPage(
             companyGallery: company!.companyGallery,
@@ -216,6 +236,7 @@ class _TabletProfileDataPage extends HookConsumerWidget {
     this.oldDetails,
     this.imageControllerNotifier,
     this.newImages,
+    this.localStaffState,
   }) : super(key: key);
   final Company? company;
   final CompanyNotifier? companyDetailsState;
@@ -223,6 +244,7 @@ class _TabletProfileDataPage extends HookConsumerWidget {
   final Company? oldDetails;
   final ImageControllerNotifier? imageControllerNotifier;
   final AsyncValue<List<ImageHelperModel>?>? newImages;
+  final List<LocalCompanyStaffModel?>? localStaffState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
@@ -246,6 +268,7 @@ class _DesktopProfileDataPage extends HookConsumerWidget {
     this.oldDetails,
     this.imageControllerNotifier,
     this.newImages,
+    this.localStaffState,
   }) : super(key: key);
   final Company? company;
   final CompanyNotifier? companyDetailsState;
@@ -253,6 +276,7 @@ class _DesktopProfileDataPage extends HookConsumerWidget {
   final Company? oldDetails;
   final ImageControllerNotifier? imageControllerNotifier;
   final AsyncValue<List<ImageHelperModel>?>? newImages;
+  final List<LocalCompanyStaffModel?>? localStaffState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(

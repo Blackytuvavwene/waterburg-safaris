@@ -1,5 +1,6 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router_flow/go_router_flow.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // company staff page hook consumer widget with app layout
@@ -9,10 +10,12 @@ class CompanyStaffPage extends HookConsumerWidget {
     this.companyId,
     this.companyStaff,
     this.companyDetailsState,
+    this.localStaffState,
   }) : super(key: key);
   final List<CompanyStaff>? companyStaff;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
+  final List<LocalCompanyStaffModel?>? localStaffState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
@@ -20,16 +23,19 @@ class CompanyStaffPage extends HookConsumerWidget {
         companyStaff: companyStaff,
         companyId: companyId,
         companyDetailsState: companyDetailsState,
+        localStaffState: localStaffState,
       ),
       tablet: _TabletCompanyStaffPage(
         companyStaff: companyStaff,
         companyId: companyId,
         companyDetailsState: companyDetailsState,
+        localStaffState: localStaffState,
       ),
       desktop: _DesktopCompanyStaffPage(
         companyStaff: companyStaff,
         companyId: companyId,
         companyDetailsState: companyDetailsState,
+        localStaffState: localStaffState,
       ),
     );
   }
@@ -42,10 +48,12 @@ class _MobileCompanyStaffPage extends HookConsumerWidget {
     this.companyStaff,
     this.companyId,
     this.companyDetailsState,
+    this.localStaffState,
   }) : super(key: key);
   final List<CompanyStaff>? companyStaff;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
+  final List<LocalCompanyStaffModel?>? localStaffState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomScrollView(
@@ -62,10 +70,39 @@ class _MobileCompanyStaffPage extends HookConsumerWidget {
                 // ref.read(companyStaffProvider.notifier).createCompanyStaff(
                 //       companyId: companyId,
                 //     );
+                context.pushNamed('addStaff');
               },
             ),
           ],
         ),
+        if (localStaffState != null)
+          localStaffState!.isNotEmpty
+              ? SliverPadding(
+                  padding: const EdgeInsets.all(8.0),
+                  sliver: SliverGrid(
+                    gridDelegate:
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 200.0,
+                      mainAxisSpacing: 10.0,
+                      crossAxisSpacing: 10.0,
+                      childAspectRatio: 1.0,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        return ListTile(
+                          title: DText(
+                            text:
+                                localStaffState?[index]?.staffDetails?.fullName,
+                          ),
+                        );
+                      },
+                      childCount: localStaffState!.length,
+                    ),
+                  ),
+                )
+              : const SliverToBoxAdapter(
+                  child: SizedBox.shrink(),
+                ),
         SliverPadding(
           padding: const EdgeInsets.all(8.0),
           sliver: SliverGrid(
@@ -97,10 +134,12 @@ class _TabletCompanyStaffPage extends HookConsumerWidget {
     this.companyStaff,
     this.companyId,
     this.companyDetailsState,
+    this.localStaffState,
   }) : super(key: key);
   final List<CompanyStaff>? companyStaff;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
+  final List<LocalCompanyStaffModel?>? localStaffState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
@@ -128,10 +167,12 @@ class _DesktopCompanyStaffPage extends HookConsumerWidget {
     this.companyStaff,
     this.companyId,
     this.companyDetailsState,
+    this.localStaffState,
   }) : super(key: key);
   final List<CompanyStaff>? companyStaff;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
+  final List<LocalCompanyStaffModel?>? localStaffState;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(

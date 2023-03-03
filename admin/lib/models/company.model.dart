@@ -1,193 +1,71 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:json_annotation/json_annotation.dart';
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+// include freezed part
+part 'company.model.freezed.dart';
 part 'company.model.g.dart';
 
-@JsonSerializable(
-  anyMap: true,
-  explicitToJson: true,
-)
-class Company {
-  String? companyId;
-  CompanyDetails? companyDetails;
-  List<CompanyStaff>? companyStaff;
-  List<Gallery>? companyGallery;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-
-  Company({
-    this.companyId,
-    this.companyDetails,
-    this.companyStaff,
-    this.companyGallery,
-    this.createdAt,
-    this.updatedAt,
-  });
+@Freezed()
+class Company with _$Company {
+  factory Company({
+    final String? companyId,
+    final CompanyDetails? companyDetails,
+    final List<CompanyStaff>? companyStaff,
+    final List<Gallery>? companyGallery,
+    final DateTime? createdAt,
+    final DateTime? updatedAt,
+  }) = _Company;
 
   factory Company.fromJson(Map<String, dynamic> json) =>
       _$CompanyFromJson(json);
-
-  Map<String, dynamic> toJson() => _$CompanyToJson(this);
-
-  Company copyWith({
-    String? companyId,
-    List<CompanyStaff>? companyStaff,
-    List<Gallery>? companyGallery,
-    CompanyDetails? companyDetails,
-    DateTime? createdAt,
-    DateTime? updatedAt,
-  }) {
-    return Company(
-      companyId: companyId ?? this.companyId,
-      companyStaff: companyStaff ?? this.companyStaff,
-      companyGallery: companyGallery ?? this.companyGallery,
-      companyDetails: companyDetails ?? this.companyDetails,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
-    );
-  }
 }
 
-@JsonSerializable(
-  anyMap: true,
-  explicitToJson: true,
-)
-class Gallery {
-  String? imageUrl;
-  String? imageTitle;
-  String? imageDescription;
-
-  Gallery({
-    this.imageUrl,
-    this.imageTitle,
-    this.imageDescription,
-  });
+@Freezed()
+class Gallery with _$Gallery {
+  factory Gallery({
+    final String? imageUrl,
+    final String? imageTitle,
+    final String? imageDescription,
+  }) = _Gallery;
 
   factory Gallery.fromJson(Map<String, dynamic> json) =>
       _$GalleryFromJson(json);
-
-  Map<String, dynamic> toJson() => _$GalleryToJson(this);
-
-  Gallery copyWith({
-    String? imageUrl,
-    String? imageTitle,
-    String? imageDescription,
-  }) {
-    return Gallery(
-      imageUrl: imageUrl ?? this.imageUrl,
-      imageTitle: imageTitle ?? this.imageTitle,
-      imageDescription: imageDescription ?? this.imageDescription,
-    );
-  }
 }
 
-@JsonSerializable(
-  anyMap: true,
-  explicitToJson: true,
-)
-class CompanyStaff {
-  String? imageUrl;
-  String? fullName;
-  String? email;
-  List<String>? phoneNos;
-  String? jobTitle;
-  String? jobDescription;
-  String? title;
-
-  CompanyStaff({
-    this.imageUrl,
-    this.fullName,
-    this.email,
-    this.phoneNos,
-    this.jobTitle,
-    this.jobDescription,
-    this.title,
-  });
+@Freezed()
+class CompanyStaff with _$CompanyStaff {
+  factory CompanyStaff({
+    final String? imageUrl,
+    final String? fullName,
+    final String? email,
+    final List<String>? phoneNos,
+    final String? jobTitle,
+    final String? jobDescription,
+    final String? title,
+  }) = _CompanyStaff;
 
   factory CompanyStaff.fromJson(Map<String, dynamic> json) =>
       _$CompanyStaffFromJson(json);
-
-  Map<String, dynamic> toJson() => _$CompanyStaffToJson(this);
-
-  CompanyStaff copyWith({
-    String? imageUrl,
-    String? fullName,
-    String? email,
-    List<String>? phoneNos,
-    String? jobTitle,
-    String? jobDescription,
-    String? title,
-  }) {
-    return CompanyStaff(
-      imageUrl: imageUrl ?? this.imageUrl,
-      fullName: fullName ?? this.fullName,
-      email: email ?? this.email,
-      phoneNos: phoneNos ?? this.phoneNos,
-      jobTitle: jobTitle ?? this.jobTitle,
-      jobDescription: jobDescription ?? this.jobDescription,
-      title: title ?? this.title,
-    );
-  }
 }
 
-@JsonSerializable(
-  anyMap: true,
-  explicitToJson: true,
-)
-class CompanyDetails {
-  String? companyName;
-  String? companyAddress;
-  String? registrationNumber;
-  String? vatNo;
-  String? companyLogoUrl;
-  String? seoDescription;
-  String? overview;
-  List<String>? cellPhoneNos;
-  String? email;
-  String? telNo;
-  CompanyDetails({
-    this.companyName,
-    this.companyAddress,
-    this.registrationNumber,
-    this.vatNo,
-    this.companyLogoUrl,
-    this.seoDescription,
-    this.overview,
-    this.cellPhoneNos,
-    this.email,
-    this.telNo,
-  });
+@Freezed()
+class CompanyDetails with _$CompanyDetails {
+  factory CompanyDetails({
+    final String? companyName,
+    final String? companyAddress,
+    final String? registrationNumber,
+    final String? vatNo,
+    final String? companyLogoUrl,
+    final String? seoDescription,
+    final String? overview,
+    final List<String>? cellPhoneNos,
+    final String? email,
+    final String? telNo,
+  }) = _CompanyDetails;
 
   factory CompanyDetails.fromJson(Map<String, dynamic> json) =>
       _$CompanyDetailsFromJson(json);
-
-  Map<String, dynamic> toJson() => _$CompanyDetailsToJson(this);
-
-  CompanyDetails copyWith({
-    String? companyName,
-    String? companyAddress,
-    String? registrationNumber,
-    String? vatNo,
-    String? companyLogoUrl,
-    String? seoDescription,
-    String? overview,
-    List<String>? cellPhoneNos,
-    String? email,
-    String? telNo,
-  }) {
-    return CompanyDetails(
-      companyName: companyName ?? this.companyName,
-      companyAddress: companyAddress ?? this.companyAddress,
-      registrationNumber: registrationNumber ?? this.registrationNumber,
-      vatNo: vatNo ?? this.vatNo,
-      companyLogoUrl: companyLogoUrl ?? this.companyLogoUrl,
-      seoDescription: seoDescription ?? this.seoDescription,
-      overview: overview ?? this.overview,
-      cellPhoneNos: cellPhoneNos ?? this.cellPhoneNos,
-      email: email ?? this.email,
-      telNo: telNo ?? this.telNo,
-    );
-  }
 }
 
 class AddressAndContact {

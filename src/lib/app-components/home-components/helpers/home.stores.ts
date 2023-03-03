@@ -1,10 +1,10 @@
 
 import type { AboutCompanyResponse } from "$lib/app-components/about-components/about.types";
 import { createStore, withProps } from "@ngneat/elf";
-import { persistState, localStorageStrategy } from "@ngneat/elf-persist-state";
+import { localStorageStrategy,persistState } from "@ngneat/elf-persist-state";
 import type { HomeActivities, HomeModel } from "./home.firestore.helpers";
 
-export const persistHomeDataStore = createStore(
+export const persistHomeDataStore= createStore(
     {name: 'homeData'},
     withProps<HomeModel>({})
 );

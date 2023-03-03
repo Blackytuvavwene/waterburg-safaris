@@ -1,55 +1,24 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+// include freezed part
+part 'bookings_model.freezed.dart';
 part 'bookings_model.g.dart';
 
-@JsonSerializable(
-  anyMap: true,
-  explicitToJson: true,
-)
-class BookingModel {
-  String? bookingCode;
-  CustomerDetails? customerDetails;
-  ActivityDetails? activityDetails;
-  DateTime? departureDate;
-  DateTime? arrivalDate;
-  bool? paid;
-  double? amountPaid;
-
-  BookingModel({
-    this.bookingCode,
-    this.customerDetails,
-    this.activityDetails,
-    this.departureDate,
-    this.arrivalDate,
-    this.paid,
-    this.amountPaid,
-  });
-
-  BookingModel copyWith({
-    String? bookingCode,
-    CustomerDetails? customerDetails,
-    ActivityDetails? activityDetails,
-    DateTime? departureDate,
-    DateTime? arrivalDate,
-    bool? paid,
-    double? amountPaid,
-  }) {
-    return BookingModel(
-      bookingCode: bookingCode ?? this.bookingCode,
-      customerDetails: customerDetails ?? this.customerDetails,
-      activityDetails: activityDetails ?? this.activityDetails,
-      departureDate: departureDate ?? this.departureDate,
-      arrivalDate: arrivalDate ?? this.arrivalDate,
-      paid: paid ?? this.paid,
-      amountPaid: amountPaid ?? this.amountPaid,
-    );
-  }
+@Freezed()
+class BookingModel with _$BookingModel {
+  factory BookingModel({
+    final String? bookingCode,
+    final CustomerDetails? customerDetails,
+    final ActivityDetails? activityDetails,
+    final DateTime? departureDate,
+    final DateTime? arrivalDate,
+    final bool? paid,
+    final double? amountPaid,
+  }) = _BookingModel;
 
   factory BookingModel.fromJson(Map<String, dynamic> json) =>
       _$BookingModelFromJson(json);
-
-  Map<String, dynamic> toJson() => _$BookingModelToJson(this);
 }
 
 @JsonSerializable(
@@ -98,16 +67,6 @@ class BookedPackage {
     this.packageName,
   });
 
-  BookedPackage copyWith({
-    String? packageId,
-    String? packageName,
-  }) {
-    return BookedPackage(
-      packageId: packageId ?? this.packageId,
-      packageName: packageName ?? this.packageName,
-    );
-  }
-
   factory BookedPackage.fromJson(Map<String, dynamic> json) =>
       _$BookedPackageFromJson(json);
 
@@ -128,18 +87,6 @@ class CustomerDetails {
     this.email,
     this.creditCardDetails,
   });
-
-  CustomerDetails copyWith({
-    String? fullNames,
-    String? email,
-    CreditCardModel? creditCardDetails,
-  }) {
-    return CustomerDetails(
-      fullNames: fullNames ?? this.fullNames,
-      email: email ?? this.email,
-      creditCardDetails: creditCardDetails ?? this.creditCardDetails,
-    );
-  }
 
   factory CustomerDetails.fromJson(Map<String, dynamic> json) =>
       _$CustomerDetailsFromJson(json);
@@ -164,20 +111,6 @@ class CreditCardModel {
     this.expiryDate,
     this.cvv,
   });
-
-  CreditCardModel copyWith({
-    String? cardNumber,
-    String? cardHolderNames,
-    DateTime? expiryDate,
-    String? cvv,
-  }) {
-    return CreditCardModel(
-      cardNumber: cardNumber ?? this.cardNumber,
-      cardHolderNames: cardHolderNames ?? this.cardHolderNames,
-      expiryDate: expiryDate ?? this.expiryDate,
-      cvv: cvv ?? this.cvv,
-    );
-  }
 
   factory CreditCardModel.fromJson(Map<String, dynamic> json) =>
       _$CreditCardModelFromJson(json);

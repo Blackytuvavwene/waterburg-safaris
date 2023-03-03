@@ -6,18 +6,17 @@ part of 'company.model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Company _$CompanyFromJson(Map json) => Company(
+_$_Company _$$_CompanyFromJson(Map<String, dynamic> json) => _$_Company(
       companyId: json['companyId'] as String?,
       companyDetails: json['companyDetails'] == null
           ? null
           : CompanyDetails.fromJson(
-              Map<String, dynamic>.from(json['companyDetails'] as Map)),
+              json['companyDetails'] as Map<String, dynamic>),
       companyStaff: (json['companyStaff'] as List<dynamic>?)
-          ?.map(
-              (e) => CompanyStaff.fromJson(Map<String, dynamic>.from(e as Map)))
+          ?.map((e) => CompanyStaff.fromJson(e as Map<String, dynamic>))
           .toList(),
       companyGallery: (json['companyGallery'] as List<dynamic>?)
-          ?.map((e) => Gallery.fromJson(Map<String, dynamic>.from(e as Map)))
+          ?.map((e) => Gallery.fromJson(e as Map<String, dynamic>))
           .toList(),
       createdAt: json['createdAt'] == null
           ? null
@@ -27,29 +26,31 @@ Company _$CompanyFromJson(Map json) => Company(
           : DateTime.parse(json['updatedAt'] as String),
     );
 
-Map<String, dynamic> _$CompanyToJson(Company instance) => <String, dynamic>{
+Map<String, dynamic> _$$_CompanyToJson(_$_Company instance) =>
+    <String, dynamic>{
       'companyId': instance.companyId,
-      'companyDetails': instance.companyDetails?.toJson(),
-      'companyStaff': instance.companyStaff?.map((e) => e.toJson()).toList(),
-      'companyGallery':
-          instance.companyGallery?.map((e) => e.toJson()).toList(),
+      'companyDetails': instance.companyDetails,
+      'companyStaff': instance.companyStaff,
+      'companyGallery': instance.companyGallery,
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
     };
 
-Gallery _$GalleryFromJson(Map json) => Gallery(
+_$_Gallery _$$_GalleryFromJson(Map<String, dynamic> json) => _$_Gallery(
       imageUrl: json['imageUrl'] as String?,
       imageTitle: json['imageTitle'] as String?,
       imageDescription: json['imageDescription'] as String?,
     );
 
-Map<String, dynamic> _$GalleryToJson(Gallery instance) => <String, dynamic>{
+Map<String, dynamic> _$$_GalleryToJson(_$_Gallery instance) =>
+    <String, dynamic>{
       'imageUrl': instance.imageUrl,
       'imageTitle': instance.imageTitle,
       'imageDescription': instance.imageDescription,
     };
 
-CompanyStaff _$CompanyStaffFromJson(Map json) => CompanyStaff(
+_$_CompanyStaff _$$_CompanyStaffFromJson(Map<String, dynamic> json) =>
+    _$_CompanyStaff(
       imageUrl: json['imageUrl'] as String?,
       fullName: json['fullName'] as String?,
       email: json['email'] as String?,
@@ -61,7 +62,7 @@ CompanyStaff _$CompanyStaffFromJson(Map json) => CompanyStaff(
       title: json['title'] as String?,
     );
 
-Map<String, dynamic> _$CompanyStaffToJson(CompanyStaff instance) =>
+Map<String, dynamic> _$$_CompanyStaffToJson(_$_CompanyStaff instance) =>
     <String, dynamic>{
       'imageUrl': instance.imageUrl,
       'fullName': instance.fullName,
@@ -72,7 +73,8 @@ Map<String, dynamic> _$CompanyStaffToJson(CompanyStaff instance) =>
       'title': instance.title,
     };
 
-CompanyDetails _$CompanyDetailsFromJson(Map json) => CompanyDetails(
+_$_CompanyDetails _$$_CompanyDetailsFromJson(Map<String, dynamic> json) =>
+    _$_CompanyDetails(
       companyName: json['companyName'] as String?,
       companyAddress: json['companyAddress'] as String?,
       registrationNumber: json['registrationNumber'] as String?,
@@ -87,7 +89,7 @@ CompanyDetails _$CompanyDetailsFromJson(Map json) => CompanyDetails(
       telNo: json['telNo'] as String?,
     );
 
-Map<String, dynamic> _$CompanyDetailsToJson(CompanyDetails instance) =>
+Map<String, dynamic> _$$_CompanyDetailsToJson(_$_CompanyDetails instance) =>
     <String, dynamic>{
       'companyName': instance.companyName,
       'companyAddress': instance.companyAddress,

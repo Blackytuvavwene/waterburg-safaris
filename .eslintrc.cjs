@@ -10,9 +10,7 @@ module.exports = {
 	},
 	parserOptions: {
 		sourceType: 'module',
-		ecmaVersion: 2020,
-		tsconfigRootDir: __dirname,
-		project: './tsconfig.json',
+		ecmaVersion: 2020
 	},
 	env: {
 		browser: true,
