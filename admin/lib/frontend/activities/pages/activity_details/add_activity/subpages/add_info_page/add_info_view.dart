@@ -92,8 +92,9 @@ class _MobileAddInfoView extends HookConsumerWidget {
                             ),
                             IconButton(
                               onPressed: () {
-                                activityData?.value.overview =
-                                    overviewController.text;
+                                activityData?.value.copyWith(
+                                  overview: overviewController.text,
+                                );
 
                                 editOverview.value = false;
                               },
@@ -162,8 +163,9 @@ class _MobileAddInfoView extends HookConsumerWidget {
                             ),
                             IconButton(
                               onPressed: () {
-                                activityData?.value.seoDescription =
-                                    seoDescriptionController.text;
+                                activityData?.value.copyWith(
+                                  seoDescription: seoDescriptionController.text,
+                                );
 
                                 editSeoDescription.value = false;
                               },

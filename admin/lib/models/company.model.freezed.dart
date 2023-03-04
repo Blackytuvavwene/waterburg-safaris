@@ -1150,3 +1150,185 @@ abstract class _CompanyDetails implements CompanyDetails {
   _$$_CompanyDetailsCopyWith<_$_CompanyDetails> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+/// @nodoc
+mixin _$LocalCompanyStaffModel {
+  ImageHelperModel? get image => throw _privateConstructorUsedError;
+  CompanyStaff? get staffDetails => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $LocalCompanyStaffModelCopyWith<LocalCompanyStaffModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $LocalCompanyStaffModelCopyWith<$Res> {
+  factory $LocalCompanyStaffModelCopyWith(LocalCompanyStaffModel value,
+          $Res Function(LocalCompanyStaffModel) then) =
+      _$LocalCompanyStaffModelCopyWithImpl<$Res, LocalCompanyStaffModel>;
+  @useResult
+  $Res call({ImageHelperModel? image, CompanyStaff? staffDetails});
+
+  $ImageHelperModelCopyWith<$Res>? get image;
+  $CompanyStaffCopyWith<$Res>? get staffDetails;
+}
+
+/// @nodoc
+class _$LocalCompanyStaffModelCopyWithImpl<$Res,
+        $Val extends LocalCompanyStaffModel>
+    implements $LocalCompanyStaffModelCopyWith<$Res> {
+  _$LocalCompanyStaffModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? image = freezed,
+    Object? staffDetails = freezed,
+  }) {
+    return _then(_value.copyWith(
+      image: freezed == image
+          ? _value.image
+          : image // ignore: cast_nullable_to_non_nullable
+              as ImageHelperModel?,
+      staffDetails: freezed == staffDetails
+          ? _value.staffDetails
+          : staffDetails // ignore: cast_nullable_to_non_nullable
+              as CompanyStaff?,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ImageHelperModelCopyWith<$Res>? get image {
+    if (_value.image == null) {
+      return null;
+    }
+
+    return $ImageHelperModelCopyWith<$Res>(_value.image!, (value) {
+      return _then(_value.copyWith(image: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $CompanyStaffCopyWith<$Res>? get staffDetails {
+    if (_value.staffDetails == null) {
+      return null;
+    }
+
+    return $CompanyStaffCopyWith<$Res>(_value.staffDetails!, (value) {
+      return _then(_value.copyWith(staffDetails: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$_LocalCompanyStaffModelCopyWith<$Res>
+    implements $LocalCompanyStaffModelCopyWith<$Res> {
+  factory _$$_LocalCompanyStaffModelCopyWith(_$_LocalCompanyStaffModel value,
+          $Res Function(_$_LocalCompanyStaffModel) then) =
+      __$$_LocalCompanyStaffModelCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({ImageHelperModel? image, CompanyStaff? staffDetails});
+
+  @override
+  $ImageHelperModelCopyWith<$Res>? get image;
+  @override
+  $CompanyStaffCopyWith<$Res>? get staffDetails;
+}
+
+/// @nodoc
+class __$$_LocalCompanyStaffModelCopyWithImpl<$Res>
+    extends _$LocalCompanyStaffModelCopyWithImpl<$Res,
+        _$_LocalCompanyStaffModel>
+    implements _$$_LocalCompanyStaffModelCopyWith<$Res> {
+  __$$_LocalCompanyStaffModelCopyWithImpl(_$_LocalCompanyStaffModel _value,
+      $Res Function(_$_LocalCompanyStaffModel) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? image = freezed,
+    Object? staffDetails = freezed,
+  }) {
+    return _then(_$_LocalCompanyStaffModel(
+      image: freezed == image
+          ? _value.image
+          : image // ignore: cast_nullable_to_non_nullable
+              as ImageHelperModel?,
+      staffDetails: freezed == staffDetails
+          ? _value.staffDetails
+          : staffDetails // ignore: cast_nullable_to_non_nullable
+              as CompanyStaff?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_LocalCompanyStaffModel
+    with DiagnosticableTreeMixin
+    implements _LocalCompanyStaffModel {
+  _$_LocalCompanyStaffModel({this.image, this.staffDetails});
+
+  @override
+  final ImageHelperModel? image;
+  @override
+  final CompanyStaff? staffDetails;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'LocalCompanyStaffModel(image: $image, staffDetails: $staffDetails)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'LocalCompanyStaffModel'))
+      ..add(DiagnosticsProperty('image', image))
+      ..add(DiagnosticsProperty('staffDetails', staffDetails));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_LocalCompanyStaffModel &&
+            (identical(other.image, image) || other.image == image) &&
+            (identical(other.staffDetails, staffDetails) ||
+                other.staffDetails == staffDetails));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, image, staffDetails);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_LocalCompanyStaffModelCopyWith<_$_LocalCompanyStaffModel> get copyWith =>
+      __$$_LocalCompanyStaffModelCopyWithImpl<_$_LocalCompanyStaffModel>(
+          this, _$identity);
+}
+
+abstract class _LocalCompanyStaffModel implements LocalCompanyStaffModel {
+  factory _LocalCompanyStaffModel(
+      {final ImageHelperModel? image,
+      final CompanyStaff? staffDetails}) = _$_LocalCompanyStaffModel;
+
+  @override
+  ImageHelperModel? get image;
+  @override
+  CompanyStaff? get staffDetails;
+  @override
+  @JsonKey(ignore: true)
+  _$$_LocalCompanyStaffModelCopyWith<_$_LocalCompanyStaffModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}

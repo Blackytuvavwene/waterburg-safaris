@@ -10,42 +10,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_compression_flutter/image_compression_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
-// model class to help with image xfile and imagefile
-class ImageHelperModel {
-  ImageHelperModel({
-    required this.xFile,
-    required this.path,
-    required this.name,
-    required this.bytes,
-    required this.imageFile,
-    required this.imageDetails,
-  });
-  XFile? xFile;
-  String? name;
-  String? path;
-  Uint8List? bytes;
-  ImageFile? imageFile;
-  Gallery? imageDetails;
-
-  ImageHelperModel copyWith({
-    XFile? xFile,
-    String? name,
-    String? path,
-    Uint8List? bytes,
-    ImageFile? imageFile,
-    Gallery? imageDetails,
-  }) {
-    return ImageHelperModel(
-      xFile: xFile ?? this.xFile,
-      name: name ?? this.name,
-      path: path ?? this.path,
-      bytes: bytes ?? this.bytes,
-      imageFile: imageFile ?? this.imageFile,
-      imageDetails: imageDetails ?? this.imageDetails,
-    );
-  }
-}
-
 class ImageHelpers {
   // get asset image
   static String getAssetImage(String name) {

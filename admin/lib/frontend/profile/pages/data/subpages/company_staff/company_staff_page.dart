@@ -1,7 +1,9 @@
 import 'package:admin/lib.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router_flow/go_router_flow.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:image_compression_flutter/image_compression_flutter.dart';
 
 // company staff page hook consumer widget with app layout
 class CompanyStaffPage extends HookConsumerWidget {
@@ -70,7 +72,26 @@ class _MobileCompanyStaffPage extends HookConsumerWidget {
                 // ref.read(companyStaffProvider.notifier).createCompanyStaff(
                 //       companyId: companyId,
                 //     );
-                context.pushNamed('addStaff');
+                final params = LocalCompanyStaffModel(
+                  image: ImageHelperModel(
+                    xFile: XFile(''),
+                    name: '',
+                    path: '',
+                    bytes: Uint8List(0),
+                    imageDetails: Gallery(),
+                    imageFile: ImageFile(
+                      filePath: '',
+                      rawBytes: Uint8List(0),
+                    ),
+                  ),
+                  staffDetails: CompanyStaff(
+                    fullName: '',
+                  ),
+                );
+                context.pushNamed(
+                  'addStaff',
+                  extra: params,
+                );
               },
             ),
           ],

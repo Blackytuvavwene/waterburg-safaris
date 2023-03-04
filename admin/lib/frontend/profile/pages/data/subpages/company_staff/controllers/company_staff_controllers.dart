@@ -33,18 +33,8 @@ class CompanyStaffLocalControllerNotifier
 
   // update company staff name
   void updateCompanyStaffName(String? name) {
-    // copy state data first
-    final stateCopy = state;
-    // new local state
-    final LocalCompanyStaffModel? newStaff = stateCopy?.copyWith.call(
-      staffDetails: stateCopy.staffDetails?.copyWith.call(
-        fullName: name,
-      ),
-    );
-    print('new state name: ${newStaff?.staffDetails?.fullName}');
-    state = newStaff;
-    print(
-        'state update name: ${state?.staffDetails?.fullName}, passed value: $name');
+    state = state?.copyWith.staffDetails?.call(fullName: name);
+    print('hello: ${state?.staffDetails?.fullName}');
   }
 
   // update company staff email
@@ -174,34 +164,3 @@ final multipleCompanyStaffLocalControllerProvider =
         List<LocalCompanyStaffModel?>>(
   (ref) => MultipleCompanyStaffLocalControllerNotifier(),
 );
-
-// local company staff model
-class LocalCompanyStaffModel {
-  ImageHelperModel? image;
-  CompanyStaff? staffDetails;
-
-  LocalCompanyStaffModel({
-    this.image,
-    this.staffDetails,
-  });
-
-  LocalCompanyStaffModel copyWith({
-    ImageHelperModel? image,
-    CompanyStaff? staffDetails,
-  }) {
-    return LocalCompanyStaffModel(
-      image: image ?? this.image,
-      staffDetails: staffDetails ?? this.staffDetails,
-    );
-  }
-
-  @override
-  bool operator ==(covariant LocalCompanyStaffModel other) {
-    if (identical(this, other)) return true;
-
-    return other.image == image && other.staffDetails == staffDetails;
-  }
-
-  @override
-  int get hashCode => image.hashCode ^ staffDetails.hashCode;
-}

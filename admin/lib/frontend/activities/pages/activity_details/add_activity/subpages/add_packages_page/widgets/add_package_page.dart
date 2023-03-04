@@ -458,11 +458,15 @@ class _MobileAddPackagePage extends HookConsumerWidget {
                                                 .error,
                                           ),
                                           onDeleted: () {
-                                            packageState.packageOffers =
-                                                packageState.packageOffers!
-                                                    .where((element) {
-                                              return element != keyword;
-                                            }).toList();
+                                            packageState.copyWith(
+                                              packageOffers: packageState
+                                                  .packageOffers!
+                                                  .where(
+                                                (element) {
+                                                  return element != keyword;
+                                                },
+                                              ).toList(),
+                                            );
                                           },
                                         ),
                                       )
