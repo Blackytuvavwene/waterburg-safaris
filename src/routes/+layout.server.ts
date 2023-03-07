@@ -9,7 +9,7 @@ import { setHomeDataPersist } from "$lib/app-components/home-components/helpers/
 
 export const load:LayoutServerLoad= async () => {
    
-    const Hdata=await getHomeActivities();
+    const Hdata=await getHomeActivities().then((data)=>data).catch((err)=>console.error(err));
 
     if(Hdata) {
         const data = Hdata ;

@@ -12,7 +12,7 @@
 		"test:unit": "vitest",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --plugin-search-dir . --write .",
-		"start": "node -r dotenv/config ./index.cjs"
+		"start": "node -r dotenv/config ./public"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.31.1",
