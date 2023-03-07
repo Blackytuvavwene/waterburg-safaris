@@ -1,1 +1,1 @@
-(()=>import("./build/index.js"))
+(()=>import("./public/index.js"))
