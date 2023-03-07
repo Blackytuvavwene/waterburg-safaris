@@ -35,9 +35,9 @@ import type { FlyTransistion } from './transitions.helpers';
      $:currentView;
 </script>
 
-<div bind:this={currentView} class=" w-full flex flex-col justify-center items-center h-full">
+<div bind:this={currentView} >
     {#if visible}
-    <div id="current" class="flex flex-col justify-center items-center w-full h-full"
+    <div 
      transition:fly|local="{{ duration: 3000,delay:0, x: 0, y: 50, opacity: 0, easing: quintOut} }" >
         <slot ></slot>
     </div>

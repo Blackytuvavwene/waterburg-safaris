@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ImageSlideShow from './../../lib/animations/ImageSlideShow.svelte';
 	import type { AboutCompanyResponse, CompanyGallery } from '$lib/app-components/about-components/about.types';
 import AboutGallery from "$lib/app-components/about-components/AboutGallery.svelte";
 import Address from "$lib/app-components/about-components/Address.svelte";
@@ -30,11 +31,11 @@ $: ({companyStaff,  companyGallery,companyDetails}=data.about as AboutCompanyRes
 </svelte:head>
 
 
-<div class="w-full flex items-center  justify-center relative h-64 sm:h-80 lg:h-96 mb-6">
+<div class="w-full flex-auto flex items-center  justify-center relative h-64 sm:h-80 lg:h-96 mb-6">
     {#if companyGallery}
-    <div class=" w-full h-full flex items-center justify-center">
+    <div class="w-full h-full flex-auto flex items-center justify-center">
         <div class="w-full h-full  ">
-            <SliderImage gallery={companyGallery} />
+            <ImageSlideShow images={companyGallery}/>
         </div>
         
         <div class="absolute  top-[50%] bottom-[50%] -translate-y-[50%]  -z-0 w-96 md:w-96">

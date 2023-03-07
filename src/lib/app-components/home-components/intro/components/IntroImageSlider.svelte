@@ -6,7 +6,7 @@ import type { CompanyGallery } from "$lib/app-components/about-components/about.
 </script>
 
 
-    <img class="h-[30vh] sm:h-[40vh] lg:h-[60vh] xl:h-[60vh] w-[100%] object-fill aspect-video object-center  " 
+    <img class=" max-h-[38rem] object-cover aspect-video object-center  " 
     src={imageData.imageUrl} loading="lazy" alt={imageData.imageDescription} />
 
 

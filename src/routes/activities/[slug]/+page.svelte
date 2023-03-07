@@ -6,6 +6,7 @@ import SlugActivityImageSlider from '$lib/app-components/activities-components/S
 import PackageCard from '$lib/app-components/activities-components/PackageCard.svelte';
 
     import type { PageServerData} from './$types';
+	import ImageSlideShow from '$lib/animations/ImageSlideShow.svelte';
 
     export let data: PageServerData;
 
@@ -75,15 +76,7 @@ import PackageCard from '$lib/app-components/activities-components/PackageCard.s
     </section>
     <div class=" flex flex-col justify-center w-full h-full ">
         {#if activityGallery}
-            <SliderImage
-                gallery={activityGallery} 
-                slideControls={true} 
-                showIndicators={true} 
-                opacity="" 
-                height="h-[40vh]"
-                lgHeight="h-[50vh]"
-                smHeight="h-[50vh]"
-            />
+            <ImageSlideShow images={activityGallery} />
         {/if}
     </div>
 </div>

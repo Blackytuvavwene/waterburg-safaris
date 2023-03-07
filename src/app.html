@@ -8,10 +8,19 @@
 		<!-- <link rel="stylesheet" href="%sveltekit.assets%/css/reset.css"> -->
 		<script src="https://kit.fontawesome.com/d20804bf75.js" crossorigin="anonymous" async></script>
 		%sveltekit.head%
+
+
 	</head>
-	
+	<style>
+		body{
+			box-sizing: border-box;
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+		}
+	</style>
 	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents; overflow: hidden; box-sizing: border-box;">
+		<div style="display: contents; overflow: hidden; box-sizing: border-box; width: 100%;">
 			%sveltekit.body%
 		</div>
 		 <!-- Messenger Chat Plugin Code -->
