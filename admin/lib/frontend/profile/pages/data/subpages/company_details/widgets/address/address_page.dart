@@ -2,6 +2,7 @@ import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icon.dart';
+import 'package:sizer/sizer.dart';
 
 // company address details page hook consumer widget with app layout
 class CompanyAddressDetailsPage extends HookConsumerWidget {
@@ -128,6 +129,22 @@ class _MobileCompanyAddressDetailsPage extends HookConsumerWidget {
                 subtitle: companyDetails?.telNo,
               ),
               SizedBoxAppSpacing.smallY(),
+              DText(
+                text: 'Cellphone Numbers',
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w900,
+              ),
+              Wrap(
+                spacing: 2.w,
+                children: [
+                  for (final cellPhoneNo in companyDetails?.cellPhoneNos ?? [])
+                    Chip(
+                      label: DText(
+                        text: cellPhoneNo,
+                      ),
+                    ),
+                ],
+              ),
             ],
           )),
         )

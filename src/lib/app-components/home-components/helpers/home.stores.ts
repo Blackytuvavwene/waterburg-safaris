@@ -6,7 +6,10 @@ import type { HomeActivities, HomeModel } from "./home.firestore.helpers";
 
 export const persistHomeDataStore= createStore(
     {name: 'homeData'},
-    withProps<HomeModel>({})
+    withProps<HomeModel>({
+        aboutCompany: {},
+        homeActivities: []
+    })
 );
 
 export const homeDataPersist=persistState(persistHomeDataStore,{

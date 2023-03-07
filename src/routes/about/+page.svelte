@@ -5,7 +5,7 @@ import Address from "$lib/app-components/about-components/Address.svelte";
 import CompanyStaff from "$lib/app-components/about-components/CompanyStaff.svelte";
 import Overview from "$lib/app-components/about-components/Overview.svelte";
 import type { PageServerData } from './$types';
-import logo from "$lib/wblogolg.svg";
+import logoLg from "$lib/ajtfulllogo.svg";
 import FadeTransition from '$lib/animations/FadeTransition.svelte';
 import { onMount } from 'svelte';
 import SliderImage from '$lib/app-components/sliders/SliderImage.svelte';
@@ -40,7 +40,7 @@ $: ({companyStaff,  companyGallery,companyDetails}=data.about as AboutCompanyRes
         <div class="absolute  top-[50%] bottom-[50%] -translate-y-[50%]  -z-0 w-96 md:w-96">
             <div class="w-full h-full items-center justify-center flex-col flex">
                 <FadeTransition>
-                    <img src={logo} class="w-96 md:w-96 h-52 lg:h-80" alt="Waterburg Safaris logo">
+                    <img src={logoLg} class="w-96 md:w-96 h-52 lg:h-80" alt="Waterburg Safaris logo">
                 </FadeTransition>
             </div>
             

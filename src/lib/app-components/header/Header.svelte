@@ -3,8 +3,10 @@ import { onMount } from "svelte";
 import { page } from "$app/stores";
 import { fade, slide } from "svelte/transition";
 import { quadInOut } from "svelte/easing";
-import logo from "$lib/wblogos.svg";
+import logo from "$lib/ajtfavicon.svg";
 import { resetCurrentSelectedPersist } from '$lib/app-components/activities-components/activity.stores';
+
+
 
 
     let mobileNavBarShow = false;
@@ -52,21 +54,32 @@ import { resetCurrentSelectedPersist } from '$lib/app-components/activities-comp
         }
     ];
 
-   
+   onMount(()=>{
+       // listen for view port size change
+         window.addEventListener('resize',()=>{
+              if(window.innerWidth>1022){
+                mobileNavBarShow=false;
+              }
+         })
+
+   })
+
+    // set active link
+    $: activeLink = navLinks.find((link) => link.id === $page.params.id);
 
 </script>
 
 
 
 <header class="w-full h-full flex items-center sticky top-0 z-10 bg-primary-900 ">
-    <nav class="w-full h-fit sm:px-10 xl:px-44 flex flex-row  justify-between items-center ">
+    <nav class="w-full h-fit xl:px-44 flex flex-row  justify-between items-center ">
         <div class= "flex flex-col items-start justify-start h-full w-full lg:w-fit">
             <div class="w-full h-full flex flex-row justify-between items-center ">
                 <div class="flex flex-row items-center justify-center w-full">
                     <a href="/" class="float-left h-full p-3 flex justify-center items-center">
-                        <img src={logo}  alt="Waterburg Safaris logo" width="50" height="50" />
+                        <img src={logo}  alt="African Journey Tour logo" width="50" height="50" />
                     </a>
-                    <span class="float-left s:text-base text-xl w-full font-bold mx-2 text-onPrimary">Waterburg Safaris</span>
+                    <span class="float-left s:text-base text-xl w-full font-bold mx-2 text-onPrimary">African Journey Tour</span>
                 </div>
                 <div class="lg:hidden h-full float-right transition delay-1000 flex flex-col w-fit justify-end items-end">
                     <button class="w-8 h-full mr-4 " on:click={toggleNavBar}>
@@ -77,19 +90,19 @@ import { resetCurrentSelectedPersist } from '$lib/app-components/activities-comp
                 </div>
             </div>
             {#if mobileNavBarShow}
-            <div class="pb-6 bg-gradient-to-b from-primary-900 to-primary {mobileNavBarShow === true ? "block" : "hidden"}
-              w-full sidebar ease-in-out duration-500 transition" transition:slide="{{duration:500,easing:quadInOut}}">
-                <div class="list-none flex flex-col  items-center w-full">
-                    {#each  navLinks as link}
-                        <a href={link.path} class="cursor-pointer text-onPrimary sm:text-center font-bold p-4 hover:bg-onPrimaryContainer hover:text-primaryContainer
-                        {link === navLinks[navLinks.length - 1] ? "border-b-0" : "border-b-2"}
-                          border-surfaceVariant w-full" on:click={toggleNavBar} data-sveltekit-noscroll>
-                            {link.name}
-                        </a>
-                    {/each}
+                <div class="pb-6 bg-gradient-to-b from-primary-900 to-primary {mobileNavBarShow === true ? "block" : "hidden"}
+                w-full sidebar ease-in-out duration-500 transition" transition:slide="{{duration:500,easing:quadInOut}}">
+                    <div class="list-none flex flex-col  items-center w-full">
+                        {#each  navLinks as link}
+                            <a href={link.path} class="cursor-pointer text-onPrimary sm:text-center font-bold p-4 hover:bg-onPrimaryContainer hover:text-primaryContainer
+                            {link === navLinks[navLinks.length - 1] ? "border-b-0" : "border-b-2"}
+                            border-surfaceVariant w-full" on:click={toggleNavBar} data-sveltekit-noscroll>
+                                {link.name}
+                            </a>
+                        {/each}
+                    </div>
                 </div>
-            </div>
-        {/if}
+            {/if}
         </div>
         <div class="list-none hidden h-full lg:flex flex-row w-fit justify-evenly  items-center">
             {#each  navLinks as link}

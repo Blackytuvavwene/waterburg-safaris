@@ -1,5 +1,6 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icon.dart';
 
@@ -12,12 +13,14 @@ class CompanyGalleryPage extends HookConsumerWidget {
     this.companyDetailsState,
     this.imageControllerNotifier,
     this.newImages,
+    this.editCompanyDetails,
   }) : super(key: key);
   final List<Gallery>? companyGallery;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
   final ImageControllerNotifier? imageControllerNotifier;
   final AsyncValue<List<ImageHelperModel>?>? newImages;
+  final ValueNotifier<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
@@ -27,6 +30,7 @@ class CompanyGalleryPage extends HookConsumerWidget {
         companyDetailsState: companyDetailsState,
         imageControllerNotifier: imageControllerNotifier,
         newImages: newImages,
+        editCompanyDetails: editCompanyDetails,
       ),
       tablet: _TabletCompanyGalleryPage(
         companyGallery: companyGallery,
@@ -55,23 +59,55 @@ class _MobileCompanyGalleryPage extends HookConsumerWidget {
     this.companyDetailsState,
     this.imageControllerNotifier,
     this.newImages,
+    this.editCompanyDetails,
   }) : super(key: key);
   final List<Gallery>? companyGallery;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
   final ImageControllerNotifier? imageControllerNotifier;
   final AsyncValue<List<ImageHelperModel>?>? newImages;
+  final ValueNotifier<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // tab pages for gallery
+    final tabPages = [
+      Tab(
+        icon: LineIcon.imagesAlt(),
+        child: const DText(
+          text: 'Gallery',
+        ),
+      ),
+      Tab(
+        icon: LineIcon.boxes(),
+        child: const DText(
+          text: 'New images',
+        ),
+      ),
+    ];
+
+    // tab controller
+    final tabController = useTabController(initialLength: tabPages.length);
+
     return CustomScrollView(
       slivers: [
         SliverAppBar(
           title: const Text('Company Gallery'),
           automaticallyImplyLeading: false,
           pinned: true,
+          bottom: newImages?.asData?.value != null
+              ? newImages!.asData!.value!.isNotEmpty
+                  ? TabBar(
+                      controller: tabController,
+                      tabs: tabPages,
+                    )
+                  : null
+              : null,
           actions: [
             IconButton(
                 onPressed: () async {
+                  if (editCompanyDetails?.value != true) {
+                    editCompanyDetails?.value = true;
+                  }
                   // ref.read(companyGalleryProvider.notifier).addGallery(
                   //       companyId: companyId,
                   //     );
@@ -81,60 +117,53 @@ class _MobileCompanyGalleryPage extends HookConsumerWidget {
           ],
         ),
         if (newImages != null)
-          newImages!.when(data: (images) {
-            return images != null
-                ? images.isNotEmpty
-                    ? SliverAppBar(
-                        title: DText(
-                          text: '${images.length} new images picked',
-                        ),
-                        pinned: true,
-                        automaticallyImplyLeading: false,
-                      )
-                    : const SliverToBoxAdapter(
-                        child: SizedBox.shrink(),
-                      )
-                : const SliverToBoxAdapter();
-          }, error: (error, stackTrace) {
-            return SliverToBoxAdapter(
-              child: DText(
-                text: error.toString(),
-              ),
-            );
-          }, loading: () {
-            return const SliverToBoxAdapter(
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }),
-        newImages?.asData?.value != null
-            ? newImages!.asData!.value!.isNotEmpty
-                ? SliverGrid.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                    ),
+          if (newImages!.value != [])
+            SliverFillRemaining(
+              child: TabBarView(
+                controller: tabController,
+                children: [
+                  ListView.separated(
+                    itemCount: companyGallery!.length,
+                    itemBuilder: (context, index) {
+                      return CompanyGalleryCard(
+                        companyGallery: companyGallery![index],
+                        companyId: companyId,
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(
+                        height: 4,
+                      );
+                    },
+                  ),
+                  ListView.separated(
+                    itemCount: newImages!.asData!.value!.length,
                     itemBuilder: (context, index) {
                       return PickedCompanyGalleryCard(
                         companyGallery: newImages?.asData?.value?[index],
                       );
                     },
-                    itemCount: newImages?.value?.length,
-                  )
-                : const SliverToBoxAdapter()
-            : const SliverToBoxAdapter(),
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              return CompanyGalleryCard(
-                companyGallery: companyGallery![index],
-                companyId: companyId,
-              );
-            },
-            childCount: companyGallery!.length,
-          ),
-        ),
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(
+                        height: 4,
+                      );
+                    },
+                  ),
+                ],
+              ),
+            )
+          else
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return CompanyGalleryCard(
+                    companyGallery: companyGallery![index],
+                    companyId: companyId,
+                  );
+                },
+                childCount: companyGallery!.length,
+              ),
+            ),
       ],
     );
   }

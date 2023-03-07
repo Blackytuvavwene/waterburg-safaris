@@ -34,7 +34,7 @@ border-primary border-2">
     </section>
     <span class="m-2"></span>
     <figure class="w-full object-cover justify-center h-full lg:justify-end flex  ">
-        <img class="w-full rounded-t-2xl lg:rounded-r-2xl lg:rounded-l-none max-h-[300px]" loading="lazy" src={activity.image?.imageUrl} alt={activity.image?.imageDescription} srcset="">
+        <img class="w-full aspect-video rounded-t-2xl lg:rounded-r-2xl lg:rounded-l-none max-h-[300px]" loading="lazy" src={activity.image?.imageUrl} alt={activity.image?.imageDescription} srcset="">
     </figure>
 </div>
 

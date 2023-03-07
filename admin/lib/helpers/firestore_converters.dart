@@ -45,19 +45,40 @@ class FirestoreHelper {
   static Future<T> updateDataInDoc<T>({
     required String docId,
     required String docPath,
-    required Map<String, dynamic> data,
+    required T data,
     required String query,
   }) async {
     try {
       await _firestore
           .collection(docPath)
           .doc(docId)
-          .set(data, SetOptions(merge: true));
-      return await getDataFromDoc<T>(
-          docId: docId, docPath: docPath, query: query);
-    } on FirebaseException catch (e) {
+          .withConverter<T>(fromFirestore: (snapshot, options) {
+            return FirestoreConverters.fromFirestore<T>(snapshot);
+          }, toFirestore: (data, options) {
+            return FirestoreConverters.toFirestore<T>(data);
+          })
+          .set(data, SetOptions(merge: true))
+          .then((value) => print({'Data updated': data}));
+      // getDataFromDoc<T>(
+      // docId: docId, docPath: docPath, query: query);
+      return data;
+    } on FirebaseException catch (e, s) {
+      debugPrintStack(
+        label: 'updateDataInDocA',
+        stackTrace: s,
+      );
       throw e.message.toString();
-    } catch (e) {
+    } on Exception catch (e, s) {
+      debugPrintStack(
+        label: 'updateDataInDocB',
+        stackTrace: s,
+      );
+      throw e.toString();
+    } catch (e, s) {
+      debugPrintStack(
+        label: 'updateDataInDocC',
+        stackTrace: s,
+      );
       throw e.toString();
     }
   }
@@ -210,7 +231,7 @@ class FirestoreHelperController<T> extends StateNotifier<AsyncValue<T>> {
   Future updateDataInDoc({
     required String docId,
     required String docPath,
-    required Map<String, dynamic> data,
+    required T data,
     required String query,
   }) async {
     state = const AsyncLoading();

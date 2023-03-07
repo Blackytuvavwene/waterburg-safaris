@@ -104,6 +104,26 @@ class _MobileProfileDataPage extends HookConsumerWidget {
       );
     });
 
+    ref.listen(companyFirestoreControllerProvider,
+        (AsyncValue<Company>? previous, AsyncValue<Company> next) {
+      return next.when(
+        data: (data) {
+          // show upload success easyloading toast when data is not null
+          EasyLoading.showSuccess('Updating company details successful');
+        },
+        loading: () {
+          // show upload progress easyloading toast when loading
+          EasyLoading.showInfo('Updating company details...');
+        },
+        error: (e, s) {
+          // show error on upload fail
+          EasyLoading.showError(
+              'Updating company details failed ${e.toString()}');
+          debugPrintStack(stackTrace: s, label: 'Error stack trace: $e');
+        },
+      );
+    });
+
     // tabs for the profile page
     final tabs = [
       {
@@ -169,16 +189,66 @@ class _MobileProfileDataPage extends HookConsumerWidget {
                   newGallery.addAll(newUploadedImages.asData!.value!);
                 }
 
+                // make a new list of company staff and add current staff to it
+                final newStaff = <CompanyStaff>[
+                  ...companyDetailsState?.company?.companyStaff ?? []
+                ];
+
+                // if local staff state is not null, add the new staff to the new staff list
+                if (localStaffState != null) {
+                  final newLocalStaff = localStaffState!.map((e) async {
+                    // first upload staff image to firebase storage
+                    final newStaffImage = await ref
+                        .read(imageDatabaseControllerNotifierProvider.notifier)
+                        .uploadImageToFirebaseStorage(
+                          image: e!.image!,
+                          path:
+                              '${companyDetailsState!.company!.companyId.toString()}/staff/${e.staffDetails!.fullName}',
+                        );
+
+                    // create a new company staff object with the new image
+                    final newStaffData = CompanyStaff(
+                      imageUrl: newStaffImage.value?.first.imageUrl,
+                      fullName: e.staffDetails?.fullName,
+                      email: e.staffDetails?.email,
+                      phoneNos: e.staffDetails?.phoneNos,
+                      jobDescription: e.staffDetails?.jobDescription,
+                      jobTitle: e.staffDetails?.jobTitle,
+                      title: e.staffDetails?.title,
+                    );
+
+                    // return the new company staff object
+                    return newStaffData;
+                  }).toList();
+
+                  // wait for all the staff to be uploaded
+                  final awaitedList = await Future.wait(newLocalStaff);
+                  // add the new staff to the new staff list
+                  newStaff.addAll(awaitedList);
+                }
+
                 // create a new company object with the new gallery
                 final newCompanyData = Company(
                   companyDetails: companyDetailsState?.company?.companyDetails,
                   companyId: companyDetailsState?.company?.companyId,
-                  companyStaff: companyDetailsState?.company?.companyStaff,
+                  companyStaff: newStaff,
                   // TODO: fix updating gallery
                   companyGallery: newGallery,
                   createdAt: companyDetailsState?.company?.createdAt,
                   updatedAt: DateTime.now(),
                 );
+
+                // update the company details state with the new company object
+                await ref
+                    .read(companyFirestoreControllerProvider.notifier)
+                    .updateCompanyInFirestore(
+                      company: newCompanyData,
+                    );
+                // clear our controller state
+                imageControllerNotifier?.clearState();
+                ref
+                    .read(multipleCompanyStaffLocalControllerProvider.notifier)
+                    .clearCompanyStaff();
               },
               child: DText(
                 text: 'Save changes',
@@ -212,6 +282,7 @@ class _MobileProfileDataPage extends HookConsumerWidget {
             companyId: company!.companyId,
             companyDetailsState: companyDetailsState,
             localStaffState: localStaffState,
+            editCompanyDetails: editCompanyDetails,
           ),
           CompanyGalleryPage(
             companyGallery: company!.companyGallery,
@@ -219,6 +290,7 @@ class _MobileProfileDataPage extends HookConsumerWidget {
             companyDetailsState: companyDetailsState,
             imageControllerNotifier: imageControllerNotifier,
             newImages: newImages,
+            editCompanyDetails: editCompanyDetails,
           ),
         ],
       ),

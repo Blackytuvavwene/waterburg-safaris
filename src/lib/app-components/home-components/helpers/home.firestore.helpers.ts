@@ -3,24 +3,24 @@ import { activitiesData, companyData, db } from "$lib/firebase";
 import { collection, FirestoreError, getDocs } from "firebase/firestore";
 
 export interface HomeActivities{
-    activityId?: string;
-    activityName?: string;
-    tags?: string[];
-    activityDetails?: string;
-    image?:CompanyGallery;
+    activityId: string;
+    activityName: string;
+    tags: string[];
+    activityDetails: string;
+    image:CompanyGallery;
    
 
 }
 
 export interface HomeModel{
-    aboutCompany?:AboutCompanyResponse;
-    homeActivities?:HomeActivities[];
+    aboutCompany: AboutCompanyResponse;
+    homeActivities: HomeActivities[];
 }
 
 export const getHomeActivities=async()=>{
 try {
     const data= await getDocs(collection(db,'activities'));
-    const cData= companyData();
+    const cData=await companyData();
     if (data && cData) {
 
 

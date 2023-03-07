@@ -28,7 +28,5 @@ abstract class ActivitiesDatabaseAbstract {
 
   // generic function update activity on firestore
   Future<T> updateActivity<T>(
-      {required String activityId,
-      required Map<String, dynamic> data,
-      required String query});
+      {required String activityId, required T data, required String query});
 }

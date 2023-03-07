@@ -13,7 +13,7 @@ let homeModel:HomeModel;
 
 export let data: PageServerData;
 
-$:({homeActivities ,aboutCompany}=data.homeData );
+$:({homeData}=data );
 
 // $:console.log(aboutCompany!);
 
@@ -24,7 +24,9 @@ persistHomeDataStore.subscribe((homeData=>{
    return homeModel=homeData ;
     
 }));
-// $:console.log('sets',homeActivities![0].activityDetails != null ? homeActivities![0].activityDetails :'shhs');
+
+
+// $:console.log('sets',homeData?.aboutCompany?.companyGallery![0]?.imageUrl);
 </script>
 
 
@@ -40,12 +42,12 @@ persistHomeDataStore.subscribe((homeData=>{
 </svelte:head>
 
 
-<Intro homeModel={data.homeData}/>
-<AboutUs/>
-{#if homeActivities}
-<Activities {homeActivities} />
+<Intro homeModel={homeData}/>
+<AboutUs gallery={homeData?.aboutCompany?.companyGallery != undefined ? homeData.aboutCompany.companyGallery : []}/>
+{#if homeData?.homeActivities != undefined}
+<Activities homeActivities= {homeData.homeActivities} />
 {:else}
-<p>No data {aboutCompany?.companyId}</p>
+<p>No data {homeData.aboutCompany?.companyId}</p>
 {/if}
 
 

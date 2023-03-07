@@ -146,7 +146,7 @@ class CompanyFirestoreControllerNotifier
     state = const AsyncValue.loading();
 
     return state = await AsyncValue.guard(() async {
-      await FirestoreHelper.updateDataInDoc<Company>(
+      await FirestoreHelper.updateDataInDoc<Map<String, dynamic>>(
         docId: company!.companyId!,
         docPath: 'aboutCompany',
         data: company.toJson(),
@@ -176,6 +176,58 @@ class CompanyFirestoreControllerNotifier
         docPath: 'aboutCompany',
         query: 'companyGallery',
         data: gallery.toJson(),
+      );
+
+      return Company();
+    });
+  }
+
+  // delete staff from firestore
+  Future<AsyncValue<Company>> deleteStaffFromFirestore({
+    required String? companyId,
+    required CompanyStaff? staff,
+  }) async {
+    state = const AsyncValue.loading();
+
+    return state = await AsyncValue.guard(() async {
+      // delete image from firebase storage first
+      await ImageHelpers.deleteImageFromFirebaseStorageByDownloadUrl(
+        imageUrl: staff!.imageUrl!,
+      );
+
+      // delete image from firestore
+      await FirestoreHelper.deleteInDocList<Map<String, dynamic>>(
+        docId: companyId!,
+        docPath: 'aboutCompany',
+        query: 'companyStaff',
+        data: staff.toJson(),
+      );
+
+      return Company();
+    });
+  }
+
+  // update company staff in firestore
+  Future<AsyncValue<Company>> updateCompanyStaffInFirestore({
+    required String? companyId,
+    required CompanyStaff? newStaff,
+    required CompanyStaff? oldStaff,
+  }) async {
+    state = const AsyncValue.loading();
+
+    return state = await AsyncValue.guard(() async {
+      // delete image from firebase storage first
+      await ImageHelpers.deleteImageFromFirebaseStorageByDownloadUrl(
+        imageUrl: oldStaff!.imageUrl!,
+      );
+
+      // delete image from firestore
+      await FirestoreHelper.deleteAndUpdateInDocList(
+        docId: companyId!,
+        docPath: 'aboutCompany',
+        data: oldStaff,
+        newData: newStaff,
+        query: 'companyStaff',
       );
 
       return Company();

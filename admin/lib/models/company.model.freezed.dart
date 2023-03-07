@@ -175,7 +175,8 @@ class __$$_CompanyCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class _$_Company with DiagnosticableTreeMixin implements _Company {
   _$_Company(
       {this.companyId,
@@ -409,7 +410,8 @@ class __$$_GalleryCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class _$_Gallery with DiagnosticableTreeMixin implements _Gallery {
   _$_Gallery({this.imageUrl, this.imageTitle, this.imageDescription});
 
@@ -651,7 +653,8 @@ class __$$_CompanyStaffCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class _$_CompanyStaff with DiagnosticableTreeMixin implements _CompanyStaff {
   _$_CompanyStaff(
       {this.imageUrl,
@@ -985,7 +988,8 @@ class __$$_CompanyDetailsCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class _$_CompanyDetails
     with DiagnosticableTreeMixin
     implements _CompanyDetails {
@@ -1155,6 +1159,8 @@ abstract class _CompanyDetails implements CompanyDetails {
 mixin _$LocalCompanyStaffModel {
   ImageHelperModel? get image => throw _privateConstructorUsedError;
   CompanyStaff? get staffDetails => throw _privateConstructorUsedError;
+  bool? get isEditing => throw _privateConstructorUsedError;
+  int? get index => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $LocalCompanyStaffModelCopyWith<LocalCompanyStaffModel> get copyWith =>
@@ -1167,7 +1173,11 @@ abstract class $LocalCompanyStaffModelCopyWith<$Res> {
           $Res Function(LocalCompanyStaffModel) then) =
       _$LocalCompanyStaffModelCopyWithImpl<$Res, LocalCompanyStaffModel>;
   @useResult
-  $Res call({ImageHelperModel? image, CompanyStaff? staffDetails});
+  $Res call(
+      {ImageHelperModel? image,
+      CompanyStaff? staffDetails,
+      bool? isEditing,
+      int? index});
 
   $ImageHelperModelCopyWith<$Res>? get image;
   $CompanyStaffCopyWith<$Res>? get staffDetails;
@@ -1189,6 +1199,8 @@ class _$LocalCompanyStaffModelCopyWithImpl<$Res,
   $Res call({
     Object? image = freezed,
     Object? staffDetails = freezed,
+    Object? isEditing = freezed,
+    Object? index = freezed,
   }) {
     return _then(_value.copyWith(
       image: freezed == image
@@ -1199,6 +1211,14 @@ class _$LocalCompanyStaffModelCopyWithImpl<$Res,
           ? _value.staffDetails
           : staffDetails // ignore: cast_nullable_to_non_nullable
               as CompanyStaff?,
+      isEditing: freezed == isEditing
+          ? _value.isEditing
+          : isEditing // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      index: freezed == index
+          ? _value.index
+          : index // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 
@@ -1235,7 +1255,11 @@ abstract class _$$_LocalCompanyStaffModelCopyWith<$Res>
       __$$_LocalCompanyStaffModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({ImageHelperModel? image, CompanyStaff? staffDetails});
+  $Res call(
+      {ImageHelperModel? image,
+      CompanyStaff? staffDetails,
+      bool? isEditing,
+      int? index});
 
   @override
   $ImageHelperModelCopyWith<$Res>? get image;
@@ -1257,6 +1281,8 @@ class __$$_LocalCompanyStaffModelCopyWithImpl<$Res>
   $Res call({
     Object? image = freezed,
     Object? staffDetails = freezed,
+    Object? isEditing = freezed,
+    Object? index = freezed,
   }) {
     return _then(_$_LocalCompanyStaffModel(
       image: freezed == image
@@ -1267,6 +1293,14 @@ class __$$_LocalCompanyStaffModelCopyWithImpl<$Res>
           ? _value.staffDetails
           : staffDetails // ignore: cast_nullable_to_non_nullable
               as CompanyStaff?,
+      isEditing: freezed == isEditing
+          ? _value.isEditing
+          : isEditing // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      index: freezed == index
+          ? _value.index
+          : index // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -1276,16 +1310,21 @@ class __$$_LocalCompanyStaffModelCopyWithImpl<$Res>
 class _$_LocalCompanyStaffModel
     with DiagnosticableTreeMixin
     implements _LocalCompanyStaffModel {
-  _$_LocalCompanyStaffModel({this.image, this.staffDetails});
+  _$_LocalCompanyStaffModel(
+      {this.image, this.staffDetails, this.isEditing, this.index});
 
   @override
   final ImageHelperModel? image;
   @override
   final CompanyStaff? staffDetails;
+  @override
+  final bool? isEditing;
+  @override
+  final int? index;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'LocalCompanyStaffModel(image: $image, staffDetails: $staffDetails)';
+    return 'LocalCompanyStaffModel(image: $image, staffDetails: $staffDetails, isEditing: $isEditing, index: $index)';
   }
 
   @override
@@ -1294,7 +1333,9 @@ class _$_LocalCompanyStaffModel
     properties
       ..add(DiagnosticsProperty('type', 'LocalCompanyStaffModel'))
       ..add(DiagnosticsProperty('image', image))
-      ..add(DiagnosticsProperty('staffDetails', staffDetails));
+      ..add(DiagnosticsProperty('staffDetails', staffDetails))
+      ..add(DiagnosticsProperty('isEditing', isEditing))
+      ..add(DiagnosticsProperty('index', index));
   }
 
   @override
@@ -1304,11 +1345,15 @@ class _$_LocalCompanyStaffModel
             other is _$_LocalCompanyStaffModel &&
             (identical(other.image, image) || other.image == image) &&
             (identical(other.staffDetails, staffDetails) ||
-                other.staffDetails == staffDetails));
+                other.staffDetails == staffDetails) &&
+            (identical(other.isEditing, isEditing) ||
+                other.isEditing == isEditing) &&
+            (identical(other.index, index) || other.index == index));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, image, staffDetails);
+  int get hashCode =>
+      Object.hash(runtimeType, image, staffDetails, isEditing, index);
 
   @JsonKey(ignore: true)
   @override
@@ -1321,12 +1366,18 @@ class _$_LocalCompanyStaffModel
 abstract class _LocalCompanyStaffModel implements LocalCompanyStaffModel {
   factory _LocalCompanyStaffModel(
       {final ImageHelperModel? image,
-      final CompanyStaff? staffDetails}) = _$_LocalCompanyStaffModel;
+      final CompanyStaff? staffDetails,
+      final bool? isEditing,
+      final int? index}) = _$_LocalCompanyStaffModel;
 
   @override
   ImageHelperModel? get image;
   @override
   CompanyStaff? get staffDetails;
+  @override
+  bool? get isEditing;
+  @override
+  int? get index;
   @override
   @JsonKey(ignore: true)
   _$$_LocalCompanyStaffModelCopyWith<_$_LocalCompanyStaffModel> get copyWith =>

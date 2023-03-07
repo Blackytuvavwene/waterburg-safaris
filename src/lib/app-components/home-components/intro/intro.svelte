@@ -24,7 +24,7 @@ $:({homeActivities, aboutCompany}= homeModel)
                 <div  class="w-full h-full">
                     <SlideText >
                         <h1 class="mb-6 font-extrabold text-tertiaryContainer font-sans text-start sm:text-center text-6xl sm:text-5xl lg:text-start">
-                            Welcome to Waterburg Safaris 
+                            Welcome to African Journey Tour 
                         </h1>
                     </SlideText>
                 </div>
@@ -47,10 +47,9 @@ $:({homeActivities, aboutCompany}= homeModel)
             </div>
         </div>
             <FadeTransition>
-                <div class=" border-2  h-fit xl:h-full w-[90vw]
-                sm:w-[80vw] lg:w-[56vw] xl:w-[58vw] lg:flex justify-center items-center ">
+                <div class=" box-border border-2 ">
                 {#if aboutCompany?.companyGallery}
-                    <IntroImageSlider imageData={aboutCompany.companyGallery[0]}/>
+                    <IntroImageSlider imageData={aboutCompany.companyGallery[1]}/>
                 {/if}
                </div>
             </FadeTransition>

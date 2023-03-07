@@ -39,6 +39,8 @@
     // afterNavigate(async (url) => {
     //     pageLoading.set(false);
     // });
+
+    $:({homeData} = data)
     
 </script>
 
@@ -117,7 +119,7 @@
 
 
 
-<Footer footerData = {data.homeData} />
+<Footer footerData = {homeData} />
 
 
 

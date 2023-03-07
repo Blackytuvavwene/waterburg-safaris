@@ -12,12 +12,9 @@ export const load:LayoutServerLoad= async () => {
     const Hdata=await getHomeActivities();
 
     if(Hdata) {
-        const data = Hdata as HomeModel;
+        const data = Hdata ;
 
      setHomeDataPersist(data);
-
-
-       
         return {
             homeData: data,
         } 

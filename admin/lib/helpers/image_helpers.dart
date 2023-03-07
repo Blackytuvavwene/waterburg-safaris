@@ -293,14 +293,23 @@ class ImageControllerNotifier
     required Gallery galleryDetails,
     required ImageHelperModel theImage,
   }) {
-    final images = state.asData?.value?.map((element) {
-      if (element == theImage) {
-        element.copyWith(imageDetails: galleryDetails);
-      }
+    // get the index of the image
+    final index = state.asData?.value?.indexOf(theImage);
+    // get the image from the list
+    var image = state.asData?.value?[index!];
+    // update the image details
+    image = image!.copyWith(
+      imageDetails: galleryDetails,
+    );
+    // update the image in the list
+    state.asData?.value?[index!] = image;
+    // update the state
+    state = AsyncData(state.asData?.value);
+  }
 
-      return element;
-    }).toList();
-    state = AsyncData(images);
+  // clear state
+  void clearState() {
+    state = const AsyncData([]);
   }
 }
 
@@ -329,6 +338,30 @@ class ImageDatabaseControllerNotifier
         );
         uploadedImages.add(imageWithUrl);
       }
+      return uploadedImages;
+    });
+  }
+
+  // upload images to firebase storage
+  Future<AsyncValue<List<Gallery>?>> uploadImageToFirebaseStorage({
+    required ImageHelperModel image,
+    required String path,
+  }) async {
+    state = const AsyncValue.loading();
+    return state = await AsyncValue.guard(() async {
+      final uploadedImages = <Gallery>[];
+
+      final imageUrl = await ImageHelpers.addImageToFirebaseStorage(
+        image: image.xFile!,
+        path: path,
+      );
+      final imageWithUrl = Gallery(
+        imageTitle: image.imageDetails?.imageTitle,
+        imageDescription: image.imageDetails?.imageDescription,
+        imageUrl: imageUrl,
+      );
+      uploadedImages.add(imageWithUrl);
+
       return uploadedImages;
     });
   }

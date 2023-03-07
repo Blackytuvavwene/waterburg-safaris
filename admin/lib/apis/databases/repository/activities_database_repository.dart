@@ -129,7 +129,7 @@ class ActivitiesDatabaseRepository implements ActivitiesDatabaseAbstract {
   @override
   Future<T> updateActivity<T>({
     required String activityId,
-    required Map<String, dynamic> data,
+    required T data,
     required String query,
   }) async {
     try {

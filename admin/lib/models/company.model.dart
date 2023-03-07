@@ -9,6 +9,10 @@ part 'company.model.g.dart';
 
 @Freezed()
 class Company with _$Company {
+  @JsonSerializable(
+    explicitToJson: true,
+    anyMap: true,
+  )
   factory Company({
     final String? companyId,
     final CompanyDetails? companyDetails,
@@ -24,6 +28,10 @@ class Company with _$Company {
 
 @Freezed()
 class Gallery with _$Gallery {
+  @JsonSerializable(
+    explicitToJson: true,
+    anyMap: true,
+  )
   factory Gallery({
     final String? imageUrl,
     final String? imageTitle,
@@ -36,6 +44,10 @@ class Gallery with _$Gallery {
 
 @Freezed()
 class CompanyStaff with _$CompanyStaff {
+  @JsonSerializable(
+    explicitToJson: true,
+    anyMap: true,
+  )
   factory CompanyStaff({
     final String? imageUrl,
     final String? fullName,
@@ -52,6 +64,10 @@ class CompanyStaff with _$CompanyStaff {
 
 @Freezed()
 class CompanyDetails with _$CompanyDetails {
+  @JsonSerializable(
+    explicitToJson: true,
+    anyMap: true,
+  )
   factory CompanyDetails({
     final String? companyName,
     final String? companyAddress,
@@ -114,5 +130,7 @@ class LocalCompanyStaffModel with _$LocalCompanyStaffModel {
   factory LocalCompanyStaffModel({
     final ImageHelperModel? image,
     final CompanyStaff? staffDetails,
+    final bool? isEditing,
+    final int? index,
   }) = _LocalCompanyStaffModel;
 }

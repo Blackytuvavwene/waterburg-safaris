@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:admin/lib.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router_flow/go_router_flow.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icon.dart';
+import 'package:sizer/sizer.dart';
 
 // company staff card hook consumer widget with app layout
 class CompanyStaffCard extends HookConsumerWidget {
@@ -11,23 +14,36 @@ class CompanyStaffCard extends HookConsumerWidget {
     Key? key,
     this.companyStaff,
     this.companyId,
+    this.onDelete,
+    this.onTap,
+    this.localStaff,
   }) : super(key: key);
   final CompanyStaff? companyStaff;
   final String? companyId;
+  final VoidCallback? onDelete;
+  final VoidCallback? onTap;
+  final LocalCompanyStaffModel? localStaff;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
       mobile: _MobileCompanyStaffCard(
         companyStaff: companyStaff,
         companyId: companyId,
+        onDelete: onDelete,
+        onTap: onTap,
+        localStaff: localStaff,
       ),
       tablet: _TabletCompanyStaffCard(
         companyStaff: companyStaff,
         companyId: companyId,
+        onDelete: onDelete,
+        onTap: onTap,
       ),
       desktop: _DesktopCompanyStaffCard(
         companyStaff: companyStaff,
         companyId: companyId,
+        onDelete: onDelete,
+        onTap: onTap,
       ),
     );
   }
@@ -38,9 +54,15 @@ class _MobileCompanyStaffCard extends HookConsumerWidget {
   const _MobileCompanyStaffCard({
     this.companyStaff,
     this.companyId,
+    this.onDelete,
+    this.onTap,
+    this.localStaff,
   });
   final CompanyStaff? companyStaff;
   final String? companyId;
+  final VoidCallback? onDelete;
+  final VoidCallback? onTap;
+  final LocalCompanyStaffModel? localStaff;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
@@ -52,36 +74,81 @@ class _MobileCompanyStaffCard extends HookConsumerWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Flexible(
-                  child: ExtendedImage.network(
-                    companyStaff!.imageUrl!,
-                    fit: BoxFit.fill,
-                    shape: BoxShape.circle,
-                    width: 110,
-                    height: 100,
-                    loadStateChanged: (state) {
-                      switch (state.extendedImageLoadState) {
-                        case LoadState.loading:
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        case LoadState.completed:
-                          return ExtendedRawImage(
-                            image: state.extendedImageInfo?.image,
-                            fit: BoxFit.fill,
-                            width: 110,
-                            height: 100,
-                          );
-                        case LoadState.failed:
-                          return const Center(
-                            child: Icon(Icons.error),
-                          );
-                      }
-                    },
-                  ),
+                  child: localStaff?.image?.path != null &&
+                          localStaff?.image?.path != ''
+                      ? ExtendedImage.file(
+                          File(
+                            localStaff!.image!.path.toString(),
+                          ),
+                          fit: BoxFit.fill,
+                          shape: BoxShape.circle,
+                          width: 110,
+                          height: 100,
+                          loadStateChanged: (state) {
+                            switch (state.extendedImageLoadState) {
+                              case LoadState.loading:
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              case LoadState.completed:
+                                return ExtendedRawImage(
+                                  image: state.extendedImageInfo?.image,
+                                  fit: BoxFit.fill,
+                                  width: 110,
+                                  height: 100,
+                                );
+                              case LoadState.failed:
+                                return const Center(
+                                  child: Icon(Icons.error),
+                                );
+                            }
+                          },
+                        )
+                      : companyStaff?.imageUrl != null
+                          ? ExtendedImage.network(
+                              companyStaff!.imageUrl!,
+                              fit: BoxFit.fill,
+                              shape: BoxShape.circle,
+                              width: 110,
+                              height: 100,
+                              loadStateChanged: (state) {
+                                switch (state.extendedImageLoadState) {
+                                  case LoadState.loading:
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  case LoadState.completed:
+                                    return ExtendedRawImage(
+                                      image: state.extendedImageInfo?.image,
+                                      fit: BoxFit.fill,
+                                      width: 110,
+                                      height: 100,
+                                    );
+                                  case LoadState.failed:
+                                    return const Center(
+                                      child: Icon(Icons.error),
+                                    );
+                                }
+                              },
+                            )
+                          : SizedBox(
+                              height: 8.h,
+                              child: const Center(
+                                child: DText(
+                                  text: 'No image',
+                                ),
+                              ),
+                            ),
                 ),
                 ListTile(
-                  title: Text(companyStaff!.fullName.toString()),
-                  subtitle: Text(companyStaff!.jobTitle.toString()),
+                  title: DText(
+                    text: companyStaff?.fullName.toString() ??
+                        localStaff?.staffDetails?.fullName.toString(),
+                  ),
+                  subtitle: DText(
+                    text: companyStaff?.jobTitle.toString() ??
+                        localStaff?.staffDetails?.jobTitle.toString(),
+                  ),
                 ),
               ],
             ),
@@ -95,22 +162,19 @@ class _MobileCompanyStaffCard extends HookConsumerWidget {
                   return [
                     PopupMenuItem(
                       value: 'edit',
-                      child: const Text('Edit'),
-                      onTap: () {
-                        // pass company staff data & company ID to edit page as arguments
-                        final args = EditStaffRouteArguments(
-                          staff: companyStaff,
-                          companyId: companyId,
-                        );
-                        context.pushNamed(
-                          'editStaffDetails',
-                          extra: args,
-                        );
-                      },
+                      textStyle: GoogleFonts.dosis(),
+                      onTap: onTap,
+                      child: const Text(
+                        'Edit',
+                      ),
                     ),
-                    const PopupMenuItem(
+                    PopupMenuItem(
                       value: 'delete',
-                      child: Text('Delete'),
+                      textStyle: GoogleFonts.dosis(),
+                      onTap: onDelete,
+                      child: const Text(
+                        'Delete',
+                      ),
                     ),
                   ];
                 },
@@ -129,9 +193,14 @@ class _TabletCompanyStaffCard extends HookConsumerWidget {
   const _TabletCompanyStaffCard({
     this.companyStaff,
     this.companyId,
+    this.onDelete,
+    this.onTap,
   });
   final CompanyStaff? companyStaff;
   final String? companyId;
+  final VoidCallback? onDelete;
+  final VoidCallback? onTap;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
@@ -156,9 +225,13 @@ class _DesktopCompanyStaffCard extends HookConsumerWidget {
   const _DesktopCompanyStaffCard({
     this.companyStaff,
     this.companyId,
+    this.onDelete,
+    this.onTap,
   });
   final CompanyStaff? companyStaff;
   final String? companyId;
+  final VoidCallback? onDelete;
+  final VoidCallback? onTap;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(

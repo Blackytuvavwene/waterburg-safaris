@@ -12,11 +12,10 @@ export const load:PageServerLoad= async () => {
 
     if(responseData ) {
         const data = responseData;
-        const aboutCompanyInfo=data ;
 
       
         return {
-            about: aboutCompanyInfo,
+            about: data,
         } 
     }
 

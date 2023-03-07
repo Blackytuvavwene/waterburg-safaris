@@ -2,6 +2,8 @@ import 'package:admin/lib.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:sizer/sizer.dart';
@@ -207,8 +209,17 @@ class _PickedMobileCompanyGalleryCard extends HookConsumerWidget {
   final ImageHelperModel? companyGallery;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final imageTitleTextCtrl = useTextEditingController(
+      text: companyGallery?.imageDetails?.imageTitle,
+    );
+    final imageDescTextCtrl = useTextEditingController(
+      text: companyGallery?.imageDetails?.imageDescription,
+    );
+    final imageTitleFocusNode = useFocusNode();
+    final imageDescFocusNode = useFocusNode();
     return Card(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Flexible(
             child: kIsWeb
@@ -282,12 +293,12 @@ class _PickedMobileCompanyGalleryCard extends HookConsumerWidget {
           Flexible(
             child: ListTile(
               title: DText(
-                text: companyGallery!.imageDetails!.imageTitle!.isNotEmpty
+                text: companyGallery!.imageDetails!.imageTitle != ''
                     ? companyGallery!.imageDetails!.imageTitle
                     : 'Edit image title',
               ),
               subtitle: DText(
-                text: companyGallery?.imageDetails?.imageTitle ??
+                text: companyGallery?.imageDetails?.imageDescription ??
                     'Edit image description',
               ),
               trailing: Row(
@@ -295,7 +306,79 @@ class _PickedMobileCompanyGalleryCard extends HookConsumerWidget {
                 children: [
                   Flexible(
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        // show edit image dialog
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return Dialog(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TextFormField(
+                                        controller: imageTitleTextCtrl,
+                                        focusNode: imageTitleFocusNode,
+                                        decoration: InputDecoration(
+                                          labelText: 'Image name',
+                                          labelStyle: GoogleFonts.dosis(),
+                                          border: const OutlineInputBorder(),
+                                        ),
+                                        textInputAction: TextInputAction.next,
+                                        onFieldSubmitted: (value) {
+                                          // update image title
+                                          imageTitleFocusNode.unfocus();
+                                          imageDescFocusNode.requestFocus();
+                                        },
+                                      ),
+                                      SizedBoxAppSpacing.smallY(),
+                                      TextFormField(
+                                        maxLength: 120,
+                                        maxLines: 3,
+                                        minLines: 1,
+                                        focusNode: imageDescFocusNode,
+                                        controller: imageDescTextCtrl,
+                                        decoration: InputDecoration(
+                                          labelText: 'Image description',
+                                          labelStyle: GoogleFonts.dosis(),
+                                          border: const OutlineInputBorder(),
+                                        ),
+                                        textInputAction: TextInputAction.done,
+                                        onFieldSubmitted: (value) {
+                                          // update image description
+                                          imageDescFocusNode.unfocus();
+                                        },
+                                      ),
+                                      SizedBoxAppSpacing.smallY(),
+                                      CustomElevatedButton(
+                                        onPressed: () {
+                                          // update image details
+                                          ref
+                                              .read(
+                                                  imageControllerNotifierProvider
+                                                      .notifier)
+                                              .updateImageGalleryDetails(
+                                                galleryDetails: Gallery(
+                                                  imageTitle:
+                                                      imageTitleTextCtrl.text,
+                                                  imageDescription:
+                                                      imageDescTextCtrl.text,
+                                                ),
+                                                theImage: companyGallery!,
+                                              );
+                                          // close dialog
+                                          Navigator.pop(context);
+                                        },
+                                        text: 'Update',
+                                        height: 50,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            });
+                      },
                       color: Theme.of(context).colorScheme.primaryContainer,
                       icon: LineIcon.editAlt(),
                     ),

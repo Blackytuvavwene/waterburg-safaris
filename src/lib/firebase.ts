@@ -56,27 +56,27 @@ const appInit =()=>{
 export const app:FirebaseApp=appInit() as FirebaseApp;
 export const db =getFirestore(app);
 
-const getAboutCompany=await getDoc(doc(db,'aboutCompany','ymV8H6FBRjfMBFhAh8o2').withConverter(aboutCompanyConverter));
-    
-const getActivities = await  getDocs(collection(db,'activities'));
 
+    
 const getActivity = (activityID:string)=> getDoc(doc(db,'activities',activityID));
   
 export const companyData = async()=>{
-if (getAboutCompany.exists()) {
-    // console.log(getAboutCompany.data());
-    const company=getAboutCompany.data();
-   if (company != undefined){
-    const companyData=company.toAboutResponse(company);
-    return companyData;
-   }
-} else {
-    console.error("No company data found");
-}
+    const getAboutCompany=await getDoc(doc(db,'aboutCompany','ymV8H6FBRjfMBFhAh8o2').withConverter(aboutCompanyConverter));
+    if (getAboutCompany.exists()) {
+        // console.log(getAboutCompany.data());
+        const company=getAboutCompany.data();
+    if (company != undefined){
+        const companyData=company.toAboutResponse(company);
+        return companyData;
+    }
+    } else {
+        console.error("No company data found");
+    }
 }
 
 // get all activities from firestore
 export const activitiesData =async () =>{
+    const getActivities = await  getDocs(collection(db,'activities'));
     const _activities = getActivities.docs.map((doc) => {return doc.data()});
 
         // console.log('hello world',getActivities.docs.values());

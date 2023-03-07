@@ -34,15 +34,12 @@ class CompanyStaffLocalControllerNotifier
   // update company staff name
   void updateCompanyStaffName(String? name) {
     state = state?.copyWith.staffDetails?.call(fullName: name);
-    print('hello: ${state?.staffDetails?.fullName}');
   }
 
   // update company staff email
   void updateCompanyStaffEmail(String? email) {
-    state = state?.copyWith(
-      staffDetails: state?.staffDetails?.copyWith.call(
-        email: email,
-      ),
+    state = state?.copyWith.staffDetails?.call(
+      email: email,
     );
   }
 
@@ -55,59 +52,54 @@ class CompanyStaffLocalControllerNotifier
     phoneNos.add(phoneNo!);
 
     // update the state
-    state = state?.copyWith(
-      staffDetails: state?.staffDetails?.copyWith(
-        phoneNos: phoneNos,
-      ),
+    state = state?.copyWith.staffDetails?.call(
+      phoneNos: phoneNos,
     );
   }
 
   // update company staff job title
   void updateCompanyStaffJobTitle(String? jobTitle) {
-    state = state?.copyWith(
-      staffDetails: state?.staffDetails?.copyWith(
-        jobTitle: jobTitle,
-      ),
+    state = state?.copyWith.staffDetails?.call(
+      jobTitle: jobTitle,
     );
   }
 
   // update job description
   void updateJobDescription(String? jobDescription) {
-    state = state?.copyWith(
-      staffDetails: state?.staffDetails?.copyWith(
-        jobDescription: jobDescription,
-      ),
+    state = state?.copyWith.staffDetails?.call(
+      jobDescription: jobDescription,
     );
   }
 
   // update designation title
   void updateTittle(String? title) {
-    state = state?.copyWith(
-      staffDetails: state?.staffDetails?.copyWith(
-        title: title,
-      ),
+    state = state?.copyWith.staffDetails?.call(
+      title: title,
     );
   }
 
   // update image title
   void updateImageTitle(String? imageTitle) {
-    state = state?.copyWith(
-      image: state?.image?.copyWith(
-        imageDetails: state?.image?.imageDetails?.copyWith(
-          imageTitle: imageTitle,
-        ),
-      ),
+    state = state?.copyWith.image?.imageDetails?.call(
+      imageTitle: imageTitle,
     );
   }
 
   // update image description
   void updateImageDescription(String? imageDescription) {
-    state = state?.copyWith(
-      image: state?.image?.copyWith(
-        imageDetails: state?.image?.imageDetails?.copyWith(
-          imageDescription: imageDescription,
-        ),
-      ),
+    state = state?.copyWith.image?.imageDetails?.call(
+      imageDescription: imageDescription,
+    );
+  }
+
+  // delete phone no from list
+  void deletePhoneNo(String? phoneNo) {
+    state = state?.copyWith.staffDetails?.call(
+      phoneNos: [
+        ...state?.staffDetails?.phoneNos
+                ?.where((element) => element != phoneNo) ??
+            []
+      ],
     );
   }
 }
@@ -147,13 +139,26 @@ class MultipleCompanyStaffLocalControllerNotifier
   // update company staff
   void updateCompanyStaff({
     required LocalCompanyStaffModel? companyStaff,
+    required int index,
     required LocalCompanyStaffModel? newCompanyStaff,
   }) {
-    state = [
-      ...state.map(
-        (element) => element == companyStaff ? newCompanyStaff : element,
-      ),
-    ];
+    // get the company staff
+    var staff = state[index];
+    // update the company staff
+    staff = staff?.copyWith(
+      staffDetails: newCompanyStaff?.staffDetails,
+      image: newCompanyStaff?.image,
+    );
+
+    // update the staff in list
+    state[index] = staff;
+    // update the state
+    state = [...state];
+  }
+
+  // clear all company staff
+  void clearCompanyStaff() {
+    state = [];
   }
 }
 
