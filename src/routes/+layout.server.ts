@@ -8,8 +8,15 @@ import { setHomeDataPersist } from "$lib/app-components/home-components/helpers/
 // /** @type {import('./$types').PageServerLoad} */
 
 export const load:LayoutServerLoad= async () => {
+
+    let errorR;
    
-    const Hdata=await getHomeActivities().then((data)=>data).catch((err)=>console.error(err));
+    const Hdata=await getHomeActivities()
+    .then((data)=>data,)
+    .catch((err)=>{
+        errorR=err;
+        console.error(err);
+    },);
 
     if(Hdata) {
         const data = Hdata ;
@@ -20,7 +27,10 @@ export const load:LayoutServerLoad= async () => {
         } 
     }
 
-    throw error(403,'failed to get data');
+    // string interpolation
+    console.error(`errorR: ${errorR}`);
+
+    throw error(403,`failed to get data :${errorR}`);
     
 };
 
