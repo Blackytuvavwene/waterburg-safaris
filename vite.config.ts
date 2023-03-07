@@ -8,7 +8,7 @@ export default defineConfig({
 		include: ['src/**/*.{test,spec}.{js,ts}']
 	},
 	server:{
-		port: 3001,
+		strictPort:false,
 	},
 	css:{
 		postcss:{
