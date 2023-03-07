@@ -7,9 +7,6 @@ export default defineConfig({
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
 	},
-	server:{
-		strictPort:false,
-	},
 	css:{
 		postcss:{
 			plugins: [tailwindcss]
