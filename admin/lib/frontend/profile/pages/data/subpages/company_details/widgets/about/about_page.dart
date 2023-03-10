@@ -17,7 +17,7 @@ class CompanyAboutDetailsPage extends HookConsumerWidget {
   final CompanyDetails? companyDetails;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
-  final ValueNotifier<bool>? editCompanyDetails;
+  final StateController<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final loading = useState(false);
@@ -57,7 +57,7 @@ class _MobileCompanyAboutDetailsPage extends HookConsumerWidget {
   final CompanyDetails? companyDetails;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
-  final ValueNotifier<bool>? editCompanyDetails;
+  final StateController<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomScrollView(
@@ -72,8 +72,10 @@ class _MobileCompanyAboutDetailsPage extends HookConsumerWidget {
             IconButton(
               icon: LineIcon.editAlt(),
               onPressed: () async {
-                if (editCompanyDetails?.value != true) {
-                  editCompanyDetails?.value = true;
+                if (editCompanyDetails?.state != true) {
+                  editCompanyDetails?.update(
+                    (state) => state = true,
+                  );
                 }
                 final result = await Navigator.push<CompanyDetails>(
                   context,
@@ -150,7 +152,7 @@ class _TabletCompanyAboutDetailsPage extends HookConsumerWidget {
   final CompanyDetails? companyDetails;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
-  final ValueNotifier<bool>? editCompanyDetails;
+  final StateController<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return const Center(
@@ -171,7 +173,7 @@ class _DesktopCompanyAboutDetailsPage extends HookConsumerWidget {
   final CompanyDetails? companyDetails;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
-  final ValueNotifier<bool>? editCompanyDetails;
+  final StateController<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return const Center(

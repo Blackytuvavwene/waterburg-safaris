@@ -19,7 +19,7 @@ let hideSlide:string;
 
 
 
-$: ({companyStaff,  companyGallery,companyDetails}=data.about as AboutCompanyResponse)
+$: ({companyStaff, companyGallery, companyDetails} = data.about as AboutCompanyResponse)
 
 
 
@@ -41,7 +41,7 @@ $: ({companyStaff,  companyGallery,companyDetails}=data.about as AboutCompanyRes
         <div class="absolute  top-[50%] bottom-[50%] -translate-y-[50%]  -z-0 w-96 md:w-96">
             <div class="w-full h-full items-center justify-center flex-col flex">
                 <FadeTransition>
-                    <img src={logoLg} class="w-96 md:w-96 h-52 lg:h-80" alt="Waterburg Safaris logo">
+                    <img src={logoLg} class="w-96 md:w-96 h-52 lg:h-80" alt="{companyDetails?.companyName} logo">
                 </FadeTransition>
             </div>
             
@@ -53,13 +53,13 @@ $: ({companyStaff,  companyGallery,companyDetails}=data.about as AboutCompanyRes
 <div class=" flex-1 flex-col justify-center items-center   h-full w-auto">
     <h1 class=" text-primary text-3xl sm:px-12 px-6 lg:px-32 lg:text-4xl font-bold my-2">{companyDetails?.companyName}</h1>
     {#if companyDetails?.overview}
-    <Overview overviewData={companyDetails?.overview}/>
+        <Overview overviewData={companyDetails?.overview}/>
     {/if}
     {#if companyStaff}
-    <CompanyStaff companyStaffData={companyStaff}/>
+        <CompanyStaff companyStaffData={companyStaff}/>
     {/if}
     {#if companyDetails}
-    <Address addressData={companyDetails}/>
+        <Address addressData={companyDetails}/>
     {/if}
     <!-- {#if gallery}
     <AboutGallery galleryData={gallery}/>

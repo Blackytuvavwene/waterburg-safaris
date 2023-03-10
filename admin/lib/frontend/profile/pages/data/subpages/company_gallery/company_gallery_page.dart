@@ -20,7 +20,7 @@ class CompanyGalleryPage extends HookConsumerWidget {
   final CompanyNotifier? companyDetailsState;
   final ImageControllerNotifier? imageControllerNotifier;
   final AsyncValue<List<ImageHelperModel>?>? newImages;
-  final ValueNotifier<bool>? editCompanyDetails;
+  final StateController<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
@@ -66,7 +66,7 @@ class _MobileCompanyGalleryPage extends HookConsumerWidget {
   final CompanyNotifier? companyDetailsState;
   final ImageControllerNotifier? imageControllerNotifier;
   final AsyncValue<List<ImageHelperModel>?>? newImages;
-  final ValueNotifier<bool>? editCompanyDetails;
+  final StateController<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // tab pages for gallery
@@ -105,8 +105,10 @@ class _MobileCompanyGalleryPage extends HookConsumerWidget {
           actions: [
             IconButton(
                 onPressed: () async {
-                  if (editCompanyDetails?.value != true) {
-                    editCompanyDetails?.value = true;
+                  if (editCompanyDetails?.state != true) {
+                    editCompanyDetails?.update(
+                      (state) => state = true,
+                    );
                   }
                   // ref.read(companyGalleryProvider.notifier).addGallery(
                   //       companyId: companyId,

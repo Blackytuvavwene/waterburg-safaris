@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:admin/lib.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:sizer/sizer.dart';
@@ -66,122 +65,146 @@ class _MobileCompanyStaffCard extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Stack(
-          children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Flexible(
-                  child: localStaff?.image?.path != null &&
-                          localStaff?.image?.path != ''
-                      ? ExtendedImage.file(
-                          File(
-                            localStaff!.image!.path.toString(),
+      child: SizedBox(
+        width: 100.w,
+        height: 15.h,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Flexible(
+                flex: 2,
+                child: localStaff?.image?.path != null &&
+                        localStaff?.image?.path != ''
+                    ? ExtendedImage.file(
+                        File(
+                          localStaff!.image!.path.toString(),
+                        ),
+                        fit: BoxFit.cover,
+                        width: 100.w,
+                        height: 150,
+                        loadStateChanged: (state) {
+                          switch (state.extendedImageLoadState) {
+                            case LoadState.loading:
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            case LoadState.completed:
+                              return ExtendedRawImage(
+                                image: state.extendedImageInfo?.image,
+                                fit: BoxFit.cover,
+                                width: 100.w,
+                                height: 150,
+                              );
+                            case LoadState.failed:
+                              return Center(
+                                child: LineIcon.exclamationTriangle(),
+                              );
+                          }
+                        },
+                      )
+                    : companyStaff?.imageUrl != null
+                        ? ExtendedImage.network(
+                            companyStaff!.imageUrl!,
+                            fit: BoxFit.cover,
+                            width: 100.w,
+                            height: 150,
+                            loadStateChanged: (state) {
+                              switch (state.extendedImageLoadState) {
+                                case LoadState.loading:
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                case LoadState.completed:
+                                  return ExtendedRawImage(
+                                    image: state.extendedImageInfo?.image,
+                                    fit: BoxFit.cover,
+                                    width: 100.w,
+                                    height: 150,
+                                  );
+                                case LoadState.failed:
+                                  return Center(
+                                    child: LineIcon.exclamationTriangle(),
+                                  );
+                              }
+                            },
+                          )
+                        : SizedBox(
+                            height: 8.h,
+                            child: const Center(
+                              child: DText(
+                                text: 'No image',
+                              ),
+                            ),
                           ),
-                          fit: BoxFit.fill,
-                          shape: BoxShape.circle,
-                          width: 110,
-                          height: 100,
-                          loadStateChanged: (state) {
-                            switch (state.extendedImageLoadState) {
-                              case LoadState.loading:
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              case LoadState.completed:
-                                return ExtendedRawImage(
-                                  image: state.extendedImageInfo?.image,
-                                  fit: BoxFit.fill,
-                                  width: 110,
-                                  height: 100,
-                                );
-                              case LoadState.failed:
-                                return const Center(
-                                  child: Icon(Icons.error),
-                                );
-                            }
-                          },
-                        )
-                      : companyStaff?.imageUrl != null
-                          ? ExtendedImage.network(
-                              companyStaff!.imageUrl!,
-                              fit: BoxFit.fill,
-                              shape: BoxShape.circle,
-                              width: 110,
-                              height: 100,
-                              loadStateChanged: (state) {
-                                switch (state.extendedImageLoadState) {
-                                  case LoadState.loading:
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  case LoadState.completed:
-                                    return ExtendedRawImage(
-                                      image: state.extendedImageInfo?.image,
-                                      fit: BoxFit.fill,
-                                      width: 110,
-                                      height: 100,
-                                    );
-                                  case LoadState.failed:
-                                    return const Center(
-                                      child: Icon(Icons.error),
-                                    );
-                                }
-                              },
-                            )
-                          : SizedBox(
-                              height: 8.h,
-                              child: const Center(
+              ),
+              Flexible(
+                flex: 3,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      InfoTile(
+                        title: companyStaff?.fullName.toString() ??
+                            localStaff?.staffDetails?.fullName.toString(),
+                        subtitle: companyStaff?.jobTitle.toString() ??
+                            (localStaff?.staffDetails?.jobTitle.toString() ??
+                                'Please add job position'),
+                      ),
+                      SizedBoxAppSpacing.smallY(),
+                      Flexible(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                              child: TextButton(
+                                onPressed: onDelete,
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Theme.of(context)
+                                      .colorScheme
+                                      .errorContainer,
+                                  minimumSize: Size.fromWidth(
+                                    25.w,
+                                  ),
+                                ),
                                 child: DText(
-                                  text: 'No image',
+                                  text: 'Delete',
+                                  textColor: Theme.of(context)
+                                      .colorScheme
+                                      .onErrorContainer,
                                 ),
                               ),
                             ),
-                ),
-                ListTile(
-                  title: DText(
-                    text: companyStaff?.fullName.toString() ??
-                        localStaff?.staffDetails?.fullName.toString(),
+                            Flexible(
+                              child: TextButton(
+                                onPressed: onTap,
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Theme.of(context)
+                                      .colorScheme
+                                      .primaryContainer,
+                                  minimumSize: Size.fromWidth(
+                                    25.w,
+                                  ),
+                                ),
+                                child: DText(
+                                  text: 'Edit',
+                                  textColor: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
-                  subtitle: DText(
-                    text: companyStaff?.jobTitle.toString() ??
-                        localStaff?.staffDetails?.jobTitle.toString(),
-                  ),
                 ),
-              ],
-            ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: PopupMenuButton(
-                color: Theme.of(context).colorScheme.secondary,
-                itemBuilder: (context) {
-                  //TODO: add edit and delete options and navigate to edit page
-                  return [
-                    PopupMenuItem(
-                      value: 'edit',
-                      textStyle: GoogleFonts.dosis(),
-                      onTap: onTap,
-                      child: const Text(
-                        'Edit',
-                      ),
-                    ),
-                    PopupMenuItem(
-                      value: 'delete',
-                      textStyle: GoogleFonts.dosis(),
-                      onTap: onDelete,
-                      child: const Text(
-                        'Delete',
-                      ),
-                    ),
-                  ];
-                },
-                icon: LineIcon.caretDown(),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

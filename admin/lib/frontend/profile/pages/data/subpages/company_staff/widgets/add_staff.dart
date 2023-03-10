@@ -104,7 +104,7 @@ class _MobileManageLocalCompanyStaffPage extends HookConsumerWidget {
                                 return data?.path != null
                                     ? Image.file(
                                         File(data!.path!),
-                                        fit: BoxFit.fill,
+                                        fit: BoxFit.cover,
                                         height: 200,
                                         width: 100.w,
                                       )
@@ -159,6 +159,7 @@ class _MobileManageLocalCompanyStaffPage extends HookConsumerWidget {
                               File(localStaffState?.image?.path ?? ''),
                               height: 200,
                               width: 100.w,
+                              fit: BoxFit.cover,
                             )
                           else
                             SizedBox(

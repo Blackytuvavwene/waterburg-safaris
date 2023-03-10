@@ -1,32 +1,33 @@
+import { writable } from "svelte/store";
+import type { HomeModel } from "./home.firestore.helpers";
 
-import type { AboutCompanyResponse } from "$lib/app-components/about-components/about.types";
-import { createStore, withProps } from "@ngneat/elf";
-import { localStorageStrategy,persistState } from "@ngneat/elf-persist-state";
-import type { HomeActivities, HomeModel } from "./home.firestore.helpers";
 
-export const persistHomeDataStore= createStore(
-    {name: 'homeData'},
-    withProps<HomeModel>({
+
+// create store
+export const homeDataStore = () => {
+    // initialize store
+    const { subscribe, set, update } = writable<HomeModel>({
         aboutCompany: {},
         homeActivities: []
-    })
-);
+    });
 
-export const homeDataPersist=persistState(persistHomeDataStore,{
-    key: 'homeData',
-    storage: localStorageStrategy,
-});
+    // function to update store
+    const updateStore = (data: HomeModel) => {
+        update((store) => {
+            return { ...store, ...data };
+        });
+    };
 
-export const setHomeDataPersist=(homeData:HomeModel) => {
-   const newD=homeData;
-    
-    if (newD) {
-        // console.log("setHomeDataPersist not null",newD);
-        return persistHomeDataStore.update((state)=>(state=newD)); 
-    }
-    
-};
+    // set initial value
+    const init = (data: HomeModel) => {
+        set(data);
+    };
 
-export const resetCurrentSelectedPersist=()=>{
-    persistHomeDataStore.reset();
+    // return store, update, updateStore, init function
+    return {
+        subscribe,
+        update,
+        updateStore,
+        init,
+    };
 }

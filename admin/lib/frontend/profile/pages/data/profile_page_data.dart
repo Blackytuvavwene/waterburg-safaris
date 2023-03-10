@@ -17,7 +17,7 @@ class ProfileDataPage extends HookConsumerWidget {
     // watch company details state from firestore
     final companyDetails = ref.watch(companyNotifierProvider(company));
     // watch edit company details state
-    final editCompanyDetails = useState(false);
+    final editCompanyDetails = ref.watch(editCompanyProvider.notifier);
     // watch company details state notifier
     final companyDetailsState =
         ref.watch(companyNotifierProvider(company).notifier);
@@ -75,7 +75,7 @@ class _MobileProfileDataPage extends HookConsumerWidget {
   }) : super(key: key);
   final Company? company;
   final CompanyNotifier? companyDetailsState;
-  final ValueNotifier<bool>? editCompanyDetails;
+  final StateController<bool>? editCompanyDetails;
   final Company? oldDetails;
   final ImageControllerNotifier? imageControllerNotifier;
   final AsyncValue<List<ImageHelperModel>?>? newImages;
@@ -152,20 +152,20 @@ class _MobileProfileDataPage extends HookConsumerWidget {
           text: 'Profile',
         ),
         actions: [
-          if (editCompanyDetails?.value != false)
+          if (editCompanyDetails?.state != false)
             TextButton(
               onPressed: () {
                 // TODO:implement cancellation of any changes made to company
                 // TODO: reset company details state
                 companyDetailsState?.updateCompany(company: oldDetails);
-                editCompanyDetails?.value = false;
+                editCompanyDetails?.update((state) => state = false);
               },
               child: DText(
                 text: 'Discard changes',
                 textColor: Theme.of(context).colorScheme.error,
               ),
             ),
-          if (editCompanyDetails?.value != false)
+          if (editCompanyDetails?.state != false)
             TextButton(
               onPressed: () async {
                 //TODO : implement updating of company details to firestore
@@ -312,7 +312,7 @@ class _TabletProfileDataPage extends HookConsumerWidget {
   }) : super(key: key);
   final Company? company;
   final CompanyNotifier? companyDetailsState;
-  final ValueNotifier<bool>? editCompanyDetails;
+  final StateController<bool>? editCompanyDetails;
   final Company? oldDetails;
   final ImageControllerNotifier? imageControllerNotifier;
   final AsyncValue<List<ImageHelperModel>?>? newImages;
@@ -344,7 +344,7 @@ class _DesktopProfileDataPage extends HookConsumerWidget {
   }) : super(key: key);
   final Company? company;
   final CompanyNotifier? companyDetailsState;
-  final ValueNotifier<bool>? editCompanyDetails;
+  final StateController<bool>? editCompanyDetails;
   final Company? oldDetails;
   final ImageControllerNotifier? imageControllerNotifier;
   final AsyncValue<List<ImageHelperModel>?>? newImages;

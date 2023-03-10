@@ -16,7 +16,7 @@ class CompanyDetailsPage extends HookConsumerWidget {
   final CompanyDetails? companyDetails;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
-  final ValueNotifier<bool>? editCompanyDetails;
+  final StateController<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
@@ -54,7 +54,7 @@ class _MobileCompanyDetailsPage extends HookConsumerWidget {
   final CompanyDetails? companyDetails;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
-  final ValueNotifier<bool>? editCompanyDetails;
+  final StateController<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pageViewController = usePageController();
@@ -124,7 +124,7 @@ class _TabletCompanyDetailsPage extends HookConsumerWidget {
   final CompanyDetails? companyDetails;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
-  final ValueNotifier<bool>? editCompanyDetails;
+  final StateController<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
@@ -157,7 +157,7 @@ class _DesktopCompanyDetailsPage extends HookConsumerWidget {
   final CompanyDetails? companyDetails;
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
-  final ValueNotifier<bool>? editCompanyDetails;
+  final StateController<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(

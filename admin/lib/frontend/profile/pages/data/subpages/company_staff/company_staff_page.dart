@@ -21,7 +21,7 @@ class CompanyStaffPage extends HookConsumerWidget {
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
   final List<LocalCompanyStaffModel?>? localStaffState;
-  final ValueNotifier<bool>? editCompanyDetails;
+  final StateController<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
@@ -62,7 +62,7 @@ class _MobileCompanyStaffPage extends HookConsumerWidget {
   final String? companyId;
   final CompanyNotifier? companyDetailsState;
   final List<LocalCompanyStaffModel?>? localStaffState;
-  final ValueNotifier<bool>? editCompanyDetails;
+  final StateController<bool>? editCompanyDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // tab pages
@@ -90,7 +90,10 @@ class _MobileCompanyStaffPage extends HookConsumerWidget {
           title: const DText(text: 'Company Staff'),
           automaticallyImplyLeading: false,
           pinned: false,
-          bottom: localStaffState != null && localStaffState!.isNotEmpty
+          bottom: localStaffState != null &&
+                  localStaffState!.isNotEmpty &&
+                  companyStaff != null &&
+                  companyStaff!.isNotEmpty
               ? TabBar(
                   controller: tabController,
                   tabs: tabPages
@@ -114,8 +117,10 @@ class _MobileCompanyStaffPage extends HookConsumerWidget {
                 //       companyId: companyId,
                 //     );
                 // set edit company details to true if it is false
-                if (editCompanyDetails?.value == false) {
-                  editCompanyDetails?.value = true;
+                if (editCompanyDetails?.state == false) {
+                  editCompanyDetails?.update(
+                    (state) => state = false,
+                  );
                 }
 
                 // push to add staff page
@@ -145,8 +150,8 @@ class _MobileCompanyStaffPage extends HookConsumerWidget {
             ),
           ],
         ),
-        if (localStaffState != null)
-          if (localStaffState!.isNotEmpty)
+        if (localStaffState != null && companyStaff != null)
+          if (localStaffState!.isNotEmpty && companyStaff!.isNotEmpty)
             SliverFillRemaining(
               child: TabBarView(
                 controller: tabController,
@@ -154,7 +159,8 @@ class _MobileCompanyStaffPage extends HookConsumerWidget {
                   GridView.custom(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2),
+                      crossAxisCount: 1,
+                    ),
                     childrenDelegate: SliverChildListDelegate(companyStaff
                         ?.map(
                           (e) => CompanyStaffCard(
@@ -221,47 +227,83 @@ class _MobileCompanyStaffPage extends HookConsumerWidget {
                 ],
               ),
             )
-          else
-            SliverPadding(
-              padding: const EdgeInsets.all(8.0),
-              sliver: SliverGrid(
-                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 200.0,
-                  mainAxisSpacing: 10.0,
-                  crossAxisSpacing: 10.0,
-                  childAspectRatio: 1.0,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return CompanyStaffCard(
-                      companyStaff: companyStaff![index],
-                      companyId: companyId,
-                      onTap: () async {
-                        // pass company staff data & company ID to edit page as arguments
-                        final args = EditStaffRouteArguments(
-                          staff: companyStaff![index],
-                          companyId: companyId,
-                        );
-                        context.pushNamed(
-                          'editStaffDetails',
-                          extra: args,
-                        );
-                      },
-                      onDelete: () async {
-                        // delete company staff
-                        await ref
-                            .read(companyFirestoreControllerProvider.notifier)
-                            .deleteStaffFromFirestore(
-                              companyId: companyId,
-                              staff: companyStaff![index],
-                            );
-                      },
-                    );
+          else if (companyStaff != null && companyStaff!.isNotEmpty)
+            SliverFillRemaining(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListView.separated(
+                  itemBuilder: (context, index) => CompanyStaffCard(
+                    companyStaff: companyStaff![index],
+                    companyId: companyId,
+                    onTap: () async {
+                      // pass company staff data & company ID to edit page as arguments
+                      final args = EditStaffRouteArguments(
+                        staff: companyStaff![index],
+                        companyId: companyId,
+                      );
+                      context.pushNamed(
+                        'editStaffDetails',
+                        extra: args,
+                      );
+                    },
+                    onDelete: () async {
+                      // delete company staff
+                      await ref
+                          .read(companyFirestoreControllerProvider.notifier)
+                          .deleteStaffFromFirestore(
+                            companyId: companyId,
+                            staff: companyStaff![index],
+                          );
+                    },
+                  ),
+                  itemCount: companyStaff!.length,
+                  separatorBuilder: (context, index) {
+                    return const Divider();
                   },
-                  childCount: companyStaff!.length,
                 ),
               ),
-            ),
+            )
+          else if (localStaffState != null &&
+                  localStaffState!.isNotEmpty &&
+                  companyStaff == null ||
+              companyStaff!.isEmpty)
+            SliverPadding(
+              padding: const EdgeInsets.all(8.0),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate(
+                  localStaffState!
+                      .map(
+                        (e) => CompanyStaffCard(
+                          localStaff: e,
+                          onTap: () async {
+                            // navigate to edit staff page
+                            final params = LocalCompanyStaffModel(
+                              image: e?.image,
+                              staffDetails: e?.staffDetails,
+                              isEditing: true,
+                              index: localStaffState!.indexOf(e),
+                            );
+                            context.pushNamed(
+                              'addStaff',
+                              extra: params,
+                            );
+                          },
+                          onDelete: () async {
+                            // delete company staff
+                            ref
+                                .read(
+                                    multipleCompanyStaffLocalControllerProvider
+                                        .notifier)
+                                .removeCompanyStaff(
+                                  companyStaff: e,
+                                );
+                          },
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+            )
       ],
     );
   }

@@ -240,3 +240,8 @@ final companyFirestoreControllerProvider = StateNotifierProvider<
     CompanyFirestoreControllerNotifier, AsyncValue<Company>>(
   (ref) => CompanyFirestoreControllerNotifier(),
 );
+
+// edit company details notifier provider
+final editCompanyProvider = StateProvider.autoDispose<bool>((ref) {
+  return false;
+});

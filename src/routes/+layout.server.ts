@@ -1,7 +1,7 @@
 import { error } from "@sveltejs/kit";
 import type { LayoutServerLoad } from './$types'; 
-import { getHomeActivities,  type HomeModel } from "$lib/app-components/home-components/helpers/home.firestore.helpers";
-import { setHomeDataPersist } from "$lib/app-components/home-components/helpers/home.stores";
+import { getHomeActivities } from "$lib/app-components/home-components/helpers/home.firestore.helpers";
+import { homeDataStore } from "$lib/app-components/home-components/helpers/home.stores";
 
 // const endpoint='http://localhost:3000/api/about-company';
 
@@ -11,17 +11,17 @@ export const load:LayoutServerLoad= async () => {
 
     let errorR;
    
-    const Hdata=await getHomeActivities()
-    .then((data)=>data,)
-    .catch((err)=>{
-        errorR=err;
-        console.error(err);
-    },);
+    const Hdata = await getHomeActivities()
+                                .then((data)=>data,)
+                                .catch((err)=>{
+                                        errorR=err;
+                                        console.error(err);
+                                    },);
 
     if(Hdata) {
         const data = Hdata ;
-
-     setHomeDataPersist(data);
+        // save to store
+        homeDataStore().updateStore(data);     
         return {
             homeData: data,
         } 
