@@ -227,14 +227,17 @@ class _MobileProfileDataPage extends HookConsumerWidget {
                   newStaff.addAll(awaitedList);
                 }
 
+                print(
+                    'company new name: ${company?.companyDetails?.companyName}');
+
                 // create a new company object with the new gallery
                 final newCompanyData = Company(
-                  companyDetails: companyDetailsState?.company?.companyDetails,
-                  companyId: companyDetailsState?.company?.companyId,
+                  companyDetails: company?.companyDetails,
+                  companyId: company?.companyId,
                   companyStaff: newStaff,
                   // TODO: fix updating gallery
                   companyGallery: newGallery,
-                  createdAt: companyDetailsState?.company?.createdAt,
+                  createdAt: company?.createdAt,
                   updatedAt: DateTime.now(),
                 );
 
@@ -249,6 +252,8 @@ class _MobileProfileDataPage extends HookConsumerWidget {
                 ref
                     .read(multipleCompanyStaffLocalControllerProvider.notifier)
                     .clearCompanyStaff();
+
+                editCompanyDetails?.update((state) => state = false);
               },
               child: DText(
                 text: 'Save changes',

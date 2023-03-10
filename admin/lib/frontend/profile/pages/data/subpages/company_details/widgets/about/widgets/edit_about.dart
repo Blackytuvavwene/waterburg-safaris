@@ -52,6 +52,12 @@ class _MobileCompanyEditAbout extends HookConsumerWidget {
   final CompanyDetails? oldDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // focus nodes
+    final companyNameFocusNode = useFocusNode();
+    final companyRegNoFocusNode = useFocusNode();
+    final companySEOFocusNode = useFocusNode();
+    final companyOverviewFocusNode = useFocusNode();
+
     return CustomScrollView(
       slivers: [
         SliverAppBar(
@@ -62,7 +68,6 @@ class _MobileCompanyEditAbout extends HookConsumerWidget {
           leading: IconButton(
             onPressed: () {
               if (companyDetails != oldDetails) {
-                print('company details changed ${companyDetails?.toJson()}}');
                 Navigator.pop<CompanyDetails>(context, companyDetails);
               } else {
                 Navigator.pop(context);
@@ -93,9 +98,16 @@ class _MobileCompanyEditAbout extends HookConsumerWidget {
                   ),
                   TextFormField(
                     initialValue: companyDetails?.companyName,
+                    focusNode: companyNameFocusNode,
+                    textInputAction: TextInputAction.next,
                     onChanged: (value) {
                       companyDetailsNotifier?.value =
                           companyDetails?.copyWith(companyName: value.trim());
+                    },
+                    onFieldSubmitted: (value) {
+                      // change focus
+                      companyRegNoFocusNode.requestFocus();
+                      // companyNameFocusNode.unfocus();
                     },
                     decoration: const InputDecoration(
                       labelText: 'Company Name',
@@ -107,9 +119,15 @@ class _MobileCompanyEditAbout extends HookConsumerWidget {
                   ),
                   TextFormField(
                     initialValue: companyDetails?.registrationNumber,
+                    focusNode: companyRegNoFocusNode,
+                    textInputAction: TextInputAction.next,
                     onChanged: (value) {
                       companyDetailsNotifier?.value = companyDetails?.copyWith(
                           registrationNumber: value.trim());
+                    },
+                    onFieldSubmitted: (value) {
+                      // change focus
+                      companySEOFocusNode.requestFocus();
                     },
                     decoration: const InputDecoration(
                       labelText: 'Company Registration Number',
@@ -121,6 +139,8 @@ class _MobileCompanyEditAbout extends HookConsumerWidget {
                   ),
                   TextFormField(
                     initialValue: companyDetails?.seoDescription,
+                    focusNode: companySEOFocusNode,
+                    textInputAction: TextInputAction.next,
                     onChanged: (value) {
                       companyDetailsNotifier?.value = companyDetails?.copyWith(
                           seoDescription: value.trim());
@@ -128,6 +148,10 @@ class _MobileCompanyEditAbout extends HookConsumerWidget {
                     maxLength: 500,
                     maxLines: 10,
                     minLines: 1,
+                    onFieldSubmitted: (value) {
+                      // change focus
+                      companyOverviewFocusNode.requestFocus();
+                    },
                     decoration: const InputDecoration(
                       labelText: 'Company SEO Description',
                       border: OutlineInputBorder(),
@@ -138,6 +162,8 @@ class _MobileCompanyEditAbout extends HookConsumerWidget {
                   ),
                   TextFormField(
                     initialValue: companyDetails?.overview,
+                    focusNode: companyOverviewFocusNode,
+                    textInputAction: TextInputAction.done,
                     onChanged: (value) {
                       companyDetailsNotifier?.value =
                           companyDetails?.copyWith(overview: value.trim());
@@ -145,6 +171,10 @@ class _MobileCompanyEditAbout extends HookConsumerWidget {
                     maxLength: 2000,
                     maxLines: 10,
                     minLines: 1,
+                    onFieldSubmitted: (value) {
+                      // remove focus
+                      companyOverviewFocusNode.unfocus();
+                    },
                     decoration: const InputDecoration(
                       labelText: 'Company Overview',
                       border: OutlineInputBorder(),

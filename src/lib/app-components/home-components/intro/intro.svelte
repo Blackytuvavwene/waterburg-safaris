@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { persistHomeDataStore } from '$lib/app-components/home-components/helpers/home.stores';
 import { resetCurrentSelectedPersist } from '$lib/app-components/activities-components/activity.stores';
 
 import FadeTransition from '$lib/animations/FadeTransition.svelte';
@@ -25,7 +24,7 @@ $:({imageUrl}=aboutCompany.companyGallery![0])
                 <div  class="w-full h-full">
                     <SlideText >
                         <h1 class="mb-6 lg:text-7xl font-extrabold text-tertiaryContainer font-sans text-start sm:text-center text-6xl sm:text-5xl lg:text-start">
-                            Welcome to African Journey Tour 
+                            Welcome to {aboutCompany.companyDetails?.companyName} 
                         </h1>
                     </SlideText>
                 </div>

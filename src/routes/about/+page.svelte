@@ -56,7 +56,7 @@ $: ({companyStaff, companyGallery, companyDetails} = data.about as AboutCompanyR
         <Overview overviewData={companyDetails?.overview}/>
     {/if}
     {#if companyStaff}
-        <CompanyStaff companyStaffData={companyStaff}/>
+        <CompanyStaff companyStaffData={companyStaff} companyName={companyDetails?.companyName}/>
     {/if}
     {#if companyDetails}
         <Address addressData={companyDetails}/>
