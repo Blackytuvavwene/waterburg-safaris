@@ -8,23 +8,28 @@ class ActivityTagsPage extends HookConsumerWidget {
     Key? key,
     this.tags,
     this.activityId,
+    this.activityNotifier,
   }) : super(key: key);
   final List<String>? tags;
   final String? activityId;
+  final ActivityControlNotifier? activityNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
       mobile: _MobileActivityTagsPage(
         tags: tags,
         activityId: activityId,
+        activityNotifier: activityNotifier,
       ),
       tablet: _TabletActivityTagsPage(
         tags: tags,
         activityId: activityId,
+        activityNotifier: activityNotifier,
       ),
       desktop: _DesktopActivityTagsPage(
         tags: tags,
         activityId: activityId,
+        activityNotifier: activityNotifier,
       ),
     );
   }
@@ -36,9 +41,11 @@ class _MobileActivityTagsPage extends HookConsumerWidget {
     Key? key,
     this.tags,
     this.activityId,
+    this.activityNotifier,
   }) : super(key: key);
   final List<String>? tags;
   final String? activityId;
+  final ActivityControlNotifier? activityNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Center(
@@ -56,9 +63,11 @@ class _TabletActivityTagsPage extends HookConsumerWidget {
     Key? key,
     this.tags,
     this.activityId,
+    this.activityNotifier,
   }) : super(key: key);
   final List<String>? tags;
   final String? activityId;
+  final ActivityControlNotifier? activityNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Center(
@@ -76,9 +85,11 @@ class _DesktopActivityTagsPage extends HookConsumerWidget {
     Key? key,
     this.tags,
     this.activityId,
+    this.activityNotifier,
   }) : super(key: key);
   final List<String>? tags;
   final String? activityId;
+  final ActivityControlNotifier? activityNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Center(

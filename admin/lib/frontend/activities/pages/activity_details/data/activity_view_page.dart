@@ -51,26 +51,38 @@ class ActivityDetailsPage extends HookConsumerWidget {
   final Activity? activity;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // watch activity provider
+    final activityProvider = ref.watch(
+      activityControlNotifierProvider(
+        activity,
+      ),
+    );
+    final activityNotifier = ref.read(activityControlNotifierProvider(
+      activity,
+    ).notifier);
     // activity edit type watch provider
     final editActivityTypeController =
-        ref.watch(editActivityTypeProvider.state);
+        ref.watch(editActivityTypeProvider.notifier);
     final editActivityType = editActivityTypeController.state;
 
     return AppLayout(
       mobile: _ActivityDetailsPageMobile(
-        activity: activity,
+        activity: activityProvider,
         editActivityType: editActivityType,
         editActivityTypeController: editActivityTypeController,
+        activityNotifier: activityNotifier,
       ),
       tablet: _ActivityDetailsPageTablet(
         activity: activity,
         editActivityType: editActivityType,
         editActivityTypeController: editActivityTypeController,
+        activityNotifier: activityNotifier,
       ),
       desktop: _ActivityDetailsPageDesktop(
         activity: activity,
         editActivityType: editActivityType,
         editActivityTypeController: editActivityTypeController,
+        activityNotifier: activityNotifier,
       ),
     );
   }
@@ -149,10 +161,12 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
     this.activity,
     this.editActivityType,
     this.editActivityTypeController,
+    this.activityNotifier,
   }) : super(key: key);
   final Activity? activity;
   final StateController<ActivityEditType>? editActivityTypeController;
   final ActivityEditType? editActivityType;
+  final ActivityControlNotifier? activityNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tabs = ref.watch(activityTabsListProvider);
@@ -160,6 +174,7 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
+      extendBody: true,
       appBar: AppBar(
         toolbarHeight: 8.h,
         title: Padding(
@@ -231,26 +246,32 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
         // toolbarHeight: 10.h,
       ),
       body: SafeArea(
+          bottom: false,
+          maintainBottomViewPadding: false,
           child: TabBarView(
-        controller: tabController,
-        children: [
-          ActivityInfoPage(
-            activity: activity,
-          ),
-          ActivityGalleryPage(
-            activityId: activity?.activityId,
-            gallery: activity?.activityGallery!,
-          ),
-          ActivityPackagesPage(
-            activityId: activity?.activityId,
-            packages: activity?.packages,
-          ),
-          ActivityTagsPage(
-            activityId: activity?.activityId,
-            tags: activity?.tags,
-          ),
-        ],
-      )),
+            controller: tabController,
+            children: [
+              ActivityInfoPage(
+                activity: activity,
+                activityNotifier: activityNotifier,
+              ),
+              ActivityGalleryPage(
+                activityId: activity?.activityId,
+                gallery: activity?.activityGallery,
+                activityNotifier: activityNotifier,
+              ),
+              ActivityPackagesPage(
+                activityId: activity?.activityId,
+                packages: activity?.packages,
+                activityNotifier: activityNotifier,
+              ),
+              ActivityTagsPage(
+                activityId: activity?.activityId,
+                tags: activity?.tags,
+                activityNotifier: activityNotifier,
+              ),
+            ],
+          )),
     );
   }
 }
@@ -262,10 +283,12 @@ class _ActivityDetailsPageTablet extends HookConsumerWidget {
     this.activity,
     this.editActivityType,
     this.editActivityTypeController,
+    this.activityNotifier,
   }) : super(key: key);
   final Activity? activity;
   final StateController<ActivityEditType>? editActivityTypeController;
   final ActivityEditType? editActivityType;
+  final ActivityControlNotifier? activityNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tabs = ref.watch(activityTabsListProvider);
@@ -326,8 +349,17 @@ class _ActivityDetailsPageTablet extends HookConsumerWidget {
                             onTap: () {
                               showDialog(
                                 context: context,
-                                builder: (context) =>
-                                    const ActivityDescriptionPopUp(),
+                                builder: (context) => ActivityDescriptionPopUp(
+                                  field: 'SEO Description',
+                                  description:
+                                      activity?.seoDescription.toString(),
+                                  onSaved: (value) {
+                                    activityNotifier
+                                        ?.updateActivitySEODescription(
+                                      seoDescription: value,
+                                    );
+                                  },
+                                ),
                               ).then(
                                 (value) {
                                   if (value != null) {
@@ -455,10 +487,12 @@ class _ActivityDetailsPageDesktop extends HookConsumerWidget {
     this.activity,
     this.editActivityType,
     this.editActivityTypeController,
+    this.activityNotifier,
   }) : super(key: key);
   final Activity? activity;
   final StateController<ActivityEditType>? editActivityTypeController;
   final ActivityEditType? editActivityType;
+  final ActivityControlNotifier? activityNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -517,8 +551,17 @@ class _ActivityDetailsPageDesktop extends HookConsumerWidget {
                             onTap: () {
                               showDialog(
                                 context: context,
-                                builder: (context) =>
-                                    const ActivityDescriptionPopUp(),
+                                builder: (context) => ActivityDescriptionPopUp(
+                                  field: 'SEO Description',
+                                  description:
+                                      activity?.seoDescription.toString(),
+                                  onSaved: (value) {
+                                    activityNotifier
+                                        ?.updateActivitySEODescription(
+                                      seoDescription: value,
+                                    );
+                                  },
+                                ),
                               ).then(
                                 (value) {
                                   if (value != null) {

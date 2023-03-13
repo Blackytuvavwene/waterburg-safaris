@@ -8,19 +8,24 @@ class ActivityInfoPage extends HookConsumerWidget {
   const ActivityInfoPage({
     Key? key,
     this.activity,
+    this.activityNotifier,
   }) : super(key: key);
   final Activity? activity;
+  final ActivityControlNotifier? activityNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
       mobile: _MobileActivityInfoPage(
         activity: activity,
+        activityNotifier: activityNotifier,
       ),
       tablet: _TabletActivityInfoPage(
         activity: activity,
+        activityNotifier: activityNotifier,
       ),
       desktop: _DesktopActivityInfoPage(
         activity: activity,
+        activityNotifier: activityNotifier,
       ),
     );
   }
@@ -31,67 +36,79 @@ class _MobileActivityInfoPage extends HookConsumerWidget {
   const _MobileActivityInfoPage({
     Key? key,
     this.activity,
+    this.activityNotifier,
   }) : super(key: key);
   final Activity? activity;
+  final ActivityControlNotifier? activityNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SizedBox(
-      height: 100.h,
-      width: 100.w,
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 4.w,
+    return CustomScrollView(
+      slivers: [
+        SliverFillRemaining(
+          child: ListView(
+            // crossAxisAlignment: CrossAxisAlignment.stretch,
+            // mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 4.w,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    ActivityDescriptionViewCard(
+                      title: 'Activity SEO Description',
+                      description: activity!.seoDescription.toString(),
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => ActivityDescriptionPopUp(
+                            description: activity!.seoDescription.toString(),
+                            field: 'seoDescription',
+                            activityId: activity?.activityId.toString(),
+                            maxLength: 200,
+                            onSaved: (value) {
+                              activityNotifier?.updateActivitySEODescription(
+                                seoDescription: value,
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      height: 4.h,
+                    ),
+                    ActivityDescriptionViewCard(
+                      title: 'Activity overview',
+                      description: activity!.overview.toString(),
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => ActivityDescriptionPopUp(
+                            description: activity!.overview.toString(),
+                            field: 'overview',
+                            activityId: activity?.activityId.toString(),
+                            maxLength: 1250,
+                            onSaved: (value) {
+                              activityNotifier?.updateActivityOverview(
+                                overview: value,
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  ActivityDescriptionViewCard(
-                    title: 'Activity SEO Description',
-                    description: activity!.seoDescription.toString(),
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => ActivityDescriptionPopUp(
-                          description: activity!.seoDescription.toString(),
-                          field: 'seoDescription',
-                          activityId: activity?.activityId.toString(),
-                          maxLength: 200,
-                        ),
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    height: 4.h,
-                  ),
-                  ActivityDescriptionViewCard(
-                    title: 'Activity overview',
-                    description: activity!.overview.toString(),
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => ActivityDescriptionPopUp(
-                          description: activity!.overview.toString(),
-                          field: 'overview',
-                          activityId: activity?.activityId.toString(),
-                          maxLength: 1250,
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }
@@ -101,8 +118,10 @@ class _TabletActivityInfoPage extends HookConsumerWidget {
   const _TabletActivityInfoPage({
     Key? key,
     this.activity,
+    this.activityNotifier,
   }) : super(key: key);
   final Activity? activity;
+  final ActivityControlNotifier? activityNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
@@ -130,10 +149,15 @@ class _TabletActivityInfoPage extends HookConsumerWidget {
                       showDialog(
                         context: context,
                         builder: (context) => ActivityDescriptionPopUp(
-                          description: activity!.seoDescription.toString(),
+                          description: activity?.seoDescription.toString(),
                           field: 'seoDescription',
                           activityId: activity?.activityId.toString(),
                           maxLength: 200,
+                          onSaved: (value) {
+                            activityNotifier?.updateActivitySEODescription(
+                              seoDescription: value,
+                            );
+                          },
                         ),
                       );
                     },
@@ -152,6 +176,11 @@ class _TabletActivityInfoPage extends HookConsumerWidget {
                           field: 'overview',
                           activityId: activity?.activityId.toString(),
                           maxLength: 1250,
+                          onSaved: (value) {
+                            activityNotifier?.updateActivityOverview(
+                              overview: value,
+                            );
+                          },
                         ),
                       );
                     },
@@ -171,8 +200,10 @@ class _DesktopActivityInfoPage extends HookConsumerWidget {
   const _DesktopActivityInfoPage({
     Key? key,
     this.activity,
+    this.activityNotifier,
   }) : super(key: key);
   final Activity? activity;
+  final ActivityControlNotifier? activityNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
@@ -200,11 +231,15 @@ class _DesktopActivityInfoPage extends HookConsumerWidget {
                       showDialog(
                         context: context,
                         builder: (context) => ActivityDescriptionPopUp(
-                          description: activity!.seoDescription.toString(),
-                          field: 'seoDescription',
-                          activityId: activity?.activityId.toString(),
-                          maxLength: 200,
-                        ),
+                            description: activity!.seoDescription.toString(),
+                            field: 'seoDescription',
+                            activityId: activity?.activityId.toString(),
+                            maxLength: 200,
+                            onSaved: (value) {
+                              activityNotifier?.updateActivitySEODescription(
+                                seoDescription: value,
+                              );
+                            }),
                       );
                     },
                   ),
@@ -222,6 +257,11 @@ class _DesktopActivityInfoPage extends HookConsumerWidget {
                           field: 'overview',
                           activityId: activity?.activityId.toString(),
                           maxLength: 1250,
+                          onSaved: (value) {
+                            activityNotifier?.updateActivityOverview(
+                              overview: value,
+                            );
+                          },
                         ),
                       );
                     },

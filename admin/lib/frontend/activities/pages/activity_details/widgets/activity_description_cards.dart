@@ -1,9 +1,7 @@
 import 'package:admin/lib.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router_flow/go_router_flow.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:layout/layout.dart';
@@ -52,89 +50,90 @@ class ActivityDescriptionPopUp extends HookConsumerWidget {
     this.field,
     this.activityId,
     this.maxLength,
+    required this.onSaved,
+    this.onCancel,
   }) : super(key: key);
   final String? description;
   final String? field;
   final String? activityId;
   final int? maxLength;
+  final Function(String value) onSaved;
+  final VoidCallback? onCancel;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = GlobalKey<FormState>();
     // listen to description notifier provider
-    ref.listen(descriptionNotifierProvider,
-        (AsyncValue<String>? previous, AsyncValue<String> next) {
-      // show loading indicator
-      next.when(data: (data) {
-        return EasyLoading.showSuccess('Description updated');
-      }, error: (error, stackTrace) {
-        return EasyLoading.showError('Error updating description');
-      }, loading: () {
-        return EasyLoading.show(status: 'Updating description...');
-      });
-    });
 
     final descriptionController = useTextEditingController(text: description);
-    return AlertDialog(
-      title: const DText(
-        text: 'Edit Description',
-      ),
+    // focus node
+    final focusNode = useFocusNode();
+
+    return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      content: Form(
+      child: Form(
         key: formKey,
-        child: TextFormField(
-          controller: descriptionController,
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'Description cannot be empty';
-            }
-            return null;
-          },
-          maxLength: maxLength,
-          decoration: InputDecoration(
-            hintText: 'Enter description',
-            hintStyle: GoogleFonts.dosis(),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                controller: descriptionController,
+                autofocus: true,
+                focusNode: focusNode,
+                onSaved: (newValue) {},
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Field cannot be empty';
+                  }
+                  return null;
+                },
+                maxLength: maxLength,
+                decoration: InputDecoration(
+                  hintText: 'Enter description',
+                  hintStyle: GoogleFonts.dosis(),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                maxLines: 8,
+                minLines: 1,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      // close dialog
+                      Navigator.of(context).pop();
+                    },
+                    child: DText(
+                      text: 'Cancel',
+                      textColor: Theme.of(context).colorScheme.error,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      onSaved(descriptionController.text);
+                      //clear controller
+                      descriptionController.clear();
+                      // close dialog
+                      Navigator.of(context).pop();
+                    },
+                    child: DText(
+                      text: 'Update',
+                      textColor: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ],
+              )
+            ],
           ),
-          maxLines: 8,
-          minLines: 1,
         ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            // close dialog
-            GoRouter.of(context).pop();
-          },
-          child: DText(
-            text: 'Cancel',
-            textColor: Theme.of(context).colorScheme.error,
-          ),
-        ),
-        TextButton(
-          onPressed: () async {
-            if (formKey.currentState!.validate()) {
-              // update description in firestore
-              await ref
-                  .read(descriptionNotifierProvider.notifier)
-                  .updateStringFieldInFirestore(
-                    activityId: activityId!,
-                    description: descriptionController.text,
-                    field: field!,
-                  );
-            }
-            GoRouter.of(context).pop();
-          },
-          child: DText(
-            text: 'Update',
-            textColor: Theme.of(context).colorScheme.primary,
-          ),
-        ),
-      ],
     );
   }
 }

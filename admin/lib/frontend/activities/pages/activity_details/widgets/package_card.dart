@@ -7,7 +7,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router_flow/go_router_flow.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:layout/layout.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:sizer/sizer.dart';
 
@@ -16,11 +15,15 @@ class EditPackageModel {
   final String activityId;
   final Package packageCopy;
   final List<Package> packages;
+  final ActivityControlNotifier activityNotifier;
+  final int index;
   EditPackageModel({
     required this.package,
     required this.activityId,
     required this.packageCopy,
     required this.packages,
+    required this.activityNotifier,
+    required this.index,
   });
 }
 
@@ -129,147 +132,78 @@ class PackageCard extends HookConsumerWidget {
     this.package,
     this.activityId,
     this.packages,
+    this.activityNotifier,
+    this.index,
   }) : super(key: key);
   final Package? package;
   final String? activityId;
   final List<Package>? packages;
+  final ActivityControlNotifier? activityNotifier;
+  final int? index;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SizedBox(
-      width: context.breakpoint > LayoutBreakpoint.sm ? 20.w : 80.w,
-      height: context.breakpoint > LayoutBreakpoint.sm ? 70.h : 50.h,
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 100.w,
-              color: Theme.of(context).colorScheme.secondary,
-              padding: EdgeInsets.all(
-                2.h,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: 100.w,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        DText(
-                          text: package?.packageName,
-                          textColor: Theme.of(context).colorScheme.onPrimary,
-                          fontSize: context.breakpoint > LayoutBreakpoint.sm
-                              ? 6.sp
-                              : 16.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        IconButton(
-                            onPressed: () async {
-                              // navigate to edit package page
-                              context.pushNamed('editPackage',
-                                  extra: EditPackageModel(
-                                      package: package!,
-                                      activityId: activityId!,
-                                      packageCopy: package!,
-                                      packages: packages!),
-                                  params: {
-                                    'activityId': activityId!,
-                                    'packageName': package!.packageName!,
-                                  });
-                            },
-                            icon: LineIcon.editAlt()),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  SizedBox(
-                    width: 100.w,
-                    child: DText(
-                      text: '\$ ${package?.price.toString()}',
-                      textColor: Theme.of(context).colorScheme.onPrimary,
-                      fontSize: context.breakpoint > LayoutBreakpoint.sm
-                          ? 4.sp
-                          : 12.sp,
-                    ),
-                  ),
-                ],
-              ),
+    return Card(
+      child: ListTile(
+        onTap: () {
+          // navigate to package edit page with push named
+          context.push(
+            '/activities/$activityId/edit-package/${package?.packageName}',
+            extra: EditPackageModel(
+              package: package!,
+              activityId: activityId!,
+              packageCopy: package!,
+              packages: packages!,
+              index: index!,
+              activityNotifier: activityNotifier!,
             ),
-            Expanded(
-              child: Container(
-                color: Theme.of(context).colorScheme.primary,
-                padding: EdgeInsets.all(
-                  2.h,
-                ),
+          );
+        },
+        tileColor: Theme.of(context).colorScheme.secondaryContainer.withOpacity(
+              0.1,
+            ),
+        title: DText(
+          text: package?.packageName,
+          fontWeight: FontWeight.w600,
+        ),
+        subtitle: DText(
+          text: package?.description,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 2,
+          minFontSize: 14,
+        ),
+        leading: ClipRRect(
+          borderRadius: BorderRadius.circular(
+            5,
+          ),
+          child: ColoredBox(
+            color: Theme.of(context).colorScheme.secondaryContainer,
+            child: SizedBox(
+              height: 10.h,
+              width: 14.w,
+              child: Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     DText(
-                      text: 'Package offers:',
-                      textColor: Theme.of(context).colorScheme.onPrimary,
-                      fontSize: context.breakpoint > LayoutBreakpoint.sm
-                          ? 4.sp
-                          : 14.sp,
-                      fontWeight: FontWeight.w800,
+                      text: 'Price',
+                      fontWeight: FontWeight.bold,
+                      textColor:
+                          Theme.of(context).colorScheme.onSecondaryContainer,
                     ),
-                    SizedBox(
-                      height: 2.h,
-                    ),
-                    package?.packageOffers != null
-                        ? Expanded(
-                            flex: 6,
-                            child: ListView.separated(
-                              itemCount: package!.packageOffers!.length,
-                              separatorBuilder: (context, index) {
-                                return SizedBox(
-                                  height: 2.h,
-                                );
-                              },
-                              itemBuilder: (context, index) {
-                                return SizedBox(
-                                  width: 20.w,
-                                  height: 3.h,
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      LineIcon.checkCircleAlt(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary,
-                                      ),
-                                      SizedBox(
-                                        width: 1.w,
-                                      ),
-                                      Expanded(
-                                        child: DText(
-                                          text: package?.packageOffers![index],
-                                          textColor: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
-                                          fontSize: context.breakpoint >
-                                                  LayoutBreakpoint.sm
-                                              ? 6.sp
-                                              : 12.sp,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          )
-                        : const SizedBox.shrink(),
+                    DText(
+                      text: '\$ ${package?.price.toString()}',
+                      textColor:
+                          Theme.of(context).colorScheme.onSecondaryContainer,
+                    )
                   ],
                 ),
               ),
             ),
-          ],
+          ),
         ),
+        isThreeLine: true,
       ),
     );
   }
@@ -285,66 +219,78 @@ class PackageEditPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // controllers
-    final tryState = useState(editPackageModel!.package.keywords);
+    final package = ref.watch(
+      packageControlNotifierProvider(
+        editPackageModel?.package,
+      ),
+    );
+    final packageNotifier = ref.read(
+      packageControlNotifierProvider(
+        editPackageModel?.package,
+      ).notifier,
+    );
+
+    // text editing controllers
     final packageName =
         useTextEditingController(text: editPackageModel!.package.packageName);
 
     final keywordsController = useTextEditingController();
-    final description =
-        useTextEditingController(text: editPackageModel!.package.description);
+    final description = useTextEditingController(
+      text: editPackageModel?.package.description,
+    );
     final price = useTextEditingController(
-        text: editPackageModel!.package.price.toString());
+      text: editPackageModel?.package.price.toString(),
+    );
     final lastPrice = useTextEditingController(
-        text: editPackageModel!.package.lastPrice.toString());
+      text: editPackageModel?.package.lastPrice.toString(),
+    );
 
     final discountPercentage = useTextEditingController(
-        text: editPackageModel!.package.discountPercentage.toString());
-    final coupon =
-        useTextEditingController(text: editPackageModel!.package.coupon);
-    final packageOffers = useState(editPackageModel!.package.packageOffers);
+      text: editPackageModel?.package.discountPercentage.toString(),
+    );
+    final coupon = useTextEditingController(
+      text: editPackageModel!.package.coupon,
+    );
     final packageOffersController = useTextEditingController();
 
     return AppLayout(
       mobile: _MobilePackageEditPage(
-        package: editPackageModel!.package,
+        package: package,
         packageName: packageName,
-        keywords: tryState,
+        packageNotifier: packageNotifier,
         keywordsController: keywordsController,
         description: description,
         price: price,
         lastPrice: lastPrice,
         discountPercentage: discountPercentage,
         coupon: coupon,
-        packageOffers: packageOffers,
         packageOffersController: packageOffersController,
         activityId: editPackageModel!.activityId,
         editPackageModel: editPackageModel,
       ),
       tablet: _TabletPackageEditPage(
-        package: editPackageModel!.package,
+        package: package,
         packageName: packageName,
-        keywords: tryState,
+        packageNotifier: packageNotifier,
         keywordsController: keywordsController,
         description: description,
         price: price,
         lastPrice: lastPrice,
         discountPercentage: discountPercentage,
         coupon: coupon,
-        packageOffers: packageOffers,
         packageOffersController: packageOffersController,
         activityId: editPackageModel!.activityId,
       ),
       desktop: _DesktopPackageEditPage(
-        package: editPackageModel!.package,
+        package: package,
         packageName: packageName,
-        keywords: tryState,
+        packageNotifier: packageNotifier,
         keywordsController: keywordsController,
         description: description,
         price: price,
         lastPrice: lastPrice,
         discountPercentage: discountPercentage,
         coupon: coupon,
-        packageOffers: packageOffers,
         packageOffersController: packageOffersController,
         activityId: editPackageModel!.activityId,
       ),
@@ -358,28 +304,26 @@ class _MobilePackageEditPage extends HookConsumerWidget {
     Key? key,
     this.package,
     this.packageName,
-    this.keywords,
     this.keywordsController,
     this.description,
     this.price,
     this.lastPrice,
     this.discountPercentage,
     this.coupon,
-    this.packageOffers,
+    this.packageNotifier,
     this.packageOffersController,
     this.activityId,
     this.editPackageModel,
   }) : super(key: key);
   final Package? package;
   final TextEditingController? packageName;
-  final ValueNotifier<List<String>?>? keywords;
   final TextEditingController? keywordsController;
   final TextEditingController? description;
   final TextEditingController? price;
   final TextEditingController? lastPrice;
+  final PackageControlNotifier? packageNotifier;
   final TextEditingController? discountPercentage;
   final TextEditingController? coupon;
-  final ValueNotifier<List<String>?>? packageOffers;
   final TextEditingController? packageOffersController;
   final String? activityId;
   final EditPackageModel? editPackageModel;
@@ -404,13 +348,13 @@ class _MobilePackageEditPage extends HookConsumerWidget {
               final packageD = Package(
                 packageId: package!.packageId,
                 packageName: packageName!.text,
-                keywords: keywords!.value,
+                keywords: package!.keywords,
                 description: description!.text,
                 price: double.parse(price!.text),
                 lastPrice: double.parse(lastPrice!.text),
                 discountPercentage: double.parse(discountPercentage!.text),
                 coupon: coupon!.text,
-                packageOffers: packageOffers!.value,
+                packageOffers: package?.packageOffers,
               );
               // final result = await ref.read(packageProvider.notifier).update(
               //       activityId: activityId!,
@@ -421,10 +365,18 @@ class _MobilePackageEditPage extends HookConsumerWidget {
               //   context.vRouter.pop();
               // }
 
-              ref.read(packageControllerProvider.notifier).savePackage(
-                    editPackageModel: editPackageModel!,
-                    newPackage: packageD,
-                  );
+              packageNotifier?.setInitialPackageData(
+                package: packageD,
+              );
+
+              // update package in activity
+              editPackageModel?.activityNotifier.updatePackageInList(
+                package: packageD,
+                index: editPackageModel!.index,
+              );
+
+              // pop page
+              context.pop();
             },
             icon: LineIcon.save(),
           ),
@@ -440,14 +392,13 @@ class _MobilePackageEditPage extends HookConsumerWidget {
             PackageEditForm(
               package: package,
               packageName: packageName,
-              keywords: keywords,
               keywordsController: keywordsController,
+              packageNotifier: packageNotifier,
               description: description,
               price: price,
               lastPrice: lastPrice,
               discountPercentage: discountPercentage,
               coupon: coupon,
-              packageOffers: packageOffers,
               packageOffersController: packageOffersController,
               activityId: activityId,
             ),
@@ -464,29 +415,27 @@ class _TabletPackageEditPage extends HookConsumerWidget {
     Key? key,
     this.package,
     this.packageName,
-    this.keywords,
     this.keywordsController,
     this.description,
     this.price,
     this.lastPrice,
     this.discountPercentage,
     this.coupon,
-    this.packageOffers,
     this.packageOffersController,
     this.activityId,
+    this.packageNotifier,
   }) : super(key: key);
   final Package? package;
   final TextEditingController? packageName;
-  final ValueNotifier<List<String>?>? keywords;
   final TextEditingController? keywordsController;
   final TextEditingController? description;
   final TextEditingController? price;
   final TextEditingController? lastPrice;
   final TextEditingController? discountPercentage;
   final TextEditingController? coupon;
-  final ValueNotifier<List<String>?>? packageOffers;
   final TextEditingController? packageOffersController;
   final String? activityId;
+  final PackageControlNotifier? packageNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -507,16 +456,15 @@ class _TabletPackageEditPage extends HookConsumerWidget {
             PackageEditForm(
               package: package,
               packageName: packageName,
-              keywords: keywords,
               keywordsController: keywordsController,
               description: description,
               price: price,
               lastPrice: lastPrice,
               discountPercentage: discountPercentage,
               coupon: coupon,
-              packageOffers: packageOffers,
               packageOffersController: packageOffersController,
               activityId: activityId,
+              packageNotifier: packageNotifier,
             ),
           ],
         ),
@@ -531,29 +479,27 @@ class _DesktopPackageEditPage extends HookConsumerWidget {
     Key? key,
     this.package,
     this.packageName,
-    this.keywords,
     this.keywordsController,
     this.description,
     this.price,
     this.lastPrice,
     this.discountPercentage,
     this.coupon,
-    this.packageOffers,
     this.packageOffersController,
     this.activityId,
+    this.packageNotifier,
   }) : super(key: key);
   final Package? package;
   final TextEditingController? packageName;
-  final ValueNotifier<List<String>?>? keywords;
   final TextEditingController? keywordsController;
   final TextEditingController? description;
   final TextEditingController? price;
   final TextEditingController? lastPrice;
   final TextEditingController? discountPercentage;
   final TextEditingController? coupon;
-  final ValueNotifier<List<String>?>? packageOffers;
   final TextEditingController? packageOffersController;
   final String? activityId;
+  final PackageControlNotifier? packageNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -574,16 +520,15 @@ class _DesktopPackageEditPage extends HookConsumerWidget {
             PackageEditForm(
               package: package,
               packageName: packageName,
-              keywords: keywords,
               keywordsController: keywordsController,
               description: description,
               price: price,
               lastPrice: lastPrice,
               discountPercentage: discountPercentage,
               coupon: coupon,
-              packageOffers: packageOffers,
               packageOffersController: packageOffersController,
               activityId: activityId,
+              packageNotifier: packageNotifier,
             ),
           ],
         ),
@@ -598,73 +543,68 @@ class PackageEditForm extends HookConsumerWidget {
     Key? key,
     this.package,
     this.packageName,
-    this.keywords,
     this.keywordsController,
     this.description,
     this.price,
     this.lastPrice,
     this.discountPercentage,
     this.coupon,
-    this.packageOffers,
     this.packageOffersController,
     this.activityId,
+    this.packageNotifier,
   }) : super(key: key);
   final Package? package;
   final TextEditingController? packageName;
-  final ValueNotifier<List<String>?>? keywords;
   final TextEditingController? keywordsController;
   final TextEditingController? description;
   final TextEditingController? price;
   final TextEditingController? lastPrice;
   final TextEditingController? discountPercentage;
   final TextEditingController? coupon;
-  final ValueNotifier<List<String>?>? packageOffers;
   final TextEditingController? packageOffersController;
   final String? activityId;
+  final PackageControlNotifier? packageNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
       mobile: _MobilePackageEditForm(
         package: package,
         packageName: packageName,
-        keywords: keywords,
         keywordsController: keywordsController,
         description: description,
         price: price,
         lastPrice: lastPrice,
         discountPercentage: discountPercentage,
         coupon: coupon,
-        packageOffers: packageOffers,
         packageOffersController: packageOffersController,
         activityId: activityId,
+        packageNotifier: packageNotifier,
       ),
       tablet: _TabletPackageEditForm(
         package: package,
         packageName: packageName,
-        keywords: keywords,
         keywordsController: keywordsController,
         description: description,
         price: price,
         lastPrice: lastPrice,
         discountPercentage: discountPercentage,
         coupon: coupon,
-        packageOffers: packageOffers,
         packageOffersController: packageOffersController,
         activityId: activityId,
+        packageNotifier: packageNotifier,
       ),
       desktop: _DesktopPackageEditForm(
         package: package,
         packageName: packageName,
-        keywords: keywords,
         keywordsController: keywordsController,
         description: description,
         price: price,
         lastPrice: lastPrice,
         discountPercentage: discountPercentage,
         coupon: coupon,
-        packageOffers: packageOffers,
         packageOffersController: packageOffersController,
         activityId: activityId,
+        packageNotifier: packageNotifier,
       ),
     );
   }
@@ -676,29 +616,27 @@ class _MobilePackageEditForm extends HookConsumerWidget {
     Key? key,
     this.package,
     this.packageName,
-    this.keywords,
     this.keywordsController,
     this.description,
     this.price,
     this.lastPrice,
     this.discountPercentage,
     this.coupon,
-    this.packageOffers,
     this.packageOffersController,
     this.activityId,
+    this.packageNotifier,
   }) : super(key: key);
   final Package? package;
   final TextEditingController? packageName;
-  final ValueNotifier<List<String>?>? keywords;
   final TextEditingController? keywordsController;
   final TextEditingController? description;
   final TextEditingController? price;
   final TextEditingController? lastPrice;
   final TextEditingController? discountPercentage;
   final TextEditingController? coupon;
-  final ValueNotifier<List<String>?>? packageOffers;
   final TextEditingController? packageOffersController;
   final String? activityId;
+  final PackageControlNotifier? packageNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tryDOOOList = useState<List<String>?>(['hekeke', 'dhdbc']);
@@ -728,7 +666,7 @@ class _MobilePackageEditForm extends HookConsumerWidget {
                 Wrap(
                   spacing: 2.w,
                   children: [
-                    ...keywords!.value!
+                    ...package!.keywords!
                         .map((keyword) => Chip(
                               label: Text(keyword),
                             ))
@@ -745,7 +683,8 @@ class _MobilePackageEditForm extends HookConsumerWidget {
               child: TextFormField(
                 controller: keywordsController,
                 onSaved: (newValue) {
-                  keywords!.value = [...keywords!.value!, newValue!];
+                  // keywords!.value = [...keywords!.value!, newValue!];
+                  //TODO: add keyword to list
                 },
                 decoration: InputDecoration(
                   labelText: 'Keywords',
@@ -773,10 +712,7 @@ class _MobilePackageEditForm extends HookConsumerWidget {
                             .withOpacity(0.2),
                       ),
                       onPressed: () {
-                        keywords!.value = [
-                          ...keywords!.value!,
-                          keywordsController!.text
-                        ];
+                        //TODO: add keyword to list
                         keywordsController!.clear();
                       },
                       child: const DText(
@@ -887,10 +823,9 @@ class _MobilePackageEditForm extends HookConsumerWidget {
                           .withOpacity(0.2),
                     ),
                     onPressed: () {
-                      packageOffers!.value = [
-                        ...packageOffers!.value!,
-                        packageOffersController!.text
-                      ];
+                      packageNotifier?.updatePackageOffers(
+                        packageOffer: packageOffersController!.text,
+                      );
                       packageOffersController!.clear();
                     },
                     child: const DText(
@@ -912,7 +847,7 @@ class _MobilePackageEditForm extends HookConsumerWidget {
                 Wrap(
                   spacing: 2.w,
                   children: [
-                    ...packageOffers!.value!
+                    ...package!.packageOffers!
                         .map(
                           (keyword) => Chip(
                             label: DText(text: keyword),
@@ -923,10 +858,9 @@ class _MobilePackageEditForm extends HookConsumerWidget {
                               color: Theme.of(context).colorScheme.error,
                             ),
                             onDeleted: () {
-                              packageOffers!.value =
-                                  packageOffers!.value!.where((element) {
-                                return element != keyword;
-                              }).toList();
+                              packageNotifier?.removePackageOffer(
+                                packageOffer: keyword,
+                              );
                             },
                           ),
                         )
@@ -956,29 +890,27 @@ class _TabletPackageEditForm extends HookConsumerWidget {
     Key? key,
     this.package,
     this.packageName,
-    this.keywords,
     this.keywordsController,
     this.description,
     this.price,
     this.lastPrice,
     this.discountPercentage,
     this.coupon,
-    this.packageOffers,
     this.packageOffersController,
     this.activityId,
+    this.packageNotifier,
   }) : super(key: key);
   final Package? package;
   final TextEditingController? packageName;
-  final ValueNotifier<List<String>?>? keywords;
   final TextEditingController? keywordsController;
   final TextEditingController? description;
   final TextEditingController? price;
   final TextEditingController? lastPrice;
   final TextEditingController? discountPercentage;
   final TextEditingController? coupon;
-  final ValueNotifier<List<String>?>? packageOffers;
   final TextEditingController? packageOffersController;
   final String? activityId;
+  final PackageControlNotifier? packageNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Form(
@@ -1085,29 +1017,27 @@ class _DesktopPackageEditForm extends HookConsumerWidget {
     Key? key,
     this.package,
     this.packageName,
-    this.keywords,
     this.keywordsController,
     this.description,
     this.price,
     this.lastPrice,
     this.discountPercentage,
     this.coupon,
-    this.packageOffers,
     this.packageOffersController,
     this.activityId,
+    this.packageNotifier,
   }) : super(key: key);
   final Package? package;
   final TextEditingController? packageName;
-  final ValueNotifier<List<String>?>? keywords;
   final TextEditingController? keywordsController;
   final TextEditingController? description;
   final TextEditingController? price;
   final TextEditingController? lastPrice;
   final TextEditingController? discountPercentage;
   final TextEditingController? coupon;
-  final ValueNotifier<List<String>?>? packageOffers;
   final TextEditingController? packageOffersController;
   final String? activityId;
+  final PackageControlNotifier? packageNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Form(

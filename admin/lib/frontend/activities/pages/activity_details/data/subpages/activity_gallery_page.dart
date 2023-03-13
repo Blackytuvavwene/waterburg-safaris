@@ -10,23 +10,28 @@ class ActivityGalleryPage extends HookConsumerWidget {
     Key? key,
     this.gallery,
     this.activityId,
+    this.activityNotifier,
   }) : super(key: key);
   final List<Gallery>? gallery;
   final String? activityId;
+  final ActivityControlNotifier? activityNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
       mobile: _MobileActivityGalleryPage(
         gallery: gallery,
         activityId: activityId,
+        activityNotifier: activityNotifier,
       ),
       tablet: _TabletActivityGalleryPage(
         gallery: gallery,
         activityId: activityId,
+        activityNotifier: activityNotifier,
       ),
       desktop: _DesktopActivityGalleryPage(
         gallery: gallery,
         activityId: activityId,
+        activityNotifier: activityNotifier,
       ),
     );
   }
@@ -38,9 +43,11 @@ class _MobileActivityGalleryPage extends HookConsumerWidget {
     Key? key,
     this.gallery,
     this.activityId,
+    this.activityNotifier,
   }) : super(key: key);
   final List<Gallery>? gallery;
   final String? activityId;
+  final ActivityControlNotifier? activityNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
@@ -123,9 +130,11 @@ class _TabletActivityGalleryPage extends HookConsumerWidget {
     Key? key,
     this.gallery,
     this.activityId,
+    this.activityNotifier,
   }) : super(key: key);
   final List<Gallery>? gallery;
   final String? activityId;
+  final ActivityControlNotifier? activityNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
@@ -207,9 +216,11 @@ class _DesktopActivityGalleryPage extends HookConsumerWidget {
     Key? key,
     this.gallery,
     this.activityId,
+    this.activityNotifier,
   }) : super(key: key);
   final List<Gallery>? gallery;
   final String? activityId;
+  final ActivityControlNotifier? activityNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(

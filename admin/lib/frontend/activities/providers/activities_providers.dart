@@ -23,9 +23,14 @@ final activityToEditActivityPageProvider =
     StateProvider<Activity?>((ref) => Activity());
 
 // final activity controller notifier provider
-final activityControlNotifierProvider =
-    StateNotifierProvider<ActivityControlNotifier, Activity?>((ref) {
-  return ActivityControlNotifier();
+final activityControlNotifierProvider = StateNotifierProvider.autoDispose
+    .family<ActivityControlNotifier, Activity?, Activity?>((
+  ref,
+  activity,
+) {
+  return ActivityControlNotifier(
+    initialActivity: activity,
+  );
 });
 
 // add activity to firestore provider

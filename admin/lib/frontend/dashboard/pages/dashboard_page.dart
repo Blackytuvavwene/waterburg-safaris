@@ -17,22 +17,6 @@ class DashboardPage extends HookConsumerWidget {
         return AppLayout(
           mobile: _MobileDashboardPage(
             userData: data,
-            activitiesWidget: activitiesList.when(
-              data: (activities) {
-                return DashBoardActivitiesData(
-                  activitiesData: activities,
-                );
-              },
-              error: (error, stackTrace) {
-                return DashBoardActivitiesError(
-                  error: error.toString(),
-                );
-              },
-              loading: () {
-                return const DashBoardActivitiesLoading();
-              },
-            ),
-            bookingsWidget: const BookingDashboard(),
           ),
           tablet: _TabletDashboardPage(
             userData: data,
@@ -91,12 +75,8 @@ class _MobileDashboardPage extends HookConsumerWidget {
   const _MobileDashboardPage({
     Key? key,
     this.userData,
-    this.activitiesWidget,
-    this.bookingsWidget,
   }) : super(key: key);
   final UserModel? userData;
-  final Widget? activitiesWidget;
-  final Widget? bookingsWidget;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //access providers for the dashboard
@@ -106,6 +86,7 @@ class _MobileDashboardPage extends HookConsumerWidget {
         title: const DText(
           text: 'Dashboard',
         ),
+        automaticallyImplyLeading: false,
         elevation: 0,
         actions: [
           IconButton(
@@ -116,23 +97,129 @@ class _MobileDashboardPage extends HookConsumerWidget {
         ],
       ),
       body: SafeArea(
-          child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              height: 45.h,
-              width: 100.w,
-              child: activitiesWidget!,
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppSpacing.largeX,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Placeholder(
+                          fallbackHeight: 10.h,
+                          fallbackWidth: 10.h,
+                        ),
+                        const Spacer(),
+                        const DText(
+                          text: 'Welcome back',
+                          fontSize: 20,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        DText(
+                          text: '${userData?.username}',
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ),
-            SizedBox(
-              height: 45.h,
-              width: 100.w,
-              child: bookingsWidget!,
+            SliverFillRemaining(
+              child: GridView(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 4.w,
+                  vertical: 4.h,
+                ),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                ),
+                children: [
+                  InkWell(
+                    child: SizedBox(
+                      height: 5.h,
+                      child: const Card(
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Center(
+                            child: DText(
+                              text: 'Activities',
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    child: SizedBox(
+                      height: 5.h,
+                      child: const Card(
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Center(
+                            child: DText(
+                              text: 'Bookings',
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    child: SizedBox(
+                      height: 5.h,
+                      child: const Card(
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Center(
+                            child: DText(
+                              text: 'Company info',
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    child: SizedBox(
+                      height: 5.h,
+                      child: const Card(
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Center(
+                            child: DText(
+                              text: 'Destinations',
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
-      )),
+      ),
     );
   }
 }

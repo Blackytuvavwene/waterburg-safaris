@@ -3,5 +3,11 @@
     "eslint.workingDirectories": [
         "functions",
         "src"
-      ]
+      ],
+      "files.autoSave": "afterDelay",
+      "workbench.colorCustomizations": {
+        "[Default Dark+ Experimental]": {
+          "statusBar.debuggingBackground": "#FF4500"
+        }
+      }
 }
