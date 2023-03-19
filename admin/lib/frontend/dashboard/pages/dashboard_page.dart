@@ -284,7 +284,7 @@ class _DesktopDashboardPage extends HookConsumerWidget {
         child: ListView(
           children: [
             activitiesWidget!,
-            bookingsWidget!,
+            bookingsWidget!, 
           ],
         ),
       ),
