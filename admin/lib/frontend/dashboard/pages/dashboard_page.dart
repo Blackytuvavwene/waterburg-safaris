@@ -1,5 +1,6 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router_flow/go_router_flow.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:sizer/sizer.dart';
@@ -151,6 +152,16 @@ class _MobileDashboardPage extends HookConsumerWidget {
                 ),
                 children: [
                   InkWell(
+                    onTap: () {
+                      // first update route index
+                      ref.read(routeIndexProvider.notifier).setIndexFromPath(
+                            AppRoutes.routeNames[AppRoutes.activities]!,
+                          );
+                      // navigate to activities page
+                      context.pushNamed(
+                        AppRoutes.routeNames[AppRoutes.activities]!,
+                      );
+                    },
                     child: SizedBox(
                       height: 5.h,
                       child: const Card(
@@ -167,6 +178,16 @@ class _MobileDashboardPage extends HookConsumerWidget {
                     ),
                   ),
                   InkWell(
+                    onTap: () {
+                      // first update route index
+                      ref.read(routeIndexProvider.notifier).setIndexFromPath(
+                            AppRoutes.routeNames[AppRoutes.bookings]!,
+                          );
+                      // navigate to bookings page
+                      context.pushNamed(
+                        AppRoutes.routeNames[AppRoutes.bookings]!,
+                      );
+                    },
                     child: SizedBox(
                       height: 5.h,
                       child: const Card(
@@ -183,6 +204,16 @@ class _MobileDashboardPage extends HookConsumerWidget {
                     ),
                   ),
                   InkWell(
+                    onTap: () {
+                      // first update route index
+                      ref.read(routeIndexProvider.notifier).setIndexFromPath(
+                            AppRoutes.routeNames[AppRoutes.profile]!,
+                          );
+                      // navigate to profile page
+                      context.pushNamed(
+                        AppRoutes.routeNames[AppRoutes.profile]!,
+                      );
+                    },
                     child: SizedBox(
                       height: 5.h,
                       child: const Card(
@@ -284,7 +315,7 @@ class _DesktopDashboardPage extends HookConsumerWidget {
         child: ListView(
           children: [
             activitiesWidget!,
-            bookingsWidget!, 
+            bookingsWidget!,
           ],
         ),
       ),

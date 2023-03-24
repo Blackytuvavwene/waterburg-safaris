@@ -119,7 +119,7 @@ class _MobileCompanyGalleryPage extends HookConsumerWidget {
           ],
         ),
         if (newImages != null)
-          if (newImages!.value != [])
+          if (newImages!.value != [] && newImages!.value!.isNotEmpty)
             SliverFillRemaining(
               child: TabBarView(
                 controller: tabController,

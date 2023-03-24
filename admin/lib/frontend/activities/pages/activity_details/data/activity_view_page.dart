@@ -20,27 +20,27 @@ enum ActivityEditType {
 }
 
 // edit activity type state  provider
-final editActivityTypeProvider = StateProvider<ActivityEditType>(
+final editActivityTypeProvider = StateProvider.autoDispose<ActivityEditType>(
   (ref) => ActivityEditType.none,
 );
 
 // toggle edit activity type between editAll and none
-final toggleEditType = Provider(
-  (ref) => () {
-    final editType = ref.watch(editActivityTypeProvider);
-    void toggleEditActivityType() {
-      if (editType == ActivityEditType.editAll) {
-        ref.read(editActivityTypeProvider.notifier).state =
-            ActivityEditType.none;
-      } else {
-        ref.read(editActivityTypeProvider.notifier).state =
-            ActivityEditType.editAll;
-      }
-    }
+// final toggleEditType = Provider(
+//   (ref) => () {
+//     final editType = ref.watch(editActivityTypeProvider);
+//     void toggleEditActivityType() {
+//       if (editType == ActivityEditType.editAll) {
+//         ref.read(editActivityTypeProvider.notifier).state =
+//             ActivityEditType.none;
+//       } else {
+//         ref.read(editActivityTypeProvider.notifier).state =
+//             ActivityEditType.editAll;
+//       }
+//     }
 
-    return toggleEditActivityType();
-  },
-);
+//     return toggleEditActivityType();
+//   },
+// );
 
 // activity view page with app layout
 class ActivityDetailsPage extends HookConsumerWidget {
@@ -57,13 +57,29 @@ class ActivityDetailsPage extends HookConsumerWidget {
         activity,
       ),
     );
+
+    // handle edit
+    final isEditing = useState(false);
+
+    // read activity notifier provider
     final activityNotifier = ref.read(activityControlNotifierProvider(
       activity,
     ).notifier);
+
     // activity edit type watch provider
     final editActivityTypeController =
-        ref.watch(editActivityTypeProvider.notifier);
-    final editActivityType = editActivityTypeController.state;
+        ref.read(editActivityTypeProvider.notifier);
+    final editActivityType = ref.watch(editActivityTypeProvider);
+
+    // watch local image provider
+    final localImageProvider = ref.watch(
+      imageControllerNotifierProvider,
+    );
+
+    // read image controller provider
+    final imageControllerNotifier = ref.read(
+      imageControllerNotifierProvider.notifier,
+    );
 
     return AppLayout(
       mobile: _ActivityDetailsPageMobile(
@@ -71,6 +87,9 @@ class ActivityDetailsPage extends HookConsumerWidget {
         editActivityType: editActivityType,
         editActivityTypeController: editActivityTypeController,
         activityNotifier: activityNotifier,
+        localImageProvider: localImageProvider,
+        imageControllerNotifier: imageControllerNotifier,
+        isEditing: isEditing,
       ),
       tablet: _ActivityDetailsPageTablet(
         activity: activity,
@@ -162,11 +181,17 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
     this.editActivityType,
     this.editActivityTypeController,
     this.activityNotifier,
+    this.localImageProvider,
+    this.imageControllerNotifier,
+    this.isEditing,
   }) : super(key: key);
   final Activity? activity;
   final StateController<ActivityEditType>? editActivityTypeController;
   final ActivityEditType? editActivityType;
   final ActivityControlNotifier? activityNotifier;
+  final AsyncValue<List<ImageHelperModel>?>? localImageProvider;
+  final ImageControllerNotifier? imageControllerNotifier;
+  final ValueNotifier<bool>? isEditing;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tabs = ref.watch(activityTabsListProvider);
@@ -181,59 +206,64 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
           padding: EdgeInsets.only(
             left: 2.w,
           ),
-          child: editActivityType == ActivityEditType.editActivityName
-              ? Center(
-                  child: SizedBox(
-                    height: 6.h,
-                    child: UpdateNameField(
-                      activityId: activity?.activityId,
-                      editActivityTypeController: editActivityTypeController,
-                      activityName: activity?.activityName,
+          child: Row(
+            children: [
+              editActivityType == ActivityEditType.editActivityName
+                  ? Center(
+                      child: SizedBox(
+                        height: 6.h,
+                        width: 60.w,
+                        child: UpdateNameField(
+                          activityId: activity?.activityId,
+                          editActivityTypeController:
+                              editActivityTypeController,
+                          activityName: activity?.activityName,
+                        ),
+                      ),
+                    ).animate().fade(
+                        duration: const Duration(milliseconds: 500),
+                        delay: const Duration(milliseconds: 200),
+                        begin: 0,
+                        end: 1,
+                      )
+                  : DText(
+                      text: activity?.activityName.toString(),
+                      fontSize: 16.sp,
                     ),
-                  ),
-                ).animate().fade(
-                    duration: const Duration(milliseconds: 500),
-                    delay: const Duration(milliseconds: 200),
-                    begin: 0,
-                    end: 1,
-                  )
-              : DText(
-                  text: activity?.activityName.toString(),
-                  fontSize: 16.sp,
-                ),
+              IconButton(
+                icon: editActivityType == ActivityEditType.editActivityName
+                    ? LineIcon.timesCircle(
+                        size: 16.sp,
+                        color: Theme.of(context).colorScheme.onBackground,
+                      )
+                    : LineIcon.editAlt(
+                        size: 16.sp,
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
+                onPressed: () {
+                  // set is editing to true if false
+                  if (isEditing!.value == false) {
+                    isEditing!.value = true;
+                  }
+
+                  // set edit activity type to edit all
+                  editActivityType == ActivityEditType.editActivityName
+                      ? editActivityTypeController!.state =
+                          ActivityEditType.none
+                      : editActivityTypeController!.state =
+                          ActivityEditType.editActivityName;
+
+                  // // reverse activity name animation controller
+                  // editActivityType == ActivityEditType.editActivityName
+                  //     ? forwardActivityNameAnimationController()
+                  //     : reverseActivityNameAnimationController();
+                },
+              )
+            ],
+          ),
         ),
         elevation: 0,
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(
-              right: 4.w,
-            ),
-            child: IconButton(
-              icon: editActivityType == ActivityEditType.editActivityName
-                  ? LineIcon.timesCircle(
-                      size: 16.sp,
-                      color: Theme.of(context).colorScheme.onBackground,
-                    )
-                  : LineIcon.editAlt(
-                      size: 16.sp,
-                      color: Theme.of(context).colorScheme.onBackground,
-                    ),
-              onPressed: () {
-                // set edit activity type to edit all
-                editActivityType == ActivityEditType.editActivityName
-                    ? editActivityTypeController!
-                        .update((state) => state = ActivityEditType.none)
-                    : editActivityTypeController!.update(
-                        (state) => state = ActivityEditType.editActivityName);
 
-                // // reverse activity name animation controller
-                // editActivityType == ActivityEditType.editActivityName
-                //     ? forwardActivityNameAnimationController()
-                //     : reverseActivityNameAnimationController();
-              },
-            ),
-          ),
-        ],
         bottom: TabBar(
           controller: tabController,
           tabs: tabs
@@ -246,32 +276,71 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
         // toolbarHeight: 10.h,
       ),
       body: SafeArea(
-          bottom: false,
-          maintainBottomViewPadding: false,
-          child: TabBarView(
-            controller: tabController,
-            children: [
-              ActivityInfoPage(
-                activity: activity,
-                activityNotifier: activityNotifier,
-              ),
-              ActivityGalleryPage(
-                activityId: activity?.activityId,
-                gallery: activity?.activityGallery,
-                activityNotifier: activityNotifier,
-              ),
-              ActivityPackagesPage(
-                activityId: activity?.activityId,
-                packages: activity?.packages,
-                activityNotifier: activityNotifier,
-              ),
-              ActivityTagsPage(
-                activityId: activity?.activityId,
-                tags: activity?.tags,
-                activityNotifier: activityNotifier,
-              ),
-            ],
-          )),
+        bottom: false,
+        maintainBottomViewPadding: false,
+        child: TabBarView(
+          controller: tabController,
+          children: [
+            ActivityInfoPage(
+              activity: activity,
+              activityNotifier: activityNotifier,
+              isEditing: isEditing,
+            ),
+            ActivityGalleryPage(
+              activityId: activity?.activityId,
+              gallery: activity?.activityGallery,
+              activityNotifier: activityNotifier,
+              localImageProvider: localImageProvider,
+              imageControllerNotifier: imageControllerNotifier,
+              isEditing: isEditing!,
+            ),
+            ActivityPackagesPage(
+              activityId: activity?.activityId,
+              packages: activity?.packages,
+              activityNotifier: activityNotifier,
+              isEditing: isEditing!,
+            ),
+            ActivityTagsPage(
+              activityId: activity?.activityId,
+              tags: activity?.tags,
+              activityNotifier: activityNotifier,
+              isEditing: isEditing!,
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: isEditing!.value
+          ? Row(
+              children: [
+                Expanded(
+                  child: CustomElevatedButton(
+                    onPressed: () async {
+                      editActivityTypeController!
+                          .update((state) => state = ActivityEditType.none);
+                    },
+                    text: 'Cancel Changes',
+                    primary: Theme.of(context).colorScheme.errorContainer,
+                    textColor: Theme.of(context).colorScheme.onErrorContainer,
+                  ),
+                ),
+                Expanded(
+                  child: CustomElevatedButton(
+                    primary: Theme.of(context).colorScheme.secondary,
+                    onPressed: () {
+                      //TODO: save changes to firestore
+                      editActivityTypeController!
+                          .update((state) => state = ActivityEditType.none);
+
+                      // set is editing to false
+                      isEditing!.value = false;
+                    },
+                    text: 'Save & Publish',
+                    textColor: Theme.of(context).colorScheme.onSecondary,
+                  ),
+                ),
+              ],
+            )
+          : null,
     );
   }
 }
@@ -318,7 +387,7 @@ class _ActivityDetailsPageTablet extends HookConsumerWidget {
               ),
               onPressed: () {
                 // set edit activity type to edit all
-                ref.read(toggleEditType).call();
+                // ref.read(toggleEditType).call();
               },
             ),
           ),
@@ -520,7 +589,7 @@ class _ActivityDetailsPageDesktop extends HookConsumerWidget {
               ),
               onPressed: () {
                 // set edit activity type to edit all
-                ref.read(toggleEditType).call();
+                // ref.read(toggleEditType).call();
               },
             ),
           ),

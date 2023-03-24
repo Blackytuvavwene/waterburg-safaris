@@ -9,15 +9,18 @@ class ActivityInfoPage extends HookConsumerWidget {
     Key? key,
     this.activity,
     this.activityNotifier,
+    this.isEditing,
   }) : super(key: key);
   final Activity? activity;
   final ActivityControlNotifier? activityNotifier;
+  final ValueNotifier<bool>? isEditing;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
       mobile: _MobileActivityInfoPage(
         activity: activity,
         activityNotifier: activityNotifier,
+        isEditing: isEditing,
       ),
       tablet: _TabletActivityInfoPage(
         activity: activity,
@@ -37,9 +40,11 @@ class _MobileActivityInfoPage extends HookConsumerWidget {
     Key? key,
     this.activity,
     this.activityNotifier,
+    this.isEditing,
   }) : super(key: key);
   final Activity? activity;
   final ActivityControlNotifier? activityNotifier;
+  final ValueNotifier<bool>? isEditing;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomScrollView(
@@ -63,6 +68,10 @@ class _MobileActivityInfoPage extends HookConsumerWidget {
                       title: 'Activity SEO Description',
                       description: activity!.seoDescription.toString(),
                       onTap: () {
+                        // set is editing to true if not already
+                        if (!isEditing!.value) {
+                          isEditing!.value = true;
+                        }
                         showDialog(
                           context: context,
                           builder: (context) => ActivityDescriptionPopUp(
@@ -86,6 +95,11 @@ class _MobileActivityInfoPage extends HookConsumerWidget {
                       title: 'Activity overview',
                       description: activity!.overview.toString(),
                       onTap: () {
+                        // set is editing to true if not already
+                        if (!isEditing!.value) {
+                          isEditing!.value = true;
+                        }
+
                         showDialog(
                           context: context,
                           builder: (context) => ActivityDescriptionPopUp(

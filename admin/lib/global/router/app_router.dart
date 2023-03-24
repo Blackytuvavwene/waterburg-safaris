@@ -340,3 +340,60 @@ Future<T?> dataRoutePush<T>({
 
   return result;
 }
+
+// app named routes class
+class AppRoutes {
+  static const String login = '/login';
+  static const String signup = '/signup';
+  static const String home = '/home';
+  static const String dashboard = '/dashboard';
+  static const String activities = '/activities';
+  static const String addActivity = '/add-activity';
+  static const String pickImages = '/pick-images';
+  static const String activityDetails = '/activity-details';
+  static const String editPackage = '/edit-package';
+  static const String bookings = '/bookings';
+  static const String profile = '/profile';
+  static const String editStaffDetails = '/edit-staff-details';
+  static const String editAddress = '/edit-address';
+  static const String editAbout = '/edit-about';
+  static const String addStaff = '/add-staff';
+
+  // named routes
+  static final Map<String, WidgetBuilder> routes = {
+    login: (context) => const LoginPage(),
+    signup: (context) => const SignUpPage(),
+    home: (context) => const HomePage(),
+    dashboard: (context) => const DashboardPage(),
+    activities: (context) => const ActivitiesPage(),
+    addActivity: (context) => const AddActivityPage(),
+    pickImages: (context) => const PickImagesPage(),
+    // activityDetails: (context) => ActivityPage(),
+    editPackage: (context) => const PackageEditPage(),
+    bookings: (context) => const BookingsPage(),
+    profile: (context) => const ProfilePage(),
+    editStaffDetails: (context) => const EditStaffDetails(),
+    editAddress: (context) => const EditAddressContactPage(),
+    editAbout: (context) => const CompanyEditAbout(),
+    addStaff: (context) => const ManageLocalCompanyStaffPage(),
+  };
+
+  // route names
+  static final Map<String, String> routeNames = {
+    login: 'login',
+    signup: 'signup',
+    home: 'home',
+    dashboard: 'dashboard',
+    activities: 'activities',
+    addActivity: 'addActivity',
+    pickImages: 'pickImages',
+    activityDetails: 'activityDetails',
+    editPackage: 'editPackage',
+    bookings: 'bookings',
+    profile: 'profile',
+    editStaffDetails: 'editStaffDetails',
+    editAddress: 'editAddress',
+    editAbout: 'editAbout',
+    addStaff: 'addStaff',
+  };
+}

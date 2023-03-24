@@ -9,10 +9,12 @@ class ActivityTagsPage extends HookConsumerWidget {
     this.tags,
     this.activityId,
     this.activityNotifier,
+    required this.isEditing,
   }) : super(key: key);
   final List<String>? tags;
   final String? activityId;
   final ActivityControlNotifier? activityNotifier;
+  final ValueNotifier<bool> isEditing;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
