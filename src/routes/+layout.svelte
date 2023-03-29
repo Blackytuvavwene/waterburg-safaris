@@ -11,8 +11,6 @@
 
     import Footer from '$lib/app-components/footer/footer.svelte';
     import Header from '$lib/app-components/header/Header.svelte';
-    
-    import logo from "$lib/wblogolg.svg";
 
    
     
@@ -77,7 +75,7 @@
                 </span>
             </div>
             <h6 class="text-xl font-bold text-primary">
-                Waterburg Safaris
+                African Journey Tours
             </h6>
         </div>
         <div class="w-fit h-full border-0 border-spacing-0 m-0 rounded-b-xl">
