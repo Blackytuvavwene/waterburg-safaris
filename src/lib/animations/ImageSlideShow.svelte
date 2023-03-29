@@ -34,7 +34,7 @@
         {#if i === slideIndex}
             <img 
             in:fade|local={{ duration: 500, delay: 0, easing: sineIn }}
-            class=" object-cover max-h-[34vh] w-full h-full aspect-video object-center  " 
+            class=" object-cover max-h-[34vh] lg:max-h-[60vh] w-full md:max-h-[30vh] aspect-video object-center  " 
             src={image.imageUrl} loading="lazy" alt={image.imageDescription} />
         {/if}
     {/each}

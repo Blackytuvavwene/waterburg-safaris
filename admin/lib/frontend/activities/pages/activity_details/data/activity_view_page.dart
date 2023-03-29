@@ -51,6 +51,21 @@ class ActivityDetailsPage extends HookConsumerWidget {
   final Activity? activity;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // listen to updates on activity
+    ref.listen<AsyncValue<Activity>?>(addActivityToFirestoreProvider,
+        (AsyncValue<Activity>? previous, AsyncValue<Activity>? current) {
+      current?.when(
+        data: (data) {
+          return EasyLoading.showSuccess('Activity updated');
+        },
+        loading: () {
+          return EasyLoading.show(status: 'Updating activity...');
+        },
+        error: (error, stackTrace) {
+          return EasyLoading.showError('Error updating activity $error');
+        },
+      );
+    });
     // watch activity provider
     final activityProvider = ref.watch(
       activityControlNotifierProvider(
@@ -90,6 +105,7 @@ class ActivityDetailsPage extends HookConsumerWidget {
         localImageProvider: localImageProvider,
         imageControllerNotifier: imageControllerNotifier,
         isEditing: isEditing,
+        initialActivity: activity,
       ),
       tablet: _ActivityDetailsPageTablet(
         activity: activity,
@@ -184,6 +200,7 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
     this.localImageProvider,
     this.imageControllerNotifier,
     this.isEditing,
+    this.initialActivity,
   }) : super(key: key);
   final Activity? activity;
   final StateController<ActivityEditType>? editActivityTypeController;
@@ -192,10 +209,36 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
   final AsyncValue<List<ImageHelperModel>?>? localImageProvider;
   final ImageControllerNotifier? imageControllerNotifier;
   final ValueNotifier<bool>? isEditing;
+  final Activity? initialActivity;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tabs = ref.watch(activityTabsListProvider);
     final tabController = useTabController(initialLength: tabs.length);
+
+    // animation controller
+    final bottomNavBarController = useAnimationController(
+      duration: const Duration(milliseconds: 500),
+      reverseDuration: const Duration(milliseconds: 500),
+    );
+
+    useValueChanged<bool, Function(bool, bool)>(isEditing!.value, (_, ___) {
+      if (isEditing!.value) {
+        bottomNavBarController.forward();
+      } else {
+        bottomNavBarController.reverse();
+      }
+      return null;
+    });
+
+    // use effect to listen to changes in edit activity type
+    // useEffect(() {
+    //   if (isEditing!.value == false) {
+    //     bottomNavBarController.reverse();
+    //   } else {
+    //     bottomNavBarController.forward();
+    //   }
+    //   return null;
+    // }, [isEditing!.value]);
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -293,6 +336,7 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
               localImageProvider: localImageProvider,
               imageControllerNotifier: imageControllerNotifier,
               isEditing: isEditing!,
+              initialActivity: initialActivity,
             ),
             ActivityPackagesPage(
               activityId: activity?.activityId,
@@ -314,9 +358,13 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
               children: [
                 Expanded(
                   child: CustomElevatedButton(
+                    height: 5.h,
                     onPressed: () async {
                       editActivityTypeController!
                           .update((state) => state = ActivityEditType.none);
+
+                      // set is editing to false
+                      isEditing!.value = false;
                     },
                     text: 'Cancel Changes',
                     primary: Theme.of(context).colorScheme.errorContainer,
@@ -325,9 +373,18 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
                 ),
                 Expanded(
                   child: CustomElevatedButton(
+                    height: 5.h,
                     primary: Theme.of(context).colorScheme.secondary,
-                    onPressed: () {
+                    onPressed: () async {
                       //TODO: save changes to firestore
+                      await ref
+                          .read(addActivityToFirestoreProvider.notifier)
+                          .updateActivityInFirestore(
+                            activity: activity!,
+                            images: localImageProvider!.value ?? [],
+                          );
+
+                      // set edit activity type to none
                       editActivityTypeController!
                           .update((state) => state = ActivityEditType.none);
 
@@ -340,6 +397,15 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
                 ),
               ],
             )
+              .animate(
+                target: isEditing!.value == true ? 1 : 0,
+              )
+              .fade(
+                duration: const Duration(milliseconds: 500),
+                delay: const Duration(milliseconds: 200),
+                begin: 0,
+                end: 1,
+              )
           : null,
     );
   }
@@ -495,8 +561,9 @@ class _ActivityDetailsPageTablet extends HookConsumerWidget {
                                     left: 2.w,
                                     right: 2.w,
                                   ),
-                                  child: ActivityImageCard(
-                                    image: activity!.activityGallery![index],
+                                  child: ImageCard(
+                                    imageDetails:
+                                        activity!.activityGallery![index],
                                   ),
                                 );
                               },
@@ -529,11 +596,6 @@ class _ActivityDetailsPageTablet extends HookConsumerWidget {
                           .toList(),
                     ),
                   ],
-                ),
-              ),
-              Center(
-                child: ImagePickerWidget(
-                  activityId: activity!.activityId,
                 ),
               ),
               Center(
@@ -697,8 +759,9 @@ class _ActivityDetailsPageDesktop extends HookConsumerWidget {
                                     left: 2.w,
                                     right: 2.w,
                                   ),
-                                  child: ActivityImageCard(
-                                    image: activity!.activityGallery![index],
+                                  child: ImageCard(
+                                    imageDetails:
+                                        activity!.activityGallery![index],
                                   ),
                                 );
                               },
@@ -772,11 +835,6 @@ class _ActivityDetailsPageDesktop extends HookConsumerWidget {
                       ),
                     ),
                   ),
-                ),
-              ),
-              Center(
-                child: ImagePickerWidget(
-                  activityId: activity!.activityId,
                 ),
               ),
               Center(

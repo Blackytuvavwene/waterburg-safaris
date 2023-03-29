@@ -1,10 +1,10 @@
 <script lang="ts">
-import { onMount } from "svelte";
-import { page } from "$app/stores";
-import { fade, slide } from "svelte/transition";
-import { quadInOut } from "svelte/easing";
-import logo from "$lib/ajtfavicon.svg";
-import { resetCurrentSelectedPersist } from '$lib/app-components/activities-components/activity.stores';
+    import { onMount } from "svelte";
+    import { page } from "$app/stores";
+    import { fade, slide } from "svelte/transition";
+    import { quadInOut } from "svelte/easing";
+    import logo from "$lib/ajtfavicon.svg";
+    import { resetCurrentSelectedPersist } from '$lib/app-components/activities-components/activity.stores';
 
 
 
@@ -22,6 +22,9 @@ import { resetCurrentSelectedPersist } from '$lib/app-components/activities-comp
     };
 
     let mouseHover:boolean=false;
+
+    // header background color on scroll
+    let headerBackground:string;
 
     
 
@@ -62,6 +65,15 @@ import { resetCurrentSelectedPersist } from '$lib/app-components/activities-comp
               }
          })
 
+         // listen for scroll event to provide background to header
+            window.addEventListener('scroll',()=>{
+                if(window.scrollY>10){
+                    headerBackground='bg-primary-900 bg-opacity-50';
+                }else{
+                    headerBackground='bg-primary-900';
+                }
+            })
+
    })
 
     // set active link
@@ -71,7 +83,7 @@ import { resetCurrentSelectedPersist } from '$lib/app-components/activities-comp
 
 
 
-<header class="w-full h-full flex items-center sticky top-0 z-10 bg-primary-900 ">
+<header class="w-full h-full flex items-center sticky top-0 z-10 {headerBackground}">
     <nav class="w-full h-fit xl:px-44 flex flex-row  justify-between items-center ">
         <div class= "flex flex-col items-start justify-start h-full w-full lg:w-fit">
             <div class="w-full h-full flex flex-row justify-between items-center ">

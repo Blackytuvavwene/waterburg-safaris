@@ -75,51 +75,6 @@ class PackageControllerNotifier extends StateNotifier<AsyncValue<Package>?> {
   }
 }
 
-// keywords state controller
-class KeywordsControllerNotifier extends StateNotifier<List<String>> {
-  KeywordsControllerNotifier({
-    this.keywords,
-  }) : super(keywords!);
-
-  // initial keywords
-  List<String>? keywords;
-
-  // set keywords
-  void setKeywords(List<String> keywords) {
-    state = keywords;
-  }
-
-  // update keywords
-  void updateKeywords(List<String> keywords) {
-    state = keywords;
-  }
-
-  // add keyword to state
-  void addKeyword(String keyword) {
-    // final keywords = state;
-    // keywords.add(keyword);
-    print('new keyword: $keyword');
-    state = [...state, keyword];
-    print('keywords: $state');
-  }
-}
-
-// initial keywords
-final intialKeywordsProvider =
-    Provider.family<List<String>, List<String>>((ref, keywords) {
-  return keywords;
-});
-
-// kewords state notifier
-final keywordsControllerProvider = StateNotifierProvider.family<
-    KeywordsControllerNotifier, List<String>, List<String>>(
-  (ref, keywords) => KeywordsControllerNotifier(
-    keywords: ref.read<List<String>>(
-      intialKeywordsProvider(keywords),
-    ),
-  ),
-);
-
 // package controller notifier
 final packageControllerProvider =
     StateNotifierProvider<PackageControllerNotifier, AsyncValue<Package>?>(
@@ -145,6 +100,60 @@ class PackageCard extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       child: ListTile(
+        onLongPress: () async {
+          // show delete dialog
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const DText(
+                    text: 'Delete Package',
+                  ),
+                  content: const DText(
+                    text: 'Are you sure you want to delete this package?',
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const DText(
+                        text: 'No',
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        // delete package
+                        activityNotifier?.deletePackageFromList(index: index!);
+
+                        // pop dialog
+                        Navigator.pop(context);
+                      },
+                      child: const DText(
+                        text: 'Yes',
+                      ),
+                    ),
+                  ],
+                );
+              });
+          // QuickAlert.show(
+          //   context: context,
+          //   type: QuickAlertType.confirm,
+          //   title: 'Delete Package',
+          //   cancelBtnText: 'No',
+          //   confirmBtnText: 'Yes',
+          //   onCancelBtnTap: () {
+          //     Navigator.pop(context);
+          //   },
+          //   onConfirmBtnTap: () {
+          //     // delete package
+          //     activityNotifier?.deletePackageFromList(index: index!);
+
+          //     // pop dialog
+          //     Navigator.pop(context);
+          //   },
+          // );
+        },
         onTap: () {
           // navigate to package edit page with push named
           context.push(

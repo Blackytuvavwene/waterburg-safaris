@@ -21,12 +21,8 @@ let ttt={
 </script>
 
 
-<div class=" z-auto h-full my-20 w-full flex flex-col">
-    
-        <TopicTextSection topicText="About us" flexDirection="row"/>
-
-        <SlideText><AboutUsSummary /></SlideText>
-        <FadeTransition><AboutUsImageView {gallery}/></FadeTransition>
-   
+<div class="z-auto h-full self-center mt-20 flex flex-col">
+    <TopicTextSection topicText="About us" flexDirection="row"/>
+    <AboutUsSummary image={gallery[0]}/>
 </div>
 

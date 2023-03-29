@@ -34,8 +34,8 @@ final activityControlNotifierProvider = StateNotifierProvider.autoDispose
 });
 
 // add activity to firestore provider
-final addActivityToFirestoreProvider =
-    StateNotifierProvider<ActivityDBController, AsyncValue<Activity>?>((ref) {
+final addActivityToFirestoreProvider = StateNotifierProvider.autoDispose<
+    ActivityDBController, AsyncValue<Activity>?>((ref) {
   return ActivityDBController(
       activitiesDatabaseRepository: ref.watch(activityDbRepositoryProvider));
 });

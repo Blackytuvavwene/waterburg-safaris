@@ -151,6 +151,7 @@ class CompanyFirestoreControllerNotifier
         docPath: 'aboutCompany',
         data: company.toJson(),
         query: 'companyId',
+        merge: true,
       );
 
       return company;

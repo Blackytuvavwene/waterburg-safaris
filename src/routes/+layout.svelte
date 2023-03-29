@@ -66,9 +66,8 @@
 </main>
 <!-- whatsapp chat widget -->
 <div class=" fixed bottom-0 right-0 -translate-x-[4vw] -translate-y-[2vh] z-40">
-    
-    <div class=" w-full flex flex-col gap-0 transition {openWidget ? " " : "hidden"} h-full rounded-xl mb-4">
-        <div class=" bg-secondary-600 p-2 flex border-0 items-center gap-6 rounded-t-xl">
+    <div class=" w-full bg-primary-100 flex flex-col gap-0 transition {openWidget ? " " : "hidden"} h-full rounded-xl mb-4">
+        <div class=" p-2 flex border-0 items-center gap-6 rounded-t-xl">
             <div class="bg-white rounded-full w-fit h-fit p-4">
                 <span class="text-lg text-primary-400 font-extrabold">
                     W
@@ -92,8 +91,8 @@
                     </p>
                 </div>
             </div>
-            <div class="bg-secondary-600 w-full m-0 rounded-b-xl p-4 h-full flex items-center">
-                <a href="https://wa.me/message/IAFUU2O7SW3OA1?src=qr" target="_blank" class="bg-secondary-300 p-2 rounded-2xl text-center w-full text-secondary-900 font-semibold" rel="noreferrer">
+            <div class=" w-full m-0 rounded-b-xl p-4 h-full flex items-center">
+                <a href="https://wa.me/message/IAFUU2O7SW3OA1?src=qr" target="_blank" class=" p-2 rounded-2xl text-center w-full text-secondary-900 font-semibold" rel="noreferrer">
                     Start chat
                 </a>
             </div>

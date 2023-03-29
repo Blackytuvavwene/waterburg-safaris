@@ -11,12 +11,12 @@ class ActivityPackagesPage extends HookConsumerWidget {
     this.packages,
     this.activityId,
     this.activityNotifier,
-    required this.isEditing,
+    this.isEditing,
   }) : super(key: key);
   final List<Package>? packages;
   final String? activityId;
   final ActivityControlNotifier? activityNotifier;
-  final ValueNotifier<bool> isEditing;
+  final ValueNotifier<bool>? isEditing;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(

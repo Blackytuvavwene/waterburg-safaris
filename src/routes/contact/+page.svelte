@@ -1,5 +1,5 @@
-<script>
-import ContactFormPage from "$lib/app-components/contact-form/ContactFormPage.svelte";
+<script lang="ts">
+    import ContactFormPage from "$lib/app-components/contact-form/ContactFormPage.svelte";
 
 </script>
 <svelte:head>

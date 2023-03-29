@@ -199,7 +199,8 @@ class __$$_ActivityCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class _$_Activity with DiagnosticableTreeMixin implements _Activity {
   _$_Activity(
       {this.activityId,
@@ -567,7 +568,8 @@ class __$$_PackageCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class _$_Package with DiagnosticableTreeMixin implements _Package {
   _$_Package(
       {this.packageId,

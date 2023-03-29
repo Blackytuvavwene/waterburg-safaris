@@ -6,16 +6,16 @@ part of 'activities.model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Activity _$$_ActivityFromJson(Map<String, dynamic> json) => _$_Activity(
+_$_Activity _$$_ActivityFromJson(Map json) => _$_Activity(
       activityId: json['activityId'] as String?,
       activityName: json['activityName'] as String?,
       seoDescription: json['seoDescription'] as String?,
       tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList(),
       packages: (json['packages'] as List<dynamic>?)
-          ?.map((e) => Package.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => Package.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList(),
       activityGallery: (json['activityGallery'] as List<dynamic>?)
-          ?.map((e) => Gallery.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => Gallery.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList(),
       createdAt: json['createdAt'] == null
           ? null
@@ -32,14 +32,15 @@ Map<String, dynamic> _$$_ActivityToJson(_$_Activity instance) =>
       'activityName': instance.activityName,
       'seoDescription': instance.seoDescription,
       'tags': instance.tags,
-      'packages': instance.packages,
-      'activityGallery': instance.activityGallery,
+      'packages': instance.packages?.map((e) => e.toJson()).toList(),
+      'activityGallery':
+          instance.activityGallery?.map((e) => e.toJson()).toList(),
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
       'overview': instance.overview,
     };
 
-_$_Package _$$_PackageFromJson(Map<String, dynamic> json) => _$_Package(
+_$_Package _$$_PackageFromJson(Map json) => _$_Package(
       packageId: json['packageId'] as String?,
       packageName: json['packageName'] as String?,
       keywords: (json['keywords'] as List<dynamic>?)

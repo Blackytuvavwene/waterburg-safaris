@@ -17,7 +17,7 @@ import ContactIconContainer from "./ContactIconContainer.svelte";
                 </div>
                 <div>
                     <label for="email">Email</label>
-                    <input class="border-2 border-primary rounded-md p-2 w-full bg-surfaceVariant" 
+                    <input class="border-2  rounded-md p-2 w-full border-primary" 
                     placeholder="Input email" type="email" name="email" id="email">
                 </div>
             </fieldset>

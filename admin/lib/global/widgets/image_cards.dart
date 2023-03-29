@@ -296,3 +296,170 @@ class _PickedDesktopImageCard extends HookConsumerWidget {
     );
   }
 }
+
+class ImageCard extends HookConsumerWidget {
+  const ImageCard({
+    super.key,
+    this.imageDetails,
+    this.docId,
+    this.onRemoveImage,
+  });
+  final Gallery? imageDetails;
+  final String? docId;
+  final VoidCallback? onRemoveImage;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return AppLayout(
+      mobile: _MobileImageCard(
+        imageDetails: imageDetails,
+        docId: docId,
+        onRemoveImage: onRemoveImage,
+      ),
+      tablet: _TabletImageCard(
+        imageDetails: imageDetails,
+        docId: docId,
+        onRemoveImage: onRemoveImage,
+      ),
+      desktop: _DesktopImageCard(
+        imageDetails: imageDetails,
+        docId: docId,
+        onRemoveImage: onRemoveImage,
+      ),
+    );
+  }
+}
+
+// mobile company image card
+class _MobileImageCard extends HookConsumerWidget {
+  const _MobileImageCard({
+    this.imageDetails,
+    this.docId,
+    this.onRemoveImage,
+  });
+  final Gallery? imageDetails;
+  final String? docId;
+  final VoidCallback? onRemoveImage;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Card(
+      child: Column(
+        children: [
+          ExtendedImage.network(
+            '${imageDetails?.imageUrl.toString()}',
+            width: 100.w,
+            height: 20.h,
+            fit: BoxFit.cover,
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(
+                5.sp,
+              ),
+            ),
+            loadStateChanged: (state) {
+              switch (state.extendedImageLoadState) {
+                case LoadState.loading:
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                case LoadState.completed:
+                  return ExtendedRawImage(
+                    image: state.extendedImageInfo?.image,
+                    fit: BoxFit.cover,
+                    width: 100.w,
+                    height: 20.h,
+                  );
+                case LoadState.failed:
+                  return const Center(
+                    child: DText(
+                      text: 'Failed to load image',
+                    ),
+                  );
+              }
+            },
+          ),
+          ListTile(
+            isThreeLine: true,
+            title: DText(
+              text: imageDetails!.imageTitle!,
+            ),
+            subtitle: DText(
+              text: imageDetails!.imageDescription!,
+              maxLines: 3,
+              minFontSize: 12,
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  child: IconButton(
+                    onPressed: onRemoveImage,
+                    color: Theme.of(context).colorScheme.errorContainer,
+                    icon: LineIcon.trash(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// tablet image card
+class _TabletImageCard extends HookConsumerWidget {
+  const _TabletImageCard({
+    this.imageDetails,
+    this.docId,
+    this.onRemoveImage,
+  });
+  final Gallery? imageDetails;
+  final String? docId;
+  final Function? onRemoveImage;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Card(
+      child: Column(
+        children: [
+          Image.network(
+            imageDetails!.imageUrl!,
+            fit: BoxFit.cover,
+          ),
+          ListTile(
+            title: Text(imageDetails!.imageTitle!),
+            subtitle: Text(imageDetails!.imageDescription!),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// desktop company image card
+class _DesktopImageCard extends HookConsumerWidget {
+  const _DesktopImageCard({
+    this.imageDetails,
+    this.docId,
+    this.onRemoveImage,
+  });
+  final Gallery? imageDetails;
+  final String? docId;
+  final Function? onRemoveImage;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Card(
+      child: Column(
+        children: [
+          Image.network(
+            imageDetails!.imageUrl!,
+            fit: BoxFit.cover,
+          ),
+          ListTile(
+            title: Text(imageDetails!.imageTitle!),
+            subtitle: Text(imageDetails!.imageDescription!),
+          ),
+        ],
+      ),
+    );
+  }
+}

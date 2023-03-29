@@ -9,7 +9,6 @@
 
 <div class=" h-screen flex flex-col justify-center items-center bg-errorContainer">
     <p class="text-error">{$page.error}</p>
-    <p class=" text-6xl text-blue-700 font-black">Site is still under testing</p>
 </div>
 
 

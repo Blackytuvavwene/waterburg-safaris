@@ -42,9 +42,9 @@ $:({packageD}=currentActivity);
     
 </script>
 
-<section class="w-[100%] p-8 lg:p-28 xl:px-36">
-    <h1 class="text-xl font-semibold text-primary mb-6">Book for {activityName}</h1>
-    <form class=" rounded-xl drop-shadow-2xl  bg-primary-50 shadow-primary" >
+<section class="lg:my-28 my-6 self-center w-full flex flex-col">
+    <h1 class="text-xl font-semibold text-primary text-center">Book for {activityName}</h1>
+    <form class="flex flex-col self-center px-6 w-full max-w-[90vw] md:max-w-[80vw] lg:max-w-7xl rounded-xl drop-shadow-xl bg-primary-50" >
         <div class="rounded-xl p-6">
             <h2 class="text-base font-semibold">Selected Package</h2>
             <p class="text-sm">This is the package you selected for activity category 
@@ -64,31 +64,8 @@ $:({packageD}=currentActivity);
         </div>
         <div class="flex flex-col md:flex-row w-full ">
             <div class="flex flex-col  p-8 w-full">
-                <h3 class="text-base font-semibold lg:font-bold">Card details</h3>
-                <div class="flex flex-col gap-10">
-                    <fieldset class="flex flex-col gap-6">
-                        <div class="flex flex-col gap-1">
-                            <label for="ccHolderName">Name on card</label>
-                            <input type="text" id="ccHolderName" name="ccHolderName" bind:value={ccHolderName}>
-                        </div>
-                        <div class="flex flex-col gap-1">
-                            <label for="ccNumber">Credit card number</label>
-                            <input type="text" id="ccNumber" name="ccNumber" bind:value={ccNumber}>
-                        </div>
-                        <div class="flex flex-col gap-1">
-                            <label for="ccExpiry">Expiry</label>
-                            <input type="month" id="ccExpiry" name="ccExpiry" bind:value={ccExpiry}>
-                        </div>
-                        <div class="flex flex-col gap-1">
-                            <label for="cvv">CVV</label>
-                            <input type="text" id="cvv" name="cvv" bind:value={cvv}>
-                        </div>
-                    </fieldset>
-                </div>
-            </div>
-            <div class="flex flex-col  p-8 w-full">
-                <h4 class="text-base font-semibold">Billing details</h4>
-                <p>Enter your billing address details</p>
+                <h4 class="text-base font-semibold">Personal information</h4>
+                <p>Enter your names and email</p>
                 <fieldset class="flex flex-col gap-2">
                     <div class="flex flex-col gap-1">
                         <label for="customerNames">Full names</label>
@@ -131,9 +108,8 @@ $:({packageD}=currentActivity);
                 
             </div>
         </div>
-        <div class="sticky bottom-0  p-2 flex flex-row items-center justify-between bg-primary">
-            <p class=" text-base font-semibold text-onPrimary">$ {currentActivity?.packageD?.price}</p>
-            <button type="button" value="Proceed to checkout" 
+        <br>
+            <button type="button" value="Book now" 
             on:click={()=>{
                 bookingModelData={
                     bookingCode: bookCode,
@@ -165,7 +141,7 @@ $:({packageD}=currentActivity);
             }} 
             class=" p-2 rounded-md shadow-xl drop-shadow-2xl bg-primaryContainer
              text-onPrimaryContainer font-bold hover:bg-success-150 hover:-translate-y-1 transition-all duration-75 ">
-            Proceed to checkout</button>
-        </div>
+            Book now
+        </button>
     </form>
 </section>

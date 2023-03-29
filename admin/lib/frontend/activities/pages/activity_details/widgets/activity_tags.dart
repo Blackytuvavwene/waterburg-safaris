@@ -127,15 +127,18 @@ class ActivityTags extends HookConsumerWidget {
     Key? key,
     this.tags,
     this.activityId,
+    this.isEditing,
   }) : super(key: key);
   final List<String>? tags;
   final String? activityId;
+  final ValueNotifier<bool>? isEditing;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
       mobile: _MobileActivityTags(
         tags: tags,
         activityId: activityId,
+        isEditing: isEditing,
       ),
       tablet: _TabletActivityTags(
         tags: tags,
@@ -155,9 +158,11 @@ class _MobileActivityTags extends HookConsumerWidget {
     Key? key,
     this.tags,
     this.activityId,
+    this.isEditing,
   }) : super(key: key);
   final List<String>? tags;
   final String? activityId;
+  final ValueNotifier<bool>? isEditing;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tagsController = useTextEditingController();
@@ -165,141 +170,143 @@ class _MobileActivityTags extends HookConsumerWidget {
     final tagsInState = ref.watch(activityTagsNotifierProvider);
     final tagsStateController = ref.read(activityTagsNotifierProvider.notifier);
     return Scaffold(
-      body: Container(
-        height: 100.h,
-        width: 100.w,
-        padding: EdgeInsets.only(
-          left: 4.w,
-          top: 2.h,
-          right: 4.w,
-        ),
-        child: Stack(
-          children: [
-            Positioned(
-              top: 0,
-              right: 0,
-              left: 0,
-              child: SizedBox(
-                width: 100.w,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      child: TextFormField(
-                        controller: tagsController,
-                        decoration: const InputDecoration(
-                          labelText: 'Add a tag',
-                          border: OutlineInputBorder(),
-                        ),
+      body: CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    left: 0,
+                    child: SizedBox(
+                      width: 100.w,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(
+                            child: TextFormField(
+                              controller: tagsController,
+                              decoration: const InputDecoration(
+                                labelText: 'Add a tag',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () async {
+                              if (tagsController.text.isNotEmpty) {
+                                tagsList.value = [
+                                  ...tagsList.value,
+                                  tagsController.text
+                                ];
+                                print('tagsList.value: ${tagsList.value}');
+                                tagsController.clear();
+                              }
+                            },
+                            icon: const Icon(Icons.add),
+                          ),
+                        ],
                       ),
                     ),
-                    IconButton(
-                      onPressed: () async {
-                        if (tagsController.text.isNotEmpty) {
-                          tagsList.value = [
-                            ...tagsList.value,
-                            tagsController.text
-                          ];
-                          print('tagsList.value: ${tagsList.value}');
-                          tagsController.clear();
-                        }
-                      },
-                      icon: const Icon(Icons.add),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              top: 10.h,
-              right: 0,
-              left: 0,
-              bottom: 0,
-              child: SizedBox(
-                height: 80.h,
-                width: 100.w,
-                child: ListView(
-                  children: [
-                    // new tags
-                    tagsList.value.isNotEmpty
-                        ? SizedBox(
-                            width: 100.w,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                SizedBox(
-                                  child: DText(
-                                    text: 'New tags',
-                                    fontSize: 18.sp,
-                                  ),
-                                ),
-                                Wrap(
-                                  spacing: 2.w,
-                                  children: [
-                                    for (var tag in tagsList.value)
-                                      Container(
-                                        child: Chip(
-                                          label: Text(tag),
-                                          deleteIcon: LineIcon.trash(),
-                                          onDeleted: () {
-                                            tagsList.value = tagsList.value
-                                                .where(
-                                                    (element) => element != tag)
-                                                .toList();
-                                          },
-                                        ).animate().scale().slide(),
+                  ),
+                  Positioned(
+                    top: 10.h,
+                    right: 0,
+                    left: 0,
+                    bottom: 0,
+                    child: SizedBox(
+                      height: 80.h,
+                      width: 100.w,
+                      child: ListView(
+                        children: [
+                          // new tags
+                          tagsList.value.isNotEmpty
+                              ? SizedBox(
+                                  width: 100.w,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      SizedBox(
+                                        child: DText(
+                                          text: 'New tags',
+                                          fontSize: 18.sp,
+                                        ),
                                       ),
-                                  ],
-                                ),
+                                      Wrap(
+                                        spacing: 2.w,
+                                        children: [
+                                          for (var tag in tagsList.value)
+                                            Container(
+                                              child: Chip(
+                                                label: Text(tag),
+                                                deleteIcon: LineIcon.trash(),
+                                                onDeleted: () {
+                                                  tagsList.value = tagsList
+                                                      .value
+                                                      .where((element) =>
+                                                          element != tag)
+                                                      .toList();
+                                                },
+                                              ).animate().scale().slide(),
+                                            ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : const SizedBox(),
+                          SizedBox(
+                            width: 100.w,
+                            child: DText(
+                              text: 'Tags from database tags',
+                              fontSize: 18.sp,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 100.w,
+                            child: Wrap(
+                              spacing: 2.w,
+                              children: [
+                                for (var tag in tags!)
+                                  Container(
+                                    child: Chip(
+                                      label: DText(
+                                        text: tag,
+                                      ),
+                                      deleteIcon: LineIcon.trash(
+                                        color: Colors.red,
+                                      ),
+                                      onDeleted: () async {
+                                        // tags?.remove(tag);
+                                        print(tags);
+                                        await tagsStateController
+                                            .removeTagFromFirestore(
+                                          tag: tag,
+                                          activityId: activityId!,
+                                          query: 'tags',
+                                        );
+                                        tagsStateController.removeTagFromState(
+                                          tag: tag,
+                                        );
+                                      },
+                                    ),
+                                  ),
                               ],
                             ),
                           )
-                        : const SizedBox(),
-                    SizedBox(
-                      width: 100.w,
-                      child: DText(
-                        text: 'Tags from database tags',
-                        fontSize: 18.sp,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 100.w,
-                      child: Wrap(
-                        spacing: 2.w,
-                        children: [
-                          for (var tag in tags!)
-                            Container(
-                              child: Chip(
-                                label: DText(
-                                  text: tag,
-                                ),
-                                deleteIcon: LineIcon.trash(
-                                  color: Colors.red,
-                                ),
-                                onDeleted: () async {
-                                  // tags?.remove(tag);
-                                  print(tags);
-                                  await tagsStateController
-                                      .removeTagFromFirestore(
-                                    tag: tag,
-                                    activityId: activityId!,
-                                    query: 'tags',
-                                  );
-                                  tagsStateController.removeTagFromState(
-                                    tag: tag,
-                                  );
-                                },
-                              ),
-                            ),
                         ],
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       bottomNavigationBar: CustomElevatedButton(
         onPressed: () async {

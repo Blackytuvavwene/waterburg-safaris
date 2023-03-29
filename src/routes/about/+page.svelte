@@ -31,10 +31,10 @@ $: ({companyStaff, companyGallery, companyDetails} = data.about as AboutCompanyR
 </svelte:head>
 
 
-<div class="w-full flex-auto flex items-center  justify-center relative h-64 sm:h-80 lg:h-96 mb-6">
+<div class="w-full flex-auto flex items-center justify-center relative h-64 sm:h-80 lg:h-96 mb-6 box-border">
     {#if companyGallery}
     <div class="w-full h-full flex-auto flex items-center justify-center">
-        <div class="w-full h-full  ">
+        <div class="w-full h-full">
             <ImageSlideShow images={companyGallery}/>
         </div>
         
@@ -44,13 +44,12 @@ $: ({companyStaff, companyGallery, companyDetails} = data.about as AboutCompanyR
                     <img src={logoLg} class="w-96 md:w-96 h-52 lg:h-80" alt="{companyDetails?.companyName} logo">
                 </FadeTransition>
             </div>
-            
         </div>
     </div> 
     {/if}
 </div>
 
-<div class=" flex-1 flex-col justify-center items-center   h-full w-auto">
+<div class=" flex-1 flex-col justify-center items-center h-full w-auto md:mt-20">
     <h1 class=" text-primary text-3xl sm:px-12 px-6 lg:px-32 lg:text-4xl font-bold my-2">{companyDetails?.companyName}</h1>
     {#if companyDetails?.overview}
         <Overview overviewData={companyDetails?.overview}/>

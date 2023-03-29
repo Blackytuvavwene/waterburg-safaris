@@ -47,6 +47,7 @@ class FirestoreHelper {
     required String docPath,
     required T data,
     required String query,
+    bool? merge,
   }) async {
     try {
       await _firestore
@@ -57,26 +58,33 @@ class FirestoreHelper {
           }, toFirestore: (data, options) {
             return FirestoreConverters.toFirestore<T>(data);
           })
-          .set(data, SetOptions(merge: true))
-          .then((value) => print({'Data updated': data}));
+          .set(
+            data,
+            SetOptions(
+              merge: merge,
+            ),
+          )
+          .then((value) => debugPrint({
+                'Data updated': data,
+              }.toString()));
       // getDataFromDoc<T>(
       // docId: docId, docPath: docPath, query: query);
       return data;
     } on FirebaseException catch (e, s) {
       debugPrintStack(
-        label: 'updateDataInDocA',
+        label: 'Firebase Exception',
         stackTrace: s,
       );
       throw e.message.toString();
     } on Exception catch (e, s) {
       debugPrintStack(
-        label: 'updateDataInDocB',
+        label: 'Catch Exception',
         stackTrace: s,
       );
       throw e.toString();
     } catch (e, s) {
       debugPrintStack(
-        label: 'updateDataInDocC',
+        label: 'Catch Exception all $e',
         stackTrace: s,
       );
       throw e.toString();

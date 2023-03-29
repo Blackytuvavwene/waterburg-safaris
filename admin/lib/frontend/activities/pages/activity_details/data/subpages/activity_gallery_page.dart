@@ -14,14 +14,16 @@ class ActivityGalleryPage extends HookConsumerWidget {
     this.activityNotifier,
     this.localImageProvider,
     this.imageControllerNotifier,
-    required this.isEditing,
+    this.isEditing,
+    this.initialActivity,
   }) : super(key: key);
   final List<Gallery>? gallery;
   final String? activityId;
   final ActivityControlNotifier? activityNotifier;
   final AsyncValue<List<ImageHelperModel>?>? localImageProvider;
   final ImageControllerNotifier? imageControllerNotifier;
-  final ValueNotifier<bool> isEditing;
+  final ValueNotifier<bool>? isEditing;
+  final Activity? initialActivity;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
@@ -31,7 +33,7 @@ class ActivityGalleryPage extends HookConsumerWidget {
         activityNotifier: activityNotifier,
         localImageProvider: localImageProvider,
         imageControllerNotifier: imageControllerNotifier,
-        isEditing: isEditing,
+        isEditing: isEditing!,
       ),
       tablet: _TabletActivityGalleryPage(
         gallery: gallery,
@@ -143,9 +145,10 @@ class _MobileActivityGalleryPage extends HookConsumerWidget {
                         left: 2.w,
                         right: 2.w,
                       ),
-                      child: ActivityImageCard(
-                        image: gallery![index],
+                      child: ImageCard(
+                        imageDetails: gallery![index],
                       ),
+                      //TODO: add on remove image
                     );
                   },
                   separatorBuilder: (context, index) {
@@ -196,7 +199,7 @@ class _MobileActivityGalleryPage extends HookConsumerWidget {
               itemCount: gallery!.length.toInt(),
               separatorBuilder: (context, index) {
                 return SizedBox(
-                  height: 4.h,
+                  height: 1.5.h,
                 );
               },
               itemBuilder: (context, index) {
@@ -205,8 +208,19 @@ class _MobileActivityGalleryPage extends HookConsumerWidget {
                     left: 2.w,
                     right: 2.w,
                   ),
-                  child: ActivityImageCard(
-                    image: gallery![index],
+                  child: ImageCard(
+                    imageDetails: gallery![index],
+                    onRemoveImage: () {
+                      // set is editing to true if not already
+                      if (!isEditing.value) {
+                        isEditing.value = true;
+                      }
+
+                      // remove image from activity gallery
+                      activityNotifier?.deleteImageFromActivityGallery(
+                        index: index,
+                      );
+                    },
                   ),
                 );
               },
@@ -262,13 +276,13 @@ class _TabletActivityGalleryPage extends HookConsumerWidget {
                       color: Theme.of(context).colorScheme.onBackground,
                     ),
                     onPressed: () {
-                      // show add image dialog
-                      showDialog(
-                        context: context,
-                        builder: (context) => AddImagesDialog(
-                          activityId: activityId.toString(),
-                        ),
-                      );
+                      //todo: show add image dialog
+                      // showDialog(
+                      //   context: context,
+                      //   builder: (context) => AddImagesDialog(
+                      //     activityId: activityId.toString(),
+                      //   ),
+                      // );
                     },
                   ),
                 ],
@@ -297,8 +311,8 @@ class _TabletActivityGalleryPage extends HookConsumerWidget {
                         left: 2.w,
                         right: 2.w,
                       ),
-                      child: ActivityImageCard(
-                        image: gallery![index],
+                      child: ImageCard(
+                        imageDetails: gallery![index],
                       ),
                     );
                   },
@@ -348,13 +362,13 @@ class _DesktopActivityGalleryPage extends HookConsumerWidget {
                       color: Theme.of(context).colorScheme.onBackground,
                     ),
                     onPressed: () {
-                      // show add image dialog
-                      showDialog(
-                        context: context,
-                        builder: (context) => AddImagesDialog(
-                          activityId: activityId.toString(),
-                        ),
-                      );
+                      //todo: show add image dialog for desktop
+                      // showDialog(
+                      //   context: context,
+                      //   builder: (context) => AddImagesDialog(
+                      //     activityId: activityId.toString(),
+                      //   ),
+                      // );
                     },
                   ),
                 ],
@@ -383,8 +397,8 @@ class _DesktopActivityGalleryPage extends HookConsumerWidget {
                         left: 2.w,
                         right: 2.w,
                       ),
-                      child: ActivityImageCard(
-                        image: gallery![index],
+                      child: ImageCard(
+                        imageDetails: gallery![index],
                       ),
                     );
                   },

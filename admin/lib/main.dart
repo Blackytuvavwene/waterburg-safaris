@@ -46,6 +46,14 @@ class MyApp extends HookConsumerWidget {
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: ThemeData.from(
+            // useMaterial3: true,
+            // textTheme: GoogleFonts.dosisTextTheme(
+            //   Theme.of(context).textTheme.copyWith(
+            //         bodySmall: TextStyle(
+            //           color: Theme.of(context).colorScheme.onSurface,
+            //         ),
+            //       ),
+            // ),
             colorScheme: const ColorScheme(
               brightness: Brightness.dark,
               primary: Color(0xFF92ccff),

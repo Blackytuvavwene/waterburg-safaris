@@ -9,12 +9,12 @@ class ActivityTagsPage extends HookConsumerWidget {
     this.tags,
     this.activityId,
     this.activityNotifier,
-    required this.isEditing,
+    this.isEditing,
   }) : super(key: key);
   final List<String>? tags;
   final String? activityId;
   final ActivityControlNotifier? activityNotifier;
-  final ValueNotifier<bool> isEditing;
+  final ValueNotifier<bool>? isEditing;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
@@ -22,6 +22,7 @@ class ActivityTagsPage extends HookConsumerWidget {
         tags: tags,
         activityId: activityId,
         activityNotifier: activityNotifier,
+        isEditing: isEditing,
       ),
       tablet: _TabletActivityTagsPage(
         tags: tags,
@@ -44,16 +45,19 @@ class _MobileActivityTagsPage extends HookConsumerWidget {
     this.tags,
     this.activityId,
     this.activityNotifier,
+    this.isEditing,
   }) : super(key: key);
   final List<String>? tags;
   final String? activityId;
   final ActivityControlNotifier? activityNotifier;
+  final ValueNotifier<bool>? isEditing;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Center(
       child: ActivityTags(
         tags: tags,
         activityId: activityId,
+        isEditing: isEditing,
       ),
     );
   }

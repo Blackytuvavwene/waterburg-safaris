@@ -17,6 +17,15 @@ class ActivityControlNotifier extends StateNotifier<Activity?> {
     state = state?.copyWith(tags: tags);
   }
 
+  // delete image from activity gallery
+  void deleteImageFromActivityGallery({required int index}) {
+    state = state?.copyWith(
+      activityGallery: [
+        ...state?.activityGallery ?? [],
+      ]..removeAt(index),
+    );
+  }
+
   // update activity gallery in activity
   void updateActivityGalleryInActivity(
       {required List<Gallery> activityGallery}) {
@@ -125,14 +134,76 @@ class ActivityDBController extends StateNotifier<AsyncValue<Activity>?> {
   ActivitiesDatabaseRepository? activitiesDatabaseRepository;
 
   // add a new activity to firestore
-  Future<AsyncValue<Activity>> addActivityToFirestore(
-      {required Activity activity}) async {
+  Future<AsyncValue<Activity>> addActivityToFirestore({
+    required Activity activity,
+  }) async {
     state = const AsyncValue.loading();
 
     return state = await AsyncValue.guard(() async {
       final activityD = await activitiesDatabaseRepository!
           .addActivityToFirestore(activity: activity);
       return activityD;
+    });
+  }
+
+  // update activity in firestore
+  Future<AsyncValue<Activity>> updateActivityInFirestore({
+    required Activity activity,
+    required List<ImageHelperModel> images,
+  }) async {
+    state = const AsyncValue.loading();
+
+    return state = await AsyncValue.guard(() async {
+      // first upload images to firebase storage and get the urls if images is not empty
+      if (images.isNotEmpty) {
+        final newImageUploads = images.map((e) async {
+          final url = await ImageHelpers.addImageToFirebaseStorage(
+            image: e.xFile!,
+            path: 'activities/${activity.activityId}/gallery',
+          );
+
+          // return the new image as gallery model
+          return Gallery(
+            imageUrl: url,
+            imageDescription: e.imageDetails?.imageDescription,
+            imageTitle: e.imageDetails?.imageTitle,
+          );
+        }).toList();
+
+        // get the new images
+        final newImages = await Future.wait(newImageUploads);
+
+        // update the activity gallery
+        activity = activity.copyWith(
+          activityGallery: [
+            ...activity.activityGallery ?? [],
+            ...newImages,
+          ],
+        );
+
+        // update the activity in firestore
+        final activityD =
+            await FirestoreHelper.updateDataInDoc<Map<String, dynamic>>(
+          docId: activity.activityId!,
+          docPath: 'activities',
+          data: activity.toJson(),
+          query: activity.activityId!,
+          merge: false,
+        );
+        return Activity.fromJson(activityD);
+      } else {
+        // update the activity in firestore
+        final activityD =
+            await FirestoreHelper.updateDataInDoc<Map<String, dynamic>>(
+          docId: activity.activityId!,
+          docPath: 'activities',
+          data: activity.toJson(),
+          query: activity.activityId!,
+          merge: false,
+        );
+
+        return Activity.fromJson(activityD);
+      }
     });
   }
 }

@@ -19,7 +19,7 @@
 
 </script>
 
-<div class="mx-6 lg:mx-28 xl:mx-72 flex items-center justify-between" style:flex-direction={flexDirection}>
+<div class="m-auto flex w-[80%] items-center justify-between" style:flex-direction={flexDirection}>
     <div class="p-3 bg-primary rounded-xl w-36 lg:w-56 items-center">
         <h1 class="text-onPrimary font-extrabold text-center lg:text-3xl">{topicText}</h1>
     </div>

@@ -10,6 +10,10 @@ part 'activities.model.g.dart';
 
 @Freezed()
 class Activity with _$Activity {
+  @JsonSerializable(
+    explicitToJson: true,
+    anyMap: true,
+  )
   factory Activity({
     final String? activityId,
     final String? activityName,
@@ -28,6 +32,10 @@ class Activity with _$Activity {
 
 @Freezed()
 class Package with _$Package {
+  @JsonSerializable(
+    explicitToJson: true,
+    anyMap: true,
+  )
   factory Package({
     final String? packageId,
     final String? packageName,
