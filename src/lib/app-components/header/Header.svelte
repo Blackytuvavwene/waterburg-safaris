@@ -68,7 +68,7 @@
          // listen for scroll event to provide background to header
             window.addEventListener('scroll',()=>{
                 if(window.scrollY>10){
-                    headerBackground='bg-primary-900 bg-opacity-50';
+                    headerBackground='bg-primary-900 bg-opacity-70';
                 }else{
                     headerBackground='bg-primary-900';
                 }
