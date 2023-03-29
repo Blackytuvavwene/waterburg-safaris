@@ -24,7 +24,7 @@
     let mouseHover:boolean=false;
 
     // header background color on scroll
-    let headerBackground:string;
+    let headerBackground:string = 'bg-primary-900';
 
     
 
