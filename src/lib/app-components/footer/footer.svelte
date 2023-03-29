@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type{ HomeModel } from './../home-components/helpers/home.firestore.helpers';
 import ContactFooter from "./components/ContactFooter.svelte";
-import wblogoLg from "$lib/ajtfulllogo.svg";
+import wblogoLg from "$lib/ajtfulllogo.png";
 
 export let footerData:HomeModel;
 

@@ -89,9 +89,9 @@
             <div class="w-full h-full flex flex-row justify-between items-center ">
                 <div class="flex flex-row items-center justify-center w-full">
                     <a href="/" class="float-left h-full p-3 flex justify-center items-center">
-                        <img src={logo}  alt="African Journey Tour logo" width="50" height="50" />
+                        <img src={logo}  alt="African Journey Tours logo" width="50" height="50" />
                     </a>
-                    <span class="float-left s:text-base text-xl w-full font-bold mx-2 text-onPrimary">African Journey Tour</span>
+                    <span class="float-left s:text-base text-xl w-full font-bold mx-2 text-onPrimary">African Journey Tours</span>
                 </div>
                 <div class="lg:hidden h-full float-right transition delay-1000 flex flex-col w-fit justify-end items-end">
                     <button class="w-8 h-full mr-4 " on:click={toggleNavBar}>

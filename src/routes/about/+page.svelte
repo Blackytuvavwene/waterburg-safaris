@@ -6,7 +6,7 @@ import Address from "$lib/app-components/about-components/Address.svelte";
 import CompanyStaff from "$lib/app-components/about-components/CompanyStaff.svelte";
 import Overview from "$lib/app-components/about-components/Overview.svelte";
 import type { PageServerData } from './$types';
-import logoLg from "$lib/ajtfulllogo.svg";
+import logoLg from "$lib/ajtfulllogo.png";
 import FadeTransition from '$lib/animations/FadeTransition.svelte';
 import { onMount } from 'svelte';
 import SliderImage from '$lib/app-components/sliders/SliderImage.svelte';
