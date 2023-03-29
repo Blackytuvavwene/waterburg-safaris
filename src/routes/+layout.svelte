@@ -11,10 +11,6 @@
 
     import Footer from '$lib/app-components/footer/footer.svelte';
     import Header from '$lib/app-components/header/Header.svelte';
-
-   
-    
-    import PageLoader from '$lib/animations/PageLoader.svelte';
 	import type { LayoutServerData } from './$types';
 
     let openWidget = false;
@@ -42,10 +38,6 @@
     
 </script>
 
-
-{#if $pageLoading}
-<PageLoader />
-{/if}
 
 
 {#await data.homeData}
