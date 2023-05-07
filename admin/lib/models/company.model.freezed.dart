@@ -26,6 +26,7 @@ mixin _$Company {
   List<Gallery>? get companyGallery => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
+  String? get slug => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,7 +44,8 @@ abstract class $CompanyCopyWith<$Res> {
       List<CompanyStaff>? companyStaff,
       List<Gallery>? companyGallery,
       DateTime? createdAt,
-      DateTime? updatedAt});
+      DateTime? updatedAt,
+      String? slug});
 
   $CompanyDetailsCopyWith<$Res>? get companyDetails;
 }
@@ -67,6 +69,7 @@ class _$CompanyCopyWithImpl<$Res, $Val extends Company>
     Object? companyGallery = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
+    Object? slug = freezed,
   }) {
     return _then(_value.copyWith(
       companyId: freezed == companyId
@@ -93,6 +96,10 @@ class _$CompanyCopyWithImpl<$Res, $Val extends Company>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      slug: freezed == slug
+          ? _value.slug
+          : slug // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 
@@ -122,7 +129,8 @@ abstract class _$$_CompanyCopyWith<$Res> implements $CompanyCopyWith<$Res> {
       List<CompanyStaff>? companyStaff,
       List<Gallery>? companyGallery,
       DateTime? createdAt,
-      DateTime? updatedAt});
+      DateTime? updatedAt,
+      String? slug});
 
   @override
   $CompanyDetailsCopyWith<$Res>? get companyDetails;
@@ -144,6 +152,7 @@ class __$$_CompanyCopyWithImpl<$Res>
     Object? companyGallery = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
+    Object? slug = freezed,
   }) {
     return _then(_$_Company(
       companyId: freezed == companyId
@@ -170,6 +179,10 @@ class __$$_CompanyCopyWithImpl<$Res>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      slug: freezed == slug
+          ? _value.slug
+          : slug // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -184,7 +197,8 @@ class _$_Company with DiagnosticableTreeMixin implements _Company {
       final List<CompanyStaff>? companyStaff,
       final List<Gallery>? companyGallery,
       this.createdAt,
-      this.updatedAt})
+      this.updatedAt,
+      this.slug})
       : _companyStaff = companyStaff,
         _companyGallery = companyGallery;
 
@@ -219,10 +233,12 @@ class _$_Company with DiagnosticableTreeMixin implements _Company {
   final DateTime? createdAt;
   @override
   final DateTime? updatedAt;
+  @override
+  final String? slug;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Company(companyId: $companyId, companyDetails: $companyDetails, companyStaff: $companyStaff, companyGallery: $companyGallery, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Company(companyId: $companyId, companyDetails: $companyDetails, companyStaff: $companyStaff, companyGallery: $companyGallery, createdAt: $createdAt, updatedAt: $updatedAt, slug: $slug)';
   }
 
   @override
@@ -235,7 +251,8 @@ class _$_Company with DiagnosticableTreeMixin implements _Company {
       ..add(DiagnosticsProperty('companyStaff', companyStaff))
       ..add(DiagnosticsProperty('companyGallery', companyGallery))
       ..add(DiagnosticsProperty('createdAt', createdAt))
-      ..add(DiagnosticsProperty('updatedAt', updatedAt));
+      ..add(DiagnosticsProperty('updatedAt', updatedAt))
+      ..add(DiagnosticsProperty('slug', slug));
   }
 
   @override
@@ -254,7 +271,8 @@ class _$_Company with DiagnosticableTreeMixin implements _Company {
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+                other.updatedAt == updatedAt) &&
+            (identical(other.slug, slug) || other.slug == slug));
   }
 
   @JsonKey(ignore: true)
@@ -266,7 +284,8 @@ class _$_Company with DiagnosticableTreeMixin implements _Company {
       const DeepCollectionEquality().hash(_companyStaff),
       const DeepCollectionEquality().hash(_companyGallery),
       createdAt,
-      updatedAt);
+      updatedAt,
+      slug);
 
   @JsonKey(ignore: true)
   @override
@@ -289,7 +308,8 @@ abstract class _Company implements Company {
       final List<CompanyStaff>? companyStaff,
       final List<Gallery>? companyGallery,
       final DateTime? createdAt,
-      final DateTime? updatedAt}) = _$_Company;
+      final DateTime? updatedAt,
+      final String? slug}) = _$_Company;
 
   factory _Company.fromJson(Map<String, dynamic> json) = _$_Company.fromJson;
 
@@ -305,6 +325,8 @@ abstract class _Company implements Company {
   DateTime? get createdAt;
   @override
   DateTime? get updatedAt;
+  @override
+  String? get slug;
   @override
   @JsonKey(ignore: true)
   _$$_CompanyCopyWith<_$_Company> get copyWith =>
@@ -505,6 +527,7 @@ mixin _$CompanyStaff {
   String? get jobTitle => throw _privateConstructorUsedError;
   String? get jobDescription => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
+  String? get slug => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -525,7 +548,8 @@ abstract class $CompanyStaffCopyWith<$Res> {
       List<String>? phoneNos,
       String? jobTitle,
       String? jobDescription,
-      String? title});
+      String? title,
+      String? slug});
 }
 
 /// @nodoc
@@ -548,6 +572,7 @@ class _$CompanyStaffCopyWithImpl<$Res, $Val extends CompanyStaff>
     Object? jobTitle = freezed,
     Object? jobDescription = freezed,
     Object? title = freezed,
+    Object? slug = freezed,
   }) {
     return _then(_value.copyWith(
       imageUrl: freezed == imageUrl
@@ -578,6 +603,10 @@ class _$CompanyStaffCopyWithImpl<$Res, $Val extends CompanyStaff>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String?,
+      slug: freezed == slug
+          ? _value.slug
+          : slug // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -597,7 +626,8 @@ abstract class _$$_CompanyStaffCopyWith<$Res>
       List<String>? phoneNos,
       String? jobTitle,
       String? jobDescription,
-      String? title});
+      String? title,
+      String? slug});
 }
 
 /// @nodoc
@@ -618,6 +648,7 @@ class __$$_CompanyStaffCopyWithImpl<$Res>
     Object? jobTitle = freezed,
     Object? jobDescription = freezed,
     Object? title = freezed,
+    Object? slug = freezed,
   }) {
     return _then(_$_CompanyStaff(
       imageUrl: freezed == imageUrl
@@ -648,6 +679,10 @@ class __$$_CompanyStaffCopyWithImpl<$Res>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String?,
+      slug: freezed == slug
+          ? _value.slug
+          : slug // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -663,7 +698,8 @@ class _$_CompanyStaff with DiagnosticableTreeMixin implements _CompanyStaff {
       final List<String>? phoneNos,
       this.jobTitle,
       this.jobDescription,
-      this.title})
+      this.title,
+      this.slug})
       : _phoneNos = phoneNos;
 
   factory _$_CompanyStaff.fromJson(Map<String, dynamic> json) =>
@@ -691,10 +727,12 @@ class _$_CompanyStaff with DiagnosticableTreeMixin implements _CompanyStaff {
   final String? jobDescription;
   @override
   final String? title;
+  @override
+  final String? slug;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CompanyStaff(imageUrl: $imageUrl, fullName: $fullName, email: $email, phoneNos: $phoneNos, jobTitle: $jobTitle, jobDescription: $jobDescription, title: $title)';
+    return 'CompanyStaff(imageUrl: $imageUrl, fullName: $fullName, email: $email, phoneNos: $phoneNos, jobTitle: $jobTitle, jobDescription: $jobDescription, title: $title, slug: $slug)';
   }
 
   @override
@@ -708,7 +746,8 @@ class _$_CompanyStaff with DiagnosticableTreeMixin implements _CompanyStaff {
       ..add(DiagnosticsProperty('phoneNos', phoneNos))
       ..add(DiagnosticsProperty('jobTitle', jobTitle))
       ..add(DiagnosticsProperty('jobDescription', jobDescription))
-      ..add(DiagnosticsProperty('title', title));
+      ..add(DiagnosticsProperty('title', title))
+      ..add(DiagnosticsProperty('slug', slug));
   }
 
   @override
@@ -726,7 +765,8 @@ class _$_CompanyStaff with DiagnosticableTreeMixin implements _CompanyStaff {
                 other.jobTitle == jobTitle) &&
             (identical(other.jobDescription, jobDescription) ||
                 other.jobDescription == jobDescription) &&
-            (identical(other.title, title) || other.title == title));
+            (identical(other.title, title) || other.title == title) &&
+            (identical(other.slug, slug) || other.slug == slug));
   }
 
   @JsonKey(ignore: true)
@@ -739,7 +779,8 @@ class _$_CompanyStaff with DiagnosticableTreeMixin implements _CompanyStaff {
       const DeepCollectionEquality().hash(_phoneNos),
       jobTitle,
       jobDescription,
-      title);
+      title,
+      slug);
 
   @JsonKey(ignore: true)
   @override
@@ -763,7 +804,8 @@ abstract class _CompanyStaff implements CompanyStaff {
       final List<String>? phoneNos,
       final String? jobTitle,
       final String? jobDescription,
-      final String? title}) = _$_CompanyStaff;
+      final String? title,
+      final String? slug}) = _$_CompanyStaff;
 
   factory _CompanyStaff.fromJson(Map<String, dynamic> json) =
       _$_CompanyStaff.fromJson;
@@ -782,6 +824,8 @@ abstract class _CompanyStaff implements CompanyStaff {
   String? get jobDescription;
   @override
   String? get title;
+  @override
+  String? get slug;
   @override
   @JsonKey(ignore: true)
   _$$_CompanyStaffCopyWith<_$_CompanyStaff> get copyWith =>

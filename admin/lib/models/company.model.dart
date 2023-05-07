@@ -20,6 +20,7 @@ class Company with _$Company {
     final List<Gallery>? companyGallery,
     final DateTime? createdAt,
     final DateTime? updatedAt,
+    final String? slug,
   }) = _Company;
 
   factory Company.fromJson(Map<String, dynamic> json) =>
@@ -56,6 +57,7 @@ class CompanyStaff with _$CompanyStaff {
     final String? jobTitle,
     final String? jobDescription,
     final String? title,
+    final String? slug,
   }) = _CompanyStaff;
 
   factory CompanyStaff.fromJson(Map<String, dynamic> json) =>

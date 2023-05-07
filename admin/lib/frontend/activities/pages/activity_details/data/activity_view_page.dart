@@ -81,6 +81,16 @@ class ActivityDetailsPage extends HookConsumerWidget {
       activity,
     ).notifier);
 
+    // reset activity
+    void refreshActivity() {
+      ref.refresh(
+        activityControlNotifierProvider(
+          activity,
+        ),
+      );
+      // activityNotifier.resetActivity(ac);
+    }
+
     // activity edit type watch provider
     final editActivityTypeController =
         ref.read(editActivityTypeProvider.notifier);
@@ -106,6 +116,7 @@ class ActivityDetailsPage extends HookConsumerWidget {
         imageControllerNotifier: imageControllerNotifier,
         isEditing: isEditing,
         initialActivity: activity,
+        refreshActivity: refreshActivity,
       ),
       tablet: _ActivityDetailsPageTablet(
         activity: activity,
@@ -201,6 +212,7 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
     this.imageControllerNotifier,
     this.isEditing,
     this.initialActivity,
+    required this.refreshActivity,
   }) : super(key: key);
   final Activity? activity;
   final StateController<ActivityEditType>? editActivityTypeController;
@@ -210,6 +222,7 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
   final ImageControllerNotifier? imageControllerNotifier;
   final ValueNotifier<bool>? isEditing;
   final Activity? initialActivity;
+  final Function refreshActivity;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tabs = ref.watch(activityTabsListProvider);
@@ -362,6 +375,8 @@ class _ActivityDetailsPageMobile extends HookConsumerWidget {
                     onPressed: () async {
                       editActivityTypeController!
                           .update((state) => state = ActivityEditType.none);
+
+                      refreshActivity();
 
                       // set is editing to false
                       isEditing!.value = false;

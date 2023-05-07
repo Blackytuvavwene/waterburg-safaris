@@ -16,14 +16,14 @@ class EditPackageModel {
   final Package packageCopy;
   final List<Package> packages;
   final ActivityControlNotifier activityNotifier;
-  final int index;
+  final int? index;
   EditPackageModel({
     required this.package,
     required this.activityId,
     required this.packageCopy,
     required this.packages,
     required this.activityNotifier,
-    required this.index,
+    this.index,
   });
 }
 
@@ -338,6 +338,16 @@ class _MobilePackageEditPage extends HookConsumerWidget {
   final EditPackageModel? editPackageModel;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // focus nodes
+    final packageNameFocusNode = useFocusNode();
+    final keywordsFocusNode = useFocusNode();
+    final descriptionFocusNode = useFocusNode();
+    final priceFocusNode = useFocusNode();
+    final lastPriceFocusNode = useFocusNode();
+    final discountPercentageFocusNode = useFocusNode();
+    final couponFocusNode = useFocusNode();
+    final packageOffersFocusNode = useFocusNode();
+
     return Scaffold(
       appBar: AppBar(
         title: DText(
@@ -356,13 +366,13 @@ class _MobilePackageEditPage extends HookConsumerWidget {
             onPressed: () async {
               final packageD = Package(
                 packageId: package!.packageId,
-                packageName: packageName!.text,
+                packageName: package!.packageName,
                 keywords: package!.keywords,
-                description: description!.text,
-                price: double.parse(price!.text),
-                lastPrice: double.parse(lastPrice!.text),
-                discountPercentage: double.parse(discountPercentage!.text),
-                coupon: coupon!.text,
+                description: package!.description,
+                price: package!.price,
+                lastPrice: package!.lastPrice,
+                discountPercentage: package!.discountPercentage,
+                coupon: package!.coupon,
                 packageOffers: package?.packageOffers,
               );
               // final result = await ref.read(packageProvider.notifier).update(
@@ -378,11 +388,18 @@ class _MobilePackageEditPage extends HookConsumerWidget {
                 package: packageD,
               );
 
-              // update package in activity
-              editPackageModel?.activityNotifier.updatePackageInList(
-                package: packageD,
-                index: editPackageModel!.index,
-              );
+              if (editPackageModel?.index == null) {
+                // add new package to list
+                editPackageModel?.activityNotifier.addPackage(
+                  package: packageD,
+                );
+              } else {
+                // update package in activity
+                editPackageModel?.activityNotifier.updatePackageInList(
+                  package: packageD,
+                  index: editPackageModel!.index!,
+                );
+              }
 
               // pop page
               context.pop();
@@ -398,18 +415,241 @@ class _MobilePackageEditPage extends HookConsumerWidget {
             SizedBox(
               height: 2.h,
             ),
-            PackageEditForm(
-              package: package,
-              packageName: packageName,
-              keywordsController: keywordsController,
-              packageNotifier: packageNotifier,
-              description: description,
-              price: price,
-              lastPrice: lastPrice,
-              discountPercentage: discountPercentage,
-              coupon: coupon,
-              packageOffersController: packageOffersController,
-              activityId: activityId,
+            Form(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextFormField(
+                      controller: packageName,
+                      focusNode: packageNameFocusNode,
+                      textInputAction: TextInputAction.next,
+                      decoration: const InputDecoration(
+                        labelText: 'Package Name',
+                        hintText: 'Enter Package Name',
+                        border: OutlineInputBorder(),
+                      ),
+                      onChanged: (value) {
+                        packageNotifier?.updatePackageName(
+                          packageName: packageName!.text,
+                        );
+                      },
+                      onFieldSubmitted: (value) {
+                        packageNotifier?.updatePackageName(
+                          packageName: packageName!.text,
+                        );
+                        // clear controller
+                        packageName!.clear();
+                        // move to next focus
+                        packageNameFocusNode.nextFocus();
+                        keywordsFocusNode.requestFocus();
+                      },
+                    ),
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    ChipInputField<String>(
+                      chips: package?.keywords,
+                      textController: keywordsController,
+                      chipFocusNode: keywordsFocusNode,
+                      onDelete: (keyword) {
+                        packageNotifier?.removePackageKeyword(
+                          keyword: keyword,
+                        );
+                      },
+                      onSubmit: (keyword) {
+                        packageNotifier?.updatePackageKeywords(
+                          keyword: keyword,
+                        );
+                      },
+                      hintText: 'Input keywords here',
+                      noChipsMessasge: 'There are no keywords',
+                    ),
+                    SizedBox(
+                      height: 4.h,
+                    ),
+                    TextFormField(
+                      controller: description,
+                      focusNode: descriptionFocusNode,
+                      minLines: 1,
+                      maxLines: 10,
+                      maxLength: 1000,
+                      textInputAction: TextInputAction.next,
+                      style: GoogleFonts.dosis(),
+                      decoration: const InputDecoration(
+                        labelText: 'Description',
+                        hintText: 'Enter Description',
+                        border: OutlineInputBorder(),
+                      ),
+                      onChanged: (value) {
+                        packageNotifier?.updatePackageDescription(
+                          packageDescription: description!.text,
+                        );
+                      },
+                      onFieldSubmitted: (value) {
+                        // update package description
+                        packageNotifier?.updatePackageDescription(
+                          packageDescription: description!.text,
+                        );
+                        // clear controller
+                        description!.clear();
+                        // next focus node
+                        descriptionFocusNode.nextFocus();
+                      },
+                    ),
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    TextFormField(
+                      controller: price,
+                      keyboardType: TextInputType.number,
+                      focusNode: priceFocusNode,
+                      style: GoogleFonts.dosis(),
+                      textInputAction: TextInputAction.next,
+                      validator: (value) {
+                        CustomFormValidators.onlyDouble(value!);
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'Price',
+                        hintText: 'Enter Price',
+                        border: OutlineInputBorder(),
+                      ),
+                      onChanged: (value) {
+                        // packageNotifier?.updatePackagePrice(
+                        //   packagePrice: double.parse(
+                        //     price!.text,
+                        //   ),
+                        // );
+                      },
+                      onFieldSubmitted: (value) {
+                        // update package price
+                        packageNotifier?.updatePackagePrice(
+                          packagePrice: double.parse(
+                            price!.text,
+                          ),
+                        );
+                        // clear controller
+                        price!.clear();
+                        // next focus
+                        priceFocusNode.nextFocus();
+                      },
+                    ),
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    TextFormField(
+                      controller: lastPrice,
+                      keyboardType: TextInputType.number,
+                      style: GoogleFonts.dosis(),
+                      textInputAction: TextInputAction.next,
+                      focusNode: lastPriceFocusNode,
+                      validator: (value) {
+                        CustomFormValidators.onlyDouble(value!);
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'Last Price',
+                        hintText: 'Enter Last Price',
+                        border: OutlineInputBorder(),
+                      ),
+                      onChanged: (value) {
+                        //TODO: add on changed functionality
+                        // packageNotifier?.updateLastPrice(
+                        //   lastPrice: double.parse(
+                        //     lastPrice!.text,
+                        //   ),
+                        // );
+                      },
+                      onFieldSubmitted: (value) {
+                        // update package last price
+                        packageNotifier?.updateLastPrice(
+                          lastPrice: double.parse(
+                            lastPrice!.text,
+                          ),
+                        );
+
+                        // clear controller
+                        lastPrice!.clear();
+
+                        // next focus
+                        lastPriceFocusNode.nextFocus();
+                      },
+                    ),
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    TextFormField(
+                      controller: discountPercentage,
+                      focusNode: discountPercentageFocusNode,
+                      keyboardType: TextInputType.number,
+                      style: GoogleFonts.dosis(),
+                      textInputAction: TextInputAction.next,
+                      validator: (value) {
+                        CustomFormValidators.onlyDouble(value!);
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'Discount Percentage',
+                        hintText: 'Enter Discount Percentage',
+                        border: OutlineInputBorder(),
+                      ),
+                      onChanged: (value) {
+                        // packageNotifier?.updatePackageDiscount(
+                        //   packageDiscount: double.parse(
+                        //     discountPercentage!.text,
+                        //   ),
+                        // );
+                      },
+                      onFieldSubmitted: (value) {
+                        packageNotifier?.updatePackageDiscount(
+                          packageDiscount: double.parse(
+                            discountPercentage!.text,
+                          ),
+                        );
+
+                        // clear controller
+                        discountPercentage!.clear();
+                        // remove focus and focus on next focus node
+                        discountPercentageFocusNode.nextFocus();
+                      },
+                    ),
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    const DText(
+                      text: 'Package offers',
+                      textAlign: TextAlign.start,
+                    ),
+                    ChipInputField<String>(
+                      chips: package?.packageOffers,
+                      textController: packageOffersController,
+                      chipFocusNode: packageOffersFocusNode,
+                      onDelete: (value) {
+                        packageNotifier?.removePackageOffer(
+                          packageOffer: value,
+                        );
+                      },
+                      onSubmit: (value) {
+                        packageNotifier?.updatePackageOffers(
+                          packageOffer: value,
+                        );
+                      },
+                      hintText: 'Please enter offer here',
+                      noChipsMessasge: 'No package offers',
+                    ),
+                    SizedBox(
+                      height: 4.h,
+                    ),
+                    // CustomElevatedButton(
+                    //   onPressed: () {},
+                    //   text: 'Update Package',
+                    //   fontSize: 16.sp,
+                    // ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
@@ -672,16 +912,18 @@ class _MobilePackageEditForm extends HookConsumerWidget {
                   text: 'Keywords',
                   fontSize: 14.sp,
                 ),
-                Wrap(
-                  spacing: 2.w,
-                  children: [
-                    ...package!.keywords!
-                        .map((keyword) => Chip(
-                              label: Text(keyword),
-                            ))
-                        .toList()
-                  ],
-                ),
+                package?.keywords != null
+                    ? Wrap(
+                        spacing: 2.w,
+                        children: [
+                          ...package!.keywords!
+                              .map((keyword) => Chip(
+                                    label: Text(keyword),
+                                  ))
+                              .toList()
+                        ],
+                      )
+                    : const SizedBox.shrink(),
               ],
             ),
             SizedBox(
@@ -856,24 +1098,25 @@ class _MobilePackageEditForm extends HookConsumerWidget {
                 Wrap(
                   spacing: 2.w,
                   children: [
-                    ...package!.packageOffers!
-                        .map(
-                          (keyword) => Chip(
-                            label: DText(text: keyword),
-                            padding: EdgeInsets.all(
-                              10.sp,
+                    if (package?.packageOffers != null)
+                      ...package!.packageOffers!
+                          .map(
+                            (keyword) => Chip(
+                              label: DText(text: keyword),
+                              padding: EdgeInsets.all(
+                                10.sp,
+                              ),
+                              deleteIcon: LineIcon.trash(
+                                color: Theme.of(context).colorScheme.error,
+                              ),
+                              onDeleted: () {
+                                packageNotifier?.removePackageOffer(
+                                  packageOffer: keyword,
+                                );
+                              },
                             ),
-                            deleteIcon: LineIcon.trash(
-                              color: Theme.of(context).colorScheme.error,
-                            ),
-                            onDeleted: () {
-                              packageNotifier?.removePackageOffer(
-                                packageOffer: keyword,
-                              );
-                            },
-                          ),
-                        )
-                        .toList()
+                          )
+                          .toList()
                   ],
                 ),
               ],

@@ -1,5 +1,9 @@
+import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:line_icons/line_icon.dart';
+import 'package:sizer/sizer.dart';
 
 class DFormTextField extends StatelessWidget {
   const DFormTextField({
@@ -107,6 +111,105 @@ class DFormTextAreaField extends HookConsumerWidget {
             color: Theme.of(context).colorScheme.primary,
           ),
         ),
+      ),
+    );
+  }
+}
+
+// chip input field
+class ChipInputField<T> extends HookConsumerWidget {
+  const ChipInputField({
+    super.key,
+    this.chips,
+    required this.onDelete,
+    required this.onSubmit,
+    this.textController,
+    this.chipFocusNode,
+    this.formKey,
+    required this.hintText,
+    this.validator,
+    required this.noChipsMessasge,
+  });
+  final List<T>? chips;
+  final Function(T chip) onDelete;
+  final FocusNode? chipFocusNode;
+  final TextEditingController? textController;
+  final Function(String value) onSubmit;
+  final GlobalKey<FormState>? formKey;
+  final Function(String? value)? validator;
+  final String hintText;
+  final String noChipsMessasge;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container(
+      width: 100.w,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Theme.of(context).colorScheme.onBackground,
+        ),
+        borderRadius: BorderRadius.circular(
+          4.sp,
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Flexible(
+            child: Wrap(
+              spacing: AppSpacing.smallX,
+              children: [
+                if (chips != null && chips != [])
+                  if (chips!.isNotEmpty)
+                    ...chips!.map(
+                      (chip) => Chip(
+                        label: DText(
+                          text: chip.toString(),
+                        ),
+                        deleteIcon: LineIcon.trash(
+                          size: 12.sp,
+                        ),
+                        onDeleted: () {
+                          onDelete(chip);
+                        },
+                      ),
+                    )
+                  else
+                    DText(
+                      text: noChipsMessasge,
+                    ),
+              ],
+            ),
+          ),
+          Flexible(
+            child: TextFormField(
+              controller: textController,
+              focusNode: chipFocusNode,
+              decoration: InputDecoration(
+                filled: true,
+                hintText: hintText,
+                hintStyle: GoogleFonts.dosis(),
+              ),
+              validator:
+                  validator != null ? (value) => validator!(value) : null,
+              onChanged: chipFocusNode != null
+                  ? (value) {
+                      // check if cellphone number input field is focused on
+                      if (chipFocusNode!.hasFocus) {
+                        // perform form validations on input changes
+                        formKey?.currentState?.validate();
+                      }
+                    }
+                  : null,
+              onFieldSubmitted: (value) {
+                onSubmit(
+                  textController!.text.trim(),
+                );
+                textController!.clear();
+                chipFocusNode!.requestFocus();
+              },
+            ),
+          )
+        ],
       ),
     );
   }

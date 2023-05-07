@@ -49,16 +49,24 @@ $: ({companyStaff, companyGallery, companyDetails} = data.about as AboutCompanyR
     {/if}
 </div>
 
-<div class=" flex-1 flex-col justify-center items-center h-full w-auto md:mt-20">
-    <h1 class=" text-primary text-3xl sm:px-12 px-6 lg:px-32 lg:text-4xl font-bold my-2">{companyDetails?.companyName}</h1>
+<div class="flex-col justify-center items-center h-full w-full flex md:mt-20">
+    <h1 class=" text-primary text-3xl sm:px-12 px-6 lg:px-32 lg:text-4xl font-bold my-2">
+        {companyDetails?.companyName}
+    </h1>
     {#if companyDetails?.overview}
-        <Overview overviewData={companyDetails?.overview}/>
+        <div>
+            <Overview overviewData={companyDetails?.overview}/>
+        </div>
     {/if}
     {#if companyStaff}
-        <CompanyStaff companyStaffData={companyStaff} companyName={companyDetails?.companyName}/>
+        <div>
+            <CompanyStaff companyStaffData={companyStaff} companyName={companyDetails?.companyName}/>
+        </div>
     {/if}
     {#if companyDetails}
-        <Address addressData={companyDetails}/>
+        <div>
+            <Address addressData={companyDetails}/>
+        </div>
     {/if}
     <!-- {#if gallery}
     <AboutGallery galleryData={gallery}/>

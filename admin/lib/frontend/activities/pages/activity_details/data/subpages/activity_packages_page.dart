@@ -1,6 +1,7 @@
 import 'package:admin/lib.dart';
 import 'package:extended_sliver/extended_sliver.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router_flow/go_router_flow.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sizer/sizer.dart';
 
@@ -69,7 +70,25 @@ class _MobileActivityPackagesPage extends HookConsumerWidget {
                 ),
                 // const Spacer(),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    // create empty model
+                    final newPackage = EditPackageModel(
+                      package: Package(),
+                      activityId: activityId!,
+                      packageCopy: Package(),
+                      packages: packages!,
+                      activityNotifier: activityNotifier!,
+                      index: null,
+                    );
+                    // navigate to add package page
+                    context.pushNamed(
+                      'addPackage',
+                      params: {
+                        'activityId': activityId!,
+                      },
+                      extra: newPackage,
+                    );
+                  },
                   style: TextButton.styleFrom(
                     backgroundColor:
                         Theme.of(context).colorScheme.secondaryContainer,
@@ -88,23 +107,43 @@ class _MobileActivityPackagesPage extends HookConsumerWidget {
             ),
           ),
         ),
-        SliverFillRemaining(
-          child: ListView(
+        SliverPinnedToBoxAdapter(
+          child: Padding(
             padding: EdgeInsets.all(
-              2.w,
+              8.sp,
             ),
-            children: [
-              ...packages!
-                  .map((e) => PackageCard(
-                        activityNotifier: activityNotifier,
-                        index: packages!.indexOf(e),
-                        package: e,
-                        activityId: activityId,
-                        packages: packages,
-                      ))
-                  .toList(),
-            ],
+            child: const DText(
+              text: 'Long press package in order to delete',
+            ),
           ),
+        ),
+        SliverFillRemaining(
+          child: packages != null || packages != []
+              ? ListView(
+                  padding: EdgeInsets.all(
+                    2.w,
+                  ),
+                  children: [
+                    ...packages!
+                        .map((e) => PackageCard(
+                              activityNotifier: activityNotifier,
+                              index: packages!.indexOf(e),
+                              package: e,
+                              activityId: activityId,
+                              packages: packages,
+                            ))
+                        .toList(),
+                  ],
+                )
+              : Center(
+                  child: Column(
+                    children: const [
+                      DText(
+                        text: 'No packages',
+                      )
+                    ],
+                  ),
+                ),
         ),
       ],
     );

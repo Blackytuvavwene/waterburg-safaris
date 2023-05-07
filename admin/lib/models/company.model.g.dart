@@ -25,6 +25,7 @@ _$_Company _$$_CompanyFromJson(Map json) => _$_Company(
       updatedAt: json['updatedAt'] == null
           ? null
           : DateTime.parse(json['updatedAt'] as String),
+      slug: json['slug'] as String?,
     );
 
 Map<String, dynamic> _$$_CompanyToJson(_$_Company instance) =>
@@ -36,6 +37,7 @@ Map<String, dynamic> _$$_CompanyToJson(_$_Company instance) =>
           instance.companyGallery?.map((e) => e.toJson()).toList(),
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
+      'slug': instance.slug,
     };
 
 _$_Gallery _$$_GalleryFromJson(Map json) => _$_Gallery(
@@ -61,6 +63,7 @@ _$_CompanyStaff _$$_CompanyStaffFromJson(Map json) => _$_CompanyStaff(
       jobTitle: json['jobTitle'] as String?,
       jobDescription: json['jobDescription'] as String?,
       title: json['title'] as String?,
+      slug: json['slug'] as String?,
     );
 
 Map<String, dynamic> _$$_CompanyStaffToJson(_$_CompanyStaff instance) =>
@@ -72,6 +75,7 @@ Map<String, dynamic> _$$_CompanyStaffToJson(_$_CompanyStaff instance) =>
       'jobTitle': instance.jobTitle,
       'jobDescription': instance.jobDescription,
       'title': instance.title,
+      'slug': instance.slug,
     };
 
 _$_CompanyDetails _$$_CompanyDetailsFromJson(Map json) => _$_CompanyDetails(

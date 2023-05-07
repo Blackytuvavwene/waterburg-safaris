@@ -9,19 +9,24 @@ class AddPackagesView extends HookConsumerWidget {
   const AddPackagesView({
     super.key,
     required this.packageData,
+    required this.activityNotifier,
   });
-  final ValueNotifier<List<Package>> packageData;
+  final List<Package> packageData;
+  final AddActivityNotifier activityNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
       mobile: _MobileAddPackagesView(
         packageData: packageData,
+        activityNotifier: activityNotifier,
       ),
       tablet: _TabletAddPackagesView(
         packageData: packageData,
+        activityNotifier: activityNotifier,
       ),
       desktop: _DesktopAddPackagesView(
         packageData: packageData,
+        activityNotifier: activityNotifier,
       ),
     );
   }
@@ -31,14 +36,16 @@ class AddPackagesView extends HookConsumerWidget {
 class _MobileAddPackagesView extends HookConsumerWidget {
   const _MobileAddPackagesView({
     required this.packageData,
+    required this.activityNotifier,
   });
-  final ValueNotifier<List<Package>> packageData;
+  final List<Package> packageData;
+  final AddActivityNotifier activityNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          packageData.value.isEmpty
+          packageData.isEmpty
               ? const SliverToBoxAdapter()
               : SliverAppBar(
                   title: DText(
@@ -50,7 +57,8 @@ class _MobileAddPackagesView extends HookConsumerWidget {
                   actions: [
                     TextButton.icon(
                       onPressed: () {
-                        packageData.value = [];
+                        //TODO : implement delete all packages
+                        // packageData = [];
                       },
                       icon: LineIcon.trash(
                         color: Theme.of(context).colorScheme.onErrorContainer,
@@ -76,7 +84,7 @@ class _MobileAddPackagesView extends HookConsumerWidget {
                     ),
                   ],
                 ),
-          packageData.value.isEmpty
+          packageData.isEmpty
               ? SliverToBoxAdapter(
                   child: Center(
                     child: SizedBox(
@@ -100,10 +108,12 @@ class _MobileAddPackagesView extends HookConsumerWidget {
                                   builder: (_) => const AddPackagePage(),
                                 ),
                               );
-                              packageData.value = [
-                                ...packageData.value,
-                                if (newPackage != null) newPackage,
-                              ];
+                              // update in list
+                              if (newPackage != null) {
+                                activityNotifier.updatePackages(
+                                  package: newPackage,
+                                );
+                              }
                             },
                             style: TextButton.styleFrom(
                               backgroundColor: Theme.of(context)
@@ -133,11 +143,11 @@ class _MobileAddPackagesView extends HookConsumerWidget {
                           vertical: 2.h,
                         ),
                         child: AddPackageViewCard(
-                          package: packageData.value[index],
+                          package: packageData[index],
                         ),
                       );
                     },
-                    childCount: packageData.value.length,
+                    childCount: packageData.length,
                   ),
                 ),
         ],
@@ -150,10 +160,12 @@ class _MobileAddPackagesView extends HookConsumerWidget {
               builder: (_) => const AddPackagePage(),
             ),
           );
-          packageData.value = [
-            ...packageData.value,
-            if (newPackage != null) newPackage,
-          ];
+          // add package to list
+          if (newPackage != null) {
+            activityNotifier.updatePackages(
+              package: newPackage,
+            );
+          }
         },
         text: 'Add package',
         fontSize: 12.sp,
@@ -170,9 +182,11 @@ class _MobileAddPackagesView extends HookConsumerWidget {
 // tablet add packages view
 class _TabletAddPackagesView extends HookConsumerWidget {
   const _TabletAddPackagesView({
-    this.packageData,
+    required this.packageData,
+    required this.activityNotifier,
   });
-  final ValueNotifier<List<Package>>? packageData;
+  final List<Package> packageData;
+  final AddActivityNotifier activityNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container();
@@ -182,9 +196,11 @@ class _TabletAddPackagesView extends HookConsumerWidget {
 // desktop add packages view
 class _DesktopAddPackagesView extends HookConsumerWidget {
   const _DesktopAddPackagesView({
-    this.packageData,
+    required this.packageData,
+    required this.activityNotifier,
   });
-  final ValueNotifier<List<Package>>? packageData;
+  final List<Package> packageData;
+  final AddActivityNotifier activityNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container();

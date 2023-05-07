@@ -97,6 +97,7 @@ _$_BookingModel _$$_BookingModelFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['arrivalDate'] as String),
       paid: json['paid'] as bool?,
       amountPaid: (json['amountPaid'] as num?)?.toDouble(),
+      slug: json['slug'] as String?,
     );
 
 Map<String, dynamic> _$$_BookingModelToJson(_$_BookingModel instance) =>
@@ -108,4 +109,5 @@ Map<String, dynamic> _$$_BookingModelToJson(_$_BookingModel instance) =>
       'arrivalDate': instance.arrivalDate?.toIso8601String(),
       'paid': instance.paid,
       'amountPaid': instance.amountPaid,
+      'slug': instance.slug,
     };

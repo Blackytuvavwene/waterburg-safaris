@@ -27,6 +27,7 @@ mixin _$BookingModel {
   DateTime? get arrivalDate => throw _privateConstructorUsedError;
   bool? get paid => throw _privateConstructorUsedError;
   double? get amountPaid => throw _privateConstructorUsedError;
+  String? get slug => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -47,7 +48,8 @@ abstract class $BookingModelCopyWith<$Res> {
       DateTime? departureDate,
       DateTime? arrivalDate,
       bool? paid,
-      double? amountPaid});
+      double? amountPaid,
+      String? slug});
 }
 
 /// @nodoc
@@ -70,6 +72,7 @@ class _$BookingModelCopyWithImpl<$Res, $Val extends BookingModel>
     Object? arrivalDate = freezed,
     Object? paid = freezed,
     Object? amountPaid = freezed,
+    Object? slug = freezed,
   }) {
     return _then(_value.copyWith(
       bookingCode: freezed == bookingCode
@@ -100,6 +103,10 @@ class _$BookingModelCopyWithImpl<$Res, $Val extends BookingModel>
           ? _value.amountPaid
           : amountPaid // ignore: cast_nullable_to_non_nullable
               as double?,
+      slug: freezed == slug
+          ? _value.slug
+          : slug // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -119,7 +126,8 @@ abstract class _$$_BookingModelCopyWith<$Res>
       DateTime? departureDate,
       DateTime? arrivalDate,
       bool? paid,
-      double? amountPaid});
+      double? amountPaid,
+      String? slug});
 }
 
 /// @nodoc
@@ -140,6 +148,7 @@ class __$$_BookingModelCopyWithImpl<$Res>
     Object? arrivalDate = freezed,
     Object? paid = freezed,
     Object? amountPaid = freezed,
+    Object? slug = freezed,
   }) {
     return _then(_$_BookingModel(
       bookingCode: freezed == bookingCode
@@ -170,6 +179,10 @@ class __$$_BookingModelCopyWithImpl<$Res>
           ? _value.amountPaid
           : amountPaid // ignore: cast_nullable_to_non_nullable
               as double?,
+      slug: freezed == slug
+          ? _value.slug
+          : slug // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -184,7 +197,8 @@ class _$_BookingModel implements _BookingModel {
       this.departureDate,
       this.arrivalDate,
       this.paid,
-      this.amountPaid});
+      this.amountPaid,
+      this.slug});
 
   factory _$_BookingModel.fromJson(Map<String, dynamic> json) =>
       _$$_BookingModelFromJson(json);
@@ -203,10 +217,12 @@ class _$_BookingModel implements _BookingModel {
   final bool? paid;
   @override
   final double? amountPaid;
+  @override
+  final String? slug;
 
   @override
   String toString() {
-    return 'BookingModel(bookingCode: $bookingCode, customerDetails: $customerDetails, activityDetails: $activityDetails, departureDate: $departureDate, arrivalDate: $arrivalDate, paid: $paid, amountPaid: $amountPaid)';
+    return 'BookingModel(bookingCode: $bookingCode, customerDetails: $customerDetails, activityDetails: $activityDetails, departureDate: $departureDate, arrivalDate: $arrivalDate, paid: $paid, amountPaid: $amountPaid, slug: $slug)';
   }
 
   @override
@@ -226,13 +242,14 @@ class _$_BookingModel implements _BookingModel {
                 other.arrivalDate == arrivalDate) &&
             (identical(other.paid, paid) || other.paid == paid) &&
             (identical(other.amountPaid, amountPaid) ||
-                other.amountPaid == amountPaid));
+                other.amountPaid == amountPaid) &&
+            (identical(other.slug, slug) || other.slug == slug));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, bookingCode, customerDetails,
-      activityDetails, departureDate, arrivalDate, paid, amountPaid);
+      activityDetails, departureDate, arrivalDate, paid, amountPaid, slug);
 
   @JsonKey(ignore: true)
   @override
@@ -256,7 +273,8 @@ abstract class _BookingModel implements BookingModel {
       final DateTime? departureDate,
       final DateTime? arrivalDate,
       final bool? paid,
-      final double? amountPaid}) = _$_BookingModel;
+      final double? amountPaid,
+      final String? slug}) = _$_BookingModel;
 
   factory _BookingModel.fromJson(Map<String, dynamic> json) =
       _$_BookingModel.fromJson;
@@ -275,6 +293,8 @@ abstract class _BookingModel implements BookingModel {
   bool? get paid;
   @override
   double? get amountPaid;
+  @override
+  String? get slug;
   @override
   @JsonKey(ignore: true)
   _$$_BookingModelCopyWith<_$_BookingModel> get copyWith =>

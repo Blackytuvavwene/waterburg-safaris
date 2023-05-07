@@ -7,22 +7,24 @@ import 'package:sizer/sizer.dart';
 
 // add info view hook consumer widget with app layout
 class AddInfoView extends HookConsumerWidget {
-  const AddInfoView({
-    super.key,
-    this.overview,
-    this.seoDescription,
-    this.activityData,
-  });
+  const AddInfoView(
+      {super.key,
+      this.overview,
+      this.seoDescription,
+      required this.activityData,
+      required this.activityNotifier});
 
-  final ValueNotifier<Activity>? activityData;
+  final Activity activityData;
   final String? overview;
   final String? seoDescription;
+  final AddActivityNotifier activityNotifier;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
       mobile: _MobileAddInfoView(
         activityData: activityData,
+        activityNotifier: activityNotifier,
       ),
       tablet: const _TabletAddInfoView(),
       desktop: const _DesktopAddInfoView(),
@@ -34,16 +36,18 @@ class AddInfoView extends HookConsumerWidget {
 class _MobileAddInfoView extends HookConsumerWidget {
   const _MobileAddInfoView({
     this.activityData,
+    required this.activityNotifier,
   });
 
-  final ValueNotifier<Activity>? activityData;
+  final Activity? activityData;
+  final AddActivityNotifier activityNotifier;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final overviewController =
-        useTextEditingController(text: activityData?.value.overview);
+        useTextEditingController(text: activityData?.overview);
     final seoDescriptionController =
-        useTextEditingController(text: activityData?.value.seoDescription);
+        useTextEditingController(text: activityData?.seoDescription);
     final editOverview = useState(false);
     final editSeoDescription = useState(false);
     return SizedBox(
@@ -92,10 +96,9 @@ class _MobileAddInfoView extends HookConsumerWidget {
                             ),
                             IconButton(
                               onPressed: () {
-                                activityData?.value.copyWith(
+                                activityNotifier.updateOverview(
                                   overview: overviewController.text,
                                 );
-
                                 editOverview.value = false;
                               },
                               icon: LineIcon.check(),
@@ -116,7 +119,7 @@ class _MobileAddInfoView extends HookConsumerWidget {
                       ],
                     )
                   : DText(
-                      text: activityData?.value.overview ??
+                      text: activityData?.overview ??
                           'No activity overview given click on \'Edit\'',
                       fontSize: 12.sp,
                     ),
@@ -163,7 +166,7 @@ class _MobileAddInfoView extends HookConsumerWidget {
                             ),
                             IconButton(
                               onPressed: () {
-                                activityData?.value.copyWith(
+                                activityNotifier.updateSeoDescription(
                                   seoDescription: seoDescriptionController.text,
                                 );
 
@@ -187,7 +190,7 @@ class _MobileAddInfoView extends HookConsumerWidget {
                       ],
                     )
                   : DText(
-                      text: activityData?.value.seoDescription ??
+                      text: activityData?.seoDescription ??
                           'No activity SEO description given given click on \'Edit\'',
                       fontSize: 12.sp,
                     ),

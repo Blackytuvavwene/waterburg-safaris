@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { CompanyGallery } from "$lib/app-components/about-components/about.types";
   import ArrowCircleButton from "$lib/app-components/button/arrow-circle-button.svelte";
+	import Image from "$lib/custom/Image.svelte";
 
   let services = [
      {
@@ -38,7 +39,7 @@
 
 
 <section class=" bg-primary-100 h-fit md:w-[80vw] max-w-7xl self-center my-8 p-4 rounded-xl flex flex-col md:flex-row md:gap-x-10 box-border">
-    <div class="box-border bg-secondary-600 p-4 text-onSecondary">
+    <div class="box-border  p-4 ">
         <span class=" text-secondary-300 font-semibold">
             Know us
         </span>
@@ -46,7 +47,7 @@
             About African Journey Tours
         </h2>
         <br>
-        <p>
+        <p class="">
             We are committed to provide exceptional mobile safari experience to 
             our valued guests. Quality services is 
             what we are known best at delivering. 
@@ -59,7 +60,7 @@
         </p>
         <br>
         <div class="h-full">
-            <img class="w-full max-h-76 object-cover aspect-video" src={image.imageUrl} alt={image.imageTitle}>
+            <Image gallery={image} />
         </div>
     </div>
     <br>
@@ -72,10 +73,10 @@
                 <li data-before='{index + 1}' 
                 class=" before:content-['0'attr(data-before)'.'] before:text-primary-900 before:font-semibold before:px-2
                   my-2 md:my-8">
-                    <span class="font-semibold text-xl md:text-sm">
+                    <span class="font-semibold text-xl">
                         {service.title}
                     </span>
-                    <p class="pl-8 md:text-xs">
+                    <p class="pl-8">
                         {service.description}
                     </p>
                 </li>

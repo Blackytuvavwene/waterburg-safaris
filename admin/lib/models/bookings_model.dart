@@ -15,6 +15,7 @@ class BookingModel with _$BookingModel {
     final DateTime? arrivalDate,
     final bool? paid,
     final double? amountPaid,
+    final String? slug,
   }) = _BookingModel;
 
   factory BookingModel.fromJson(Map<String, dynamic> json) =>

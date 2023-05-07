@@ -23,6 +23,7 @@ mixin _$Activity {
   String? get activityId => throw _privateConstructorUsedError;
   String? get activityName => throw _privateConstructorUsedError;
   String? get seoDescription => throw _privateConstructorUsedError;
+  String? get slug => throw _privateConstructorUsedError;
   List<String>? get tags => throw _privateConstructorUsedError;
   List<Package>? get packages => throw _privateConstructorUsedError;
   List<Gallery>? get activityGallery => throw _privateConstructorUsedError;
@@ -45,6 +46,7 @@ abstract class $ActivityCopyWith<$Res> {
       {String? activityId,
       String? activityName,
       String? seoDescription,
+      String? slug,
       List<String>? tags,
       List<Package>? packages,
       List<Gallery>? activityGallery,
@@ -69,6 +71,7 @@ class _$ActivityCopyWithImpl<$Res, $Val extends Activity>
     Object? activityId = freezed,
     Object? activityName = freezed,
     Object? seoDescription = freezed,
+    Object? slug = freezed,
     Object? tags = freezed,
     Object? packages = freezed,
     Object? activityGallery = freezed,
@@ -88,6 +91,10 @@ class _$ActivityCopyWithImpl<$Res, $Val extends Activity>
       seoDescription: freezed == seoDescription
           ? _value.seoDescription
           : seoDescription // ignore: cast_nullable_to_non_nullable
+              as String?,
+      slug: freezed == slug
+          ? _value.slug
+          : slug // ignore: cast_nullable_to_non_nullable
               as String?,
       tags: freezed == tags
           ? _value.tags
@@ -128,6 +135,7 @@ abstract class _$$_ActivityCopyWith<$Res> implements $ActivityCopyWith<$Res> {
       {String? activityId,
       String? activityName,
       String? seoDescription,
+      String? slug,
       List<String>? tags,
       List<Package>? packages,
       List<Gallery>? activityGallery,
@@ -150,6 +158,7 @@ class __$$_ActivityCopyWithImpl<$Res>
     Object? activityId = freezed,
     Object? activityName = freezed,
     Object? seoDescription = freezed,
+    Object? slug = freezed,
     Object? tags = freezed,
     Object? packages = freezed,
     Object? activityGallery = freezed,
@@ -169,6 +178,10 @@ class __$$_ActivityCopyWithImpl<$Res>
       seoDescription: freezed == seoDescription
           ? _value.seoDescription
           : seoDescription // ignore: cast_nullable_to_non_nullable
+              as String?,
+      slug: freezed == slug
+          ? _value.slug
+          : slug // ignore: cast_nullable_to_non_nullable
               as String?,
       tags: freezed == tags
           ? _value._tags
@@ -206,6 +219,7 @@ class _$_Activity with DiagnosticableTreeMixin implements _Activity {
       {this.activityId,
       this.activityName,
       this.seoDescription,
+      this.slug,
       final List<String>? tags,
       final List<Package>? packages,
       final List<Gallery>? activityGallery,
@@ -225,6 +239,8 @@ class _$_Activity with DiagnosticableTreeMixin implements _Activity {
   final String? activityName;
   @override
   final String? seoDescription;
+  @override
+  final String? slug;
   final List<String>? _tags;
   @override
   List<String>? get tags {
@@ -264,7 +280,7 @@ class _$_Activity with DiagnosticableTreeMixin implements _Activity {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Activity(activityId: $activityId, activityName: $activityName, seoDescription: $seoDescription, tags: $tags, packages: $packages, activityGallery: $activityGallery, createdAt: $createdAt, updatedAt: $updatedAt, overview: $overview)';
+    return 'Activity(activityId: $activityId, activityName: $activityName, seoDescription: $seoDescription, slug: $slug, tags: $tags, packages: $packages, activityGallery: $activityGallery, createdAt: $createdAt, updatedAt: $updatedAt, overview: $overview)';
   }
 
   @override
@@ -275,6 +291,7 @@ class _$_Activity with DiagnosticableTreeMixin implements _Activity {
       ..add(DiagnosticsProperty('activityId', activityId))
       ..add(DiagnosticsProperty('activityName', activityName))
       ..add(DiagnosticsProperty('seoDescription', seoDescription))
+      ..add(DiagnosticsProperty('slug', slug))
       ..add(DiagnosticsProperty('tags', tags))
       ..add(DiagnosticsProperty('packages', packages))
       ..add(DiagnosticsProperty('activityGallery', activityGallery))
@@ -294,6 +311,7 @@ class _$_Activity with DiagnosticableTreeMixin implements _Activity {
                 other.activityName == activityName) &&
             (identical(other.seoDescription, seoDescription) ||
                 other.seoDescription == seoDescription) &&
+            (identical(other.slug, slug) || other.slug == slug) &&
             const DeepCollectionEquality().equals(other._tags, _tags) &&
             const DeepCollectionEquality().equals(other._packages, _packages) &&
             const DeepCollectionEquality()
@@ -313,6 +331,7 @@ class _$_Activity with DiagnosticableTreeMixin implements _Activity {
       activityId,
       activityName,
       seoDescription,
+      slug,
       const DeepCollectionEquality().hash(_tags),
       const DeepCollectionEquality().hash(_packages),
       const DeepCollectionEquality().hash(_activityGallery),
@@ -339,6 +358,7 @@ abstract class _Activity implements Activity {
       {final String? activityId,
       final String? activityName,
       final String? seoDescription,
+      final String? slug,
       final List<String>? tags,
       final List<Package>? packages,
       final List<Gallery>? activityGallery,
@@ -354,6 +374,8 @@ abstract class _Activity implements Activity {
   String? get activityName;
   @override
   String? get seoDescription;
+  @override
+  String? get slug;
   @override
   List<String>? get tags;
   @override
@@ -388,6 +410,7 @@ mixin _$Package {
   double? get discountPercentage => throw _privateConstructorUsedError;
   String? get coupon => throw _privateConstructorUsedError;
   List<String>? get packageOffers => throw _privateConstructorUsedError;
+  String? get slug => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -409,7 +432,8 @@ abstract class $PackageCopyWith<$Res> {
       double? rating,
       double? discountPercentage,
       String? coupon,
-      List<String>? packageOffers});
+      List<String>? packageOffers,
+      String? slug});
 }
 
 /// @nodoc
@@ -435,6 +459,7 @@ class _$PackageCopyWithImpl<$Res, $Val extends Package>
     Object? discountPercentage = freezed,
     Object? coupon = freezed,
     Object? packageOffers = freezed,
+    Object? slug = freezed,
   }) {
     return _then(_value.copyWith(
       packageId: freezed == packageId
@@ -477,6 +502,10 @@ class _$PackageCopyWithImpl<$Res, $Val extends Package>
           ? _value.packageOffers
           : packageOffers // ignore: cast_nullable_to_non_nullable
               as List<String>?,
+      slug: freezed == slug
+          ? _value.slug
+          : slug // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -498,7 +527,8 @@ abstract class _$$_PackageCopyWith<$Res> implements $PackageCopyWith<$Res> {
       double? rating,
       double? discountPercentage,
       String? coupon,
-      List<String>? packageOffers});
+      List<String>? packageOffers,
+      String? slug});
 }
 
 /// @nodoc
@@ -521,6 +551,7 @@ class __$$_PackageCopyWithImpl<$Res>
     Object? discountPercentage = freezed,
     Object? coupon = freezed,
     Object? packageOffers = freezed,
+    Object? slug = freezed,
   }) {
     return _then(_$_Package(
       packageId: freezed == packageId
@@ -563,6 +594,10 @@ class __$$_PackageCopyWithImpl<$Res>
           ? _value._packageOffers
           : packageOffers // ignore: cast_nullable_to_non_nullable
               as List<String>?,
+      slug: freezed == slug
+          ? _value.slug
+          : slug // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -581,7 +616,8 @@ class _$_Package with DiagnosticableTreeMixin implements _Package {
       this.rating,
       this.discountPercentage,
       this.coupon,
-      final List<String>? packageOffers})
+      final List<String>? packageOffers,
+      this.slug})
       : _keywords = keywords,
         _packageOffers = packageOffers;
 
@@ -625,8 +661,11 @@ class _$_Package with DiagnosticableTreeMixin implements _Package {
   }
 
   @override
+  final String? slug;
+
+  @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Package(packageId: $packageId, packageName: $packageName, keywords: $keywords, description: $description, price: $price, lastPrice: $lastPrice, rating: $rating, discountPercentage: $discountPercentage, coupon: $coupon, packageOffers: $packageOffers)';
+    return 'Package(packageId: $packageId, packageName: $packageName, keywords: $keywords, description: $description, price: $price, lastPrice: $lastPrice, rating: $rating, discountPercentage: $discountPercentage, coupon: $coupon, packageOffers: $packageOffers, slug: $slug)';
   }
 
   @override
@@ -643,7 +682,8 @@ class _$_Package with DiagnosticableTreeMixin implements _Package {
       ..add(DiagnosticsProperty('rating', rating))
       ..add(DiagnosticsProperty('discountPercentage', discountPercentage))
       ..add(DiagnosticsProperty('coupon', coupon))
-      ..add(DiagnosticsProperty('packageOffers', packageOffers));
+      ..add(DiagnosticsProperty('packageOffers', packageOffers))
+      ..add(DiagnosticsProperty('slug', slug));
   }
 
   @override
@@ -666,7 +706,8 @@ class _$_Package with DiagnosticableTreeMixin implements _Package {
                 other.discountPercentage == discountPercentage) &&
             (identical(other.coupon, coupon) || other.coupon == coupon) &&
             const DeepCollectionEquality()
-                .equals(other._packageOffers, _packageOffers));
+                .equals(other._packageOffers, _packageOffers) &&
+            (identical(other.slug, slug) || other.slug == slug));
   }
 
   @JsonKey(ignore: true)
@@ -682,7 +723,8 @@ class _$_Package with DiagnosticableTreeMixin implements _Package {
       rating,
       discountPercentage,
       coupon,
-      const DeepCollectionEquality().hash(_packageOffers));
+      const DeepCollectionEquality().hash(_packageOffers),
+      slug);
 
   @JsonKey(ignore: true)
   @override
@@ -709,7 +751,8 @@ abstract class _Package implements Package {
       final double? rating,
       final double? discountPercentage,
       final String? coupon,
-      final List<String>? packageOffers}) = _$_Package;
+      final List<String>? packageOffers,
+      final String? slug}) = _$_Package;
 
   factory _Package.fromJson(Map<String, dynamic> json) = _$_Package.fromJson;
 
@@ -733,6 +776,8 @@ abstract class _Package implements Package {
   String? get coupon;
   @override
   List<String>? get packageOffers;
+  @override
+  String? get slug;
   @override
   @JsonKey(ignore: true)
   _$$_PackageCopyWith<_$_Package> get copyWith =>

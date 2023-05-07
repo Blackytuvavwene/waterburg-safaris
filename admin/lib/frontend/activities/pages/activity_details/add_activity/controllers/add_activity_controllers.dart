@@ -50,3 +50,86 @@ final addImageNotifierProvider = StateNotifierProvider.autoDispose<
     AddImagesNotifier, List<ImageHelperModel>>((ref) {
   return AddImagesNotifier();
 });
+
+class AddActivityNotifier extends StateNotifier<Activity> {
+  AddActivityNotifier() : super(Activity());
+
+  // update activity name
+  void updateActivityName({
+    required String activityName,
+  }) {
+    state = state.copyWith(
+      activityName: activityName,
+    );
+  }
+
+  // update activity seo description
+  void updateSeoDescription({
+    required String seoDescription,
+  }) {
+    state = state.copyWith(
+      seoDescription: seoDescription,
+    );
+  }
+
+  // update activity overview
+  void updateOverview({
+    required String overview,
+  }) {
+    state = state.copyWith(
+      overview: overview,
+    );
+  }
+
+  // update activity tags
+  void updateTags({
+    required String tag,
+  }) {
+    state = state.copyWith(
+      tags: [
+        ...state.tags ?? [],
+        tag,
+      ],
+    );
+  }
+
+  // update activity packages
+  void updatePackages({
+    required Package package,
+  }) {
+    state = state.copyWith(
+      packages: [
+        ...state.packages ?? [],
+        package,
+      ],
+    );
+  }
+
+  // remove package from list
+  void removePackageFromList({
+    required int index,
+  }) {
+    state = state.copyWith(
+      packages: [
+        ...state.packages ?? [],
+      ]..removeAt(index),
+    );
+  }
+
+  // remove tag from list
+  void removeTagFromList({
+    required String tag,
+  }) {
+    state = state.copyWith(
+      tags: [
+        ...state.tags ?? [],
+      ]..remove(tag),
+    );
+  }
+}
+
+// add activity provider
+final addActivityControlProvider =
+    StateNotifierProvider<AddActivityNotifier, Activity>((ref) {
+  return AddActivityNotifier();
+});

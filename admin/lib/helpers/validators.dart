@@ -46,3 +46,40 @@ class EmailValidator {
     return _emailRegExp.hasMatch(value);
   }
 }
+
+// function to create slug
+String createSlug({
+  required String text,
+}) {
+  // non numeric regex
+  final nonNumericRegExp = RegExp(r'[^\w\s-]');
+
+  // space regex
+  final spacesRegex = RegExp(r'\s+');
+
+  // remove trailing and leading hyphens regex
+  final hyphensRegex = RegExp(r'(^-*)|(-*$)');
+
+  // convert to lower case
+  String lowerCaseText = text.toLowerCase();
+
+  // replace non-alphanumeric characters with spaces
+  lowerCaseText = lowerCaseText.replaceAll(
+    nonNumericRegExp,
+    ' ',
+  );
+
+  // replace the spaces
+  lowerCaseText = lowerCaseText.replaceAll(
+    spacesRegex,
+    '-',
+  );
+
+  // remove leading and trailing hyphens
+  final slugText = lowerCaseText.trim().replaceAll(
+        hyphensRegex,
+        '',
+      );
+
+  return slugText;
+}

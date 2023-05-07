@@ -6,10 +6,15 @@
 </script>
 
 
-<div class=" h-full w-full">
-    <h1 class=" font-bold text-2xl my-2 mx-6 sm:mx-12 lg:mx-32 lg:my-14">Company overview</h1>
-    {#each paragraphs as line}
-        <p class=" font-bold lg:font-medium mx-6 sm:mx-12 text-base lg:text-lg my-6  lg:mx-32">{line}</p>
-    {/each}
-
+<div class="h-full w-full">
+    <section class="max-w-7xl">
+        <h1 class=" font-bold text-2xl my-2 lg:my-14">
+            Company overview
+        </h1>
+        {#each paragraphs as line}
+            <p class=" text-base lg:text-lg my-6">
+                {line}
+            </p>
+        {/each}
+    </section>
 </div>

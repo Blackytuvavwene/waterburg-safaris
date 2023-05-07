@@ -18,6 +18,7 @@ class Activity with _$Activity {
     final String? activityId,
     final String? activityName,
     final String? seoDescription,
+    final String? slug,
     final List<String>? tags,
     final List<Package>? packages,
     final List<Gallery>? activityGallery,
@@ -47,6 +48,7 @@ class Package with _$Package {
     final double? discountPercentage,
     final String? coupon,
     final List<String>? packageOffers,
+    final String? slug,
   }) = _Package;
 
   factory Package.fromJson(Map<String, dynamic> json) =>

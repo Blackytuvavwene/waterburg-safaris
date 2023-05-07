@@ -191,6 +191,20 @@ final goroutingProvider = Provider<GoRouter>(
                                         );
                                       },
                                     ),
+                                    GoRoute(
+                                      path: 'add-package',
+                                      name: 'addPackage',
+                                      builder: (context, state) {
+                                        // get passed values
+                                        final EditPackageModel addPackage =
+                                            state.extra as EditPackageModel;
+
+                                        return PackageEditPage(
+                                          key: state.pageKey,
+                                          editPackageModel: addPackage,
+                                        );
+                                      },
+                                    )
                                   ],
                                 ),
                               ],

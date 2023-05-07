@@ -43,7 +43,7 @@
 <Intro homeModel={homeData}/>
 <AboutUs gallery={homeData?.aboutCompany?.companyGallery != undefined ? homeData.aboutCompany.companyGallery : []}/>
 {#if homeData?.homeActivities != undefined}
-<Activities homeActivities= {homeData.homeActivities} />
+<Activities homeActivities={homeData.homeActivities} />
 {:else}
 <p>No data {homeData.aboutCompany?.companyId}</p>
 {/if}

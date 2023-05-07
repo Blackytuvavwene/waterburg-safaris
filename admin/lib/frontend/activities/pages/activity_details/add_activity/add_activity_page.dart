@@ -26,10 +26,10 @@ class AddActivityPage extends HookConsumerWidget {
       );
     });
 
-    final activityData = useState(Activity());
-    // final pickedImages = useState<List<ImageHelperModel>>([]);
-    final packages = useState<List<Package>>([]);
-    final tags = useState<List<String>>([]);
+    // watch activity control notifier
+    final activityData = ref.watch(addActivityControlProvider);
+    // read the control notifier
+    final activityNotifier = ref.read(addActivityControlProvider.notifier);
 
     final imagesPicked = ref.watch(addImageNotifierProvider);
     final addImageNotifier = ref.read(addImageNotifierProvider.notifier);
@@ -39,6 +39,7 @@ class AddActivityPage extends HookConsumerWidget {
         'name': 'Details',
         'view': AddInfoView(
           activityData: activityData,
+          activityNotifier: activityNotifier,
         ),
         'icon': LineIcon.infoCircle(),
       },
@@ -53,14 +54,16 @@ class AddActivityPage extends HookConsumerWidget {
       {
         'name': 'Packages',
         'view': AddPackagesView(
-          packageData: packages,
+          packageData: activityData.packages ?? [],
+          activityNotifier: activityNotifier,
         ),
         'icon': LineIcon.boxOpen(),
       },
       {
         'name': 'Tags',
         'view': AddTagsView(
-          tagData: tags,
+          tagData: activityData.tags ?? [],
+          activityNotifier: activityNotifier,
         ),
         'icon': LineIcon.tags(),
       }
@@ -146,7 +149,7 @@ class _MobileAddActivityPage extends HookConsumerWidget {
     this.tabBar,
     this.pickedImages,
   }) : super(key: key);
-  final ValueNotifier<Activity>? activity;
+  final Activity? activity;
   final TabBarView? tabView;
   final TabBar? tabBar;
   final List<ImageHelperModel>? pickedImages;
@@ -166,9 +169,12 @@ class _MobileAddActivityPage extends HookConsumerWidget {
 
               final newActivity = Activity(
                 activityId: newActivityId,
-                activityName: activity!.value.activityName,
-                overview: activity!.value.overview,
-                seoDescription: activity!.value.seoDescription,
+                activityName: activity!.activityName,
+                overview: activity!.overview,
+                seoDescription: activity!.seoDescription,
+                slug: createSlug(
+                  text: activity!.activityName!,
+                ),
                 activityGallery:
                     await Future.wait(pickedImages!.map((imageModel) async {
                   final newGallery = Gallery(
@@ -184,8 +190,8 @@ class _MobileAddActivityPage extends HookConsumerWidget {
                 }).toList()),
                 createdAt: DateTime.now(),
                 updatedAt: DateTime.now(),
-                packages: activity!.value.packages,
-                tags: activity!.value.tags,
+                packages: activity!.packages,
+                tags: activity!.tags,
               );
             },
             icon: const Icon(Icons.save),
@@ -205,7 +211,7 @@ class _TabletAddActivityPage extends HookConsumerWidget {
     this.pageView,
     this.navRail,
   }) : super(key: key);
-  final ValueNotifier<Activity>? activity;
+  final Activity? activity;
   final NavigationRail? navRail;
   final PageView? pageView;
   @override
@@ -239,7 +245,7 @@ class _DesktopAddActivityPage extends HookConsumerWidget {
     this.pageView,
     this.navRail,
   }) : super(key: key);
-  final ValueNotifier<Activity>? activity;
+  final Activity? activity;
   final NavigationRail? navRail;
   final PageView? pageView;
   @override

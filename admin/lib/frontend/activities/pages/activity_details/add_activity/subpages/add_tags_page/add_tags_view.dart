@@ -1,6 +1,9 @@
 import 'package:admin/lib.dart';
+import 'package:extended_sliver/extended_sliver.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sizer/sizer.dart';
 
@@ -8,9 +11,11 @@ import 'package:sizer/sizer.dart';
 class AddTagsView extends HookConsumerWidget {
   const AddTagsView({
     super.key,
-    this.tagData,
+    required this.tagData,
+    required this.activityNotifier,
   });
-  final ValueNotifier<List<String>>? tagData;
+  final List<String> tagData;
+  final AddActivityNotifier activityNotifier;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,14 +26,17 @@ class AddTagsView extends HookConsumerWidget {
       mobile: _MobileAddTagsView(
         tagData: tagData,
         tagController: tagController,
+        activityNotifier: activityNotifier,
       ),
       tablet: _TabletAddTagsView(
         tagData: tagData,
         tagController: tagController,
+        activityNotifier: activityNotifier,
       ),
       desktop: _DesktopAddTagsView(
         tagData: tagData,
         tagController: tagController,
+        activityNotifier: activityNotifier,
       ),
     );
   }
@@ -37,78 +45,80 @@ class AddTagsView extends HookConsumerWidget {
 // mobile add tags view
 class _MobileAddTagsView extends HookConsumerWidget {
   const _MobileAddTagsView({
-    this.tagData,
+    required this.tagData,
     this.tagController,
+    required this.activityNotifier,
   });
-  final ValueNotifier<List<String>>? tagData;
+  final List<String> tagData;
   final TextEditingController? tagController;
+  final AddActivityNotifier activityNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SizedBox(
-      height: 100.h,
-      width: 100.w,
+    final tagFocusNode = useFocusNode();
+    return GestureDetector(
+      onTap: () {
+        // dismiss keyboard
+        tagFocusNode.unfocus();
+      },
       child: CustomScrollView(
         slivers: [
-          SliverPersistentHeader(
-            delegate: AddTagField(tagController: tagController!, tags: tagData),
-            pinned: true,
-          ),
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: 1.h,
+          SliverPinnedToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.all(
+                8.sp,
+              ),
+              child: Form(
+                child: TextFormField(
+                  controller: tagController,
+                  focusNode: tagFocusNode,
+                  style: GoogleFonts.dosis(),
+                  textInputAction: TextInputAction.done,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Enter search keywords here for activity',
+                  ),
+                  onFieldSubmitted: (value) {
+                    // update list
+                    activityNotifier.updateTags(
+                      tag: tagController!.text,
+                    );
+                    // clear controller
+                    tagController!.clear();
+                    // request focus
+                    tagFocusNode.requestFocus();
+                  },
+                ),
+              ),
             ),
           ),
-          tagData?.value == []
-              ? SliverToBoxAdapter(
-                  child: Center(
-                    child: DText(
-                      text: 'No tags added',
-                      fontSize: 14.sp,
-                    ),
-                  ),
-                )
-              : SliverPersistentHeader(
-                  delegate: AddTagTextHeader(
-                    text: 'Added tags',
-                    tagsLength: tagData?.value.length,
-                  ),
-                  pinned: true,
-                ),
-          tagData?.value == []
-              ? const SliverToBoxAdapter()
-              : SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Wrap(
-                      spacing: 12.sp,
-                      children: tagData!.value.map(
+          SliverFillRemaining(
+            child: Padding(
+              padding: EdgeInsets.all(
+                8.sp,
+              ),
+              child: Wrap(
+                spacing: 12.sp,
+                children: [
+                  if (tagData != null)
+                    if (tagData.isNotEmpty || tagData != [])
+                      ...tagData.map(
                         (tag) {
-                          return Padding(
-                            padding: EdgeInsets.only(
-                              right: 1.w,
-                              bottom: 1.h,
+                          return Chip(
+                            label: DText(
+                              text: tag,
                             ),
-                            child: Chip(
-                              label: DText(
-                                text: tag,
-                                fontSize: 12.sp,
-                              ),
-                              deleteIcon: Icon(
-                                Icons.close,
-                                color: Colors.white,
-                                size: 12.sp,
-                              ),
-                              onDeleted: () {
-                                tagData?.value.remove(tag);
-                                tagData?.notifyListeners();
-                              },
-                            ),
-                          );
+                            onDeleted: () {
+                              activityNotifier.removeTagFromList(
+                                tag: tag,
+                              );
+                            },
+                          ).animate().slideY();
                         },
-                      ).toList(),
-                    ),
-                  ),
-                ),
+                      )
+                ],
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -118,11 +128,13 @@ class _MobileAddTagsView extends HookConsumerWidget {
 // tablet add tags view
 class _TabletAddTagsView extends HookConsumerWidget {
   const _TabletAddTagsView({
-    this.tagData,
+    required this.tagData,
     this.tagController,
+    required this.activityNotifier,
   });
-  final ValueNotifier<List<String>>? tagData;
+  final List<String> tagData;
   final TextEditingController? tagController;
+  final AddActivityNotifier activityNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container();
@@ -132,11 +144,13 @@ class _TabletAddTagsView extends HookConsumerWidget {
 // desktop add tags view
 class _DesktopAddTagsView extends HookConsumerWidget {
   const _DesktopAddTagsView({
-    this.tagData,
+    required this.tagData,
     this.tagController,
+    required this.activityNotifier,
   });
-  final ValueNotifier<List<String>>? tagData;
+  final List<String> tagData;
   final TextEditingController? tagController;
+  final AddActivityNotifier activityNotifier;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container();

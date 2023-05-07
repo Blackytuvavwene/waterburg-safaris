@@ -83,8 +83,8 @@
 
 
 
-<header class="w-full h-full flex items-center sticky top-0 z-10 {headerBackground}">
-    <nav class="w-full h-fit xl:px-44 flex flex-row  justify-between items-center ">
+<header class="w-full h-full flex lg:justify-center items-center sticky top-0 z-10 {headerBackground}">
+    <nav class="w-full h-fit max-w-6xl self-center flex flex-row  justify-between items-center ">
         <div class= "flex flex-col items-start justify-start h-full w-full lg:w-fit">
             <div class="w-full h-full flex flex-row justify-between items-center ">
                 <div class="flex flex-row items-center justify-center w-full">

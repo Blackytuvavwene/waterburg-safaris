@@ -12,6 +12,8 @@
     import Footer from '$lib/app-components/footer/footer.svelte';
     import Header from '$lib/app-components/header/Header.svelte';
 	import type { LayoutServerData } from './$types';
+	import { onMount } from "svelte";
+	import { browser } from "$app/environment";
 
     let openWidget = false;
 
@@ -19,6 +21,16 @@
    
 
     export let data: LayoutServerData;
+
+    onMount(() => {
+
+            var chatbox = document.getElementById('fb-customer-chat');
+
+            chatbox!.setAttribute("page_id", "101164178799129");
+
+            chatbox!.setAttribute("attribution", "biz_inbox");
+
+    });
 
 
    
@@ -40,10 +52,25 @@
 
 
 
-{#await data.homeData}
-    <div class="h-screen w-screen bg-black text-white text-4xl">loading...</div>
-
-{/await}
+<svelte:head>
+    <!-- head content -->
+    <script>
+        window.fbAsyncInit = function() {
+                FB.init({
+                  xfbml            : true,
+                  version          : 'v15.0'
+                });
+              };
+        
+              (function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+                fjs.parentNode.insertBefore(js, fjs);
+              }(document, 'script', 'facebook-jssdk'));
+    </script>
+</svelte:head>
 
 <Header/>
 <main>

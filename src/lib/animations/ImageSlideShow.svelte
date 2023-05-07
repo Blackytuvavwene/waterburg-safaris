@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { CompanyGallery } from "$lib/app-components/about-components/about.types";
+	import Image from "$lib/custom/Image.svelte";
 	import { onMount } from "svelte";
 	import { quintOut,elasticIn ,sineIn, sineOut} from "svelte/easing";
 	import { fade } from "svelte/transition";
@@ -29,13 +30,16 @@
 
 </script>
 
-<div >
+<div class="h-full w-full">
     {#each images as image, i}
         {#if i === slideIndex}
-            <img 
-            in:fade|local={{ duration: 500, delay: 0, easing: sineIn }}
-            class=" object-cover max-h-[34vh] lg:max-h-[60vh] w-full md:max-h-[30vh] aspect-video object-center  " 
-            src={image.imageUrl} loading="lazy" alt={image.imageDescription} />
+        <div 
+            class="h-full w-full"
+            in:fade|local={{ duration: 100, delay: 50, easing: sineIn }}>
+            <Image 
+                classList=" object-cover h-full w-full aspect-video object-center  " 
+                gallery={image} />
+        </div>
         {/if}
     {/each}
 </div>

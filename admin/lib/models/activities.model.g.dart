@@ -10,6 +10,7 @@ _$_Activity _$$_ActivityFromJson(Map json) => _$_Activity(
       activityId: json['activityId'] as String?,
       activityName: json['activityName'] as String?,
       seoDescription: json['seoDescription'] as String?,
+      slug: json['slug'] as String?,
       tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList(),
       packages: (json['packages'] as List<dynamic>?)
           ?.map((e) => Package.fromJson(Map<String, dynamic>.from(e as Map)))
@@ -31,6 +32,7 @@ Map<String, dynamic> _$$_ActivityToJson(_$_Activity instance) =>
       'activityId': instance.activityId,
       'activityName': instance.activityName,
       'seoDescription': instance.seoDescription,
+      'slug': instance.slug,
       'tags': instance.tags,
       'packages': instance.packages?.map((e) => e.toJson()).toList(),
       'activityGallery':
@@ -55,6 +57,7 @@ _$_Package _$$_PackageFromJson(Map json) => _$_Package(
       packageOffers: (json['packageOffers'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
+      slug: json['slug'] as String?,
     );
 
 Map<String, dynamic> _$$_PackageToJson(_$_Package instance) =>
@@ -69,4 +72,5 @@ Map<String, dynamic> _$$_PackageToJson(_$_Package instance) =>
       'discountPercentage': instance.discountPercentage,
       'coupon': instance.coupon,
       'packageOffers': instance.packageOffers,
+      'slug': instance.slug,
     };

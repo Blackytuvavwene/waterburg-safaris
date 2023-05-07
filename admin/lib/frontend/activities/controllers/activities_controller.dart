@@ -48,7 +48,9 @@ class ActivityControlNotifier extends StateNotifier<Activity?> {
   void updateActivityName({
     required String activityName,
   }) {
-    state = state?.copyWith(activityName: activityName);
+    state = state?.copyWith(
+      activityName: activityName,
+    );
   }
 
   // update activity seoDescription
@@ -125,6 +127,24 @@ class ActivityControlNotifier extends StateNotifier<Activity?> {
       ],
     );
   }
+
+  // add package to list
+  void addPackage({
+    required Package package,
+  }) {
+    // update
+    state = state?.copyWith(
+      packages: [
+        ...state?.packages ?? [],
+        package,
+      ],
+    );
+  }
+
+  // reset activity
+  void resetActivity(Activity activity) {
+    state = activity;
+  }
 }
 
 // activity repository provider controller
@@ -175,6 +195,9 @@ class ActivityDBController extends StateNotifier<AsyncValue<Activity>?> {
 
         // update the activity gallery
         activity = activity.copyWith(
+          slug: createSlug(
+            text: activity.activityName!,
+          ),
           activityGallery: [
             ...activity.activityGallery ?? [],
             ...newImages,
@@ -192,6 +215,12 @@ class ActivityDBController extends StateNotifier<AsyncValue<Activity>?> {
         );
         return Activity.fromJson(activityD);
       } else {
+        // update activity slug
+        activity = activity.copyWith(
+          slug: createSlug(
+            text: activity.activityName!,
+          ),
+        );
         // update the activity in firestore
         final activityD =
             await FirestoreHelper.updateDataInDoc<Map<String, dynamic>>(

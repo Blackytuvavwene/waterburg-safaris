@@ -13,7 +13,7 @@ export let homeActivities:HomeActivities[] ;
 
 <div class="h-full my-20 flex flex-col justify-center ">
     <TopicTextSection topicText="Activities" flexDirection="row-reverse" />
-    <div class="my-10 flex flex-col items-center justify-center sm:flex-row flex-wrap ">
+    <div class="my-10 flex flex-col items-center gap-12 justify-center sm:flex-row ">
         {#if homeActivities}
             {#each homeActivities as activity}
             <ActivityCard {activity} /> 
