@@ -38,7 +38,7 @@
 
 
 
-<section class=" bg-primary-100 h-fit md:w-[80vw] max-w-7xl self-center my-8 p-4 rounded-xl flex flex-col md:flex-row md:gap-x-10 box-border">
+<section class=" bg-primary-100 h-fit md:w-[80vw] max-w-7xl self-center my-8 p-4 rounded-xl flex flex-col lg:flex-row md:gap-x-10 box-border">
     <div class="box-border  p-4 ">
         <span class=" text-secondary-300 font-semibold">
             Know us

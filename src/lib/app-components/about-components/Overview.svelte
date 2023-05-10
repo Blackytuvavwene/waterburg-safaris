@@ -6,8 +6,8 @@
 </script>
 
 
-<div class="h-full w-full">
-    <section class="max-w-7xl">
+<div class="h-full w-full flex flex-col items-center">
+    <section class="max-w-md xl:max-w-7xl lg:max-w-4xl sm:max-w-lg md:max-w-2xl">
         <h1 class=" font-bold text-2xl my-2 lg:my-14">
             Company overview
         </h1>

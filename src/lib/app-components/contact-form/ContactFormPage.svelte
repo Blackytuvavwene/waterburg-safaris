@@ -18,7 +18,8 @@ import ContactPageIcon from "./ContactPageIcon.svelte";
                 </div>
             </div>
         </section>
-        <form class="w-[100%] sm:w-[92%] lg:w-[70%] flex flex-col items-center s:p-4 bg-onPrimary  p-8 rounded
+        <!-- TODO: add form here -->
+        <!-- <form class="w-[100%] sm:w-[92%] lg:w-[70%] flex flex-col items-center s:p-4 bg-onPrimary  p-8 rounded
          justify-center" action="" method="post">
             <fieldset class=" flex w-full flex-col justify-center mb-8">
                 <div>
@@ -39,7 +40,7 @@ import ContactPageIcon from "./ContactPageIcon.svelte";
            </fieldset>
            <input class="w-full  bg-onPrimaryContainer text-primaryContainer mt-6 p-6
             rounded-md" type="submit" value="Submit">
-        </form>
+        </form> -->
         
     </div>
 </main>

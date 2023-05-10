@@ -24,14 +24,14 @@ import { setCurrentSelected, setCurrentSelectedPersist } from './activity.stores
                 {packageData.packageName}
             </strong>
         </h1>
-        <p class=" font-bold ">${packageData.price}</p>
+        <p class=" font-bold ">Contact for price</p>
     </div>
     
     <div class=" flex w-full bg-surface-1 h-full rounded-b-xl flex-col justify-between p-6 items-center">
         <p class=" text-lg font-bold mb-2">Package offers:</p>
         <div class=" w-full h-[100%] object-contain mb-4 ">
             {#if packageData.packageOffers}
-                {#each packageData.packageOffers as offer}
+                {#each packageData.packageOffers as offer (offer)}
                 <p class=" text-onTertiaryContainer border-secondar
                     {offer ===packageData.packageOffers[packageData.packageOffers.length -1] ? ""
                     : "border-b-[1px] py-1"}">
@@ -40,11 +40,11 @@ import { setCurrentSelected, setCurrentSelectedPersist } from './activity.stores
                 {/each}
             {/if}
         </div>
-        <a class="w-full" href="/book-online">
+        <!-- <a class="w-full" href="/book-online">
             <button class="text-onPrimary p-2 rounded-lg w-full bg-secondary" on:click={setBookActivity}>
                 Book online
             </button>
-        </a>
+        </a> -->
     </div>
     
 </div>

@@ -75,10 +75,10 @@
 <Header/>
 <main>
     <slot></slot>
-    {#if $page.url.pathname!=='/contact'}
+    <!-- {#if $page.url.pathname!=='/contact'}
    
     <ContactFormFooter/>
-    {/if}
+    {/if} -->
     
 </main>
 <!-- whatsapp chat widget -->
@@ -109,7 +109,7 @@
                 </div>
             </div>
             <div class=" w-full m-0 rounded-b-xl p-4 h-full flex items-center">
-                <a href="https://wa.me/message/IAFUU2O7SW3OA1?src=qr" target="_blank" class=" p-2 rounded-2xl text-center w-full text-secondary-900 font-semibold" rel="noreferrer">
+                <a href="https://wa.me/message/IAFUU2O7SW3OA1?src=qr" target="_blank" class=" p-2 rounded-2xl text-center w-full bg-secondary-400 text-secondary-900 font-semibold" rel="noreferrer">
                     Start chat
                 </a>
             </div>

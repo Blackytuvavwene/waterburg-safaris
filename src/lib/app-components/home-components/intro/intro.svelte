@@ -36,12 +36,6 @@ $:({imageUrl}=aboutCompany.companyGallery![0])
                     <button class="font-bold w-full bg-onPrimary text-primary shadow-md 
                     shadow-onPrimaryContainer hover:-translate-y-1 rounded-lg p-2 lg:p-0 h-full">View activities</button>
                 </a>
-                <span class="m-4 "></span>
-                <a href="/book-online" class="w-full h-[6vh]">
-                    <button class="font-bold w-full transition ease-in-out duration-500 hover:-translate-y-1 rounded-lg
-                    border-onPrimary border-[1px] h-full sm:p-4 p-[7px] lg:p-0
-                    text-onPrimary" on:click={resetCurrentSelectedPersist}>Book online</button>
-                </a>
             </div>
         </div>
             <FadeTransition>

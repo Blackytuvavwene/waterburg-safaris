@@ -8,6 +8,6 @@
     })
 </script>
 
-<video controls width={width} src={videoUrl}>
+<video autoplay width={width} src={videoUrl}>
     trac
 </video>

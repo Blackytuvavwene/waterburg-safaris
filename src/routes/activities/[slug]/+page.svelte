@@ -19,7 +19,7 @@ import PackageCard from '$lib/app-components/activities-components/PackageCard.s
 </svelte:head>
 
 <div class="w-full h-full flex flex-col items-center">
-    <div class="max-w-7xl">
+    <div class="max-w-md lg:max-w-7xl w-full sm:max-w-xl">
         <section class="mt-6">
             <h1>
                 <strong class="text-3xl lg:text-4xl lg:font-bold text-primary">
@@ -43,7 +43,7 @@ import PackageCard from '$lib/app-components/activities-components/PackageCard.s
                     </strong> to our clients
                 </p>
             </div>
-            <div class="flex items-center my-12 justify-center md:flex-row flex-wrap ">
+            <div class="flex flex-col items-center my-12 justify-center md:flex-row md:overflow-x-scroll ">
                 {#if packages}
                 {#each packages as packageData}
                     <div class=" m-4 w-full h-full sm:w-80">

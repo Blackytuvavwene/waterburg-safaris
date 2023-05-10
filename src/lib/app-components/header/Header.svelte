@@ -50,11 +50,6 @@
             id: "contact",
             path: "/contact"
         },
-        {
-            name: "Book online",
-            id: 'book-online',
-            path: '/book-online'
-        }
     ];
 
    onMount(()=>{
@@ -121,7 +116,7 @@
                 <a href={link.path} class="cursor-pointe w-fit h-fit px-7 hover:bg-tertiaryContainer   
                 hover:text-onTertiaryContainer items-center py-7 text-center font-semibold 
                 {$page.route.id ===link.id ?"text-onTertiaryContainer bg-tertiaryContainer": "text-onPrimary"} " 
-                on:click={$page.route.id ==='book-online' ? resetCurrentSelectedPersist : null} data-sveltekit-noscroll>
+                 data-sveltekit-noscroll>
                     {link.name}
                 </a>
             {/each}

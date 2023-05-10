@@ -18,9 +18,9 @@ const buttonData:ButtonProps={
 
     
 
-<div class="max-w-sm box-border flex flex-col justify-between">
+<div class="max-w-xs w-full bg-primary-100 box-border flex flex-col justify-between">
     <Image classList="h-52 w-full aspect-video object-cover" gallery={activity.image} />
-    <section class="pt-4 flex flex-col">
+    <section class="p-4 flex gap-4 flex-col">
         <h1 class="font-bold">
             {activity.activityName}
         </h1>

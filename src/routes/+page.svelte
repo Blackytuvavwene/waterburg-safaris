@@ -6,6 +6,7 @@
    import { homeDataStore} from "$lib/app-components/home-components/helpers/home.stores";
    import type { HomeModel } from "$lib/app-components/home-components/helpers/home.firestore.helpers";
    import type { PageServerData } from "./$types";
+	import Video from "$lib/custom/Video.svelte";
 
    let homeModel:HomeModel;
 
@@ -41,12 +42,14 @@
 
 
 <Intro homeModel={homeData}/>
+
 <AboutUs gallery={homeData?.aboutCompany?.companyGallery != undefined ? homeData.aboutCompany.companyGallery : []}/>
 {#if homeData?.homeActivities != undefined}
 <Activities homeActivities={homeData.homeActivities} />
 {:else}
 <p>No data {homeData.aboutCompany?.companyId}</p>
 {/if}
+<Video videoUrl='./videos/AJT-WildlifeSlideshow.mp4'/>
 
 
 
