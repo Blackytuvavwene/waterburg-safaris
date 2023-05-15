@@ -1427,3 +1427,405 @@ abstract class _LocalCompanyStaffModel implements LocalCompanyStaffModel {
   _$$_LocalCompanyStaffModelCopyWith<_$_LocalCompanyStaffModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+VideoAndGalleryModel _$VideoAndGalleryModelFromJson(Map<String, dynamic> json) {
+  return _VideoAndGalleryModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$VideoAndGalleryModel {
+  List<Gallery>? get image => throw _privateConstructorUsedError;
+  List<VideoDTOModel>? get video => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $VideoAndGalleryModelCopyWith<VideoAndGalleryModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $VideoAndGalleryModelCopyWith<$Res> {
+  factory $VideoAndGalleryModelCopyWith(VideoAndGalleryModel value,
+          $Res Function(VideoAndGalleryModel) then) =
+      _$VideoAndGalleryModelCopyWithImpl<$Res, VideoAndGalleryModel>;
+  @useResult
+  $Res call({List<Gallery>? image, List<VideoDTOModel>? video});
+}
+
+/// @nodoc
+class _$VideoAndGalleryModelCopyWithImpl<$Res,
+        $Val extends VideoAndGalleryModel>
+    implements $VideoAndGalleryModelCopyWith<$Res> {
+  _$VideoAndGalleryModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? image = freezed,
+    Object? video = freezed,
+  }) {
+    return _then(_value.copyWith(
+      image: freezed == image
+          ? _value.image
+          : image // ignore: cast_nullable_to_non_nullable
+              as List<Gallery>?,
+      video: freezed == video
+          ? _value.video
+          : video // ignore: cast_nullable_to_non_nullable
+              as List<VideoDTOModel>?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_VideoAndGalleryModelCopyWith<$Res>
+    implements $VideoAndGalleryModelCopyWith<$Res> {
+  factory _$$_VideoAndGalleryModelCopyWith(_$_VideoAndGalleryModel value,
+          $Res Function(_$_VideoAndGalleryModel) then) =
+      __$$_VideoAndGalleryModelCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({List<Gallery>? image, List<VideoDTOModel>? video});
+}
+
+/// @nodoc
+class __$$_VideoAndGalleryModelCopyWithImpl<$Res>
+    extends _$VideoAndGalleryModelCopyWithImpl<$Res, _$_VideoAndGalleryModel>
+    implements _$$_VideoAndGalleryModelCopyWith<$Res> {
+  __$$_VideoAndGalleryModelCopyWithImpl(_$_VideoAndGalleryModel _value,
+      $Res Function(_$_VideoAndGalleryModel) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? image = freezed,
+    Object? video = freezed,
+  }) {
+    return _then(_$_VideoAndGalleryModel(
+      image: freezed == image
+          ? _value._image
+          : image // ignore: cast_nullable_to_non_nullable
+              as List<Gallery>?,
+      video: freezed == video
+          ? _value._video
+          : video // ignore: cast_nullable_to_non_nullable
+              as List<VideoDTOModel>?,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
+class _$_VideoAndGalleryModel
+    with DiagnosticableTreeMixin
+    implements _VideoAndGalleryModel {
+  _$_VideoAndGalleryModel(
+      {final List<Gallery>? image, final List<VideoDTOModel>? video})
+      : _image = image,
+        _video = video;
+
+  factory _$_VideoAndGalleryModel.fromJson(Map<String, dynamic> json) =>
+      _$$_VideoAndGalleryModelFromJson(json);
+
+  final List<Gallery>? _image;
+  @override
+  List<Gallery>? get image {
+    final value = _image;
+    if (value == null) return null;
+    if (_image is EqualUnmodifiableListView) return _image;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<VideoDTOModel>? _video;
+  @override
+  List<VideoDTOModel>? get video {
+    final value = _video;
+    if (value == null) return null;
+    if (_video is EqualUnmodifiableListView) return _video;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'VideoAndGalleryModel(image: $image, video: $video)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'VideoAndGalleryModel'))
+      ..add(DiagnosticsProperty('image', image))
+      ..add(DiagnosticsProperty('video', video));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_VideoAndGalleryModel &&
+            const DeepCollectionEquality().equals(other._image, _image) &&
+            const DeepCollectionEquality().equals(other._video, _video));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_image),
+      const DeepCollectionEquality().hash(_video));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_VideoAndGalleryModelCopyWith<_$_VideoAndGalleryModel> get copyWith =>
+      __$$_VideoAndGalleryModelCopyWithImpl<_$_VideoAndGalleryModel>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_VideoAndGalleryModelToJson(
+      this,
+    );
+  }
+}
+
+abstract class _VideoAndGalleryModel implements VideoAndGalleryModel {
+  factory _VideoAndGalleryModel(
+      {final List<Gallery>? image,
+      final List<VideoDTOModel>? video}) = _$_VideoAndGalleryModel;
+
+  factory _VideoAndGalleryModel.fromJson(Map<String, dynamic> json) =
+      _$_VideoAndGalleryModel.fromJson;
+
+  @override
+  List<Gallery>? get image;
+  @override
+  List<VideoDTOModel>? get video;
+  @override
+  @JsonKey(ignore: true)
+  _$$_VideoAndGalleryModelCopyWith<_$_VideoAndGalleryModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+VideoDTOModel _$VideoDTOModelFromJson(Map<String, dynamic> json) {
+  return _VideoDTOModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$VideoDTOModel {
+  String? get videoUrl => throw _privateConstructorUsedError;
+  String? get videoDescription => throw _privateConstructorUsedError;
+  bool? get isEditing => throw _privateConstructorUsedError;
+  int? get index => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $VideoDTOModelCopyWith<VideoDTOModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $VideoDTOModelCopyWith<$Res> {
+  factory $VideoDTOModelCopyWith(
+          VideoDTOModel value, $Res Function(VideoDTOModel) then) =
+      _$VideoDTOModelCopyWithImpl<$Res, VideoDTOModel>;
+  @useResult
+  $Res call(
+      {String? videoUrl,
+      String? videoDescription,
+      bool? isEditing,
+      int? index});
+}
+
+/// @nodoc
+class _$VideoDTOModelCopyWithImpl<$Res, $Val extends VideoDTOModel>
+    implements $VideoDTOModelCopyWith<$Res> {
+  _$VideoDTOModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? videoUrl = freezed,
+    Object? videoDescription = freezed,
+    Object? isEditing = freezed,
+    Object? index = freezed,
+  }) {
+    return _then(_value.copyWith(
+      videoUrl: freezed == videoUrl
+          ? _value.videoUrl
+          : videoUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      videoDescription: freezed == videoDescription
+          ? _value.videoDescription
+          : videoDescription // ignore: cast_nullable_to_non_nullable
+              as String?,
+      isEditing: freezed == isEditing
+          ? _value.isEditing
+          : isEditing // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      index: freezed == index
+          ? _value.index
+          : index // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_VideoDTOModelCopyWith<$Res>
+    implements $VideoDTOModelCopyWith<$Res> {
+  factory _$$_VideoDTOModelCopyWith(
+          _$_VideoDTOModel value, $Res Function(_$_VideoDTOModel) then) =
+      __$$_VideoDTOModelCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String? videoUrl,
+      String? videoDescription,
+      bool? isEditing,
+      int? index});
+}
+
+/// @nodoc
+class __$$_VideoDTOModelCopyWithImpl<$Res>
+    extends _$VideoDTOModelCopyWithImpl<$Res, _$_VideoDTOModel>
+    implements _$$_VideoDTOModelCopyWith<$Res> {
+  __$$_VideoDTOModelCopyWithImpl(
+      _$_VideoDTOModel _value, $Res Function(_$_VideoDTOModel) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? videoUrl = freezed,
+    Object? videoDescription = freezed,
+    Object? isEditing = freezed,
+    Object? index = freezed,
+  }) {
+    return _then(_$_VideoDTOModel(
+      videoUrl: freezed == videoUrl
+          ? _value.videoUrl
+          : videoUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      videoDescription: freezed == videoDescription
+          ? _value.videoDescription
+          : videoDescription // ignore: cast_nullable_to_non_nullable
+              as String?,
+      isEditing: freezed == isEditing
+          ? _value.isEditing
+          : isEditing // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      index: freezed == index
+          ? _value.index
+          : index // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
+class _$_VideoDTOModel with DiagnosticableTreeMixin implements _VideoDTOModel {
+  _$_VideoDTOModel(
+      {this.videoUrl, this.videoDescription, this.isEditing, this.index});
+
+  factory _$_VideoDTOModel.fromJson(Map<String, dynamic> json) =>
+      _$$_VideoDTOModelFromJson(json);
+
+  @override
+  final String? videoUrl;
+  @override
+  final String? videoDescription;
+  @override
+  final bool? isEditing;
+  @override
+  final int? index;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'VideoDTOModel(videoUrl: $videoUrl, videoDescription: $videoDescription, isEditing: $isEditing, index: $index)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'VideoDTOModel'))
+      ..add(DiagnosticsProperty('videoUrl', videoUrl))
+      ..add(DiagnosticsProperty('videoDescription', videoDescription))
+      ..add(DiagnosticsProperty('isEditing', isEditing))
+      ..add(DiagnosticsProperty('index', index));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_VideoDTOModel &&
+            (identical(other.videoUrl, videoUrl) ||
+                other.videoUrl == videoUrl) &&
+            (identical(other.videoDescription, videoDescription) ||
+                other.videoDescription == videoDescription) &&
+            (identical(other.isEditing, isEditing) ||
+                other.isEditing == isEditing) &&
+            (identical(other.index, index) || other.index == index));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, videoUrl, videoDescription, isEditing, index);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_VideoDTOModelCopyWith<_$_VideoDTOModel> get copyWith =>
+      __$$_VideoDTOModelCopyWithImpl<_$_VideoDTOModel>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_VideoDTOModelToJson(
+      this,
+    );
+  }
+}
+
+abstract class _VideoDTOModel implements VideoDTOModel {
+  factory _VideoDTOModel(
+      {final String? videoUrl,
+      final String? videoDescription,
+      final bool? isEditing,
+      final int? index}) = _$_VideoDTOModel;
+
+  factory _VideoDTOModel.fromJson(Map<String, dynamic> json) =
+      _$_VideoDTOModel.fromJson;
+
+  @override
+  String? get videoUrl;
+  @override
+  String? get videoDescription;
+  @override
+  bool? get isEditing;
+  @override
+  int? get index;
+  @override
+  @JsonKey(ignore: true)
+  _$$_VideoDTOModelCopyWith<_$_VideoDTOModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}

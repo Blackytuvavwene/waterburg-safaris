@@ -4,7 +4,7 @@ import 'package:admin/lib.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router_flow/go_router_flow.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icon.dart';
@@ -115,7 +115,7 @@ class PackageCard extends HookConsumerWidget {
                   actions: [
                     TextButton(
                       onPressed: () {
-                        Navigator.pop(context);
+                        context.pop();
                       },
                       child: const DText(
                         text: 'No',
@@ -127,7 +127,7 @@ class PackageCard extends HookConsumerWidget {
                         activityNotifier?.deletePackageFromList(index: index!);
 
                         // pop dialog
-                        Navigator.pop(context);
+                        context.pop();
                       },
                       child: const DText(
                         text: 'Yes',
@@ -156,8 +156,12 @@ class PackageCard extends HookConsumerWidget {
         },
         onTap: () {
           // navigate to package edit page with push named
-          context.push(
-            '/activities/$activityId/edit-package/${package?.packageName}',
+          context.pushNamed(
+            'editPackage',
+            pathParameters: {
+              'activityId': activityId!,
+              'packageName': package!.packageName.toString(),
+            },
             extra: EditPackageModel(
               package: package!,
               activityId: activityId!,

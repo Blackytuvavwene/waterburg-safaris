@@ -1,6 +1,6 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router_flow/go_router_flow.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

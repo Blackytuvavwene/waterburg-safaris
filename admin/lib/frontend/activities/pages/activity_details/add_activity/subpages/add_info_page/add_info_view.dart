@@ -1,6 +1,7 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:sizer/sizer.dart';
@@ -50,11 +51,53 @@ class _MobileAddInfoView extends HookConsumerWidget {
         useTextEditingController(text: activityData?.seoDescription);
     final editOverview = useState(false);
     final editSeoDescription = useState(false);
+
+    // activity name controller and focus node
+    final activityNameController = useTextEditingController(
+      text: activityData?.activityName,
+    );
+    final activityNameFocusNode = useFocusNode();
     return SizedBox(
       height: 100.h,
       width: 100.w,
       child: CustomScrollView(
         slivers: [
+          SliverToBoxAdapter(
+            child: Form(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const DText(text: 'Activity name'),
+                    TextFormField(
+                      controller: activityNameController,
+                      focusNode: activityNameFocusNode,
+                      style: GoogleFonts.dosis(),
+                      decoration: const InputDecoration(
+                        hintText: 'Activity name',
+                        border: OutlineInputBorder(),
+                      ),
+                      onFieldSubmitted: (value) {
+                        // update activity name
+                        activityNotifier.updateActivityName(
+                          activityName: activityNameController.text,
+                        );
+                        // clear controller
+                        // activityNameController.clear();
+                      },
+                      onChanged: (value) {
+                        // update activity name
+                        activityNotifier.updateActivityName(
+                          activityName: activityNameController.text,
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
           SliverAppBar(
             backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
             pinned: true,

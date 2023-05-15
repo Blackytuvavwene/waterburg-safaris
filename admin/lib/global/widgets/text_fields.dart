@@ -158,6 +158,10 @@ class ChipInputField<T> extends HookConsumerWidget {
             child: Wrap(
               spacing: AppSpacing.smallX,
               children: [
+                if (chips == null || chips == [])
+                  DText(
+                    text: noChipsMessasge,
+                  ),
                 if (chips != null && chips != [])
                   if (chips!.isNotEmpty)
                     ...chips!.map(

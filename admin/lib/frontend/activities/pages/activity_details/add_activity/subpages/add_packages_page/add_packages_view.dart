@@ -1,5 +1,6 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:sizer/sizer.dart';
@@ -57,8 +58,8 @@ class _MobileAddPackagesView extends HookConsumerWidget {
                   actions: [
                     TextButton.icon(
                       onPressed: () {
-                        //TODO : implement delete all packages
                         // packageData = [];
+                        activityNotifier.clearAllPackages();
                       },
                       icon: LineIcon.trash(
                         color: Theme.of(context).colorScheme.onErrorContainer,
@@ -102,13 +103,19 @@ class _MobileAddPackagesView extends HookConsumerWidget {
                           ),
                           TextButton(
                             onPressed: () async {
-                              final newPackage = await Navigator.push<Package>(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const AddPackagePage(),
-                                ),
+                              final addPckgModel = AddPackageModel(
+                                package: Package(),
+                                activityId: '',
+                                packageCopy: Package(),
+                                packages: packageData,
+                                activityNotifier: activityNotifier,
                               );
-                              // update in list
+                              final newPackage =
+                                  await context.pushNamed<Package>(
+                                'addNewPackage',
+                                extra: addPckgModel,
+                              );
+                              // add package to list
                               if (newPackage != null) {
                                 activityNotifier.updatePackages(
                                   package: newPackage,
@@ -139,11 +146,38 @@ class _MobileAddPackagesView extends HookConsumerWidget {
                     (context, index) {
                       return Padding(
                         padding: EdgeInsets.symmetric(
-                          horizontal: 5.w,
-                          vertical: 2.h,
+                          horizontal: 1.5.w,
                         ),
-                        child: AddPackageViewCard(
+                        child: CustomPackageCard(
                           package: packageData[index],
+                          navigateTo: () async {
+                            final addPckgModel = AddPackageModel(
+                              package: packageData[index],
+                              activityId: '',
+                              packageCopy: packageData[index],
+                              packages: packageData,
+                              activityNotifier: activityNotifier,
+                              index: index,
+                            );
+
+                            final newPackage = await context.pushNamed<Package>(
+                              'editNewPackage',
+                              extra: addPckgModel,
+                            );
+
+                            // update in list
+                            if (newPackage != null) {
+                              activityNotifier.updatePackageInList(
+                                package: newPackage,
+                                index: index,
+                              );
+                            }
+                          },
+                          deletePackage: () {
+                            activityNotifier.removePackageFromList(
+                              index: index,
+                            );
+                          },
                         ),
                       );
                     },
@@ -154,11 +188,16 @@ class _MobileAddPackagesView extends HookConsumerWidget {
       ),
       floatingActionButton: CustomElevatedButton(
         onPressed: () async {
-          final newPackage = await Navigator.push<Package>(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const AddPackagePage(),
-            ),
+          final addPckgModel = AddPackageModel(
+            package: Package(),
+            activityId: '',
+            packageCopy: Package(),
+            packages: packageData,
+            activityNotifier: activityNotifier,
+          );
+          final newPackage = await context.pushNamed<Package>(
+            'addNewPackage',
+            extra: addPckgModel,
           );
           // add package to list
           if (newPackage != null) {

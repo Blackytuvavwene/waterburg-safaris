@@ -26,9 +26,9 @@ class _MobileProfileLoadingPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       color: Theme.of(context).colorScheme.background,
-      child: Center(
+      child: const Center(
         child: Column(
-          children: const [
+          children: [
             DText(
               text: 'Mobile Profile Loading',
             ),
@@ -51,9 +51,9 @@ class _TabletProfileLoadingPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       color: Theme.of(context).colorScheme.background,
-      child: Center(
+      child: const Center(
         child: Column(
-          children: const [
+          children: [
             DText(
               text: 'Tablet Profile Loading',
             ),
@@ -76,9 +76,9 @@ class _DesktopProfileLoadingPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       color: Theme.of(context).colorScheme.background,
-      child: Center(
+      child: const Center(
         child: Column(
-          children: const [
+          children: [
             DText(
               text: 'Desktop Profile Loading',
             ),

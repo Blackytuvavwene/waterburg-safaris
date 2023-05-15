@@ -136,3 +136,37 @@ class LocalCompanyStaffModel with _$LocalCompanyStaffModel {
     final int? index,
   }) = _LocalCompanyStaffModel;
 }
+
+// video and gallery model
+@Freezed()
+class VideoAndGalleryModel with _$VideoAndGalleryModel {
+  @JsonSerializable(
+    explicitToJson: true,
+    anyMap: true,
+  )
+  factory VideoAndGalleryModel({
+    final List<Gallery>? image,
+    final List<VideoDTOModel>? video,
+  }) = _VideoAndGalleryModel;
+
+  factory VideoAndGalleryModel.fromJson(Map<String, dynamic> json) =>
+      _$VideoAndGalleryModelFromJson(json);
+}
+
+// video model
+@Freezed()
+class VideoDTOModel with _$VideoDTOModel {
+  @JsonSerializable(
+    explicitToJson: true,
+    anyMap: true,
+  )
+  factory VideoDTOModel({
+    final String? videoUrl,
+    final String? videoDescription,
+    final bool? isEditing,
+    final int? index,
+  }) = _VideoDTOModel;
+
+  factory VideoDTOModel.fromJson(Map<String, dynamic> json) =>
+      _$VideoDTOModelFromJson(json);
+}

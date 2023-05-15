@@ -105,6 +105,29 @@ class AddActivityNotifier extends StateNotifier<Activity> {
     );
   }
 
+  // update package in list
+  void updatePackageInList({
+    required int index,
+    required Package package,
+  }) {
+    // get the package to be updated first
+    var pkg = state.packages?[index];
+    // update the package
+    pkg = package;
+    // update in list
+    state = state.copyWith(
+      packages: [
+        ...state.packages ?? [],
+      ]..[index] = pkg,
+    );
+    // update the state
+    state = state.copyWith(
+      packages: [
+        ...state.packages ?? [],
+      ],
+    );
+  }
+
   // remove package from list
   void removePackageFromList({
     required int index,
@@ -126,10 +149,22 @@ class AddActivityNotifier extends StateNotifier<Activity> {
       ]..remove(tag),
     );
   }
+
+  // clear activity
+  void clearActivity() {
+    state = Activity();
+  }
+
+  // clear all packages
+  void clearAllPackages() {
+    state = state.copyWith(
+      packages: [],
+    );
+  }
 }
 
 // add activity provider
 final addActivityControlProvider =
-    StateNotifierProvider<AddActivityNotifier, Activity>((ref) {
+    StateNotifierProvider.autoDispose<AddActivityNotifier, Activity>((ref) {
   return AddActivityNotifier();
 });

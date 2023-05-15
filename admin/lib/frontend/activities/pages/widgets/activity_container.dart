@@ -1,7 +1,9 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router_flow/go_router_flow.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:line_icons/line_icon.dart';
 import 'package:sizer/sizer.dart';
 
 // activity preiview container hook widget with applayout
@@ -13,6 +15,22 @@ class ActivityPreviewContainer extends HookConsumerWidget {
   final Activity? activity;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<AsyncValue<Activity>?>(
+      addActivityToFirestoreProvider,
+      (old, newD) {
+        newD?.when(
+          data: (data) {
+            return EasyLoading.showSuccess('Activity deleted successfully');
+          },
+          error: (err, stckTrace) {
+            return EasyLoading.showError(err.toString());
+          },
+          loading: () {
+            return EasyLoading.show(status: 'Loading...');
+          },
+        );
+      },
+    );
     return AppLayout(
       mobile: _ActivityPreviewContainerMobile(
         activity: activity,
@@ -69,24 +87,40 @@ class _ActivityPreviewContainerMobile extends HookConsumerWidget {
                       flex: 3,
                       child: DText(
                         text: activity?.activityName.toString(),
-                        fontSize: 19.sp,
                       ),
                     ),
                     const Spacer(),
                     Expanded(
                       flex: 3,
-                      child: CustomElevatedButton(
-                        text: 'View details',
-                        textColor: Theme.of(context).colorScheme.onPrimary,
-                        onPressed: () {
-                          context.pushNamed(
-                            'activityDetails',
-                            params: {
-                              'activityId': activity!.activityId.toString(),
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: LineIcon.editAlt(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            onPressed: () {
+                              context.pushNamed(
+                                'activityDetails',
+                                pathParameters: {
+                                  'activityId': activity!.activityId.toString(),
+                                },
+                              );
                             },
-                          );
-                        },
-                        primary: Theme.of(context).colorScheme.primary,
+                          ),
+                          IconButton(
+                            icon: LineIcon.alternateTrashAlt(
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                            onPressed: () async {
+                              await ref
+                                  .read(addActivityToFirestoreProvider.notifier)
+                                  .deleteActivityFromFirestore(
+                                    activityId: activity!.activityId!,
+                                    activity: activity!,
+                                  );
+                            },
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -215,7 +249,7 @@ class _ActivityPreviewContainerTablet extends HookConsumerWidget {
                         onPressed: () {
                           context.pushNamed(
                             'activityDetails',
-                            params: {
+                            pathParameters: {
                               'activityId': activity!.activityId.toString(),
                             },
                           );
@@ -347,7 +381,7 @@ class _ActivityPreviewContainerDesktop extends HookConsumerWidget {
                         onPressed: () {
                           context.pushNamed(
                             'activityDetails',
-                            params: {
+                            pathParameters: {
                               'activityId': activity!.activityId.toString(),
                             },
                           );

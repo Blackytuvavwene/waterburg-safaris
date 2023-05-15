@@ -59,12 +59,23 @@ List<RouteModel> nestedMainAppRoutes({int? iconColor}) => [
         ),
       ),
       RouteModel(
+        widget: const GalleryPage(),
+        path: '/gallery',
+        name: 'gallery',
+        label: 'Gallery',
+        icon: LineIcon.imagesAlt(
+          color: iconColor == 2
+              ? const Color(0xFF003351)
+              : const Color(0xFFcce5ff),
+        ),
+      ),
+      RouteModel(
         widget: const BookingsPage(),
         path: '/bookings',
         name: 'bookings',
         label: 'Bookings',
         icon: LineIcon.comments(
-          color: iconColor == 2
+          color: iconColor == 3
               ? const Color(0xFF003351)
               : const Color(0xFFcce5ff),
         ),
@@ -75,7 +86,7 @@ List<RouteModel> nestedMainAppRoutes({int? iconColor}) => [
         name: 'profile',
         label: 'Profile',
         icon: LineIcon.user(
-          color: iconColor == 3
+          color: iconColor == 4
               ? const Color(0xFF003351)
               : const Color(0xFFcce5ff),
         ),

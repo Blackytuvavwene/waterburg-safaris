@@ -190,9 +190,9 @@ class _TabletCompanyGalleryPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       color: Theme.of(context).colorScheme.background,
-      child: Center(
+      child: const Center(
         child: Column(
-          children: const [
+          children: [
             DText(
               text: 'Tablet Company Gallery',
             ),
@@ -225,9 +225,9 @@ class _DesktopCompanyGalleryPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       color: Theme.of(context).colorScheme.background,
-      child: Center(
+      child: const Center(
         child: Column(
-          children: const [
+          children: [
             DText(
               text: 'Desktop Company Gallery',
             ),

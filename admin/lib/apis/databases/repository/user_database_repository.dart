@@ -10,10 +10,7 @@ class UserDatabaseRepository implements UserDatabaseAbstract {
   @override
   Future<UserModel> saveUserToFirestore({UserModel? model}) async {
     try {
-      final user = await _firestore
-          .collection('users')
-          .doc(model?.uid)
-          .set(model!.toJson());
+      await _firestore.collection('users').doc(model?.uid).set(model!.toJson());
 
       return model;
     } catch (e) {

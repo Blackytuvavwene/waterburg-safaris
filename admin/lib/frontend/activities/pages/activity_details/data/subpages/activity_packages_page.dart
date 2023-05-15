@@ -1,7 +1,7 @@
 import 'package:admin/lib.dart';
 import 'package:extended_sliver/extended_sliver.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router_flow/go_router_flow.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sizer/sizer.dart';
 
@@ -83,7 +83,7 @@ class _MobileActivityPackagesPage extends HookConsumerWidget {
                     // navigate to add package page
                     context.pushNamed(
                       'addPackage',
-                      params: {
+                      pathParameters: {
                         'activityId': activityId!,
                       },
                       extra: newPackage,
@@ -135,9 +135,9 @@ class _MobileActivityPackagesPage extends HookConsumerWidget {
                         .toList(),
                   ],
                 )
-              : Center(
+              : const Center(
                   child: Column(
-                    children: const [
+                    children: [
                       DText(
                         text: 'No packages',
                       )

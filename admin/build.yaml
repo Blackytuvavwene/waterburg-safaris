@@ -1,7 +1,8 @@
 targets:
   $default:
     builders:
-      freezed:
+      json_serializable:
         options:
           explicit_to_json: true
           any_map: true
+      freezed:

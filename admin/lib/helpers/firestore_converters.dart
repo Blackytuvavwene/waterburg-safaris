@@ -23,15 +23,49 @@ final docRef = <T>(String path) {
 class FirestoreHelper {
   static final _firestore = FirebaseFirestore.instance;
 
-  static Future<T> getDataFromDoc<T>(
-      {required String docId,
-      required String docPath,
-      required String query}) async {
+  static Future<T> getDataFromDoc<T>({
+    required String? docId,
+    required String docPath,
+    required String? query,
+  }) async {
     try {
-      final data = await docRef<T>('$docPath/$docId')
-          .where(query, isEqualTo: true)
-          .get();
+      final data = query != null
+          ? await docRef<T>(docId != null ? '$docPath/$docId' : docPath)
+              .where(query, isEqualTo: true)
+              .get()
+          : await docRef<T>(docId != null ? '$docPath/$docId' : docPath).get();
       return data.docs.first.data();
+    } on FirebaseException catch (e) {
+      throw e.toString();
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  // stream data from firestore
+  static Stream<T> streamDataFromDoc<T>({
+    required String? docId,
+    required String docPath,
+    required String? query,
+  }) {
+    try {
+      final Stream<T> data = query != null
+          ? docRef<T>('$docPath/$docId')
+              .where(query, isEqualTo: true)
+              .snapshots()
+              .map(
+                (event) => event.docs.map(
+                  (e) => e.data(),
+                ) as T,
+              )
+          : docRef<T>(docId != null ? '$docPath/$docId' : docPath)
+              .snapshots()
+              .map(
+                (event) => event.docs.map(
+                  (e) => e.data(),
+                ) as T,
+              );
+      return data;
     } on FirebaseException catch (e) {
       throw e.toString();
     } catch (e) {
@@ -286,3 +320,8 @@ final firestoreHelperControllerProvider = <T>() => StateNotifierProvider
         .autoDispose<FirestoreHelperController<T>, AsyncValue<T>>((ref) {
       return FirestoreHelperController();
     });
+
+// firestore helper provider
+final firestoreHelperProvider = Provider<FirestoreHelper>((ref) {
+  return FirestoreHelper();
+});

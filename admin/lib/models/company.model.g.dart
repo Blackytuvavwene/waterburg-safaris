@@ -106,3 +106,36 @@ Map<String, dynamic> _$$_CompanyDetailsToJson(_$_CompanyDetails instance) =>
       'email': instance.email,
       'telNo': instance.telNo,
     };
+
+_$_VideoAndGalleryModel _$$_VideoAndGalleryModelFromJson(Map json) =>
+    _$_VideoAndGalleryModel(
+      image: (json['image'] as List<dynamic>?)
+          ?.map((e) => Gallery.fromJson(Map<String, dynamic>.from(e as Map)))
+          .toList(),
+      video: (json['video'] as List<dynamic>?)
+          ?.map((e) =>
+              VideoDTOModel.fromJson(Map<String, dynamic>.from(e as Map)))
+          .toList(),
+    );
+
+Map<String, dynamic> _$$_VideoAndGalleryModelToJson(
+        _$_VideoAndGalleryModel instance) =>
+    <String, dynamic>{
+      'image': instance.image?.map((e) => e.toJson()).toList(),
+      'video': instance.video?.map((e) => e.toJson()).toList(),
+    };
+
+_$_VideoDTOModel _$$_VideoDTOModelFromJson(Map json) => _$_VideoDTOModel(
+      videoUrl: json['videoUrl'] as String?,
+      videoDescription: json['videoDescription'] as String?,
+      isEditing: json['isEditing'] as bool?,
+      index: json['index'] as int?,
+    );
+
+Map<String, dynamic> _$$_VideoDTOModelToJson(_$_VideoDTOModel instance) =>
+    <String, dynamic>{
+      'videoUrl': instance.videoUrl,
+      'videoDescription': instance.videoDescription,
+      'isEditing': instance.isEditing,
+      'index': instance.index,
+    };

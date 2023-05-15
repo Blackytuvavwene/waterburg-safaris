@@ -235,6 +235,28 @@ class ActivityDBController extends StateNotifier<AsyncValue<Activity>?> {
       }
     });
   }
+
+  // delete activity from firestore
+  Future deleteActivityFromFirestore({
+    required String activityId,
+    required Activity activity,
+  }) async {
+    state = const AsyncValue.loading();
+
+    state = await AsyncValue.guard(() async {
+      // delete images from firebase storage
+      for (var image in activity.activityGallery!) {
+        await ImageHelpers.deleteImageFromFirebaseStorageByDownloadUrl(
+          imageUrl: image.imageUrl!,
+        );
+      }
+
+      await activitiesDatabaseRepository!
+          .deleteActivityFromFirestore(activityId: activityId);
+
+      return Activity();
+    });
+  }
 }
 
 class AddImageNotifier extends StateNotifier<AsyncValue<List<String>?>> {

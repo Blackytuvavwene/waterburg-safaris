@@ -4,8 +4,8 @@ import 'dart:convert';
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router_flow/go_router_flow.dart';
-// import 'package:go_router_flow/go_router_flow.dart';
+import 'package:go_router/go_router.dart';
+// import 'package:go_router/go_router.dart';
 
 // navigator keys
 final GlobalKey<NavigatorState> _rootNavigatorKey =
@@ -56,7 +56,7 @@ final goroutingProvider = Provider<GoRouter>(
                   debugLogDiagnostics: true,
                   redirectLimit: 50,
                   redirect: (context, state) {
-                    final welcomeLoc = state.subloc == '/';
+                    final welcomeLoc = state.matchedLocation == '/';
 
                     String _getRoutePath() {
                       final route = ref.read(
@@ -164,6 +164,30 @@ final goroutingProvider = Provider<GoRouter>(
                                         key: state.pageKey,
                                       ),
                                     ),
+                                    GoRoute(
+                                      path: 'add-package',
+                                      name: 'addNewPackage',
+                                      builder: (context, state) {
+                                        final addPackageModel =
+                                            state.extra as AddPackageModel;
+                                        return AddPackagePage(
+                                          key: state.pageKey,
+                                          model: addPackageModel,
+                                        );
+                                      },
+                                    ),
+                                    GoRoute(
+                                      path: 'edit-package',
+                                      name: 'editNewPackage',
+                                      builder: (context, state) {
+                                        final addPackageModel =
+                                            state.extra as AddPackageModel;
+                                        return AddPackagePage(
+                                          key: state.pageKey,
+                                          model: addPackageModel,
+                                        );
+                                      },
+                                    ),
                                   ],
                                 ),
                                 GoRoute(
@@ -171,8 +195,9 @@ final goroutingProvider = Provider<GoRouter>(
                                   name: 'activityDetails',
                                   builder: (context, state) {
                                     return ActivityPage(
-                                      activityId:
-                                          state.params['activityId'].toString(),
+                                      activityId: state
+                                          .pathParameters['activityId']
+                                          .toString(),
                                       key: state.pageKey,
                                     );
                                   },
@@ -208,6 +233,15 @@ final goroutingProvider = Provider<GoRouter>(
                                   ],
                                 ),
                               ],
+                            ),
+                            GoRoute(
+                              path: 'gallery',
+                              name: 'gallery',
+                              builder: (context, state) {
+                                return GalleryPage(
+                                  key: state.pageKey,
+                                );
+                              },
                             ),
                             GoRoute(
                               path: 'bookings',

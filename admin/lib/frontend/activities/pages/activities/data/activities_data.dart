@@ -1,6 +1,6 @@
 import 'package:admin/lib.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router_flow/go_router_flow.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sizer/sizer.dart';
 
@@ -129,6 +129,19 @@ class _ActivitiesDataTablet extends HookConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class Food extends HookConsumerWidget {
+  const Food({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return const Center(
+      child: DText(text: 'Hello how are you',),
     );
   }
 }

@@ -222,9 +222,9 @@ class _TabletCompanyEditAbout extends HookConsumerWidget {
             ),
           ],
         ),
-        SliverToBoxAdapter(
+        const SliverToBoxAdapter(
           child: Column(
-            children: const [
+            children: [
               SizedBox(
                 height: 20,
               ),
@@ -271,9 +271,9 @@ class _DesktopCompanyEditAbout extends HookConsumerWidget {
             ),
           ],
         ),
-        SliverToBoxAdapter(
+        const SliverToBoxAdapter(
           child: Column(
-            children: const [
+            children: [
               SizedBox(
                 height: 20,
               ),
