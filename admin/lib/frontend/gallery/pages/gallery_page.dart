@@ -6,21 +6,74 @@ class GalleryPage extends HookConsumerWidget {
   const GalleryPage({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final galleryData = ref.watch(
-      firestoreGalleryAndVideoStreamProvider('gallery'),
+    final videos = ref.watch(firestoreVideoStreamProvider('videos'));
+    final images = ref.watch(firestoreGalleryStreamProvider('images'));
+    return AppLayout(
+      mobile: _MobileGalleryPage(
+        videoPage: videos.when(data: (data){
+          return VideoDataPage(videos: data,);
+        }, error: (error,stackTrace){
+          return VideoErrorPage(error: error.toString(),);
+        }, loading: (){
+          return const VideoLoadingPage();
+        },),
+        imagePage: images.when(data: (data){
+          return GalleryDataPage(gallery: data,);
+        }, error: (error,stackTrace){
+          return GalleryErrorPage(error: error.toString(),);
+        }, loading: (){
+          return const GalleryLoadingPage();
+        },),
+      ),
+      tablet: _TabletGalleryPage(),
+      desktop: _DesktopGalleryPage(),
     );
-    return galleryData.when(
-      data: (galleryResults) {
-        return const GalleryDataPage();
-      },
-      error: (err, stackTrace) {
-        return GalleryErrorPage(
-          error: err.toString() + stackTrace.toString(),
-        );
-      },
-      loading: () {
-        return const GalleryLoadingPage();
-      },
+}
+
+
+}
+
+
+// gallery page mobile
+class _MobileGalleryPage extends HookConsumerWidget {
+  const _MobileGalleryPage({required this.videoPage, required this.imagePage,});
+  final Widget videoPage;
+  final Widget imagePage;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+body: CustomScrollView(slivers: [
+  SliverToBoxAdapter(
+    child: Container(
+      height: 200,
+      child: videoPage,
+    ),
+  ),
+  SliverToBoxAdapter(
+    child: Container(
+      height: 200,
+      child: imagePage,
+    ),
+  ),
+],),
     );
+  }
+}
+
+// gallery page tablet
+class _TabletGalleryPage extends HookConsumerWidget {
+  const _TabletGalleryPage();
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container();
+  }
+}
+
+// gallery page desktop
+class _DesktopGalleryPage extends HookConsumerWidget {
+  const _DesktopGalleryPage();
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container();
   }
 }

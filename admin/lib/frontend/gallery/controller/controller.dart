@@ -71,32 +71,56 @@ final videoPickerControllerProvider = StateNotifierProvider<
   (ref) => VideoPickerControllerNotifier(),
 );
 
-// firestore gallery and video stream provider
-final firestoreGalleryAndVideoStreamProvider = StreamProvider.autoDispose
-    .family<VideoAndGalleryModel, String>((ref, docPath) {
-  final firestoreInstance = FirebaseFirestore.instance;
 
-  // stream list of gallery from firestore
-  final gallery = firestoreInstance
-      .collection('gallery')
-      .doc('gallery')
-      .snapshots()
-      .map((event) => event.data());
 
-  // stream list of video from firestore
-  final video = firestoreInstance
-      .collection('gallery')
-      .doc('video')
-      .snapshots()
-      .map((event) => VideoAndGalleryModel.fromJson(event.data()!));
+// firestore gallery  stream provider
+final firestoreGalleryStreamProvider = StreamProvider.autoDispose
+    .family<List<Gallery>, String>((ref, docPath)  {
+      try {
+        // // stream videos
+        // final streamedVideos = FirestoreHelper.streamDataFromDocWithoutQuery(docPath: '$docPath[videos]',);
+        // stream gallery
+        final streamedGallery = FirestoreHelper.streamListDataWithoutQuery<Map<String,dynamic>>(docPath: docPath,);
 
-  // return stream of gallery and video
-  // final model = VideoAndGalleryModel(
-  //   image: gallery.map((event)async => await Gallery.fromJson(event!)).toList(),
-  //   video: video.map((event) => VideoDTOModel.fromJson(event!)).toList(),
-  // );
-  return video;
+       final myList = streamedGallery.map((event) => event.map((e) => Gallery.fromJson(e)).toList(),);
+
+       return myList;
+
+      } catch (e, stack) {
+        // debug print
+        debugPrint(
+          'Error in trying to stream gallery: $e',
+        );
+        debugPrint(
+          'Stack error in trying to stream gallery: $stack',
+        );
+        throw e.toString();
+      }
+
 });
+
+// firestore video stream provider
+final firestoreVideoStreamProvider = StreamProvider.autoDispose
+    .family<List<VideoDTOModel>, String>((ref, docPath)  {
+        try {
+          // stream videos
+          final streamedVideos = FirestoreHelper.streamListDataWithoutQuery<Map<String,dynamic>>(docPath: docPath,);
+
+          final myList = streamedVideos.map((event) => event.map((e) => VideoDTOModel.fromJson(e)).toList(),);
+
+          return myList;
+
+        } catch (e, stack) {
+          // debug print
+          debugPrint(
+            'Error in trying to stream videos: $e',
+          );
+          debugPrint(
+            'Stack error in trying to stream videos: $stack',
+          );
+          throw e.toString();
+        }
+    });
 
 // multiple video picker controller
 class MultipleVideoPickerControllerNotifier
@@ -196,3 +220,5 @@ class FirebaseVideoAndGalleryControllerNotifier
     // });
   }
 }
+
+

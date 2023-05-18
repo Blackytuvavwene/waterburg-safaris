@@ -53,3 +53,56 @@ class _DesktopGalleryLoadingPage extends HookConsumerWidget {
     );
   }
 }
+
+// video loading page hook consumer widget with app layout
+class VideoLoadingPage extends HookConsumerWidget {
+  const VideoLoadingPage({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return const AppLayout(
+      mobile: _MobileVideoLoadingPage(),
+      tablet: _TabletVideoLoadingPage(),
+      desktop: _DesktopVideoLoadingPage(),
+    );
+  }
+}
+
+// video loading page mobile
+class _MobileVideoLoadingPage extends HookConsumerWidget {
+  const _MobileVideoLoadingPage();
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+}
+
+// video loading page tablet
+class _TabletVideoLoadingPage extends HookConsumerWidget {
+  const _TabletVideoLoadingPage();
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+}
+
+// video loading page desktop
+class _DesktopVideoLoadingPage extends HookConsumerWidget {
+  const _DesktopVideoLoadingPage();
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+}
+
