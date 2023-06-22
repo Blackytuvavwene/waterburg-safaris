@@ -104,21 +104,3 @@ class GalleryPageHandler extends HookConsumerWidget {
     );
   }
 }
-
-// gallery page tablet
-class _TabletGalleryPage extends HookConsumerWidget {
-  const _TabletGalleryPage();
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Container();
-  }
-}
-
-// gallery page desktop
-class _DesktopGalleryPage extends HookConsumerWidget {
-  const _DesktopGalleryPage();
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Container();
-  }
-}
