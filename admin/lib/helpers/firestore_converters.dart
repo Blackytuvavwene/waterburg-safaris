@@ -42,33 +42,53 @@ class FirestoreHelper {
     }
   }
 
-  // stream data from firestore
-  static Stream<T> streamDataFromDoc<T>({
-    required String? docId,
+  // stream data from firestore without query
+  static Stream<List<T>> streamListDataWithoutQuery<T>({
     required String docPath,
-    required String? query,
   }) {
     try {
-      final Stream<T> data = query != null
-          ? docRef<T>('$docPath/$docId')
-              .where(query, isEqualTo: true)
-              .snapshots()
-              .map(
-                (event) => event.docs.map(
+      final Stream<List<T>> data = docRef<T>(docPath).snapshots().map(
+            (event) => event.docs
+                .map(
                   (e) => e.data(),
-                ) as T,
-              )
-          : docRef<T>(docId != null ? '$docPath/$docId' : docPath)
-              .snapshots()
-              .map(
-                (event) => event.docs.map(
-                  (e) => e.data(),
-                ) as T,
-              );
+                )
+                .toList(),
+          );
       return data;
-    } on FirebaseException catch (e) {
+    } on FirebaseException catch (e, stack) {
+      debugPrint('Failed stream stack : ${stack.toString()}');
+      debugPrint('Failed stream error: ${e.toString()}');
       throw e.toString();
-    } catch (e) {
+    } catch (e, stack) {
+      debugPrint('Failed stream stack : ${stack.toString()}');
+      debugPrint('Failed stream error: ${e.toString()}');
+      throw e.toString();
+    }
+  }
+
+  // stream data from firestore with query
+  static Stream<T> streamDataFromDocWithQuery<T>({
+    required String? docId,
+    required String docPath,
+    required String query,
+  }) {
+    try {
+      final Stream<T> data = docRef<T>('$docPath/$docId')
+          .where(query, isEqualTo: true)
+          .snapshots()
+          .map(
+            (event) => event.docs.map(
+              (e) => e.data(),
+            ) as T,
+          );
+      return data;
+    } on FirebaseException catch (e, stack) {
+      debugPrint('Failed stream stack : ${stack.toString()}');
+      debugPrint('Failed stream error: ${e.toString()}');
+      throw e.toString();
+    } catch (e, stack) {
+      debugPrint('Failed stream stack : ${stack.toString()}');
+      debugPrint('Failed stream error: ${e.toString()}');
       throw e.toString();
     }
   }
