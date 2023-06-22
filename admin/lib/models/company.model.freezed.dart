@@ -1521,8 +1521,7 @@ class __$$_VideoAndGalleryModelCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
-@JsonSerializable(explicitToJson: true, anyMap: true)
+@JsonSerializable()
 class _$_VideoAndGalleryModel
     with DiagnosticableTreeMixin
     implements _VideoAndGalleryModel {
@@ -1627,6 +1626,7 @@ mixin _$VideoDTOModel {
   String? get videoDescription => throw _privateConstructorUsedError;
   bool? get isEditing => throw _privateConstructorUsedError;
   int? get index => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -1644,7 +1644,8 @@ abstract class $VideoDTOModelCopyWith<$Res> {
       {String? videoUrl,
       String? videoDescription,
       bool? isEditing,
-      int? index});
+      int? index,
+      String? id});
 }
 
 /// @nodoc
@@ -1664,6 +1665,7 @@ class _$VideoDTOModelCopyWithImpl<$Res, $Val extends VideoDTOModel>
     Object? videoDescription = freezed,
     Object? isEditing = freezed,
     Object? index = freezed,
+    Object? id = freezed,
   }) {
     return _then(_value.copyWith(
       videoUrl: freezed == videoUrl
@@ -1682,6 +1684,10 @@ class _$VideoDTOModelCopyWithImpl<$Res, $Val extends VideoDTOModel>
           ? _value.index
           : index // ignore: cast_nullable_to_non_nullable
               as int?,
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -1698,7 +1704,8 @@ abstract class _$$_VideoDTOModelCopyWith<$Res>
       {String? videoUrl,
       String? videoDescription,
       bool? isEditing,
-      int? index});
+      int? index,
+      String? id});
 }
 
 /// @nodoc
@@ -1716,6 +1723,7 @@ class __$$_VideoDTOModelCopyWithImpl<$Res>
     Object? videoDescription = freezed,
     Object? isEditing = freezed,
     Object? index = freezed,
+    Object? id = freezed,
   }) {
     return _then(_$_VideoDTOModel(
       videoUrl: freezed == videoUrl
@@ -1734,16 +1742,23 @@ class __$$_VideoDTOModelCopyWithImpl<$Res>
           ? _value.index
           : index // ignore: cast_nullable_to_non_nullable
               as int?,
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
 
 /// @nodoc
-
-@JsonSerializable(explicitToJson: true, anyMap: true)
+@JsonSerializable()
 class _$_VideoDTOModel with DiagnosticableTreeMixin implements _VideoDTOModel {
   _$_VideoDTOModel(
-      {this.videoUrl, this.videoDescription, this.isEditing, this.index});
+      {this.videoUrl,
+      this.videoDescription,
+      this.isEditing,
+      this.index,
+      this.id});
 
   factory _$_VideoDTOModel.fromJson(Map<String, dynamic> json) =>
       _$$_VideoDTOModelFromJson(json);
@@ -1756,10 +1771,12 @@ class _$_VideoDTOModel with DiagnosticableTreeMixin implements _VideoDTOModel {
   final bool? isEditing;
   @override
   final int? index;
+  @override
+  final String? id;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'VideoDTOModel(videoUrl: $videoUrl, videoDescription: $videoDescription, isEditing: $isEditing, index: $index)';
+    return 'VideoDTOModel(videoUrl: $videoUrl, videoDescription: $videoDescription, isEditing: $isEditing, index: $index, id: $id)';
   }
 
   @override
@@ -1770,7 +1787,8 @@ class _$_VideoDTOModel with DiagnosticableTreeMixin implements _VideoDTOModel {
       ..add(DiagnosticsProperty('videoUrl', videoUrl))
       ..add(DiagnosticsProperty('videoDescription', videoDescription))
       ..add(DiagnosticsProperty('isEditing', isEditing))
-      ..add(DiagnosticsProperty('index', index));
+      ..add(DiagnosticsProperty('index', index))
+      ..add(DiagnosticsProperty('id', id));
   }
 
   @override
@@ -1784,13 +1802,14 @@ class _$_VideoDTOModel with DiagnosticableTreeMixin implements _VideoDTOModel {
                 other.videoDescription == videoDescription) &&
             (identical(other.isEditing, isEditing) ||
                 other.isEditing == isEditing) &&
-            (identical(other.index, index) || other.index == index));
+            (identical(other.index, index) || other.index == index) &&
+            (identical(other.id, id) || other.id == id));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, videoUrl, videoDescription, isEditing, index);
+  int get hashCode => Object.hash(
+      runtimeType, videoUrl, videoDescription, isEditing, index, id);
 
   @JsonKey(ignore: true)
   @override
@@ -1811,7 +1830,8 @@ abstract class _VideoDTOModel implements VideoDTOModel {
       {final String? videoUrl,
       final String? videoDescription,
       final bool? isEditing,
-      final int? index}) = _$_VideoDTOModel;
+      final int? index,
+      final String? id}) = _$_VideoDTOModel;
 
   factory _VideoDTOModel.fromJson(Map<String, dynamic> json) =
       _$_VideoDTOModel.fromJson;
@@ -1825,7 +1845,269 @@ abstract class _VideoDTOModel implements VideoDTOModel {
   @override
   int? get index;
   @override
+  String? get id;
+  @override
   @JsonKey(ignore: true)
   _$$_VideoDTOModelCopyWith<_$_VideoDTOModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+GalleryDTOModel _$GalleryDTOModelFromJson(Map<String, dynamic> json) {
+  return _GalleryDTOModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$GalleryDTOModel {
+  String? get imageUrl => throw _privateConstructorUsedError;
+  String? get imageTitle => throw _privateConstructorUsedError;
+  String? get imageDescription => throw _privateConstructorUsedError;
+  bool? get isEditing => throw _privateConstructorUsedError;
+  int? get index => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $GalleryDTOModelCopyWith<GalleryDTOModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $GalleryDTOModelCopyWith<$Res> {
+  factory $GalleryDTOModelCopyWith(
+          GalleryDTOModel value, $Res Function(GalleryDTOModel) then) =
+      _$GalleryDTOModelCopyWithImpl<$Res, GalleryDTOModel>;
+  @useResult
+  $Res call(
+      {String? imageUrl,
+      String? imageTitle,
+      String? imageDescription,
+      bool? isEditing,
+      int? index,
+      String? id});
+}
+
+/// @nodoc
+class _$GalleryDTOModelCopyWithImpl<$Res, $Val extends GalleryDTOModel>
+    implements $GalleryDTOModelCopyWith<$Res> {
+  _$GalleryDTOModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? imageUrl = freezed,
+    Object? imageTitle = freezed,
+    Object? imageDescription = freezed,
+    Object? isEditing = freezed,
+    Object? index = freezed,
+    Object? id = freezed,
+  }) {
+    return _then(_value.copyWith(
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      imageTitle: freezed == imageTitle
+          ? _value.imageTitle
+          : imageTitle // ignore: cast_nullable_to_non_nullable
+              as String?,
+      imageDescription: freezed == imageDescription
+          ? _value.imageDescription
+          : imageDescription // ignore: cast_nullable_to_non_nullable
+              as String?,
+      isEditing: freezed == isEditing
+          ? _value.isEditing
+          : isEditing // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      index: freezed == index
+          ? _value.index
+          : index // ignore: cast_nullable_to_non_nullable
+              as int?,
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$_GalleryDTOModelCopyWith<$Res>
+    implements $GalleryDTOModelCopyWith<$Res> {
+  factory _$$_GalleryDTOModelCopyWith(
+          _$_GalleryDTOModel value, $Res Function(_$_GalleryDTOModel) then) =
+      __$$_GalleryDTOModelCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String? imageUrl,
+      String? imageTitle,
+      String? imageDescription,
+      bool? isEditing,
+      int? index,
+      String? id});
+}
+
+/// @nodoc
+class __$$_GalleryDTOModelCopyWithImpl<$Res>
+    extends _$GalleryDTOModelCopyWithImpl<$Res, _$_GalleryDTOModel>
+    implements _$$_GalleryDTOModelCopyWith<$Res> {
+  __$$_GalleryDTOModelCopyWithImpl(
+      _$_GalleryDTOModel _value, $Res Function(_$_GalleryDTOModel) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? imageUrl = freezed,
+    Object? imageTitle = freezed,
+    Object? imageDescription = freezed,
+    Object? isEditing = freezed,
+    Object? index = freezed,
+    Object? id = freezed,
+  }) {
+    return _then(_$_GalleryDTOModel(
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      imageTitle: freezed == imageTitle
+          ? _value.imageTitle
+          : imageTitle // ignore: cast_nullable_to_non_nullable
+              as String?,
+      imageDescription: freezed == imageDescription
+          ? _value.imageDescription
+          : imageDescription // ignore: cast_nullable_to_non_nullable
+              as String?,
+      isEditing: freezed == isEditing
+          ? _value.isEditing
+          : isEditing // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      index: freezed == index
+          ? _value.index
+          : index // ignore: cast_nullable_to_non_nullable
+              as int?,
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_GalleryDTOModel
+    with DiagnosticableTreeMixin
+    implements _GalleryDTOModel {
+  _$_GalleryDTOModel(
+      {this.imageUrl,
+      this.imageTitle,
+      this.imageDescription,
+      this.isEditing,
+      this.index,
+      this.id});
+
+  factory _$_GalleryDTOModel.fromJson(Map<String, dynamic> json) =>
+      _$$_GalleryDTOModelFromJson(json);
+
+  @override
+  final String? imageUrl;
+  @override
+  final String? imageTitle;
+  @override
+  final String? imageDescription;
+  @override
+  final bool? isEditing;
+  @override
+  final int? index;
+  @override
+  final String? id;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'GalleryDTOModel(imageUrl: $imageUrl, imageTitle: $imageTitle, imageDescription: $imageDescription, isEditing: $isEditing, index: $index, id: $id)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'GalleryDTOModel'))
+      ..add(DiagnosticsProperty('imageUrl', imageUrl))
+      ..add(DiagnosticsProperty('imageTitle', imageTitle))
+      ..add(DiagnosticsProperty('imageDescription', imageDescription))
+      ..add(DiagnosticsProperty('isEditing', isEditing))
+      ..add(DiagnosticsProperty('index', index))
+      ..add(DiagnosticsProperty('id', id));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_GalleryDTOModel &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
+            (identical(other.imageTitle, imageTitle) ||
+                other.imageTitle == imageTitle) &&
+            (identical(other.imageDescription, imageDescription) ||
+                other.imageDescription == imageDescription) &&
+            (identical(other.isEditing, isEditing) ||
+                other.isEditing == isEditing) &&
+            (identical(other.index, index) || other.index == index) &&
+            (identical(other.id, id) || other.id == id));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, imageUrl, imageTitle,
+      imageDescription, isEditing, index, id);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_GalleryDTOModelCopyWith<_$_GalleryDTOModel> get copyWith =>
+      __$$_GalleryDTOModelCopyWithImpl<_$_GalleryDTOModel>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_GalleryDTOModelToJson(
+      this,
+    );
+  }
+}
+
+abstract class _GalleryDTOModel implements GalleryDTOModel {
+  factory _GalleryDTOModel(
+      {final String? imageUrl,
+      final String? imageTitle,
+      final String? imageDescription,
+      final bool? isEditing,
+      final int? index,
+      final String? id}) = _$_GalleryDTOModel;
+
+  factory _GalleryDTOModel.fromJson(Map<String, dynamic> json) =
+      _$_GalleryDTOModel.fromJson;
+
+  @override
+  String? get imageUrl;
+  @override
+  String? get imageTitle;
+  @override
+  String? get imageDescription;
+  @override
+  bool? get isEditing;
+  @override
+  int? get index;
+  @override
+  String? get id;
+  @override
+  @JsonKey(ignore: true)
+  _$$_GalleryDTOModelCopyWith<_$_GalleryDTOModel> get copyWith =>
       throw _privateConstructorUsedError;
 }

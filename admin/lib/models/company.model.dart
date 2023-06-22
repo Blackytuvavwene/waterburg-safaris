@@ -140,10 +140,6 @@ class LocalCompanyStaffModel with _$LocalCompanyStaffModel {
 // video and gallery model
 @Freezed()
 class VideoAndGalleryModel with _$VideoAndGalleryModel {
-  @JsonSerializable(
-    explicitToJson: true,
-    anyMap: true,
-  )
   factory VideoAndGalleryModel({
     final List<Gallery>? image,
     final List<VideoDTOModel>? video,
@@ -156,17 +152,29 @@ class VideoAndGalleryModel with _$VideoAndGalleryModel {
 // video model
 @Freezed()
 class VideoDTOModel with _$VideoDTOModel {
-  @JsonSerializable(
-    explicitToJson: true,
-    anyMap: true,
-  )
   factory VideoDTOModel({
     final String? videoUrl,
     final String? videoDescription,
     final bool? isEditing,
     final int? index,
+    final String? id,
   }) = _VideoDTOModel;
 
   factory VideoDTOModel.fromJson(Map<String, dynamic> json) =>
       _$VideoDTOModelFromJson(json);
+}
+
+@freezed
+class GalleryDTOModel with _$GalleryDTOModel {
+  factory GalleryDTOModel({
+    final String? imageUrl,
+    final String? imageTitle,
+    final String? imageDescription,
+    final bool? isEditing,
+    final int? index,
+    final String? id,
+  }) = _GalleryDTOModel;
+
+  factory GalleryDTOModel.fromJson(Map<String, dynamic> json) =>
+      _$GalleryDTOModelFromJson(json);
 }

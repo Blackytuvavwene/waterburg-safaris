@@ -130,6 +130,7 @@ _$_VideoDTOModel _$$_VideoDTOModelFromJson(Map json) => _$_VideoDTOModel(
       videoDescription: json['videoDescription'] as String?,
       isEditing: json['isEditing'] as bool?,
       index: json['index'] as int?,
+      id: json['id'] as String?,
     );
 
 Map<String, dynamic> _$$_VideoDTOModelToJson(_$_VideoDTOModel instance) =>
@@ -138,4 +139,24 @@ Map<String, dynamic> _$$_VideoDTOModelToJson(_$_VideoDTOModel instance) =>
       'videoDescription': instance.videoDescription,
       'isEditing': instance.isEditing,
       'index': instance.index,
+      'id': instance.id,
+    };
+
+_$_GalleryDTOModel _$$_GalleryDTOModelFromJson(Map json) => _$_GalleryDTOModel(
+      imageUrl: json['imageUrl'] as String?,
+      imageTitle: json['imageTitle'] as String?,
+      imageDescription: json['imageDescription'] as String?,
+      isEditing: json['isEditing'] as bool?,
+      index: json['index'] as int?,
+      id: json['id'] as String?,
+    );
+
+Map<String, dynamic> _$$_GalleryDTOModelToJson(_$_GalleryDTOModel instance) =>
+    <String, dynamic>{
+      'imageUrl': instance.imageUrl,
+      'imageTitle': instance.imageTitle,
+      'imageDescription': instance.imageDescription,
+      'isEditing': instance.isEditing,
+      'index': instance.index,
+      'id': instance.id,
     };

@@ -3,6 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:uuid/uuid.dart';
+
+part 'controller.g.dart';
 
 // video helper model
 class VideoHelperModel {
@@ -66,7 +70,7 @@ class VideoPickerControllerNotifier
 }
 
 // video picker controller provider
-final videoPickerControllerProvider = StateNotifierProvider<
+final videoPickerControllerProvider = StateNotifierProvider.autoDispose<
     VideoPickerControllerNotifier, AsyncValue<VideoHelperModel?>>(
   (ref) => VideoPickerControllerNotifier(),
 );
@@ -111,8 +115,19 @@ class MultipleVideoPickerControllerNotifier
   }
 
   // remove video from list
-  void removeVideoFromList({required VideoHelperModel video}) {
-    state = state.where((element) => element != video).toList();
+  void removeVideoFromList({required int index}) {
+    state = [...state]..removeAt(index);
+  }
+
+  // update video from list
+  void updateVideoFromList({
+    required int index,
+    required VideoHelperModel video,
+  }) {
+    // update the video
+    state[index] = video;
+    // update the state
+    state = [...state];
   }
 
   // clear video list
@@ -122,49 +137,54 @@ class MultipleVideoPickerControllerNotifier
 }
 
 // multiple video picker controller provider
-final multipleVideoPickerControllerProvider = StateNotifierProvider<
+final multipleVideoPickerControllerProvider = StateNotifierProvider.autoDispose<
     MultipleVideoPickerControllerNotifier, List<VideoHelperModel>>(
   (ref) => MultipleVideoPickerControllerNotifier(),
 );
 
 // firebase video and gallery controller
-class FirebaseVideoAndGalleryControllerNotifier
-    extends StateNotifier<AsyncValue<VideoAndGalleryModel>> {
-  FirebaseVideoAndGalleryControllerNotifier()
+class FirebaseVideoControllerNotifier
+    extends StateNotifier<AsyncValue<List<VideoDTOModel>>> {
+  FirebaseVideoControllerNotifier()
       : super(
-          AsyncData<VideoAndGalleryModel>(
-            VideoAndGalleryModel(
-              image: [],
-              video: [],
-            ),
+          AsyncData<List<VideoDTOModel>>(
+            [],
           ),
         );
 
   // add video to firebase
-  Future<void> addVideoToFirebase({
-    required VideoHelperModel video,
+  Future<void> addVideosToFirebase({
+    required List<VideoHelperModel> videos,
     required String docPath,
   }) async {
     state = const AsyncLoading();
 
-    // state = await AsyncValue.guard(() async {
-    //   final videoUrl = await FirebaseStorageHelper.uploadFile(
-    //     file: File(video.video.path),
-    //     path: docPath,
-    //   );
+    state = await AsyncValue.guard(() async {
+      List<VideoDTOModel> videoList = [];
 
-    //   final videoDetails = Video(
-    //     videoUrl: videoUrl,
-    //     videoDescription: video.videoDescription,
-    //   );
+      for (var e in videos) {
+        // get doc id
+        final docId = Uuid().v1();
+        final videoUrl = await ImageHelpers.addImageToFirebaseStorage(
+          image: e.video,
+          path: 'videos',
+        );
 
-    //   final videoAndGallery = await FirestoreHelper.addDocumentToFirestore(
-    //     docPath: docPath,
-    //     data: videoDetails.toJson(),
-    //   );
+        // add to firestore
+        final video = await FirestoreHelper.addDataToDoc(
+          docPath: docPath,
+          data: VideoDTOModel(
+            videoUrl: videoUrl,
+            videoDescription: e.videoDescription,
+            id: docId,
+          ).toJson(),
+        );
 
-    //   return videoAndGallery;
-    // });
+        videoList.add(VideoDTOModel.fromJson(video));
+      }
+
+      return videoList;
+    });
   }
 
   // add gallery to firebase
@@ -196,3 +216,46 @@ class FirebaseVideoAndGalleryControllerNotifier
     // });
   }
 }
+
+// stream video from firestore
+@riverpod
+Stream<List<VideoDTOModel>> streamVideoFromFirestore(
+    StreamVideoFromFirestoreRef ref) {
+  final firestoreInstance = FirebaseFirestore.instance;
+
+  // stream list of video from firestore
+  final video = firestoreInstance.collection('videos').snapshots().map(
+        (event) => event.docs
+            .map(
+              (e) => VideoDTOModel.fromJson(
+                e.data(),
+              ),
+            )
+            .toList(),
+      );
+
+  return video;
+}
+
+// stream gallery from firestore
+@riverpod
+Stream<List<GalleryDTOModel>> streamGalleryFromFirestore(
+    StreamGalleryFromFirestoreRef ref) {
+  final firestoreInstance = FirebaseFirestore.instance;
+
+  // stream list of gallery from firestore
+  final gallery = firestoreInstance.collection('gallery').snapshots().map(
+        (event) => event.docs
+            .map(
+              (e) => GalleryDTOModel.fromJson(
+                e.data(),
+              ),
+            )
+            .toList(),
+      );
+
+  return gallery;
+}
+
+// get data
+
