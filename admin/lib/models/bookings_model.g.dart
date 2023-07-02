@@ -78,17 +78,16 @@ Json? _$JsonConverterToJson<Json, Value>(
 ) =>
     value == null ? null : toJson(value);
 
-_$_BookingModel _$$_BookingModelFromJson(Map<String, dynamic> json) =>
-    _$_BookingModel(
+_$_BookingModel _$$_BookingModelFromJson(Map json) => _$_BookingModel(
       bookingCode: json['bookingCode'] as String?,
       customerDetails: json['customerDetails'] == null
           ? null
           : CustomerDetails.fromJson(
-              json['customerDetails'] as Map<String, dynamic>),
+              Map<String, dynamic>.from(json['customerDetails'] as Map)),
       activityDetails: json['activityDetails'] == null
           ? null
           : ActivityDetails.fromJson(
-              json['activityDetails'] as Map<String, dynamic>),
+              Map<String, dynamic>.from(json['activityDetails'] as Map)),
       departureDate: json['departureDate'] == null
           ? null
           : DateTime.parse(json['departureDate'] as String),
@@ -103,8 +102,8 @@ _$_BookingModel _$$_BookingModelFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$_BookingModelToJson(_$_BookingModel instance) =>
     <String, dynamic>{
       'bookingCode': instance.bookingCode,
-      'customerDetails': instance.customerDetails,
-      'activityDetails': instance.activityDetails,
+      'customerDetails': instance.customerDetails?.toJson(),
+      'activityDetails': instance.activityDetails?.toJson(),
       'departureDate': instance.departureDate?.toIso8601String(),
       'arrivalDate': instance.arrivalDate?.toIso8601String(),
       'paid': instance.paid,

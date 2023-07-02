@@ -1,4 +1,3 @@
-export 'data/data.dart';
-export 'error/error.dart';
+export 'photos/photos.dart';
+export 'video/video.dart';
 export 'gallery_page.dart';
-export 'loading/loading.dart';

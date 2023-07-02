@@ -4,7 +4,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // gallery data page stateless hook consumer with app layout
 class GalleryDataPage extends HookConsumerWidget {
-  const GalleryDataPage({super.key});
+  const GalleryDataPage({
+    super.key,
+    required this.gallery,
+  });
+  final List<GalleryDTOModel> gallery;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return const AppLayout(

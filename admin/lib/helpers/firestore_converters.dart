@@ -197,6 +197,25 @@ class FirestoreHelper {
     }
   }
 
+  // add data to firestore
+  static Future<Map<String, dynamic>> addDataToDoc({
+    required String docPath,
+    required Map<String, dynamic> data,
+  }) async {
+    try {
+      final docData =
+          await _firestore.collection(docPath).add(data).then((value) {
+        debugPrint('Data added: $data');
+        return data;
+      });
+      return docData;
+    } on FirebaseException catch (e) {
+      throw e.message.toString();
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
   // delete from list using run transaction
   static Future<T> deleteInDocList<T>({
     required String docPath,
