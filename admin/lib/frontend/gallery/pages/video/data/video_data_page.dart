@@ -118,7 +118,6 @@ class _MobileVideoDataPage extends HookConsumerWidget {
             source: ImageSource.gallery,
           );
 
-          // if video is not null
           if (video.value != null) {
             // add video to list
             multipleVideoPickerControllerNotifier.addVideoToList(
