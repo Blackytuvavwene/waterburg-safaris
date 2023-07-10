@@ -256,6 +256,3 @@ Stream<List<GalleryDTOModel>> streamGalleryFromFirestore(
 
   return gallery;
 }
-
-// get data
-
