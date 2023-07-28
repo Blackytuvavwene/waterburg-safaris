@@ -5,11 +5,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:sizer/sizer.dart';
 
-// function to add two numbers
-dynamic addTwoNumbers(int a, int b) {
-  var sum = a + b;
-}
-
 // company edit about page hook consumer widget with app layout
 class CompanyEditAbout extends HookConsumerWidget {
   const CompanyEditAbout({
@@ -73,7 +68,7 @@ class _MobileCompanyEditAbout extends HookConsumerWidget {
                 Navigator.pop(context);
               }
             },
-            icon: LineIcon.arrowLeft(),
+            icon: const LineIcon.arrowLeft(),
           ),
           pinned: true,
           actions: [

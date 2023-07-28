@@ -45,3 +45,9 @@ class _DesktopGalleryDataPage extends HookConsumerWidget {
     return Container();
   }
 }
+
+
+// create an addition function
+double addTwoNumbers(double a, double b) {
+  return a + b;
+}
