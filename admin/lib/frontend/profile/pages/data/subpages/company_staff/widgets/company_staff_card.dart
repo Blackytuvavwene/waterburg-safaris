@@ -98,7 +98,7 @@ class _MobileCompanyStaffCard extends HookConsumerWidget {
                                 height: 150,
                               );
                             case LoadState.failed:
-                              return Center(
+                              return const Center(
                                 child: LineIcon.exclamationTriangle(),
                               );
                           }
@@ -124,7 +124,7 @@ class _MobileCompanyStaffCard extends HookConsumerWidget {
                                     height: 150,
                                   );
                                 case LoadState.failed:
-                                  return Center(
+                                  return const Center(
                                     child: LineIcon.exclamationTriangle(),
                                   );
                               }

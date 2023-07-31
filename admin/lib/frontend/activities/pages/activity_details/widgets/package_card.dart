@@ -363,7 +363,7 @@ class _MobilePackageEditPage extends HookConsumerWidget {
           onPressed: () {
             context.pop();
           },
-          icon: LineIcon.chevronCircleLeft(),
+          icon: const LineIcon.chevronCircleLeft(),
         ),
         actions: [
           IconButton(
@@ -408,7 +408,7 @@ class _MobilePackageEditPage extends HookConsumerWidget {
               // pop page
               context.pop();
             },
-            icon: LineIcon.save(),
+            icon: const LineIcon.save(),
           ),
         ],
       ),

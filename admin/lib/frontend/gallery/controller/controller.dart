@@ -147,7 +147,7 @@ class FirebaseVideoControllerNotifier
     extends StateNotifier<AsyncValue<List<VideoDTOModel>>> {
   FirebaseVideoControllerNotifier()
       : super(
-          AsyncData<List<VideoDTOModel>>(
+          const AsyncData<List<VideoDTOModel>>(
             [],
           ),
         );
@@ -164,7 +164,7 @@ class FirebaseVideoControllerNotifier
 
       for (var e in videos) {
         // get doc id
-        final docId = Uuid().v1();
+        final docId = const Uuid().v1();
         final videoUrl = await ImageHelpers.addImageToFirebaseStorage(
           image: e.video,
           path: 'videos',
@@ -186,6 +186,15 @@ class FirebaseVideoControllerNotifier
       return videoList;
     });
   }
+}
+
+// firebase gallery controller
+class FirebaseGalleryNotifier
+    extends StateNotifier<AsyncValue<List<GalleryDTOModel>>> {
+  FirebaseGalleryNotifier()
+      : super(
+          const AsyncData<List<GalleryDTOModel>>([]),
+        );
 
   // add gallery to firebase
   Future<void> addGalleryToFirebase({
@@ -194,26 +203,26 @@ class FirebaseVideoControllerNotifier
   }) async {
     state = const AsyncLoading();
 
-    // state = await AsyncValue.guard(() async {
-    //   final galleryUrl = await FirebaseStorageHelper.uploadMultipleFiles(
-    //     files: gallery.map((e) => File(e.image.path)).toList(),
-    //     path: docPath,
-    //   );
+    state = await AsyncValue.guard(() async {
+      List<GalleryDTOModel> galleryList = [];
 
-    //   final galleryDetails = galleryUrl.map((e) {
-    //     return Gallery(
-    //       imageUrl: e,
-    //       imageDescription: e,
-    //     );
-    //   }).toList();
+      // iterate through gallery
+      for (var e in gallery) {
+        // get doc id
+        final docId = const Uuid().v1();
 
-    //   final videoAndGallery = await FirestoreHelper.addDocumentToFirestore(
-    //     docPath: docPath,
-    //     data: galleryDetails.map((e) => e.toJson()).toList(),
-    //   );
+        // upload image to firebase storage
+        final imageUrl = await ImageHelpers.addImageToFirebaseStorage(
+          image: e.xFile!,
+          path: 'gallery',
+        );
 
-    //   return videoAndGallery;
-    // });
+        // add to firestore
+        
+      }
+
+      return galleryList;
+    });
   }
 }
 

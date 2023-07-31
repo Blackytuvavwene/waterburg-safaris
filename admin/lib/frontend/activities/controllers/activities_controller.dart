@@ -302,25 +302,25 @@ class ActivityTabModel {
 final activityTabsList = [
   ActivityTabModel(
     tabName: 'Info',
-    tabIcon: LineIcon.infoCircle(),
+    tabIcon: const LineIcon.infoCircle(),
     tabWidget: const ActivityInfoPage(),
     tabIndex: 0,
   ),
   ActivityTabModel(
     tabName: 'Gallery',
-    tabIcon: LineIcon.imagesAlt(),
+    tabIcon: const LineIcon.imagesAlt(),
     tabWidget: const ActivityGalleryPage(),
     tabIndex: 1,
   ),
   ActivityTabModel(
     tabName: 'Packages',
-    tabIcon: LineIcon.boxes(),
+    tabIcon: const LineIcon.boxes(),
     tabWidget: const ActivityPackagesPage(),
     tabIndex: 2,
   ),
   ActivityTabModel(
     tabName: 'Tags',
-    tabIcon: LineIcon.tags(),
+    tabIcon: const LineIcon.tags(),
     tabWidget: const ActivityTagsPage(),
     tabIndex: 3,
   ),

@@ -70,12 +70,12 @@ class _MobileCompanyStaffPage extends HookConsumerWidget {
       // company staff
       {
         'pageName': 'Company Staff',
-        'icon': LineIcon.userFriends(),
+        'icon': const LineIcon.userFriends(),
       },
       // add staff
       {
         'pageName': 'New Staff',
-        'icon': LineIcon.userPlus(),
+        'icon': const LineIcon.userPlus(),
       },
     ];
 

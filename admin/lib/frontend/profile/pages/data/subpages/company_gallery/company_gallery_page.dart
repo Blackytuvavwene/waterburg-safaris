@@ -71,15 +71,15 @@ class _MobileCompanyGalleryPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // tab pages for gallery
     final tabPages = [
-      Tab(
+      const Tab(
         icon: LineIcon.imagesAlt(),
-        child: const DText(
+        child: DText(
           text: 'Gallery',
         ),
       ),
-      Tab(
+      const Tab(
         icon: LineIcon.boxes(),
-        child: const DText(
+        child: DText(
           text: 'New images',
         ),
       ),
@@ -115,7 +115,7 @@ class _MobileCompanyGalleryPage extends HookConsumerWidget {
                   //     );
                   await imageControllerNotifier?.pickImages();
                 },
-                icon: LineIcon.plusCircle()),
+                icon: const LineIcon.plusCircle()),
           ],
         ),
         if (newImages != null)

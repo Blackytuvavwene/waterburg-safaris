@@ -95,7 +95,7 @@ class _MobileCompanyGalleryCard extends HookConsumerWidget {
                   child: IconButton(
                     onPressed: () {},
                     color: Theme.of(context).colorScheme.primaryContainer,
-                    icon: LineIcon.editAlt(),
+                    icon: const LineIcon.editAlt(),
                   ),
                 ),
                 Flexible(
@@ -111,7 +111,7 @@ class _MobileCompanyGalleryCard extends HookConsumerWidget {
                           );
                     },
                     color: Theme.of(context).colorScheme.errorContainer,
-                    icon: LineIcon.trash(),
+                    icon: const LineIcon.trash(),
                   ),
                 ),
               ],
@@ -380,7 +380,7 @@ class _PickedMobileCompanyGalleryCard extends HookConsumerWidget {
                             });
                       },
                       color: Theme.of(context).colorScheme.primaryContainer,
-                      icon: LineIcon.editAlt(),
+                      icon: const LineIcon.editAlt(),
                     ),
                   ),
                   Flexible(
@@ -392,7 +392,7 @@ class _PickedMobileCompanyGalleryCard extends HookConsumerWidget {
                             .removeImageFromState(image: companyGallery!);
                       },
                       color: Theme.of(context).colorScheme.errorContainer,
-                      icon: LineIcon.trash(),
+                      icon: const LineIcon.trash(),
                     ),
                   ),
                 ],

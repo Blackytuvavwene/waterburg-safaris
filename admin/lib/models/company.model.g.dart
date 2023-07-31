@@ -121,8 +121,8 @@ _$_VideoAndGalleryModel _$$_VideoAndGalleryModelFromJson(Map json) =>
 Map<String, dynamic> _$$_VideoAndGalleryModelToJson(
         _$_VideoAndGalleryModel instance) =>
     <String, dynamic>{
-      'image': instance.image?.map((e) => e.toJson()).toList(),
-      'video': instance.video?.map((e) => e.toJson()).toList(),
+      'image': instance.image,
+      'video': instance.video,
     };
 
 _$_VideoDTOModel _$$_VideoDTOModelFromJson(Map json) => _$_VideoDTOModel(

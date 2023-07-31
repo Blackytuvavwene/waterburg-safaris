@@ -243,7 +243,7 @@ class _MobileActivityTags extends HookConsumerWidget {
                                             Container(
                                               child: Chip(
                                                 label: Text(tag),
-                                                deleteIcon: LineIcon.trash(),
+                                                deleteIcon: const LineIcon.trash(),
                                                 onDeleted: () {
                                                   tagsList.value = tagsList
                                                       .value
@@ -277,7 +277,7 @@ class _MobileActivityTags extends HookConsumerWidget {
                                       label: DText(
                                         text: tag,
                                       ),
-                                      deleteIcon: LineIcon.trash(
+                                      deleteIcon: const LineIcon.trash(
                                         color: Colors.red,
                                       ),
                                       onDeleted: () async {

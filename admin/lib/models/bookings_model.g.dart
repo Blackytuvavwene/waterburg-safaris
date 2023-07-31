@@ -102,8 +102,8 @@ _$_BookingModel _$$_BookingModelFromJson(Map json) => _$_BookingModel(
 Map<String, dynamic> _$$_BookingModelToJson(_$_BookingModel instance) =>
     <String, dynamic>{
       'bookingCode': instance.bookingCode,
-      'customerDetails': instance.customerDetails?.toJson(),
-      'activityDetails': instance.activityDetails?.toJson(),
+      'customerDetails': instance.customerDetails,
+      'activityDetails': instance.activityDetails,
       'departureDate': instance.departureDate?.toIso8601String(),
       'arrivalDate': instance.arrivalDate?.toIso8601String(),
       'paid': instance.paid,

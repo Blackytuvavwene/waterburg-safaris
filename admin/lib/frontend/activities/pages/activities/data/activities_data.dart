@@ -237,7 +237,7 @@ class TryG extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: DText(text: 'Hello world',),
+      child: const DText(text: 'Hello world',),
     );
   }
 }

@@ -69,7 +69,7 @@ class _MobileCompanyAddressDetailsPage extends HookConsumerWidget {
           snap: true,
           actions: [
             IconButton(
-              icon: LineIcon.editAlt(),
+              icon: const LineIcon.editAlt(),
               onPressed: () async {
                 if (editCompanyDetails?.state != true) {
                   editCompanyDetails?.update(

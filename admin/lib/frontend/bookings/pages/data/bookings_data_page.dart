@@ -65,7 +65,7 @@ class _MobileBookingsDataPage extends HookConsumerWidget {
                             ),
                             border: const OutlineInputBorder(),
                             suffixIcon: IconButton(
-                                onPressed: () {}, icon: LineIcon.search())),
+                                onPressed: () {}, icon: const LineIcon.search())),
                       ),
                     ),
                   ],
@@ -221,7 +221,7 @@ class _TabletBookingsDataPage extends HookConsumerWidget {
                 actions: [
                   IconButton(
                     onPressed: () {},
-                    icon: LineIcon.search(),
+                    icon: const LineIcon.search(),
                   ),
                 ],
               ),

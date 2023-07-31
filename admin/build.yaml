@@ -1,16 +1,6 @@
-<<<<<<< HEAD
 targets:
   $default:
     builders:
       json_serializable:
         options:
           any_map: true
-=======
-targets:
-  $default:
-    builders:
-      json_serializable:
-        options:
-          any_map: true
->>>>>>> 6dbeed21ae13da762a8632ba99c4b91e03dd3557
-          explicit_to_json: true

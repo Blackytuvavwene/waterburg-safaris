@@ -192,7 +192,7 @@ class _MobileAddPackagePage extends HookConsumerWidget {
               );
               context.pop<Package>(package);
             },
-            icon: LineIcon.arrowLeft(),
+            icon: const LineIcon.arrowLeft(),
           ),
         ),
         SliverToBoxAdapter(

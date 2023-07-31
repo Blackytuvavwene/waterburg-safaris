@@ -165,6 +165,22 @@ class FirestoreHelper {
     }
   }
 
+  // create new firebase doc
+  static Future<Map<String, dynamic>> createDataInDoc({
+    required String docPath,
+    required Map<String, dynamic> data,
+    required String docId,
+  }) async {
+    try {
+      await _firestore.collection(docPath).doc(docId).set(data);
+      return data;
+    } on FirebaseException catch (e) {
+      throw e.message.toString();
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
   // delete from list of data in firestore
   static Future<List<T>> deleteDataInDocList<T>({
     required String docId,

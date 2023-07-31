@@ -64,7 +64,7 @@ class _MobileEditAddressContactPage extends HookConsumerWidget {
               text: 'Edit Address and Contact',
             ),
             leading: IconButton(
-              icon: LineIcon.arrowLeft(),
+              icon: const LineIcon.arrowLeft(),
               onPressed: () {
                 final newAddress = AddressAndContact(
                   address: addressAndContact?.address,
@@ -80,7 +80,7 @@ class _MobileEditAddressContactPage extends HookConsumerWidget {
             snap: true,
             actions: [
               IconButton(
-                icon: LineIcon.save(),
+                icon: const LineIcon.save(),
                 onPressed: () async {
                   // ref.read(companyDetailsProvider.notifier).editCompanyDetails(
                   //       companyId: companyId,

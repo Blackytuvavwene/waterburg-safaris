@@ -118,10 +118,23 @@ class _MobileVideoDataPage extends HookConsumerWidget {
             source: ImageSource.gallery,
           );
 
-          if (video.value != null) {
+          // show snackbar if no video is picked
+          if (video.asData?.value == null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: DText(
+                  text: 'No video is picked',
+                ),
+              ),
+            );
+            return;
+          }
+
+          if (video.asData?.value != null) {
             // add video to list
             multipleVideoPickerControllerNotifier.addVideoToList(
-                video: video.value!);
+              video: video.value!,
+            );
           }
         },
         width: 10.w,
@@ -220,8 +233,8 @@ class LocalVideoPlayerWidget extends HookConsumerWidget {
               child: IconButton(
                 iconSize: 26.sp,
                 icon: isPlaying.value
-                    ? LineIcon.pauseCircleAlt()
-                    : LineIcon.playCircleAlt(),
+                    ? const LineIcon.pauseCircleAlt()
+                    : const LineIcon.playCircleAlt(),
                 onPressed: () {
                   if (videoPlayerController.value.value.isPlaying == true) {
                     isPlaying.value = false;
@@ -242,13 +255,13 @@ class LocalVideoPlayerWidget extends HookConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                      icon: LineIcon.editAlt(),
+                      icon: const LineIcon.editAlt(),
                       onPressed: () {
                         //todo: edit video
                       },
                     ),
                     IconButton(
-                      icon: LineIcon.trash(),
+                      icon: const LineIcon.trash(),
                       onPressed: () {
                         // delete video
                         ref

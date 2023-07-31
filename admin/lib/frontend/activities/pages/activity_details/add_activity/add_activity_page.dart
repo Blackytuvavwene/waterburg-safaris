@@ -42,7 +42,7 @@ class AddActivityPage extends HookConsumerWidget {
           activityData: activityData,
           activityNotifier: activityNotifier,
         ),
-        'icon': LineIcon.infoCircle(),
+        'icon': const LineIcon.infoCircle(),
       },
       {
         'name': 'Gallery',
@@ -50,7 +50,7 @@ class AddActivityPage extends HookConsumerWidget {
           galleryData: imagesPicked,
           addImageNotifier: addImageNotifier,
         ),
-        'icon': LineIcon.imagesAlt(),
+        'icon': const LineIcon.imagesAlt(),
       },
       {
         'name': 'Packages',
@@ -58,7 +58,7 @@ class AddActivityPage extends HookConsumerWidget {
           packageData: activityData.packages ?? [],
           activityNotifier: activityNotifier,
         ),
-        'icon': LineIcon.boxOpen(),
+        'icon': const LineIcon.boxOpen(),
       },
       {
         'name': 'Tags',
@@ -66,7 +66,7 @@ class AddActivityPage extends HookConsumerWidget {
           tagData: activityData.tags ?? [],
           activityNotifier: activityNotifier,
         ),
-        'icon': LineIcon.tags(),
+        'icon': const LineIcon.tags(),
       }
     ];
 

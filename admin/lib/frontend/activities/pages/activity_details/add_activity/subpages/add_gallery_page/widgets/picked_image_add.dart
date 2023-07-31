@@ -113,13 +113,13 @@ class AddPickedImage extends HookConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                    icon: LineIcon.trash(),
+                    icon: const LineIcon.trash(),
                     onPressed: () {
                       addImageNotifier.removeImageFromList(image: image!);
                     },
                   ),
                   IconButton(
-                    icon: LineIcon.editAlt(),
+                    icon: const LineIcon.editAlt(),
                     onPressed: () {
                       showDialog(
                         context: context,

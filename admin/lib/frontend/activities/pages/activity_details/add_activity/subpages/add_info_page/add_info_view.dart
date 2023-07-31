@@ -135,7 +135,7 @@ class _MobileAddInfoView extends HookConsumerWidget {
                               onPressed: () {
                                 editOverview.value = false;
                               },
-                              icon: LineIcon.times(),
+                              icon: const LineIcon.times(),
                             ),
                             IconButton(
                               onPressed: () {
@@ -144,7 +144,7 @@ class _MobileAddInfoView extends HookConsumerWidget {
                                 );
                                 editOverview.value = false;
                               },
-                              icon: LineIcon.check(),
+                              icon: const LineIcon.check(),
                             )
                           ],
                         ),
@@ -205,7 +205,7 @@ class _MobileAddInfoView extends HookConsumerWidget {
                               onPressed: () {
                                 editOverview.value = false;
                               },
-                              icon: LineIcon.times(),
+                              icon: const LineIcon.times(),
                             ),
                             IconButton(
                               onPressed: () {
@@ -215,7 +215,7 @@ class _MobileAddInfoView extends HookConsumerWidget {
 
                                 editSeoDescription.value = false;
                               },
-                              icon: LineIcon.check(),
+                              icon: const LineIcon.check(),
                             )
                           ],
                         ),

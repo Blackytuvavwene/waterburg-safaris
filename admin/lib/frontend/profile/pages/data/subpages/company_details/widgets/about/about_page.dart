@@ -70,7 +70,7 @@ class _MobileCompanyAboutDetailsPage extends HookConsumerWidget {
           automaticallyImplyLeading: false,
           actions: [
             IconButton(
-              icon: LineIcon.editAlt(),
+              icon: const LineIcon.editAlt(),
               onPressed: () async {
                 if (editCompanyDetails?.state != true) {
                   editCompanyDetails?.update(

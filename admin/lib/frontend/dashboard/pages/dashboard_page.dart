@@ -94,7 +94,7 @@ class _MobileDashboardPage extends HookConsumerWidget {
               onPressed: () {
                 ref.read(authProvider).logout();
               },
-              icon: LineIcon.doorOpen())
+              icon: const LineIcon.doorOpen())
         ],
       ),
       body: SafeArea(
@@ -281,7 +281,7 @@ class _TabletDashboardPage extends HookConsumerWidget {
               onPressed: () {
                 ref.read(authProvider).logout();
               },
-              icon: LineIcon.doorOpen())
+              icon: const LineIcon.doorOpen())
         ],
       ),
       body: SafeArea(

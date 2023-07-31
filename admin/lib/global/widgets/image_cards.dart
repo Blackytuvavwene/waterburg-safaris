@@ -227,14 +227,14 @@ class _PickedMobileImageCard extends HookConsumerWidget {
                             });
                       },
                       color: Theme.of(context).colorScheme.primaryContainer,
-                      icon: LineIcon.editAlt(),
+                      icon: const LineIcon.editAlt(),
                     ),
                   ),
                   Flexible(
                     child: IconButton(
                       onPressed: onRemoveImage,
                       color: Theme.of(context).colorScheme.errorContainer,
-                      icon: LineIcon.trash(),
+                      icon: const LineIcon.trash(),
                     ),
                   ),
                 ],
@@ -394,7 +394,7 @@ class _MobileImageCard extends HookConsumerWidget {
                   child: IconButton(
                     onPressed: onRemoveImage,
                     color: Theme.of(context).colorScheme.errorContainer,
-                    icon: LineIcon.trash(),
+                    icon: const LineIcon.trash(),
                   ),
                 ),
               ],

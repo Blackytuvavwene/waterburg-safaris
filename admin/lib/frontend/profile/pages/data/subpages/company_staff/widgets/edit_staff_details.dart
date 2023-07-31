@@ -345,7 +345,7 @@ class _MobileEditStaffDetails extends HookConsumerWidget {
                           .read(imageHelperNotifierProvider.notifier)
                           .pickImage(imageSource: ImageSource.gallery);
                     },
-                    icon: LineIcon.camera(),
+                    icon: const LineIcon.camera(),
                   ),
                 ),
               ),

@@ -128,15 +128,15 @@ class _MobileProfileDataPage extends HookConsumerWidget {
     final tabs = [
       {
         'title': 'Details',
-        'icon': LineIcon.infoCircle(),
+        'icon': const LineIcon.infoCircle(),
       },
       {
         'title': 'Staff',
-        'icon': LineIcon.users(),
+        'icon': const LineIcon.users(),
       },
       {
         'title': 'Gallery',
-        'icon': LineIcon.images(),
+        'icon': const LineIcon.images(),
       }
     ];
 
