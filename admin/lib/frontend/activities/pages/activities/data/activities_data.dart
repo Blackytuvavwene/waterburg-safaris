@@ -133,19 +133,6 @@ class _ActivitiesDataTablet extends HookConsumerWidget {
   }
 }
 
-class Food extends HookConsumerWidget {
-  const Food({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return const Center(
-      child: DText(text: 'Hello how are you',),
-    );
-  }
-}
-
 // activities data for desktop
 class _ActivitiesDataDesktop extends HookConsumerWidget {
   const _ActivitiesDataDesktop({
@@ -237,8 +224,9 @@ class TryG extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: const DText(text: 'Hello world',),
+      child: const DText(
+        text: 'Hello world',
+      ),
     );
   }
 }
-
