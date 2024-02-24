@@ -31,6 +31,12 @@ Future<void> main() async {
   );
 }
 
+String getTwoWidgets(){
+  // get two similar widgets from a list of widgets
+  var widgetsList = [].firstWhere((element) => element== "Widgets").toString();
+  return widgetsList;
+}
+
 class MyApp extends HookConsumerWidget {
   const MyApp({Key? key}) : super(key: key);
 

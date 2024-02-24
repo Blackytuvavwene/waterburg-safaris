@@ -3,8 +3,11 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  cloud_firestore
   file_selector_windows
+  firebase_auth
   firebase_core
+  firebase_storage
   image_compression_flutter
   isar_flutter_libs
   url_launcher_windows
